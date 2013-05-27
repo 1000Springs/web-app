@@ -8,6 +8,10 @@ app = Flask(__name__)
 app.config.from_pyfile('hotsprings.cfg')
 
 
+
+
+from models import *
+
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     error = None
