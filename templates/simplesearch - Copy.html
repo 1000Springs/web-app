@@ -1,0 +1,98 @@
+{% extends "layout.html" %}
+{% block title %}Index{% endblock %}
+{% block head %}
+  {{ super() }}
+  <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?sensor=true"></script>
+    <script type="text/javascript" src="{{ url_for('static', filename='js/maps.js') }}"></script>
+	<script type="text/javascript" src="{{ url_for('static', filename='js/jquery.js') }}"></script>
+
+	
+	<script type="text/javascript">
+	
+	
+
+
+
+	$(document).ready(function () 
+	{
+		$("#searchMenuItem").addClass("active");
+  
+	});
+ 
+
+	window.onload=function()
+	{
+	navigator.geolocation.getCurrentPosition(show_map);
+	codeLatLng();
+	};
+
+
+	</script>
+{% endblock %}
+{% block content %}
+
+
+<div>
+	
+	<div class="row-fluid ">
+		
+		<div  class="bodytype span6" >
+		
+		<h3> Find-a-Spring </h3>
+		
+		<table>		
+			<tr>
+				<th style="text-align:left"> Location </th>
+			</tr>
+			<tr>
+				<td>
+					<form action="{{ url_for('simpleresults', filter='city')}}">
+					
+						<p>	Find hot springs near a city: </p>
+						<input type="text" data-provide="typeahead" name="city" id="myLoc" >	
+						<input type="submit" value="Search" class="btn" style="margin-bottom:10px">
+					</form>
+				</td>
+			</tr>
+			<tr>
+				<td>
+				
+				</td>
+			</tr>
+			<tr>
+				<th style="text-align:left"> Temperature </th>
+			</tr>
+			<tr>
+				<td>
+				<div class="btn-group" >
+					<a class="btn" href="{{url_for('simpleresults',filter='Safe')}}">Safe</a>
+					<a class="btn" href="{{url_for('simpleresults',filter='Unsafe')}}">Unsafe</a>
+					<a class="btn" href="{{url_for('simpleresults',filter='Hottest')}}">Hottest <i class="icon-fire"></i></a>
+				</div>
+				</td>
+			</tr>
+			<tr>
+			<th style="text-align:left"> Misc <br> </th>
+			</tr>
+			<tr>
+				<td>
+					<div class="btn-group" >
+						<a class="btn" href="{{url_for('simpleresults',filter='Unique')}}">Unique</a>
+						<a class="btn" href="{{url_for('simpleresults',filter='All')}}">All</a>
+					</div>
+				</td>
+			</tr>
+		</table>
+			
+		</div>
+		<div class="span6">
+			<img src="{{ url_for('static', filename='img/hotsprings4.jpg')}}" style="margin:15px 0px;height:395px" class="thumbnail">
+
+		</div>
+		<a class="btn" onclick="history.back()" >Back</a>
+	</div>
+</div>
+
+
+
+{% endblock %}

@@ -1,0 +1,83 @@
+{% extends "layout.html" %}
+{% block title %}Home{% endblock %}
+{% block head %}
+  {{ super() }}
+  
+ {% endblock %}
+{% block content %}
+
+<!--<form action="{{url_for('login')}}" method="POST">
+
+<input type="text" name="username">
+<input type="text" name="password">
+
+<input type="submit" value="login">
+
+</form>!-->
+
+ <style type="text/css">
+      /* Override some defaults */
+
+
+
+      /* The white background content wrapper */
+      .container > .content {
+        background-color: #fff;
+        padding: 20px;
+        margin: 0 -20px; 
+        -webkit-border-radius: 10px 10px 10px 10px;
+           -moz-border-radius: 10px 10px 10px 10px;
+                border-radius: 10px 10px 10px 10px;
+        -webkit-box-shadow: 0 1px 2px rgba(0,0,0,.15);
+           -moz-box-shadow: 0 1px 2px rgba(0,0,0,.15);
+                box-shadow: 0 1px 2px rgba(0,0,0,.15);
+      }
+
+	  .login-form {
+		margin-left: 65px;
+	  }
+	
+	  legend {
+		margin-right: -50px;
+		font-weight: bold;
+	  	color: #404040;
+	  }
+
+    </style>
+
+</head>
+<body>
+	<div class="container">
+		<div class="content">
+			<div class="row">
+				<div class="login-form">
+					<h2>Login</h2>
+					<form action="{{url_for('login')}}" method="post">
+						<fieldset>							
+								<input type="text" placeholder="Username" name="username" style="display:block">					
+							
+								<input type="password" placeholder="Password" name="password" style="display:block">		
+
+								<button class="btn btn-primary" type="submit">Sign in</button>
+						</fieldset>
+
+					</form>
+
+						{% if error%}						
+						<div class="alert" id="alert">
+							<button type="button" class="close" data-dismiss="alert">&times;</button>
+							<p id="alertMessage"> {{error}} </p>
+						</div>
+						{% endif %}
+
+				</div>
+			</div>
+		</div>
+	</div> <!-- /container -->
+</body>
+</html>
+
+
+
+
+{% endblock %}

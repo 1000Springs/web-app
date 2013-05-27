@@ -1,0 +1,42 @@
+{% extends "layout.html" %}
+{% block title %}Home{% endblock %}
+{% block head %}
+  {{ super() }}
+
+
+	<script type="text/javascript" src="{{ url_for('static', filename='js/jquery.js') }}"></script>
+
+
+{% endblock %}
+{% block content %}
+
+	
+<div style="float:left;">
+<img src="{{ url_for('static', filename='img/springsbycat/colouredhotspring.jpg')}}"  >
+<p style="text-align:center">Coloured Pools </p>
+</div>
+
+<div style="float:left;">
+<img src="{{ url_for('static', filename='img/springsbycat/clearhotspring.jpg')}}"  >
+<p style="text-align:center">Clear Pools </p>
+</div>
+
+<div style="float:left;">
+<img src="{{ url_for('static', filename='img/springsbycat/murkyhotspring.jpg')}}"    >
+<p style="text-align:center">Murky Pools </p>
+</div>
+
+
+<script type="text/javascript">
+$(document).ready(function(){
+$("img").hover(
+function() {
+$(this).stop().animate({"opacity": "0.5"}, "fast");
+},
+function() {
+$(this).stop().animate({"opacity": "1"}, "fast");
+});
+
+});
+</script>
+{% endblock %}

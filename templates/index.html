@@ -1,0 +1,51 @@
+{% extends "layout.html" %}
+{% block title %}Home{% endblock %}
+{% block head %}
+  {{ super() }}
+
+
+  <script type="text/javascript">
+
+
+
+ $(document).ready(function () {
+  $("#indexMenuItem").addClass("active");
+
+});
+  </script>
+
+
+{% endblock %}
+{% block content %}
+<h1>Overview</h1>
+
+<div>
+<a class="btn btn-primary" href="{{url_for('simplesearch')}}">Find Hot Springs</a>
+<a class="btn" href="{{url_for('search')}}">Advanced Search</a>
+
+<br>
+<br>
+<p class="muted"><em>Check out the<a href="{{url_for('sotd')}}"> Spring of the day </a></em></p>
+</div>
+<div>
+	<p>
+	Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur tincidunt tempus ipsum gravida aliquet. Proin turpis magna, suscipit sed mattis nec, eleifend at magna. Suspendisse potenti. Aenean vel odio velit. Ut gravida orci eu nunc auctor rutrum. Cras lacinia metus ac diam vehicula a condimentum augue congue. Etiam ante turpis, dignissim ut varius a, tincidunt eget sem. Morbi et justo neque. Sed a turpis augue, a faucibus purus.
+	</p>
+</div>
+
+<div>
+<table class="table">
+
+		<tr>
+			<td><img src="{{ url_for('static', filename='img/hotsprings6small.jpg') }}" alt="Geothermal Hot Springs, Bay of Plenty, New Zealand"></td>
+			<td><img src="{{ url_for('static', filename='img/hotsprings2small.jpg') }}" alt="Geothermal Hot Springs, Bay of Plenty, New Zealand"></td>
+			<td><img src="{{ url_for('static', filename='img/hotsprings3small.jpg') }}" alt="Geothermal Hot Springs, Bay of Plenty, New Zealand"></td>
+		</tr>
+
+</table>
+
+
+</div>
+
+
+{% endblock %}

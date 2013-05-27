@@ -1,0 +1,342 @@
+
+#header {
+    height: 120px; 
+    background: url('img/geothermalBanner.gif') no-repeat scroll left bottom;
+}
+
+
+#logo {
+    color: #000000;
+    float: left;
+    height: 100px;
+    margin-left: 5px;
+    margin-top: 8px;
+    position: absolute;
+    width: 70px;
+    z-index: 3;
+    cursor: pointer;
+}
+
+body    {
+    background: url('img/wig.gif') repeat-x scroll 0 150px #FFFFFF;
+    height: 100%;
+    font-family: Arial,Helvetica,sans-serif;
+    font-size: 0.8em;
+    margin: 0;
+    padding: 0;
+    width: 100%;
+}
+
+#container  {
+    border: medium none; 
+    margin: 0px auto; 
+    padding: 0px; 
+    width: 1024px; 
+    height: 100%;
+}
+
+#innerContainer {
+    width:1024px; 
+    margin: 0 auto; 
+    padding: 0; 
+    overflow: auto; 
+    background-color: #FFFFFF;
+}
+
+#menu {
+    float:left;
+    margin-top: 20px;
+    margin-bottom: 60px;
+    width:200px;
+}
+
+.activeMenuItem, .selectedMenuItem, .inactiveMenuItem   {
+    color: #00386b;
+    margin-top: 2px;
+    margin-right: 3px;
+    height: 22px;
+    width:120px;
+    display:inline-block;
+    font-family:arial;
+    font-size:13px;
+    font-weight:normal;
+    padding:10px 6px 4px;
+    text-decoration:none;
+    border-top-left-radius: 6px 6px;
+    border-top-right-radius: 6px 6px;
+    border-bottom-left-radius: 6px 6px;
+    border-bottom-right-radius: 6px 6px;
+}
+
+.activeMenuItem {
+    background-color:#BBBBBB;
+    color:#fffaff;
+    border: 2px solid #BBBBBB;
+}
+
+.selectedMenuItem   {
+    background-color:#888888;
+    font-weight:bold;
+    color:#DDDDFF;
+    border: 2px solid #DDDDFF;
+}
+
+.activeMenuItem a:link span, 
+.selectedMenuItem a:link span,
+.inactiveMenuItem a:link span   {
+    height: 24px;
+    display:inline-block;
+    color:#fffaff;
+    font-family:arial;
+    font-size:13px;
+    font-weight:normal;
+    padding:0px 6px 4px;
+    text-decoration:none;
+}
+
+.selectedMenuItem a:link span {
+    font-weight:bold;
+}
+
+.inactiveMenuItem a:link span {
+    color:#9F9F9F;
+}
+
+.activeMenuItem a:visited span,
+.selectedMenuItem a:visited span, 
+.inactiveMenuItem a:visited span {
+     color: #fffaff;
+}
+
+.inactiveMenuItem a:visited span {
+    color:#9F9F9F;
+}
+
+.activeMenuItem:hover {
+    background-color:#DDDDFF;
+}
+
+.inactiveMenuItem:hover {
+    cursor: default;
+}
+
+.activeMenuItem:active,
+.selectedMenuItem:active    {
+    position:relative;
+    top:1px;
+}
+
+
+
+.inactiveMenuItem   {
+    background-color:#9c939c;
+    color:#9F9F9F;
+    cursor: default;
+}
+
+
+#content {
+    position: relative;
+    /*margin-left: 200px;*/
+    overflow: hidden; 
+    padding: 0px 0 20px 0; 
+    background-color: #FFFFFF;
+}
+
+#footer {
+    height: 28px; 
+    width: 1024px; 
+    overflow: hidden; 
+    padding-left: 0px; 
+    padding-top: 0px;
+    background-color: #1D9BAB;
+    opacity: 0.7;
+}
+
+#footer a {
+    color: #FFFFFF;
+    display: block;
+    text-decoration: none;
+}
+
+.footerPanel {
+   overflow: hidden; 
+   height: 25px; 
+   width: 1024px;
+}
+
+.footerMenuItem    {
+   height: 28px; 
+   width: 236px; 
+   overflow: hidden; 
+   float: left; 
+   padding-left: 0px; 
+   padding-top: 5px;
+}
+
+.pageButton   {
+    color: #00386b;
+    margin-top: 2px;
+    margin-right: 3px;
+    height: 22px;
+    width:120px;
+    display:inline-block;
+    font-family:arial;
+    font-size:13px;
+    font-weight:normal;
+    padding:10px 6px 4px;
+    text-decoration:none;
+    border-top-left-radius: 6px 6px;
+    border-top-right-radius: 6px 6px;
+    border-bottom-left-radius: 6px 6px;
+    border-bottom-right-radius: 6px 6px;
+}
+
+.pageButton {
+    background-color:#BBBBBB;
+    color:#fffaff;
+    border: 2px solid #BBBBBB;
+}
+
+.pageButton:hover {
+    background-color:#DDDDFF;
+}
+
+
+
+
+
+
+
+
+#bounds {
+    margin:4px;	
+    overflow:auto;
+   float: left;
+   padding:0px 5px 10px 5px;
+
+}
+
+#bounds label {
+    
+  -webkit-appearance: button;
+	padding:0px 5px;
+	float: left;
+}
+
+#bounds label span {
+    /*text-align:center;*/
+    padding:3px 0px;
+    display:block;
+	
+}
+
+#bounds label input {
+    position:absolute;
+    top:-20px;
+}
+
+#bounds input:checked + span 
+{
+    background-color:#404040;
+    color:#F7F7F7;
+}   
+
+#constraint
+{
+float:left;
+
+margin:4px;
+padding:0px 5px;
+}
+
+#condition
+{
+
+float:left;
+
+margin:4px;
+padding:0px 5px;
+}
+
+.bodytype            
+{ font-family: sans-serif; 
+background-color:rgba(29,155,171,0.75);
+margin: 15px 0px;
+padding: 30px 30px; 
+}
+
+.springDesc
+{ 
+background-color:#E9B64D;
+margin: 15px 0px;
+padding: 10px 20px; 
+}
+    
+
+.bodytype.span3
+{
+padding: 7px 12px; 
+margin: 9px 0px;
+}
+
+
+#map_canvas
+{ 
+    /*height: 200px;*/
+    background-color: #CCC;
+}
+
+#show_map
+{
+    height: 400px;
+    background-color: #CCC;
+
+}
+
+#show_map img
+{
+	max-width:none;
+}
+
+#images_full img,
+#images_thumbnails img {
+  padding:3px;
+  border:1px solid #CCC;
+}
+
+#images_thumbnails img {
+  margin:4px;
+}
+
+
+/*THE LOGIN PAGE*/
+/* The white background content wrapper */
+.container > .logincontent {
+background-color: #fff;
+padding: 20px;
+
+-webkit-border-radius: 10px 10px 10px 10px;
+   -moz-border-radius: 10px 10px 10px 10px;
+        border-radius: 10px 10px 10px 10px;
+-webkit-box-shadow: 0 1px 2px rgba(0,0,0,.15);
+   -moz-box-shadow: 0 1px 2px rgba(0,0,0,.15);
+        box-shadow: 0 1px 2px rgba(0,0,0,.15);
+}
+
+.container 
+{
+width:480px;
+}
+
+
+
+.login-form {
+margin-left: 65px;
+}
+
+legend {
+margin-right: -50px;
+font-weight: bold;
+color: #404040;
+}

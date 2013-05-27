@@ -1,0 +1,95 @@
+{% extends "layout.html" %}
+{% block title %}Index{% endblock %}
+{% block head %}
+  {{ super() }}
+
+  <script type="text/javascript" src="{{ url_for('static', filename='js/advsearch.js') }}"></script>
+  <script type="text/javascript">
+  
+
+
+ $(document).ready(function () {
+  $("#adSearchMenuItem").addClass("active");
+  
+});
+  </script>
+
+{% endblock %}
+{% block content %}
+
+
+<h1> Search </h1>
+<div class="bodytype">
+<p>
+	Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur tincidunt tempus ipsum gravida aliquet. Proin turpis magna, suscipit sed mattis nec, eleifend at magna. Suspendisse potenti. Aenean vel odio velit. Ut gravida orci eu nunc auctor rutrum. Cras lacinia metus ac diam vehicula a condimentum augue congue. Etiam ante turpis, dignissim ut varius a, tincidunt eget sem. Morbi et justo neque. Sed a turpis augue, a faucibus purus.
+
+<p>
+<div>
+	<form action="{{ url_for('results')}}" method="get">
+	<div class="tabbable"> <!-- Only required for left/right tabs -->
+		<ul class="nav nav-tabs">
+			<li class="active">
+				<a href="#tab1" data-toggle="tab">Physical</a>
+			</li>
+			<li>
+				<a href="#tab2" data-toggle="tab">Chemical</a>
+			</li>
+		</ul>
+		<div class="tab-content">
+			<div class="tab-pane active" id="tab1">
+				
+				
+					<div id="bounds" style="background:#81C6DD;">
+						<p>(1) Attribute</p>
+						<label><input type="radio" name="att" value="temperature"><span>Temperature</span></label>
+						<label><input type="radio" name="att" value="ph_level"><span>pH</span></label>
+						<label><input type="radio" name="att" value="redox"><span>Redox</span></label>
+						<label><input type="radio" name="att" value="dissolved_oxygen"><span>Dissolved Oxygen</span></label>
+						<label><input type="radio" name="att" value="conductivity"><span>Conductivity</span></label>								
+					</div>
+					
+					<div id="bounds" style="background:#90CA77;">
+						<p>(2) Condition</p>
+						<label><input type="radio" name="cond" value=">="><span>≥</span></label>
+						<label><input type="radio" name="cond" value="="><span>=</span></label>
+						<label><input type="radio" name="cond" value="<="><span>≤</span></label>
+					</div>
+					
+					
+					<div id="constraint" style="background:#E9B64D; ">
+						<p>(3) Constraint</p>
+						<input type="text" name="const" style="width:100px">
+					</div>
+
+					<div id="bounds" style="background:#E44D2E;">
+						<p>(4) Next Condition</p>
+						<label><input type="radio" name="logic" value="and"><span>AND</span></label>
+						<label><input type="radio" name="logic" value="or"><span>OR</span></label>
+					</div>
+					<input type="button" value="add condition" style="display:block" onclick="addCondition()">
+					<input type="submit" value="Search">
+
+				
+				
+			</div>
+			<div class="tab-pane" id="tab2">							
+				
+			</div>
+		</div>
+	</div>
+	<div class="alert" id="alert" style="display:none">
+		<button type="button" class="close" data-dismiss="alert">&times;</button>
+		<p id="alertMessage"></p>
+	</div>			
+
+	<div class="row-fluid">
+		<div id="conditions" class="span4">
+			<h5> Current query conditions: </h5>	
+
+		</div>
+	</div>
+	</form>
+</div>
+
+</div>
+{% endblock %}

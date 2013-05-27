@@ -1,0 +1,32 @@
+{% extends "layout.html" %}
+{% block title %}Home{% endblock %}
+{% block head %}
+  {{ super() }}
+  <script type="text/javascript" src="{{ url_for('static', filename='js/jquery.js') }}"></script>
+  {% endblock %}
+
+
+{% block content %}
+
+<div>
+
+
+<ul class="thumbnails">
+  
+
+
+{% for image in images %}
+
+	<li class="span2">
+    	<a href="{{url_for('samplesite', site_id=image.site_id)}}" class="thumbnail">
+      		<img data-src="holder.js/160x120" style="width:120px: height:160px;"src="{{url_for('static', filename=image.imagepath)}}" alt="blah">
+    	</a>
+	</li>
+
+{% endfor %}
+
+</ul>
+</div>
+
+
+  {% endblock %}

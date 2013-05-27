@@ -1,0 +1,56 @@
+<!doctype html>
+<html>
+  <head>
+
+	
+    {% block head %}
+    
+
+	<script type="text/javascript" src="{{ url_for('static', filename='js/jquery.js') }}"></script>
+
+    <title>{% block title %}{% endblock %} - Geothermal Database</title>
+	
+    {% endblock %}
+	<link href="{{ url_for('static', filename='bootstrap/css/bootstrap.min.css')}}" rel="stylesheet">
+	<link rel="stylesheet" href="{{ url_for('static', filename='gns.css') }}">
+	<link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}">
+
+	{% with messages = get_flashed_messages() %}
+  {% if messages %}
+    <ul class=flashes>
+    {% for message in messages %}
+      <li>{{ message }}</li>
+    {% endfor %}
+    </ul>
+  {% endif %}
+{% endwith %}
+
+	
+
+  </head>
+<body > 
+<div id="container">
+	<div id="innerContainer">
+		{% include "header.html" %}
+
+		{% include "menu.html" %}
+	
+		<div id="content">
+			{% block content %}
+			{% endblock %}
+
+		</div>
+	
+		<div id="footer">
+			{% block footer %}
+				{% include "footer.html" %}
+			{% endblock %}
+		</div>
+	</div>
+</div>
+
+<script src="{{ url_for('static', filename='bootstrap/js/bootstrap.js')}}"></script>
+
+
+</body>
+</html>

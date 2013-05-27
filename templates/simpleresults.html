@@ -1,0 +1,214 @@
+{% extends "layout.html" %}
+{% block title %}Results{% endblock %}
+{% block head %}
+  {{ super() }}
+    <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?sensor=true"></script>
+    <script type="text/javascript" src="{{ url_for('static', filename='js/maps.js') }}"></script>
+	<script type="text/javascript" src="{{ url_for('static', filename='js/jquery.js') }}"></script>
+	<script type="text/javascript" src="https://www.google.com/jsapi"></script>
+
+	
+	<script type="text/javascript">
+	
+	
+	function loadMarkers()
+	{
+		{% for pos in entries %}		
+			addMarker("{{pos.city}}", "{{pos.eastings}}", "{{pos.northings}}", "{{pos.feature_name}}", "{{pos.desc}}");
+		{% endfor %}
+	}
+
+	window.onload=function()
+	{
+		initialize();
+		loadMarkers();
+		$('i').tooltip();
+	};
+
+	google.load("visualization", "1", {packages:["corechart"]});
+
+    google.setOnLoadCallback(drawChart);
+      function drawChart() 
+      {
+      	var raw = []
+
+      	raw.push(["Range","Count"]);
+
+      	{% for slice in pieChart %}
+      		raw.push(["{{slice.range}}",{{slice.count}}]);
+      	{% endfor %}
+
+        var data = google.visualization.arrayToDataTable(raw);
+
+        var options = 
+        {
+          title: 'Hot Spring Temperatures',
+          chartArea: {left:5,top:20, height:"100%", width:"100%"},
+          colors:["#FFE71E","#EDAD16","#DC730F","#CB3907","#ba0000"],
+          backgroundColor: 'transparent'
+
+        };
+
+        var chart = new google.visualization.PieChart(document.getElementById('chart_div'));
+        chart.draw(data, options);
+      }
+	
+
+	</script>
+
+	
+
+		
+{% endblock %}
+{% block content %}
+<div>
+<h1>{{filtertype}} Springs</h1>
+<div align="right">
+	<input type="button" value="Enlarge Map" id="expand" >	
+</div>
+	
+<div id="map_canvas" style="height: 200px; background-color: #CCC;" style="float:none"></div>	
+
+
+
+<div class="span3 bodytype">	
+	
+
+	<form action="{{url_for('simpleresults', filter=filtertype)}}">
+		<table>
+		<tr>
+			<th style="text-align:left"> Temperature </th>
+			</tr>
+			<tr>
+				<td>
+						
+					{% if filtertype=="All" %} 
+						<p style="display:inline;"> Between </p> 
+						<input type="text" style="width:30px; display:inline;" value="{{tempMin}}" name="tempMin"> 
+
+						<p style="display:inline;"> and </p> 
+						<input type="text" style="width:30px; display:inline;" value="{{tempMax}}" name="tempMax">
+					{% else %}
+						<p style="display:inline;"> Between </p> 
+						<input type="text" style="width:30px; display:inline;" value="{{tempMin}}" name="tempMin" disabled> 
+
+						<p style="display:inline;"> and </p> 
+						<input type="text" style="width:30px; display:inline;" value="{{tempMax}}" name="tempMax" disabled>
+					{% endif %}
+						
+					
+				</td>
+			</tr>
+
+			<tr>
+				<th>Must have:</th>
+			</tr>
+			<tr>
+				<td>					
+						<label class="checkbox"><i class="icon-trash"></i><input type="checkbox" name="items" value="toilet"> Toilet </label>
+						<label class="checkbox"><i class="icon-road"></i><input type="checkbox" name="items" value="track"> Track </label>
+						<label class="checkbox"><i class="icon-hdd"></i><input type="checkbox" name="items" value="parkbench"> Park Bench</label>
+						<label class="checkbox"><i class="icon-warning-sign"></i><input type="checkbox" name="items" value="private"> Private</label>
+						<a class="btn" onclick="history.back()">Back</a>
+						<input type="submit" value="Go" class="btn">
+					
+				</td>
+			</tr>			
+		</table>
+		</form>
+
+		 <div id="chart_div" style="width: auto; height: auto;"></div>
+</div>
+<div class="span9">
+	<table class="table" >
+				{% for entry in entries %}
+		<tr>
+			<td>
+				<div class="span2">
+					<img style="padding-top:10px" src="{{ url_for('static', filename=entry.imagepath) }}">
+					<div style="background-color: #1D9BAB; height:10px;"> </div>
+				</div>
+				<div class="span4">
+					<ul class="unstyled">
+						<li>	<h4 class="feature_name" style="margin-bottom:0"> {{entry.feature_name}} </h4></li>
+						<li> <p><em> {{ entry.city }} </em></p> </li>
+						
+
+
+						<li><div style="overflow:hidden; height:automatic" >
+							{{ entry.desc}}
+						</div></li>
+					</ul>
+				</div>
+			</td>
+			<td>
+				<div class="row-fluid">
+
+					<div class="span11">
+					<div style="margin:25px 0 0 0;">
+						<p style="text-align:right"> Temp: {{ entry.temp}} </p>
+					</div>
+
+					<div style=" margin:0 0 5px 0; float:right;" class="span5">
+						{% if entry.toilet %}
+							<i rel="tooltip" data-original-title="Trash cans available" class="icon-trash" style="float:right; margin:0 2px;"></i>
+						{% endif %}
+						{% if entry.track %}
+							<i rel="tooltip" data-original-title="Walking track available" class="icon-road" style="float:right; margin:0 2px;"></i>
+						{% endif %}
+						{% if entry.parkbench %}
+							<i rel="tooltip" data-original-title="Park benches available" class="icon-hdd" style="float:right; margin:0 2px;"></i>
+						{% endif %}
+						{% if entry.private %}
+							<i rel="tooltip" data-original-title="Private Property" class="icon-warning-sign" style="float:right; margin:0 2px;"></i>
+						{% endif %}
+			
+					</div>
+					<div style="float:right;">
+						<a href="{{url_for('samplesite',site_id=entry.location_id)}}" class="btn" style="display:block; margin:10px 0;" > More Details</a>
+
+						<input type="hidden" value="{{entry.eastings}},{{entry.northings}}">
+
+						<!-- Button to trigger modal -->
+						<a href="#myModal" role="button" class="btn" data-toggle="modal" onclick="modalInit.call(this);" style="display:block; ">Show on Map</a>
+					</div>
+				</div>
+					
+
+					
+
+					
+				</div> 
+				
+			</td>
+		</tr>
+		
+		{% else %}
+
+		<tr>
+		<td> <em>Unbelievable.  No entries here</em> </td>
+		</tr>
+		{% endfor %}
+	</table>
+</div>
+</div>
+
+<!-- Modal -->
+				<div id="myModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+				  <div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+					<h3 id="myModalLabel">Modal header</h3>
+				  </div>
+				  <div class="modal-body">
+					<script type="text/javascript">
+						
+					</script>
+					
+					<div id="show_map" style="float:none"></div>
+				  </div>
+				  <div class="modal-footer">
+				  	
+					<button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
+				  </div>
+				</div>
+{% endblock %}	

@@ -1,0 +1,43 @@
+{% extends "layout.html" %}
+{% block title %}Index{% endblock %}
+{% block head %}
+  {{ super() }}
+{% endblock %}
+{% block content %}
+<h1>Results</h1>
+
+
+ 
+	<table class="table">
+		<tr>
+			<th>Sample Id</th>
+			<th>Physical Id</th>
+			<th>Temperature</th>
+			<th>pH Level</th>
+			<th>Redox</th>
+			<th>Dissolved Oxygen</th>
+			<th>Conductivity</th>
+		</tr>
+		{% for entry in entries %}
+		<tr>
+		
+			<td>{{ entry.sample_id }}</td>
+			<td>{{ entry.phys_id }}</td>
+			<td>{{ entry.temperature }}</td>
+			<td>{{ entry.ph_level }}</td>
+			<td>{{ entry.redox }}</td>
+			<td>{{ entry.dissolved_oxygen }}</td>
+			<td>{{ entry.conductivity }}</td>
+		</tr>
+		{% else %}
+		<tr>
+		<td> <em>Unbelievable.  No entries here</em>
+		</tr>
+		{% endfor %}
+	</table>
+  
+   
+ 
+
+
+{% endblock %}

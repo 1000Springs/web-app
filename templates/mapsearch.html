@@ -1,0 +1,62 @@
+{% extends "layout.html" %}
+{% block title %}Home{% endblock %}
+{% block head %}
+  {{ super() }}
+      <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?sensor=true"></script>
+    <script type="text/javascript" src="{{ url_for('static', filename='js/mapsearch.js') }}"></script>
+	<script type="text/javascript" src="{{ url_for('static', filename='js/jquery.js') }}"></script>
+
+
+	<script type="text/javascript">
+	
+	
+	function loadMarkers()
+	{
+		{% for pos in positions %}
+		
+			addMarker("{{pos.city}}", "{{pos.eastings}}", "{{pos.northings}}", "{{pos.feature_name}}", "{{pos.desc}}", "{{pos.id}}");
+		{% endfor %}
+	}
+
+	window.onload=function()
+	{
+		initialize();
+		loadMarkers();
+	};
+
+
+
+	</script>
+
+	
+{% endblock %}
+{% block content %}
+<h1>Map Search</h1>
+
+<div class="span8">
+
+	<div id="map_canvas" style="height: 500px;" ></div>	
+
+</div>
+
+<div class="span4">
+	<form action="{{url_for('mapResults')}}">
+	<div id="selected" class="bodytype" style="margin:0px">
+		<h3> Selected Springs </h3>
+	</div>
+	<input type="submit" value="Search">
+	</form>
+
+	<input type="button" value="Northland" style="display:block">
+	<input type="button" value="Auckland" style="display:block">
+	<input type="button" value="Waikato" style="display:block">
+	<input type="button" value="Bay of Plenty" style="display:block">
+	<input type="button" value="Gisbourne" style="display:block">
+	<input type="button" value="Manawatu-Wanganui" style="display:block">
+	<input type="button" value="Wellington" style="display:block">
+	<input type="button" value="Hawke's Bay" style="display:block">
+
+</div>
+
+
+{% endblock %}

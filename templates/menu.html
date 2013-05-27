@@ -1,0 +1,27 @@
+
+
+<div class="navbar">
+  <div class="navbar-inner">   
+    <ul class="nav">	
+		<li id="indexMenuItem"><a href="{{ url_for('index')}}">Home</a></li>
+	  <li class="divider-vertical"></li>
+	  
+		<li id="searchMenuItem"><a href="{{ url_for('simplesearch')}}">Basic Search</a></li>
+	  <li class="divider-vertical"></li>
+	  
+		<li id="mapSearchMenuItem"><a href="{{ url_for('searchbyimage')}}">Search by Image</a></li>
+	  <li class="divider-vertical"></li>
+	  
+		<li id="mapSearchMenuItem"><a href="{{ url_for('mapsearch')}}">Map Search</a></li>
+	  <li class="divider-vertical"></li>
+
+	  	<li id="adSearchMenuItem"><a href="{{ url_for('search')}}">Advanced Search</a></li>
+	  	<li class="divider-vertical"></li>
+
+	  	<li id="mapSearchMenuItem"><a href="{{ url_for('index')}}">History Search</a></li>
+	  	<li class="divider-vertical"></li>
+
+	  	<li id="adSearchMenuItem"><a href="{{ url_for('searchbycat')}}">Catergory Search</a></li>
+    </ul>
+  </div>
+</div>
