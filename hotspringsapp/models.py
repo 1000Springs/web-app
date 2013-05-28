@@ -70,10 +70,10 @@ class Location(db.Model):
 
 class User(db.Model):
 
-	username = db.Column(db.String)
+	username = db.Column(db.String, primary_key=True)
 	password = db.Column(db.String)
 
-	def __init__(self, uName,pWord):
-		username = uname
-		password = pWord
+	def __init__(self,uName,pWord):
+		self.username = uname
+		self.password = pWord
 		

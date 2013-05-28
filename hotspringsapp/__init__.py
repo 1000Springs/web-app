@@ -152,7 +152,7 @@ def simpleresults(filter):
 					from sample s, physical_data p, location l, images i
 					where l.FEATURE_NC = s.location_feature_nc
 					and p.sample_id = s.sample_id
-					and i.location_feature_nc = l.feature_nc
+					and i.sample_id = s.sample_id
 					and s.sample_id in
 						(select sample_id 
 						from sample group 
@@ -161,7 +161,7 @@ def simpleresults(filter):
 					and i.image_id in
 						(select image_id 
 						from images
-						group by location_feature_nc)"""
+						group by sample_id)"""
 
 	if filter == "city":
 		queryCity = request.args.get('city')
@@ -266,13 +266,14 @@ def searchbyimage():
 
 	cur = g.db.cursor()
 
-	cur.execute("""select image_path, image_name, location_feature_nc
-					from images
+	cur.execute("""select i.image_path, i.image_name, i.sample_id,s.location_feature_nc
+					from images i, sample s
+					where i.sample_id = s.sample_id;
 					""")
 
 	images = [dict(imagepath=row[0],
 				   imagename=row[1],
-				   site_id=row[2]) for row in cur.fetchall()]
+				   site_id=row[3]) for row in cur.fetchall()]
 
 	cur.close()
 
@@ -338,9 +339,10 @@ def samplesite(site_id):
 					img2 = imageLocation2)
 	app.logger.debug (siteInfo)
 
-	query = """select image_path, image_name
-				   from images
-				   where location_feature_nc = '{id}'""".format(id=id)
+	query = """select i.image_path, i.image_name
+				   from images i, sample s
+				   where s.sample_id = i.sample_id
+				   and s.location_feature_nc = '{id}'""".format(id=id)
 
 	
 
@@ -400,7 +402,7 @@ def GetSOTD():
 	if (now - currentDate) > datetime.timedelta(days=1):
 		springIndex+=1
 
-	query = """select image_path, location_feature_nc
+	query = """select image_path
 				from images"""
 
 	cur.execute(query)
