@@ -1,43 +1,10 @@
 from flask_sqlalchemy import SQLAlchemy
 from hotspringsapp import app
+from werkzeug.security import generate_password_hash, check_password_hash
+
 
 db = SQLAlchemy(app)
 
-class Sample(db.Model):
-
-	SAMPLE_ID = db.Column(db.Integer, primary_key=True)
-	date_gathered = db.Column(db.DateTime)
-	LOCATION_FEATURE_NC = db.Column(db.String, db.ForeignKey("location.feature_nc"))
-	feature_nc = db.relationship("location",backref="Sample",lazy="select")
-
-	def __init__(self,id,date,location):
-		self.SAMPLE_ID = id
-		self.date_gathered = date
-		self.LOCATION_FEATURE_NC = location
-
-
-class Physical_data(db.Model):
-
-	Phys_ID = db.Column(db.Integer, primary_key=True)
-	SAMPLE_ID = db.Column(db.Integer, db.ForeignKey('sample.sample_id'))
-	sample = db.relationship("Sample",backref="Physical_data",lazy='select')
-
-	Temperature = db.Column(db.Float)
-	ph_level = db.Column(db.Float)
-	redox = db.Column(db.Float)
-	dissolved_oxygen = db.Column(db.Float)
-	conductivity = db.Column(db.Float)
-	date_gathered = db.Column(db.Float)
-
-	def __init__(self, pid,sid,temp,ph,red,dis_ox,cond,date):
-		self.Phys_ID          = pid
-		self.SAMPLE_ID        = sid
-		self.Temperature      = temp
-		self.ph_level         = ph
-		self.redox            = red
-		self.dissolved_oxygen = dis_ox
-		self.conductivity     = cond
-		self.date_gathered    = date
 
 class Location(db.Model):
 
@@ -65,15 +32,55 @@ class Location(db.Model):
 	 	self.track = track
 	 	self.private = private
 
+class Sample(db.Model):
+
+	SAMPLE_ID = db.Column(db.Integer, primary_key=True)
+	date_gathered = db.Column(db.DateTime)
+	LOCATION_FEATURE_NC = db.Column(db.String, db.ForeignKey("location.Feature_nc"))
+	feature_nc = db.relationship("Location",backref="Sample",lazy="select")
+
+	def __init__(self,id,date,location):
+		self.SAMPLE_ID = id
+		self.date_gathered = date
+		self.LOCATION_FEATURE_NC = location
+
+
+class Physical_data(db.Model):
+
+	Phys_ID = db.Column(db.Integer, primary_key=True)
+	sample_id = db.Column(db.Integer, db.ForeignKey('sample.SAMPLE_ID'))
+	sample = db.relationship("Sample",backref="Physical_data",lazy='select')
+
+	Temperature = db.Column(db.Float)
+	ph_level = db.Column(db.Float)
+	redox = db.Column(db.Float)
+	dissolved_oxygen = db.Column(db.Float)
+	conductivity = db.Column(db.Float)
+	date_gathered = db.Column(db.Float)
+
+	def __init__(self, pid,sid,temp,ph,red,dis_ox,cond,date):
+		self.Phys_ID          = pid
+		self.sample_id        = sid
+		self.Temperature      = temp
+		self.ph_level         = ph
+		self.redox            = red
+		self.dissolved_oxygen = dis_ox
+		self.conductivity     = cond
+		self.date_gathered    = date
+
 		
 		
 
 class User(db.Model):
 
-	username = db.Column(db.String, primary_key=True)
-	password = db.Column(db.String)
+	username = db.Column(db.String(100), primary_key=True)
+	password = db.Column(db.String(100))
 
-	def __init__(self,uName,pWord):
-		self.username = uname
-		self.password = pWord
-		
+	def __init__(self,username,password):
+		self.username = username
+		self.password = password
+
+	def check_password(self, password):
+		return check_password_hash(self.password,password)
+
+db.create_all()
