@@ -6,6 +6,6 @@ A web application to allow the public to discover the hot springs around New Zea
 Required Flask Add-ons
 --------------
 
-flask sqlalchemy
-flask script
-flask assets
+flask sqlalchemy<br>
+flask script<br>
+flask assets<br>
