@@ -6,22 +6,36 @@
 		<li id="indexMenuItem"><a href="{{ url_for('index')}}">Home</a></li>
 	  <li class="divider-vertical"></li>
 	  
-		<li id="searchMenuItem"><a href="{{ url_for('simplesearch')}}">Basic Search</a></li>
+	  <li id="searchMenuItem"><a href="#">About Project</a></li>
 	  <li class="divider-vertical"></li>
+
+	  <li id="searchMenuItem"><a href="#">Browse by</a></li>
+	  <li class="divider-vertical"></li>
+
+
+		<!-- <li id="searchMenuItem"><a href="{{ url_for('simplesearch')}}">Basic Search</a></li>
+	  <li class="divider-vertical"></li> -->
 	  
-		<li id="mapSearchMenuItem"><a href="{{ url_for('searchbyimage')}}">Search by Image</a></li>
+	<!-- 	<li id="mapSearchMenuItem"><a href="{{ url_for('searchbyimage')}}">Search by Image</a></li>
 	  <li class="divider-vertical"></li>
 	  
 		<li id="mapSearchMenuItem"><a href="{{ url_for('mapsearch')}}">Map Search</a></li>
-	  <li class="divider-vertical"></li>
+	  <li class="divider-vertical"></li> -->
 
 	  	<li id="adSearchMenuItem"><a href="{{ url_for('search')}}">Advanced Search</a></li>
 	  	<li class="divider-vertical"></li>
 
-	  	<li id="mapSearchMenuItem"><a href="{{ url_for('index')}}">History Search</a></li>
+<!-- 	  	<li id="mapSearchMenuItem"><a href="{{ url_for('index')}}">History Search</a></li>
 	  	<li class="divider-vertical"></li>
 
-	  	<li id="adSearchMenuItem"><a href="{{ url_for('searchbycat')}}">Catergory Search</a></li>
+	  	<li id="adSearchMenuItem"><a href="{{ url_for('searchbycat')}}">Catergory Search</a></li> -->
     </ul>
+<ul class="nav pull-right">	
+    		<li id="searchMenuItem">
+    			<a href="{{ url_for('simplesearch')}}">Search</a>
+    			<img style="height:25px;width:25px" src="{{ url_for('static', filename='img/Search.png') }}">
+    		</li>
+	  
+</ul>
   </div>
 </div>

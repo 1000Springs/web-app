@@ -17,35 +17,57 @@
 
 {% endblock %}
 {% block content %}
-<h1>Overview</h1>
 
-<div>
-<a class="btn btn-primary" href="{{url_for('simplesearch')}}">Find Hot Springs</a>
-<a class="btn" href="{{url_for('search')}}">Advanced Search</a>
+<div id="myCarousel" class="carousel slide" >
 
-<br>
-<br>
-<p class="muted"><em>Check out the<a href="{{url_for('sotd')}}"> Spring of the day </a></em></p>
+  <!-- Carousel items -->
+  <div class="carousel-inner">
+    <div class="active item">
+    	<img  src="{{ url_for('static', filename='img/carouselimage1.jpg') }}" alt="Geothermal Hot Springs, Bay of Plenty, New Zealand">
+    	<div class="container">
+            <div class="carousel-caption">
+              <h1 >Search by Location</h1>
+              <p class="lead">Cras justo odio, dapibus ac facilisis in, egestas eget quam. Donec id elit non mi porta gravida at eget metus. Nullam id dolor id nibh ultricies vehicula ut id elit.</p>
+              
+            </div>
+        </div>
+    </div>
+    <div class="item">
+    	<a href="{{url_for('searchbycat')}}"><img src="{{ url_for('static', filename='img/carouselimage3.jpg') }}" alt="Geothermal Hot Springs, Bay of Plenty, New Zealand"></a>
+    	<div class="container">
+            <div class="carousel-caption">
+              <h1>Tripidity</h1>
+              <p class="lead">Cras justo odio, dapibus ac facilisis in, egestas eget quam. Donec id elit non mi porta gravida at eget metus. Nullam id dolor id nibh ultricies vehicula ut id elit.</p>
+              
+            </div>
+        </div>
+    </div>
+    <div class="item">
+    	<img src="{{ url_for('static', filename='img/carouselimage2.jpg') }}" alt="Geothermal Hot Springs, Bay of Plenty, New Zealand">
+    	<div class="container">
+            <div class="carousel-caption">
+              <h1>Spring of the Day</h1>
+              <p class="lead">Cras justo odio, dapibus ac facilisis in, egestas eget quam. Donec id elit non mi porta gravida at eget metus. Nullam id dolor id nibh ultricies vehicula ut id elit.</p>
+             
+            </div>
+        </div>
+    </div>
+  </div>
+  <!-- Carousel nav -->
+  <a class="carousel-control left" href="#myCarousel" data-slide="prev">&lsaquo;</a>
+  <a class="carousel-control right" href="#myCarousel" data-slide="next">&rsaquo;</a>
 </div>
+
+<h1>Overview</h1>
 <div>
 	<p>
 	Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur tincidunt tempus ipsum gravida aliquet. Proin turpis magna, suscipit sed mattis nec, eleifend at magna. Suspendisse potenti. Aenean vel odio velit. Ut gravida orci eu nunc auctor rutrum. Cras lacinia metus ac diam vehicula a condimentum augue congue. Etiam ante turpis, dignissim ut varius a, tincidunt eget sem. Morbi et justo neque. Sed a turpis augue, a faucibus purus.
 	</p>
 </div>
 
-<div>
-<table class="table">
-
-		<tr>
-			<td><img src="{{ url_for('static', filename='img/hotsprings6small.jpg') }}" alt="Geothermal Hot Springs, Bay of Plenty, New Zealand"></td>
-			<td><img src="{{ url_for('static', filename='img/hotsprings2small.jpg') }}" alt="Geothermal Hot Springs, Bay of Plenty, New Zealand"></td>
-			<td><img src="{{ url_for('static', filename='img/hotsprings3small.jpg') }}" alt="Geothermal Hot Springs, Bay of Plenty, New Zealand"></td>
-		</tr>
-
-</table>
-
-
-</div>
-
-
 {% endblock %}
+
+
+
+
+
