@@ -1,0 +1,43 @@
+{% extends "layout.html" %}
+{% block title %}Home{% endblock %}
+{% block head %}
+  {{ super() }}
+
+
+	<script type="text/javascript" src="{{ url_for('static', filename='js/jquery.js') }}"></script>
+
+
+{% endblock %}
+{% block content %}
+
+<div style="position:relative; height:768px;">
+<div class="cat" style="float:left;">
+<img src="{{ url_for('static', filename='img/springsbycat/colouredhotspring.jpg')}}"  >
+<p class="lead" style="text-align:center;background-color:rgba(29,155,171,0.75);">Coloured Pools </p>
+</div>
+
+<div class="cat" style="float:left;padding:0 60px;">
+<img src="{{ url_for('static', filename='img/springsbycat/clearhotspring.jpg')}}"  >
+<p  class="lead" style="text-align:center;background-color:rgba(29,155,171,0.75)">Clear Pools </p>
+</div>
+
+<div class="cat" style="float:left;">
+<img src="{{ url_for('static', filename='img/springsbycat/murkyhotspring.jpg')}}"    >
+<p class="lead" style="text-align:center;background-color:rgba(29,155,171,0.75);">Murky Pools </p>
+</div>
+</div>
+
+
+<script type="text/javascript">
+$(document).ready(function(){
+$(".cat img").hover(
+function() {
+$(this).animate({"opacity": "0.5"}, "fast");
+},
+function() {
+$(this).animate({"opacity": "1"}, "fast");
+});
+
+});
+</script>
+{% endblock %}

@@ -30,12 +30,16 @@
   </head>
 <body > 
 <div id="container">
+	
 	<div id="innerContainer">
 		{% include "header.html" %}
 
-		{% include "menu.html" %}
+		
 	
 		<div id="content">
+				<img style="width:1024px;position:absolute; "src="{{ url_for('static', filename='img/nzhotsprings/background.jpg') }}">
+			{% include "menu.html" %}
+		
 			{% block content %}
 			{% endblock %}
 
@@ -47,6 +51,7 @@
 			{% endblock %}
 		</div>
 	</div>
+	
 </div>
 
 <script src="{{ url_for('static', filename='bootstrap/js/bootstrap.js')}}"></script>

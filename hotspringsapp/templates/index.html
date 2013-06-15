@@ -18,12 +18,14 @@
 {% endblock %}
 {% block content %}
 
+
+
 <div id="myCarousel" class="carousel slide" >
 
   <!-- Carousel items -->
   <div class="carousel-inner">
     <div class="active item">
-    	<img  src="{{ url_for('static', filename='img/carouselimage1.jpg') }}" alt="Geothermal Hot Springs, Bay of Plenty, New Zealand">
+    	<img  src="{{ url_for('static', filename='img/searchbylocation.jpg') }}" alt="Geothermal Hot Springs, Bay of Plenty, New Zealand">
     	<div class="container">
             <div class="carousel-caption">
               <h1 >Search by Location</h1>
@@ -33,7 +35,7 @@
         </div>
     </div>
     <div class="item">
-    	<a href="{{url_for('searchbycat')}}"><img src="{{ url_for('static', filename='img/carouselimage3.jpg') }}" alt="Geothermal Hot Springs, Bay of Plenty, New Zealand"></a>
+    	<a href="{{url_for('searchbycat')}}"><img src="{{ url_for('static', filename='img/searchbycategory.jpg') }}" alt="Geothermal Hot Springs, Bay of Plenty, New Zealand"></a>
     	<div class="container">
             <div class="carousel-caption">
               <h1>Tripidity</h1>
@@ -58,12 +60,7 @@
   <a class="carousel-control right" href="#myCarousel" data-slide="next">&rsaquo;</a>
 </div>
 
-<h1>Overview</h1>
-<div>
-	<p>
-	Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur tincidunt tempus ipsum gravida aliquet. Proin turpis magna, suscipit sed mattis nec, eleifend at magna. Suspendisse potenti. Aenean vel odio velit. Ut gravida orci eu nunc auctor rutrum. Cras lacinia metus ac diam vehicula a condimentum augue congue. Etiam ante turpis, dignissim ut varius a, tincidunt eget sem. Morbi et justo neque. Sed a turpis augue, a faucibus purus.
-	</p>
-</div>
+
 
 {% endblock %}
 

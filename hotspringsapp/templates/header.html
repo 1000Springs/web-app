@@ -1,4 +1,13 @@
-<div id="header">
-	<div id="logo" onclick="location.href='http://www.gns.cri.nz';" title="GNS Science Home">
-    </div>
+<div id="header" style="">
+	
+	<img style="width:400px;height:100%;padding-top:44px" src="{{ url_for('static', filename='img/logo2.png') }}">
+
+	<div style="float:right;padding-top:49px;margin:0 5px;">
+	<a style="text-decoration:none;"href="{{url_for('login')}}"><img style="
+
+				height:34px;
+				width:34px;"src="{{ url_for('static', filename='img/icons/login.png') }}">
+	<p style="color:#1D9BAB;"> Login </p>
+</a>
+</div>
 </div>

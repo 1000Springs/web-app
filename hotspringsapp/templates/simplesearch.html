@@ -1,107 +1,112 @@
 {% extends "layout.html" %}
 {% block title %}Index{% endblock %}
 {% block head %}
-  {{ super() }}
-  <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?sensor=true"></script>
-    <script type="text/javascript" src="{{ url_for('static', filename='js/maps.js') }}"></script>
-	<script type="text/javascript" src="{{ url_for('static', filename='js/jquery.js') }}"></script>
+{{ super() }}
+<script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?sensor=true"></script>
+<script type="text/javascript" src="{{ url_for('static', filename='js/maps.js') }}"></script>
+<script type="text/javascript" src="{{ url_for('static', filename='js/jquery.js') }}"></script>
+<script type="text/javascript">
+   $(document).ready(function () 
+   {
+   	$("#searchMenuItem").addClass("active");
 
+   	images = new Array();
+
+   	images[0] = "bench";
+   	images[1] = "toilet";
+   	images[2] = "private";
+   	images[3] = "track";
+
+	// $(".filterIcons img").hover(
+	// function() {
+	// $(this).animate({"opacity": "0.7"}, "fast");
 	
-	<script type="text/javascript">
-	
-	
+	// },
+	// function() {
+	// $(this).animate({"opacity": "1"}, "fast");
+	// });
 
+$(".filterIcons img").toggle(
+  function () {
+    $(this).animate({"opacity": "1"}, "fast");
+  },
+  function () {
+    $(this).animate({"opacity": "0.7"}, "fast");
+  }
+);
+    
+   });
+   
 
-
-	$(document).ready(function () 
-	{
-		$("#searchMenuItem").addClass("active");
-  
-	});
- 
-
-	window.onload=function()
-	{
-	navigator.geolocation.getCurrentPosition(show_map);
-	codeLatLng();
-	};
-
-
-	</script>
+   window.onload=function()
+   {
+   navigator.geolocation.getCurrentPosition(show_map);
+   codeLatLng();
+   $('img').tooltip();
+   };
+   
+   
+</script>
 {% endblock %}
 {% block content %}
+<div class="row-fluid " style="top:75px;" >
+	      <div style="background-color: rgba(29,155,171,0.75); height:50px; opacity: 0.7; margin-top:-10px; "> </div>
+   <div  class="bodytype span6 contrast"  >
 
+         <h3> Find-a-Spring </h3>
+         <table>
+            <tr>
+               <th style="text-align:left"> Location </th>
+            </tr>
+            <tr>
+               <td>
+                  <form action="{{ url_for('simpleresults', filter='city')}}">
+                  <p>	Find hot springs near a city: </p>
+                  <input type="text" data-provide="typeahead" name="city" id="myLoc" >	
+                  <input type="submit" value="Search" class="btn" style="margin-bottom:10px">
+                  </form>
+               </td>
+            </tr>
+            <tr  class="filterIcons">
+            	<td>
+            		<div>
+						<img rel="tooltip" data-original-title="Benches" src="{{ url_for('static', filename='img/icons/bench_Selected.png') }}">               
+						<img rel="tooltip" data-original-title="Private" src="{{ url_for('static', filename='img/icons/private_Selected.png') }}">               
+						<img rel="tooltip" data-original-title="Toilet" src="{{ url_for('static', filename='img/icons/toilet_Selected.png') }}">               
+						<img rel="tooltip" data-original-title="Track" src="{{ url_for('static', filename='img/icons/track_Selected.png') }}">   
+	               	<span></div>
 
-<div>
-	
-	
+           		</td>
+            </tr>
+            <tr>
+               <th style="text-align:left"> Temperature </th>
+            </tr>
+            <tr>
+               <td>
+                  <div class="btn-group" >
+                     <a class="btn" href="{{url_for('simpleresults',filter='Safe')}}">Safe</a>
+                     <a class="btn" href="{{url_for('simpleresults',filter='Unsafe')}}">Unsafe</a>
+                     <a class="btn" href="{{url_for('simpleresults',filter='Hottest')}}">Hottest <i class="icon-fire"></i></a>
+                  </div>
+               </td>
+            </tr>
+            <tr>
+               <th style="text-align:left"> Misc <br> </th>
+            </tr>
+            <tr>
+               <td>
+                  <div class="btn-group" >
+                     <a class="btn" href="{{url_for('simpleresults',filter='Unique')}}">Unique</a>
+                     <a class="btn" href="{{url_for('simpleresults',filter='All')}}">All</a>
+                  </div>
+               </td>
+            </tr>
+         </table>
+      </div>
+   </div>
+<!--    <div>
+      <a class="btn" onclick="history.back()" style=" z-index:2">Back</a>!
+   </div> -->
 
-	<div class="row-fluid " style="position:absolute; top:75px;" >
-		
-		<div  class="bodytype span6"  >
-		
-		<h3> Find-a-Spring </h3>
-		
-		<table>		
-			<tr>
-				<th style="text-align:left"> Location </th>
-			</tr>
-			<tr>
-				<td>
-					<form action="{{ url_for('simpleresults', filter='city')}}"
-					
-						<p>	Find hot springs near a city: </p>
-						<input type="text" data-provide="typeahead" name="city" id="myLoc" >	
-						<input type="submit" value="Search" class="btn" style="margin-bottom:10px">
-					</form>
-				</td>
-			</tr>
-			<tr>
-				<td>
-				
-				</td>
-			</tr>
-			<tr>
-				<th style="text-align:left"> Temperature </th>
-			</tr>
-			<tr>
-				<td>
-				<div class="btn-group" >
-					<a class="btn" href="{{url_for('simpleresults',filter='Safe')}}">Safe</a>
-					<a class="btn" href="{{url_for('simpleresults',filter='Unsafe')}}">Unsafe</a>
-					<a class="btn" href="{{url_for('simpleresults',filter='Hottest')}}">Hottest <i class="icon-fire"></i></a>
-				</div>
-				</td>
-			</tr>
-			<tr>
-			<th style="text-align:left"> Misc <br> </th>
-			</tr>
-			<tr>
-				<td>
-					<div class="btn-group" >
-						<a class="btn" href="{{url_for('simpleresults',filter='Unique')}}">Unique</a>
-						<a class="btn" href="{{url_for('simpleresults',filter='All')}}">All</a>
-					</div>
-				</td>
-			</tr>
-		</table>
-			
-		</div>
-
-		
-	</div>
-<div>
-	<div style="background-color: #1D9BAB; height:50px; opacity: 0.7; z-index:1 ">
-	<!--<a class="btn" onclick="history.back()" style=" z-index:2">Back</a>!-->
-	</div>
-
-
-	
-
-	<img src="{{ url_for('static', filename='img/hotsprings4.jpg')}}" style="margin:-50px 0px;">
-	</div>
 </div>
-
-
-
 {% endblock %}
