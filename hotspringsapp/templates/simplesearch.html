@@ -5,26 +5,54 @@
 <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?sensor=true"></script>
 <script type="text/javascript" src="{{ url_for('static', filename='js/maps.js') }}"></script>
 <script type="text/javascript" src="{{ url_for('static', filename='js/jquery.js') }}"></script>
+<link rel="stylesheet" href="http://code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css" />
+  <script src="http://code.jquery.com/ui/1.10.3/jquery-ui.js"></script>
 <script type="text/javascript">
+
+ $(function () {
+  $("#search").css("background-color" , "rgba(29,155,171,0.75)");
+  $("#search img").attr("src","{{ url_for('static', filename='img/icons/search_Selected.png') }}");
+  $("#search p").css("color","#ffffff");
+
+});
+
+
+
+var max = 150;
+var min = 0;
+    $(function() {
+    $( "#slider-range" ).slider({
+      range: true,
+      min: min,
+      max: max,
+     animate: "fast",
+      values: [ 25, 75 ],
+      change: function( event, ui ) { $( "#amount" ).val($( "#slider-range" ).slider( "values", 0 )+ "°C" +
+      " - " + $( "#slider-range" ).slider( "values", 1 ) + "°C" );},
+      slide: function( event, ui ) {
+        $( "#amount" ).val(ui.values[ 0 ] + "°C - " + ui.values[ 1 ]+"°C" );
+      }
+    });
+    $( "#amount" ).val($( "#slider-range" ).slider( "values", 0 )+ "°C" +
+      " - " + $( "#slider-range" ).slider( "values", 1 ) + "°C" );
+  });
+
+
+   
+   var cities = "{{cities}}";
+   
+
    $(document).ready(function () 
    {
-   	$("#searchMenuItem").addClass("active");
-
-   	images = new Array();
-
-   	images[0] = "bench";
-   	images[1] = "toilet";
-   	images[2] = "private";
-   	images[3] = "track";
-
-	// $(".filterIcons img").hover(
-	// function() {
-	// $(this).animate({"opacity": "0.7"}, "fast");
-	
-	// },
-	// function() {
-	// $(this).animate({"opacity": "1"}, "fast");
-	// });
+    $("#searchMenuItem").addClass("active");
+  // $(".filterIcons img").hover(
+  // function() {
+  // $(this).animate({"opacity": "0.7"}, "fast");
+  
+  // },
+  // function() {
+  // $(this).animate({"opacity": "1"}, "fast");
+  // });
 
 $(".filterIcons img").toggle(
   function () {
@@ -35,8 +63,35 @@ $(".filterIcons img").toggle(
   }
 );
     
+
+$("#safe").click(function()
+   {
+      presetTemp(min,35);
+        
+   });
+
+$("#unsafe").click(function()
+   {
+      presetTemp(35,max);
+        
+   });
+
+$("#hottest").click(function()
+   {
+      presetTemp(Math.ceil(max*0.90),max);
+        
+   });
+
+
+
    });
    
+   function presetTemp(low,high)
+   {
+        $( "#slider-range" ).slider( "values", 1, high );
+        setTimeout(function() {$( "#slider-range" ).slider( "values", 0, low )},150);
+        
+   }
 
    window.onload=function()
    {
@@ -49,64 +104,91 @@ $(".filterIcons img").toggle(
 </script>
 {% endblock %}
 {% block content %}
-<div class="row-fluid " style="top:75px;" >
-	      <div style="background-color: rgba(29,155,171,0.75); height:50px; opacity: 0.7; margin-top:-10px; "> </div>
-   <div  class="bodytype span6 contrast"  >
+<div class="row-fluid" style="top:75px;" >
 
-         <h3> Find-a-Spring </h3>
-         <table>
-            <tr>
-               <th style="text-align:left"> Location </th>
-            </tr>
-            <tr>
-               <td>
-                  <form action="{{ url_for('simpleresults', filter='city')}}">
-                  <p>	Find hot springs near a city: </p>
-                  <input type="text" data-provide="typeahead" name="city" id="myLoc" >	
-                  <input type="submit" value="Search" class="btn" style="margin-bottom:10px">
-                  </form>
-               </td>
-            </tr>
-            <tr  class="filterIcons">
-            	<td>
-            		<div>
-						<img rel="tooltip" data-original-title="Benches" src="{{ url_for('static', filename='img/icons/bench_Selected.png') }}">               
-						<img rel="tooltip" data-original-title="Private" src="{{ url_for('static', filename='img/icons/private_Selected.png') }}">               
-						<img rel="tooltip" data-original-title="Toilet" src="{{ url_for('static', filename='img/icons/toilet_Selected.png') }}">               
-						<img rel="tooltip" data-original-title="Track" src="{{ url_for('static', filename='img/icons/track_Selected.png') }}">   
-	               	<span></div>
+   <div  class="bodytype span6 contrast" style="padding-top:25px;" >
+      <h2 style="padding:5px 0 25px 0 ; margin-top:0;"> search for springs </h2>
+       <form action="{{ url_for('simpleresults', filter='city')}}">
+      <table >
+         <tr>
+            <th style="text-align:left"> Location </th>
+         </tr>
+         <tr>
+            <td>
+              
+                  <p> Find hot springs near a city: </p>
+                  <input style="margin: 0 0 20px;" type="text" data-provide="typeahead" name="city" id="myLoc" >  
+                
+              
+            </td>
+         </tr>
+         <tr>            
+            <th style="text-align:left; "> Filters </th>
+         </tr>
+         <tr   class="filterIcons">
+            <td>
+               <div style="margin: 0 0 20px;">
+                  <img rel="tooltip" data-original-title="Benches" src="{{ url_for('static', filename='img/icons/bench_Selected.png') }}">               
+                  <img rel="tooltip" data-original-title="Private" src="{{ url_for('static', filename='img/icons/private_Selected.png') }}">               
+                  <img rel="tooltip" data-original-title="Toilet" src="{{ url_for('static', filename='img/icons/toilet_Selected.png') }}">               
+                  <img rel="tooltip" data-original-title="Track" src="{{ url_for('static', filename='img/icons/track_Selected.png') }}">   
+                  
+               </div>
+            </td>
+         </tr>
+         <tr>
+            <th style="text-align:left;"> Temperature </th>
+         </tr>
+         <tr>
+            <td>               
+               <input type="text" id="amount" style="border: 0;" />
+               </p>
+               <div style="margin-bottom:10px;"id="slider-range"></div>
+            </td>
+            <td>            
+         </tr>
+         <tr>
+            <td>
+               <div class="btn-group" >
+                  <!-- <a class="btn" href="{{url_for('simpleresults',filter='Safe')}}">Safe</a> -->
+                  <a class="btn" id="safe">Safe</a>
+                  <a class="btn" id="unsafe">Unsafe</a>
+                  <a class="btn" id="hottest">Hottest</a>
+                 <!--  <a class="btn" href="{{url_for('simpleresults',filter='Unsafe')}}">Unsafe</a>
+                  <a class="btn" href="{{url_for('simpleresults',filter='Hottest')}}">Hottest <i class="icon-fire"></i></a> -->
+               </div>
+            </td>
+         </tr>
+         <tr align =center >
+            <td ><input type="submit" value="Search" class="btn" style="margin:35px 0;"></td>
+         </tr>
+<!--          <tr>
+            <th style="text-align:left"> Misc <br> </th>
+         </tr>
+         <tr>
+            <td>
+               <p>
+               <div class="btn-group" >
+                  <a class="btn" href="{{url_for('simpleresults',filter='Unique')}}">Unique</a>
+                  <a class="btn" href="{{url_for('simpleresults',filter='All')}}">All</a>
+               </div>
+            </td>
+         </tr> -->
+      </table>
+    
 
-           		</td>
-            </tr>
-            <tr>
-               <th style="text-align:left"> Temperature </th>
-            </tr>
-            <tr>
-               <td>
-                  <div class="btn-group" >
-                     <a class="btn" href="{{url_for('simpleresults',filter='Safe')}}">Safe</a>
-                     <a class="btn" href="{{url_for('simpleresults',filter='Unsafe')}}">Unsafe</a>
-                     <a class="btn" href="{{url_for('simpleresults',filter='Hottest')}}">Hottest <i class="icon-fire"></i></a>
-                  </div>
-               </td>
-            </tr>
-            <tr>
-               <th style="text-align:left"> Misc <br> </th>
-            </tr>
-            <tr>
-               <td>
-                  <div class="btn-group" >
-                     <a class="btn" href="{{url_for('simpleresults',filter='Unique')}}">Unique</a>
-                     <a class="btn" href="{{url_for('simpleresults',filter='All')}}">All</a>
-                  </div>
-               </td>
-            </tr>
-         </table>
-      </div>
+   
+   </form>
+</div>
+<div class="span6" style="position:relative;" >
+<div class="contrast"style="background-color: rgba(29,155,171,0.5); height:73px; width:522px; "> 
+
    </div>
+  </div>
+</div>
+ <div style="background-color: rgba(29,155,171,0.75); height:30px; opacity: 0.7;  "> </div>
 <!--    <div>
-      <a class="btn" onclick="history.back()" style=" z-index:2">Back</a>!
+   <a class="btn" onclick="history.back()" style=" z-index:2">Back</a>!
    </div> -->
-
 </div>
 {% endblock %}

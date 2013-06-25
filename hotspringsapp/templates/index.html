@@ -8,8 +8,10 @@
 
 
 
- $(document).ready(function () {
-  $("#indexMenuItem").addClass("active");
+ $(function () {
+  $("#home").css("background-color" , "rgba(29,155,171,0.75)");
+  $("#home img").attr("src","{{ url_for('static', filename='img/icons/home_Selected.png') }}");
+  $("#home p").css("color","#ffffff");
 
 });
   </script>
@@ -18,10 +20,20 @@
 {% endblock %}
 {% block content %}
 
+<div style="height:73px;position:relative;background-color:rgba(29,155,171,0.75);">
 
+</div>
+
+<div style="height:5px;position:relative;background-color:rgb(255,255,255)">
+
+</div>
 
 <div id="myCarousel" class="carousel slide" >
-
+  <ol class="carousel-indicators">
+    <li data-target="#myCarousel" data-slide-to="0" class="active"></li>
+    <li data-target="#myCarousel" data-slide-to="1"></li>
+    <li data-target="#myCarousel" data-slide-to="2"></li>
+  </ol>
   <!-- Carousel items -->
   <div class="carousel-inner">
     <div class="active item">
@@ -38,7 +50,7 @@
     	<a href="{{url_for('searchbycat')}}"><img src="{{ url_for('static', filename='img/searchbycategory.jpg') }}" alt="Geothermal Hot Springs, Bay of Plenty, New Zealand"></a>
     	<div class="container">
             <div class="carousel-caption">
-              <h1>Tripidity</h1>
+              <h1>Turbidity</h1>
               <p class="lead">Cras justo odio, dapibus ac facilisis in, egestas eget quam. Donec id elit non mi porta gravida at eget metus. Nullam id dolor id nibh ultricies vehicula ut id elit.</p>
               
             </div>
@@ -59,6 +71,13 @@
   <a class="carousel-control left" href="#myCarousel" data-slide="prev">&lsaquo;</a>
   <a class="carousel-control right" href="#myCarousel" data-slide="next">&rsaquo;</a>
 </div>
+<div style="height:5px;position:relative;background-color:rgb(255,255,255)">
+
+</div>
+<div style="height:73px;position:relative;background-color:rgba(29,155,171,0.75);">
+
+</div>
+
 
 
 

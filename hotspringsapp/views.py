@@ -10,7 +10,7 @@ def get_user_name():
     """ Fetch the logged in User"""
     return session['logged_in'] if session.has_key('logged_in') else None
 
-@app.route('/login', methods=['GET', 'POST'])
+@app.route('/login', methods=['POST','GET'])
 def login():
 
 	user = User.query.filter_by(username=request.form['username']).first()
@@ -28,7 +28,12 @@ def login():
 
 	return render_template('login.html', error=error, site_id=request.form['site_id'])
 
+@app.route('/loginpage')
+def loginpage():
+	error = None
+	
 
+	return render_template('login.html', error=None,site_id=None)
 
 
 
@@ -54,7 +59,12 @@ def search():
 	
 @app.route('/simplesearch')
 def simplesearch():
-	return render_template('simplesearch.html')
+
+	location = Location.query.filter().all()
+	entries = [row.feature_system for row in location]
+	app.logger.debug(entries)
+
+	return render_template('simplesearch.html',cities = entries)
 	
 @app.route('/results')
 def results():
@@ -375,9 +385,9 @@ def channel():
 	return render_template('channel.html')
 
 
-@app.route("/searchbycatergory")
+@app.route("/searchbycategory")
 def searchbycat():
-	return render_template('searchbycatergory.html')
+	return render_template('searchbycategory.html')
 
 def GetSOTD():
 	g.db = connect_db()
