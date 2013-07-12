@@ -20,15 +20,22 @@
 {% endblock %}
 {% block content %}
 
-<div style="height:73px;position:relative;background-color:rgba(29,155,171,0.75);">
+<div style="height:125px;position:relative;background-color:rgba(29,155,171,0.75);">
+<div class="contrast" style="padding:15px;"><h2>Welcome </h2>
+<p style="font-size:16px"> Our project collects biodiversity information from 1,000 hot springs in and around Taupo.
+These springs are hotspots for unique populations of bugs and microbes about which we know very little.
+Here we make our research results accessible to the public.
+ </p>
+
+</div>
+</div>
+
+
+<div style="height:15px;position:relative;background-color:rgb(255,255,255)">
 
 </div>
 
-<div style="height:5px;position:relative;background-color:rgb(255,255,255)">
-
-</div>
-
-<div id="myCarousel" class="carousel slide" >
+<div id="myCarousel" class="carousel slide" style="display:inline-block; background:#ffffff">
   <ol class="carousel-indicators">
     <li data-target="#myCarousel" data-slide-to="0" class="active"></li>
     <li data-target="#myCarousel" data-slide-to="1"></li>
@@ -40,28 +47,56 @@
     	<img  src="{{ url_for('static', filename='img/searchbylocation.jpg') }}" alt="Geothermal Hot Springs, Bay of Plenty, New Zealand">
     	<div class="container">
             <div class="carousel-caption">
-              <h1 >Search by Location</h1>
-              <p class="lead">Cras justo odio, dapibus ac facilisis in, egestas eget quam. Donec id elit non mi porta gravida at eget metus. Nullam id dolor id nibh ultricies vehicula ut id elit.</p>
+              <h2 >Browse by Location</h2>
+             <!--  <p class="lead">Cras justo odio, dapibus ac facilisis in, egestas eget quam. Donec id elit non mi porta gravida at eget metus. Nullam id dolor id nibh ultricies vehicula ut id elit.</p> -->
               
             </div>
         </div>
     </div>
     <div class="item">
-    	<a href="{{url_for('searchbycat')}}"><img src="{{ url_for('static', filename='img/searchbycategory.jpg') }}" alt="Geothermal Hot Springs, Bay of Plenty, New Zealand"></a>
+      <div>
+   
+       <img style="float:left"src="{{ url_for('static', filename='img/springsbycat/murkyhotspring.jpg') }}" alt="Geothermal Hot Springs, Bay of Plenty, New Zealand">
+
+    <img style="float:left;padding:0 60px" src="{{ url_for('static', filename='img/springsbycat/colouredhotspring.jpg') }}" alt="Geothermal Hot Springs, Bay of Plenty, New Zealand">
+       <img src="{{ url_for('static', filename='img/springsbycat/clearhotspring.jpg') }}" alt="Geothermal Hot Springs, Bay of Plenty, New Zealand">
     	<div class="container">
             <div class="carousel-caption">
-              <h1>Turbidity</h1>
-              <p class="lead">Cras justo odio, dapibus ac facilisis in, egestas eget quam. Donec id elit non mi porta gravida at eget metus. Nullam id dolor id nibh ultricies vehicula ut id elit.</p>
+              <h2>Browse by Colour</h2>
+             
               
             </div>
         </div>
     </div>
+  </div> 
     <div class="item">
     	<img src="{{ url_for('static', filename='img/carouselimage2.jpg') }}" alt="Geothermal Hot Springs, Bay of Plenty, New Zealand">
     	<div class="container">
             <div class="carousel-caption">
-              <h1>Spring of the Day</h1>
-              <p class="lead">Cras justo odio, dapibus ac facilisis in, egestas eget quam. Donec id elit non mi porta gravida at eget metus. Nullam id dolor id nibh ultricies vehicula ut id elit.</p>
+              <h2>Spring of the Day</h2>
+
+             
+            </div>
+        </div>
+    </div>
+
+    <div class="item">
+      <img src="{{ url_for('static', filename='img/searchbyimage.jpg') }}" alt="Geothermal Hot Springs, Bay of Plenty, New Zealand">
+      <div class="container">
+            <div class="carousel-caption">
+              <h2>Browse by Image</h2>
+
+             
+            </div>
+        </div>
+    </div>
+
+    <div class="item">
+      <img src="{{ url_for('static', filename='img/carouselimage2.jpg') }}" alt="Geothermal Hot Springs, Bay of Plenty, New Zealand">
+      <div class="container">
+            <div class="carousel-caption">
+              <h2>Search</h2>
+
              
             </div>
         </div>
@@ -71,12 +106,17 @@
   <a class="carousel-control left" href="#myCarousel" data-slide="prev">&lsaquo;</a>
   <a class="carousel-control right" href="#myCarousel" data-slide="next">&rsaquo;</a>
 </div>
-<div style="height:5px;position:relative;background-color:rgb(255,255,255)">
 
-</div>
-<div style="height:73px;position:relative;background-color:rgba(29,155,171,0.75);">
 
+
+<div style="height:15px;position:relative;background-color:rgb(255,255,255); margin-top:-5px;">
 </div>
+
+
+
+
+
+
 
 
 

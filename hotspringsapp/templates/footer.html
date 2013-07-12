@@ -30,7 +30,7 @@
     </div>
 	!-->
 <div class="row-fluid" >
-<div class="span2">
+<div class="span1">
 </div>
     <div class="span2">
      
@@ -39,7 +39,6 @@
     <ul>
     <li><a href="#">safety</a></li>
     <li><a href="#">contact</a></li>
-    <li><a href="#">facebook</a></li>
     </ul>
      
     </div>
@@ -50,8 +49,9 @@
     <p style="font-size:16px;"><span>search</span> springs</p>
      
     <ul>
-    <li><a href="{{ url_for('searchbyimage')}}">simple</a></li>
-    <li><a href="#">advanced</a></li>    
+    <li><a href="{{ url_for('simplesearch')}}">simple</a></li>
+    <li><a href="{{ url_for('search')}}">advanced</a></li>    
+    <li><a href="{{ url_for('search')}}">spring of the day</a></li>   
     </ul>
      
     </div>
@@ -64,10 +64,22 @@
     <ul>
     <li><a href="{{ url_for('searchbyimage')}}">image</a></li>
     <li><a href="#">location</a></li>
-    <li><a href="{{ url_for('searchbycat')}}">colour/turbidity</a></li>
+    <li><a href="{{ url_for('searchbycat')}}">colour</a></li>
     </ul>
      
     </div>
-              <div class="span2">
+              <div class="span1">
 </div>
+
+ <div class="span2" id="social">
+     
+   <!--  <p style="font-size:16px;"><span>connect</span></p> -->
+     
+    
+    <a href="https://www.facebook.com/1000SpringsProject"><img src="{{ url_for('static', filename='img/icons/facebook.png') }}"></a>
+    <a><img src="{{ url_for('static', filename='img/icons/twitter.png') }}"></a>
+    <a><img src="{{ url_for('static', filename='img/icons/pinterest.png') }}"></a>
+    
+     
+    </div>
 </div>

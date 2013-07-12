@@ -9,22 +9,33 @@
 
 
  $(document).ready(function () {
-  $("#adSearchMenuItem").addClass("active");
+  
+  $("#adsearch").css("background-color" , "rgba(29,155,171,0.75)");
+  $("#adsearch img").attr("src","{{ url_for('static', filename='img/icons/general_Selected.png') }}");
+  $("#adsearch p").css("color","#ffffff");
+
+  $('input[type=radio]').hide();
   
 });
   </script>
 
 {% endblock %}
 {% block content %}
+<div>
+<div class="contrast" style="height:73px;position:relative;background-color:rgba(29,155,171,0.75);">
+<h2 style="margin:0; padding:10px 10px"> Search </h2>
+</div>
 
+<div style="height:5px;position:relative;background-color:rgb(255,255,255)">
 
-<h1> Search </h1>
-<div class="bodytype">
-<p>
+</div>
+
+<div style="position:relative">
+<p class="contrast" style="background-color:rgba(29,155,171,0.75); padding: 15px 15px">
 	Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur tincidunt tempus ipsum gravida aliquet. Proin turpis magna, suscipit sed mattis nec, eleifend at magna. Suspendisse potenti. Aenean vel odio velit. Ut gravida orci eu nunc auctor rutrum. Cras lacinia metus ac diam vehicula a condimentum augue congue. Etiam ante turpis, dignissim ut varius a, tincidunt eget sem. Morbi et justo neque. Sed a turpis augue, a faucibus purus.
 
 <p>
-<div>
+
 	<form action="{{ url_for('results')}}" method="get">
 	<div class="tabbable"> <!-- Only required for left/right tabs -->
 		<ul class="nav nav-tabs">
@@ -72,9 +83,7 @@
 				
 				
 			</div>
-			<div class="tab-pane" id="tab2">							
-				
-			</div>
+
 		</div>
 	</div>
 	<div class="alert" id="alert" style="display:none">
@@ -89,7 +98,7 @@
 		</div>
 	</div>
 	</form>
-</div>
 
+</div>
 </div>
 {% endblock %}

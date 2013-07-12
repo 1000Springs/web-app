@@ -8,7 +8,10 @@
 
 {% block content %}
 
-<div>
+<div style="height:73px;position:relative;background-color:rgba(29,155,171,0.5); ">
+</div>
+
+<div style="position:relative; padding-left:40px; background:#fff;">
 
 
 <ul class="thumbnails">
@@ -19,7 +22,7 @@
 
 	<li class="span2">
     	<a href="{{url_for('samplesite', site_id=image.site_id)}}" class="thumbnail">
-      		<img data-src="holder.js/160x120" style="width:120px: height:160px;"src="{{url_for('static', filename=image.imagepath)}}" alt="blah">
+      		<img data-src="holder.js/160x120" src="{{url_for('static', filename=image.imagepath)}}">
     	</a>
 	</li>
 

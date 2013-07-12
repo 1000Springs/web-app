@@ -9,25 +9,39 @@
 
 {% endblock %}
 {% block content %}
+<div class="contrast" style="height:73px;position:relative;background-color:rgba(29,155,171,0.5); padding-left:15px;">
 
-<div style="position:relative; height:768px;">
+<h2 style="margin:0;">Search by Colour</h2>
+
+</div>
+
+
+<div style="height:5px;position:relative;background-color:rgb(255,255,255)">
+
+</div>
+
+<div style="position:relative; height:606px; background:#fff;" >
 <div class="cat" style="float:left;">
-<img src="{{ url_for('static', filename='img/springsbycat/colouredhotspring.jpg')}}"  >
+<img src="{{ url_for('static', filename='img/springsbycat/colouredhotspring.jpg')}}" style="height:577px;" >
 <p class="lead" style="text-align:center;background-color:rgba(29,155,171,0.75);">Coloured Pools </p>
 </div>
 
-<div class="cat" style="float:left;padding:0 60px;">
-<img src="{{ url_for('static', filename='img/springsbycat/clearhotspring.jpg')}}"  >
+<div class="cat" style="float:left;padding:0 78px;">
+<img src="{{ url_for('static', filename='img/springsbycat/clearhotspring.jpg')}}"
+style="height:577px;"  >
 <p  class="lead" style="text-align:center;background-color:rgba(29,155,171,0.75)">Clear Pools </p>
 </div>
 
 <div class="cat" style="float:left;">
-<img src="{{ url_for('static', filename='img/springsbycat/murkyhotspring.jpg')}}"    >
+<img src="{{ url_for('static', filename='img/springsbycat/murkyhotspring.jpg')}}"
+style="height:577px;"    >
 <p class="lead" style="text-align:center;background-color:rgba(29,155,171,0.75);">Murky Pools </p>
 </div>
 </div>
+<div style="height:5px;position:relative;background-color:rgb(255,255,255)"> </div>
 
-
+<div style="height:73px;position:relative;background-color:rgba(29,155,171,0.5); ">
+</div>
 <script type="text/javascript">
 $(document).ready(function(){
 $(".cat img").hover(

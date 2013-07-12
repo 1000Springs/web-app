@@ -61,15 +61,23 @@
 		
 {% endblock %}
 {% block content %}
-<div>
-<h1>{{filtertype}} Springs</h1>
+<div class="contrast" style="height:73px;position:relative;background-color:rgba(29,155,171,0.5); padding-left:15px;">
+<h2 style="margin:0px;">{{filtertype}} Springs</h2>
 <div align="right">
 	<input type="button" value="Enlarge Map" id="expand" >	
 </div>
+</div>
+
+<div style="height:5px;position:relative;background-color:rgb(255,255,255)">
+
+</div>
 	
-<div id="map_canvas" style="height: 200px; background-color: #CCC;" style="float:none"></div>	
+<div id="map_canvas" style="height: 233px; background-color: #CCC;" style="float:none"></div>	
 
 
+<div style="height:5px;position:relative;background-color:rgb(255,255,255)">
+
+</div>
 
 <div class="span3 bodytype">	
 	
@@ -119,7 +127,7 @@
 
 		 <div id="chart_div" style="width: auto; height: auto;"></div>
 </div>
-<div class="span9">
+<div class="span10" style="position: relative; margin-left:0px; padding:0 0 0 0px; background:#fff">
 	<table class="table" >
 				{% for entry in entries %}
 		<tr>

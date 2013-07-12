@@ -48,17 +48,38 @@
  -->
  
 
+<div id="login" class="menuItem">		
+		<a style="text-decoration:none;"href="{{url_for('login')}}">
+			<div style="position:relative;height:34px;">
+			<img style="height:34px;width:34px;position:absolute;margin-left:-17px;left:50%"src="{{ url_for('static', filename='img/icons/login.png') }}">
+		</div>
+			<p style="color:#1D9BAB;">Login</p>
 
+		</a>
+	</div>
+
+<div id="about" class="menuItem">		
+		<a style="text-decoration:none;" href="{{url_for('about')}}">
+
+			<div style="position:relative;height:34px;">
+			<img style="height:34px;width:34px;position:absolute;margin-left:-17px;left:50%"src="{{ url_for('static', filename='img/icons/about.png') }}">
+		</div>
+			<p style="color:#1D9BAB;"> About</p>
+
+		</a>
+	</div>
 
 	<div id="adsearch" class="menuItem">		
 		<a style="text-decoration:none;"href="{{url_for('search')}}">
 			<div style="position:relative;height:34px;">
-			<img style="height:34px;width:34px;position:absolute;margin-left:-17px;left:50%"src="{{ url_for('static', filename='img/icons/login.png') }}">
+			<img style="height:34px;width:34px;position:absolute;margin-left:-17px;left:50%"src="{{ url_for('static', filename='img/icons/general.png') }}">
 		</div>
-			<p style="color:#1D9BAB;">Advanced Search</p>
+			<p style="color:#1D9BAB;">Advanced</p>
 
 		</a>
 	</div>
+
+	
 
 	<div id="search" class="menuItem">		
 		<a style="text-decoration:none;"href="{{url_for('simplesearch')}}">
@@ -75,23 +96,14 @@
 		<a style="text-decoration:none;"href="{{url_for('index')}}">
 
 			<div style="position:relative;height:34px;">
-			<img style="height:34px;width:34px;position:absolute;margin-left:-17px;left:50%"src="{{ url_for('static', filename='img/icons/login.png') }}">
+			<img style="height:34px;width:34px;position:absolute;margin-left:-17px;left:50%"src="{{ url_for('static', filename='img/icons/browse.png') }}">
 		</div>
-			<p style="color:#1D9BAB;"> Browse By </p>
+			<p style="color:#1D9BAB;"> Browse </p>
 
 		</a>
 	</div>
 
-	<div id="about" class="menuItem">		
-		<a style="text-decoration:none;"href="{{url_for('index')}}">
-
-			<div style="position:relative;height:34px;">
-			<img style="height:34px;width:34px;position:absolute;margin-left:-17px;left:50%"src="{{ url_for('static', filename='img/icons/login.png') }}">
-		</div>
-			<p style="color:#1D9BAB;"> About Project </p>
-
-		</a>
-	</div>
+	
 <div id="home" class="menuItem">		
 		<a style="text-decoration:none;"href="{{url_for('index')}}">
 
