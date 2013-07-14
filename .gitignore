@@ -1,0 +1,12 @@
+insertdata/
+
+SOTD.ini
+Start.bat
+
+Thumbs.db
+*.db
+*.pyc
+
+Old_Assets/
+
+stockphotos/
