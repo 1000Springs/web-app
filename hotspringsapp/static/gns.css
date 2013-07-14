@@ -291,7 +291,7 @@ height: 100%;
 
 .springDesc
 { 
-background-color:#E9B64D;
+background-color:rgba(29,155,171,0.5);
 margin: 15px 0px;
 padding: 10px 20px; 
 }
@@ -451,7 +451,7 @@ height: 100%;*/
   color: #ffffff;
   text-decoration: none;
 
-  text-shadow: 0 1px 0 #777777;
+ 
 }
 
 .filterIcons img
@@ -460,7 +460,7 @@ height: 100%;*/
   opacity: 0.6;
 }
 
-p,a,span,th,h2,input,h5
+p,a,span,th,h2,input,h5,h4
 {
 font-family: century gothic;
 }
@@ -512,3 +512,19 @@ border-top-left-radius: 10px;
 {
   margin-bottom: 0;
 }
+
+#social a
+{
+
+float:left;
+padding: 0 5px;
+
+}
+
+#aboutText
+{
+  white-space: pre-line; 
+
+  padding: 10px 20px;  
+}
+
