@@ -10,8 +10,8 @@ def get_user_name():
     """ Fetch the logged in User"""
     return session['logged_in'] if session.has_key('logged_in') else None
 
-@app.route('/login', methods=['POST','GET'])
-def login():
+@app.route('/attemptLogin', methods=['POST','GET'])
+def attemptLogin():
 
 	user = User.query.filter_by(username=request.form['username']).first()
 	error = None
@@ -28,8 +28,8 @@ def login():
 
 	return render_template('login.html', error=error, site_id=request.form['site_id'])
 
-@app.route('/loginpage')
-def loginpage():
+@app.route('/login')
+def login():
 	error = None
 	
 

@@ -22,7 +22,7 @@
 
       /* The white background content wrapper */
       .container > .content {
-        background-color: #fff;
+        background-color: rgba(29,155,171,0.9);
         padding: 20px;
         margin: 0 -20px; 
         -webkit-border-radius: 10px 10px 10px 10px;
@@ -47,11 +47,11 @@
 
 </head>
 <body>
-	<div class="container">
-		<div class="content">
-			<div class="row">
+	<div class="container" style="position:relative; padding:20px 0">
+		<div class="content" >
+			<div class="row" >
 				<div class="login-form">
-					<h2>Login</h2>
+					<h2 class="contrast">Login</h2>
 					<form action="{{url_for('login')}}" method="post">
 						<fieldset>							
 								<input type="text" placeholder="Username" name="username" style="display:block">					
