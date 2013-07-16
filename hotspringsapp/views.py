@@ -41,6 +41,10 @@ def login():
 def about():
 	return render_template('about.html');
 
+@app.route('/browseby')
+def browseby():
+	return render_template('browseby.html');
+
 
 @app.before_request
 def before_request():

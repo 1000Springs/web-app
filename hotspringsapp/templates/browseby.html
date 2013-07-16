@@ -1,0 +1,65 @@
+{% extends "layout.html" %}
+{% block title %}Browse By{% endblock %}
+{% block head %}
+  {{ super() }}
+
+  <script type="text/javascript">
+
+
+
+ $(function () {
+  $("#browse").css("background-color" , "rgba(29,155,171,0.75)");
+  $("#browse img").attr("src","{{ url_for('static', filename='img/icons/browse_Selected.png') }}");
+  $("#browse p").css("color","#ffffff");
+
+});
+  </script>
+
+  {% endblock %}
+{% block content %}
+<div id="browseby" style="position:relative">
+	<div class="contrast" style="height:73px;position:relative;background-color:rgba(29,155,171,0.75);">
+		<h2 style="margin:0; padding:25px 15px 0 15px"> browse by </h2>	
+	</div>
+	
+	<div>
+		<div style="padding-top:10px; background-color:#ffffff;">
+			<a href="{{url_for('mapsearch')}}" style="text-decoration:none">
+				<img src="{{ url_for('static', filename='img/browseby/browsebylocation.png') }}">
+				<div class="contrast" style="height:40px;position:relative;background-color:rgb(29,155,171);">
+					<h4 style="margin:0; padding:8px 15px 0 15px"> Location </h4>	
+				</div>
+			</a>
+		</div>
+		<div style="padding-top:10px; background-color:#ffffff;">
+			<a href="{{url_for('searchbyimage')}}" style="text-decoration:none">
+				<img src="{{ url_for('static', filename='img/browseby/browsebyimage.png') }}">
+				<div class="contrast" style="height:40px;position:relative;background-color:rgb(29,155,171);">
+					<h4 style="margin:0; padding:8px 15px 0 15px"> Image </h4>	
+				</div>
+			</a>
+		</div>
+		<div style="padding-top:10px; background-color:#ffffff;">
+			<a href="{{url_for('searchbycat')}}" style="text-decoration:none">
+				<img src="{{ url_for('static', filename='img/browseby/browsebycolour.png') }}">		
+				<div class="contrast" style="height:40px;position:relative;background-color:rgb(29,155,171);">
+					<h4 style="margin:0; padding:8px 15px 0 15px"> Colour </h4>	
+				</div>
+			</a>
+		</div>
+	</div>
+</div>
+
+<script type="text/javascript">
+$(document).ready(function(){
+$("#browseby img").hover(
+function() {
+$(this).animate({"opacity": "0.5"}, "fast");
+},
+function() {
+$(this).animate({"opacity": "1"}, "fast");
+});
+
+});
+</script>
+{% endblock %}
