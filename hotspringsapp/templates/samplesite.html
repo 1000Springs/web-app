@@ -151,12 +151,15 @@
 
 		
 	</div>
-		<div style="height:5px;position:relative;background-color:rgb(255,255,255)"></div>
+
+		<div style="height:15px;position:relative;background-color:rgb(255,255,255)"></div>
+
 			<div id="show_map"></div>
-			<a class="btn" onclick="history.back()" style="display:inline">Back</a>
+		
+		<div style="height:15px;position:relative;background-color:rgb(255,255,255)"></div>
+		<a class="btn" onclick="history.back()" >Back</a>
 
 			<a href="#myModal" role="button" class="btn" data-toggle="modal" style="float:right;" id="loginButton">Advanced</a>
-		
 		
 {% if session.logged_in %}
 	<div id="advanced">
@@ -164,7 +167,32 @@
 	</div>
 {% endif %}
 
-
+<div class="accordion" id="accordion2" style="margin:15px 0">
+  <div class="accordion-group">
+    <div class="accordion-heading">
+      <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#collapseOne">
+        Collapsible Group Item #1
+      </a>
+    </div>
+    <div id="collapseOne" class="accordion-body collapse">
+      <div class="accordion-inner">
+        Anim pariatur cliche...
+      </div>
+    </div>
+  </div>
+  <div class="accordion-group">
+    <div class="accordion-heading">
+      <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#collapseTwo">
+        Collapsible Group Item #2
+      </a>
+    </div>
+    <div id="collapseTwo" class="accordion-body collapse">
+      <div class="accordion-inner">
+        Anim pariatur cliche...
+      </div>
+    </div>
+  </div>
+</div>
 
 
 	<div id="myModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">

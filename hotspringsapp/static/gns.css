@@ -539,3 +539,13 @@ padding: 0 5px;
 }
 
 
+.accordion-heading
+{
+  background-color: rgb(29,155,171);
+}
+
+.accordion-heading a
+{
+  color: white;
+  text-decoration: none;
+}
