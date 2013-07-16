@@ -30,7 +30,7 @@ function initialize() {
     $("#expand").prop('value', 'Reduce Map');
 }, function () {
     $("#map_canvas").animate({
-        "height": "200px"
+        "height": "233px"
     }, "slow", function () {
         google.maps.event.trigger(map, 'resize');
     });

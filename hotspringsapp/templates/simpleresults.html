@@ -61,10 +61,10 @@
 		
 {% endblock %}
 {% block content %}
-<div class="contrast" style="height:73px;position:relative;background-color:rgba(29,155,171,0.5); padding-left:15px;">
-<h2 style="margin:0px;">{{filtertype}} Springs</h2>
+<div class="contrast" style="height:73px;position:relative;background-color:rgba(29,155,171,0.5); ">
+<h2 style="padding:25px 15px 0 15px; margin:0; float:left; ">{{filtertype}} Springs</h2>
 <div align="right">
-	<input type="button" value="Enlarge Map" id="expand" >	
+	<input type="button" value="Enlarge Map" id="expand" style="margin:37px 5px 0 0">	
 </div>
 </div>
 
@@ -72,7 +72,7 @@
 
 </div>
 	
-<div id="map_canvas" style="height: 233px; background-color: #CCC;" style="float:none"></div>	
+<div id="map_canvas" style="height: 233px; background-color: #CCC; display:block" style="float:none"></div>	
 
 
 <div style="height:5px;position:relative;background-color:rgb(255,255,255)">
@@ -134,9 +134,9 @@
 			<td>
 				<div class="span2">
 					<img style="padding-top:10px" src="{{ url_for('static', filename=entry.imagepath) }}">
-					<div style="background-color: #1D9BAB; height:10px;"> </div>
+
 				</div>
-				<div class="span4">
+				<div class="span5">
 					<ul class="unstyled">
 						<li>	<h4 class="feature_name" style="margin-bottom:0"> {{entry.feature_name}} </h4></li>
 						<li> <p><em> {{ entry.city }} </em></p> </li>
@@ -152,12 +152,12 @@
 			<td>
 				<div class="row-fluid">
 
-					<div class="span11">
+					
 					<div style="margin:25px 0 0 0;">
 						<p style="text-align:right"> Temp: {{ entry.temp}} </p>
 					</div>
 
-					<div style=" margin:0 0 5px 0; float:right;" class="span5">
+					<div style=" margin:5px 0 5px 5px; display:block;" class="contrast">
 						{% if entry.toilet %}
 							<i rel="tooltip" data-original-title="Trash cans available" class="icon-trash" style="float:right; margin:0 2px;"></i>
 						{% endif %}
@@ -180,7 +180,7 @@
 						<!-- Button to trigger modal -->
 						<a href="#myModal" role="button" class="btn" data-toggle="modal" onclick="modalInit.call(this);" style="display:block; ">Show on Map</a>
 					</div>
-				</div>
+				
 					
 
 					

@@ -3,11 +3,23 @@
 {% block head %}
   {{ super() }}
 
+  <script type="text/javascript">
+
+
+
+ $(function () {
+  $("#about").css("background-color" , "rgba(29,155,171,0.75)");
+  $("#about img").attr("src","{{ url_for('static', filename='img/icons/about_Selected.png') }}");
+  $("#about p").css("color","#ffffff");
+
+});
+  </script>
+
 {% endblock %}
 {% block content %}
 
 <div class="contrast" style="height:73px;position:relative;background-color:rgba(29,155,171,0.75);">
-	<h2 style="margin:0; padding:10px 10px"> About </h2>
+	<h2 style="margin:0; padding:25px 15px 0 15px"> About </h2>
 </div>
 <div style="position:relative;background:#ffffff">
 	<div id="aboutText" >"The primary goal of the research project is to collate the physical, chemical, and microbial biodiversity information from 1,000 geothermal ecosystems from the Taupo Volcanic Zone (TVZ). While geothermal ecosystems are understood to be hotspots for unique and diverse microbial populations, we currently know very little about what microbial populations resident in these environments. 
