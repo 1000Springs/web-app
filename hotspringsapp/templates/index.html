@@ -20,22 +20,20 @@
 {% endblock %}
 {% block content %}
 
-<div style="height:125px;position:relative;background-color:rgba(29,155,171,0.75);">
-<div class="contrast" style="padding:15px;"><h2>welcome </h2>
-<p style="font-size:16px"> Our project collects biodiversity information from 1,000 hot springs in and around Taupo.
-These springs are hotspots for unique populations of bugs and microbes about which we know very little.
-Here we make our research results accessible to the public.
- </p>
-
-</div>
-</div>
-
-
-<div style="height:15px;position:relative;background-color:rgb(255,255,255)">
+<div class="title contrast" id="index">
+  <h2>welcome</h2>
+  <p> 
+    Our project collects biodiversity information from 1,000 hot springs in and around Taupo.
+    These springs are hotspots for unique populations of bugs and microbes about which we know very little.
+    Here we make our research results accessible to the public.
+  </p>
 
 </div>
 
-<div id="myCarousel" class="carousel slide" style="display:inline-block; background:#ffffff">
+
+<div class="divider"></div>
+
+<div id="myCarousel" class="carousel slide" style="background:#ffffff">
   <ol class="carousel-indicators">
     <li data-target="#myCarousel" data-slide-to="0" class="active"></li>
     <li data-target="#myCarousel" data-slide-to="1"></li>
@@ -46,60 +44,50 @@ Here we make our research results accessible to the public.
   <!-- Carousel items -->
   <div class="carousel-inner">
     <div class="active item">
-    	<img  src="{{ url_for('static', filename='img/carousel/searchbylocation.jpg') }}" alt="Geothermal Hot Springs, Bay of Plenty, New Zealand">
+    	<img  src="{{ url_for('static', filename='img/carousel/searchbylocation.jpg') }}">
     	<div class="container">
-            <div class="carousel-caption ">
-              <h4 >Browse by Location</h4>
-             <!--  <p class="lead">Cras justo odio, dapibus ac facilisis in, egestas eget quam. Donec id elit non mi porta gravida at eget metus. Nullam id dolor id nibh ultricies vehicula ut id elit.</p> -->
-              
+            <div class="carousel-caption">
+              <h4>Browse by Location</h4>            
             </div>
         </div>
     </div>
     <div class="item">
       <div>
    
-       <img style="float:left"src="{{ url_for('static', filename='img/springsbycat/murkyhotspring.jpg') }}" alt="Geothermal Hot Springs, Bay of Plenty, New Zealand">
+        <img style="float:left"src="{{ url_for('static', filename='img/springsbycat/murkyhotspring.jpg') }}">
+        <img style="float:left;padding:0 60px" src="{{ url_for('static', filename='img/springsbycat/colouredhotspring.jpg') }}">
+        <img src="{{ url_for('static', filename='img/springsbycat/clearhotspring.jpg') }}">
 
-    <img style="float:left;padding:0 60px" src="{{ url_for('static', filename='img/springsbycat/colouredhotspring.jpg') }}" alt="Geothermal Hot Springs, Bay of Plenty, New Zealand">
-       <img src="{{ url_for('static', filename='img/springsbycat/clearhotspring.jpg') }}" alt="Geothermal Hot Springs, Bay of Plenty, New Zealand">
     	<div class="container">
-            <div class="carousel-caption">
-              <h4>Browse by Colour</h4>
-             
-              
-            </div>
+        <div class="carousel-caption">
+          <h4>Browse by Colour</h4>
         </div>
+      </div>
     </div>
   </div> 
     <div class="item">
-    	<img src="{{ url_for('static', filename='img/carousel/carouselimage2.jpg') }}" alt="Geothermal Hot Springs, Bay of Plenty, New Zealand">
+    	<img src="{{ url_for('static', filename='img/carousel/carouselimage2.jpg') }}">
     	<div class="container">
             <div class="carousel-caption">
-              <h4>Spring of the Day</h4>
-
-             
+              <h4>Spring of the Day</h4>             
             </div>
         </div>
     </div>
 
     <div class="item">
-      <img src="{{ url_for('static', filename='img/carousel/searchbyimage.jpg') }}" alt="Geothermal Hot Springs, Bay of Plenty, New Zealand">
+      <img src="{{ url_for('static', filename='img/carousel/searchbyimage.jpg') }}">
       <div class="container">
             <div class="carousel-caption">
-              <h4>Browse by Image</h4>
-
-             
+              <h4>Browse by Image</h4>             
             </div>
         </div>
     </div>
 
     <div class="item">
-      <img src="{{ url_for('static', filename='img/carousel/carouselimage2.jpg') }}" alt="Geothermal Hot Springs, Bay of Plenty, New Zealand">
+      <img src="{{ url_for('static', filename='img/carousel/carouselimage2.jpg') }}">
       <div class="container">
             <div class="carousel-caption">
-              <h4>Search</h4>
-
-             
+              <h4>Search</h4>             
             </div>
         </div>
     </div>
@@ -108,10 +96,6 @@ Here we make our research results accessible to the public.
   <a class="carousel-control left" href="#myCarousel" data-slide="prev">&lsaquo;</a>
   <a class="carousel-control right" href="#myCarousel" data-slide="next">&rsaquo;</a>
 </div>
-
-
-
-<div style="height:15px;position:relative;background-color:rgb(255,255,255); margin-top:-5px;">
 </div>
 
 

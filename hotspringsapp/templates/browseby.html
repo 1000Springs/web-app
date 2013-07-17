@@ -8,42 +8,51 @@
 
 
  $(function () {
-  $("#browse").css("background-color" , "rgba(29,155,171,0.75)");
-  $("#browse img").attr("src","{{ url_for('static', filename='img/icons/browse_Selected.png') }}");
-  $("#browse p").css("color","#ffffff");
-
+	  $("#browse").css("background-color" , "rgba(29,155,171,0.75)");
+	  $("#browse img").attr("src","{{ url_for('static', filename='img/icons/browse_Selected.png') }}");
+	  $("#browse p").css("color","#ffffff");
+	//  $("#browse").css("background-color" , "rgba(29,155,171,0.75)");
+	// var awesome = "url_for('static',filename='img/icons/browse_Selected.png') ";
+	// $("#browse"+" img").attr("src",awesome);
+	// $("#browse"+" p").css("color","#ffffff");
+	// console.log(awesome);
+	// menuItem("#browse" , "browse_Selected.png");
 });
   </script>
 
   {% endblock %}
 {% block content %}
-<div id="browseby" style="position:relative">
-	<div class="contrast" style="height:73px;position:relative;background-color:rgba(29,155,171,0.75);">
-		<h2 style="margin:0; padding:25px 15px 0 15px"> browse by </h2>	
+
+	<div class="title" >
+		<h2> browse by </h2>	
 	</div>
-	
+<div id="browseby" style="position:relative;background-color:white;">	
 	<div>
-		<div style="padding-top:10px; background-color:#ffffff;">
+
+		<div class="divider"></div>
+		<div>
 			<a href="{{url_for('mapsearch')}}" style="text-decoration:none">
 				<img src="{{ url_for('static', filename='img/browseby/browsebylocation.png') }}">
-				<div class="contrast" style="height:40px;position:relative;background-color:rgb(29,155,171);">
-					<h4 style="margin:0; padding:8px 15px 0 15px"> Location </h4>	
+				<div class="browseby-caption">
+					<h4> Location </h4>	
 				</div>
 			</a>
 		</div>
-		<div style="padding-top:10px; background-color:#ffffff;">
+		<div class="divider"></div>
+		<div>
 			<a href="{{url_for('searchbyimage')}}" style="text-decoration:none">
 				<img src="{{ url_for('static', filename='img/browseby/browsebyimage.png') }}">
-				<div class="contrast" style="height:40px;position:relative;background-color:rgb(29,155,171);">
-					<h4 style="margin:0; padding:8px 15px 0 15px"> Image </h4>	
+				<div class="browseby-caption">
+					<h4> Image </h4>	
 				</div>
 			</a>
 		</div>
-		<div style="padding-top:10px; background-color:#ffffff;">
+		<div class="divider"></div>
+		<div>
 			<a href="{{url_for('searchbycat')}}" style="text-decoration:none">
 				<img src="{{ url_for('static', filename='img/browseby/browsebycolour.png') }}">		
-				<div class="contrast" style="height:40px;position:relative;background-color:rgb(29,155,171);">
-					<h4 style="margin:0; padding:8px 15px 0 15px"> Colour </h4>	
+				<div class="browseby-caption">
+					<h4> Colour </h4>	
 				</div>
 			</a>
 		</div>

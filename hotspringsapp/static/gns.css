@@ -456,13 +456,7 @@ height: 100%;*/
   border-left: 1px solid #1CA7B9;
 }
 
-.contrast 
-{
-  color: #ffffff;
-  text-decoration: none;
 
- 
-}
 
 .filterIcons img
 {
@@ -548,4 +542,74 @@ padding: 0 5px;
 {
   color: white;
   text-decoration: none;
+}
+
+/* Index */
+
+.title #index
+{
+  height:125px;
+  
+}
+
+/* Simple Search */
+
+/* Browse by */
+
+.browseby-caption
+{
+  height:40px;
+  position:relative;
+  background-color:rgb(29,155,171);
+}
+
+.browseby-caption h4
+{
+  margin: 0px;
+  padding:8px 15px 0 15px;
+  color:white;
+}
+
+/* Template */
+
+.default-background
+{
+  background-color:rgba(29,155,171,0.75);
+}
+
+.to-front
+{
+  position:relative;
+}
+
+.contrast 
+{
+  color: #ffffff;
+  text-decoration: none;   
+}
+
+.title
+{
+  position:relative;
+  background-color:rgba(29,155,171,0.75);
+  padding:25px 15px 15px 15px;
+}
+
+.title h2
+{
+  margin: 0px;
+  color: white;
+}
+
+
+.contrast p
+{
+  font-size: 16px;
+}
+
+.divider
+{
+  height:15px;
+  position:relative;
+  background-color:white;
 }
