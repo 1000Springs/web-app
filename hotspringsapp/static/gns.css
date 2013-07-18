@@ -366,7 +366,10 @@ color: #404040;
 
     /* Carousel base class */
 
-
+#myCarousel
+{
+  background-color: white;
+}
 .carousel-caption {
       background-color: rgba(29,155,171,0.75);
 /*      top: 0;
@@ -549,8 +552,15 @@ padding: 0 5px;
 .title #index
 {
   height:125px;
-  
 }
+
+#cat-images img
+{
+  width: 300px;
+  height: 500px;
+  float: left;
+}
+
 
 /* Simple Search */
 
@@ -568,6 +578,21 @@ padding: 0 5px;
   margin: 0px;
   padding:8px 15px 0 15px;
   color:white;
+}
+
+#browseby 
+{
+  position:relative;
+  background-color:white;
+  text-decoration: none;
+
+}
+
+#browseby a
+{
+
+  text-decoration: none;
+
 }
 
 /* Template */

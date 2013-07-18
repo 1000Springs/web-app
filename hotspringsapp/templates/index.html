@@ -33,7 +33,7 @@
 
 <div class="divider"></div>
 
-<div id="myCarousel" class="carousel slide" style="background:#ffffff">
+<div id="myCarousel" class="carousel slide" >
   <ol class="carousel-indicators">
     <li data-target="#myCarousel" data-slide-to="0" class="active"></li>
     <li data-target="#myCarousel" data-slide-to="1"></li>
@@ -52,10 +52,10 @@
         </div>
     </div>
     <div class="item">
-      <div>
-   
-        <img style="float:left"src="{{ url_for('static', filename='img/springsbycat/murkyhotspring.jpg') }}">
-        <img style="float:left;padding:0 60px" src="{{ url_for('static', filename='img/springsbycat/colouredhotspring.jpg') }}">
+      <div id="cat-images">
+         
+        <img src="{{ url_for('static', filename='img/springsbycat/murkyhotspring.jpg') }}">
+        <img style="padding:0 60px;" src="{{ url_for('static', filename='img/springsbycat/colouredhotspring.jpg') }}">
         <img src="{{ url_for('static', filename='img/springsbycat/clearhotspring.jpg') }}">
 
     	<div class="container">
