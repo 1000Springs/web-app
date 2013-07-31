@@ -292,8 +292,7 @@ height: 100%;
 .springDesc
 { 
 background-color:rgba(29,155,171,0.5);
-margin: 15px 0px;
-padding: 10px 20px; 
+
 }
     
 
@@ -594,6 +593,39 @@ padding: 0 5px;
   text-decoration: none;
 
 }
+
+/* Sample Site */
+
+.unitText
+{
+  font-size: 10px;
+  float: left;
+}
+
+.descTable
+{
+  margin-top: 35px;
+}
+
+.descTable .progress
+{
+  width:50%;
+  margin-bottom:0; 
+  float:left;
+}
+
+.descTable td
+{
+  text-align: right;
+
+}
+
+.descTable p
+{
+  margin-right:5px;
+  margin-left: 5px;
+}
+
 
 /* Template */
 

@@ -28,7 +28,7 @@ def attemptLogin():
 
 	return render_template('login.html', error=error, site_id=request.form['site_id'])
 
-@app.route('/login')
+@app.route('/login', methods=['POST','GET'])
 def login():
 	error = None
 	

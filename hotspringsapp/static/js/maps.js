@@ -13,7 +13,7 @@ function initialize() {
 	{
   center: new google.maps.LatLng(-37.8256,175.2954),
 	zoom: 6,
-	mapTypeId: google.maps.MapTypeId.HYBRID
+	mapTypeId: google.maps.MapTypeId.ROADMAP 
 	};
 	
 	map = new google.maps.Map(document.getElementById("map_canvas"),mapOptions);
@@ -46,7 +46,7 @@ function initalizeSampleSite()
   {
   center: new google.maps.LatLng(-37.8256,175.2954),
   zoom: 6,
-  mapTypeId: google.maps.MapTypeId.HYBRID
+  mapTypeId: google.maps.MapTypeId.ROADMAP
   };
   
   navigator.geolocation.getCurrentPosition(show_map);

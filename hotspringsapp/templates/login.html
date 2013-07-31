@@ -6,14 +6,7 @@
  {% endblock %}
 {% block content %}
 
-<!--<form action="{{url_for('login')}}" method="POST">
 
-<input type="text" name="username">
-<input type="text" name="password">
-
-<input type="submit" value="login">
-
-</form>!-->
 
  <style type="text/css">
       /* Override some defaults */
@@ -52,7 +45,7 @@
 			<div class="row" >
 				<div class="login-form">
 					<h2 class="contrast">Login</h2>
-					<form action="{{url_for('login')}}" method="post">
+					<form action="{{url_for('attemptLogin')}}" method="post">
 						<fieldset>							
 								<input type="text" placeholder="Username" name="username" style="display:block">					
 							
