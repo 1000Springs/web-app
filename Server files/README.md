@@ -95,3 +95,6 @@ After that is all done apache just needs to load the new config files in
 run `curl http://localhost:<port number>`
 
 this should return the html of the webpage
+
+Useful resource [Deploying Flask Apps With Apache and Mod_wsgi](https://beagle.whoi.edu/redmine/projects/ibt/wiki/Deploying_Flask_Apps_with_Apache_and_Mod_WSGI "Deploying_Flask_Apps_with_Apache_and_Mod_WSGI")
+
