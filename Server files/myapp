@@ -1,0 +1,39 @@
+<VirtualHost *:80>
+
+ # ---- Configure VirtualHost Defaults ----
+
+    ServerAdmin test@test.com
+
+        DocumentRoot /home/ubuntu/opt/local/webapp/hotspringsapp
+
+        <Directory />
+                Options FollowSymLinks
+                AllowOverride None
+        </Directory>
+
+        <Directory /home/ubuntu/opt/local/webapp/hotspringsapp/>
+                Options Indexes FollowSymLinks MultiViews
+                AllowOverride None
+                Order allow,deny
+                allow from all
+        </Directory>
+
+        # ---- Configure WSGI Listener(s) ----
+
+        WSGIDaemonProcess flaskapp user=www-data group=www-data threads=5
+        WSGIScriptAlias / /home/ubuntu/opt/local/webapp/myapp.wsgi
+
+        <Directory /home/ubuntu/public_html/http/flasktest1>
+                WSGIProcessGroup flaskapp
+                WSGIApplicationGroup %{GLOBAL}
+                Order deny,allow
+                Allow from all
+        </Directory>
+
+        # ---- Configure Logging ----
+
+    ErrorLog /home/ubuntu/public_html/logs/error22.log
+    LogLevel warn
+    CustomLog /home/ubuntu/public_html/logs/access.log combined
+
+</VirtualHost>
