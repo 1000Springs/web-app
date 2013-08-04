@@ -3,15 +3,7 @@
 {% block head %}
   {{ super() }}
 
-  <script type="text/javascript">
 
- $(function () {
-	  $("#browse").css("background-color" , "rgba(29,155,171,0.75)");
-	  $("#browse img").attr("src","{{ url_for('static', filename='img/icons/browse_Selected.png') }}");
-	  $("#browse p").css("color","#ffffff");
-});
-
-  </script>
 
   {% endblock %}
 {% block content %}

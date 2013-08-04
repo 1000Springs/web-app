@@ -52,7 +52,7 @@ div.slideshow span.image-wrapper {
 div.slideshow a.advance-link {
 	display: block;
 	/*width: 550px;*/
-	height: 502px; /* This should be set to be at least the height of the largest image in the slideshow */
+	height: 100%; /* This should be set to be at least the height of the largest image in the slideshow */
 	line-height: 15px; /* This should be set to be at least the height of the largest image in the slideshow */
 	text-align: center;
 }
@@ -98,10 +98,11 @@ div.image-desc {
 }
 div.navigation {
 	/* The navigation style is set using jQuery so that the javascript specific styles won't be applied unless javascript is enabled. */
+		padding-left: 20px;
 }
 ul.thumbs {
 	clear: both;
-	margin: 0 0 0 35px;
+
 	padding: 0;
 }
 ul.thumbs li {
@@ -137,8 +138,11 @@ div.pagination {
 }
 div.navigation div.top {
 	margin-bottom: 12px;
+
 	/*height: 11px;*/
 }
+
+d.
 div.navigation div.bottom {
 	margin-top: 12px;
 }

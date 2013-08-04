@@ -72,14 +72,9 @@
 
 </div>
 	
-<div id="map_canvas" style="height: 233px; background-color: #CCC; display:block" style="float:none"></div>	
 
 
-<div style="height:5px;position:relative;background-color:rgb(255,255,255)">
-
-</div>
-
-<div class="span3 bodytype">	
+<div class="span3 bodytype contrast" style="height:676px;">	
 	
 
 	<form action="{{url_for('simpleresults', filter=filtertype)}}">
@@ -109,7 +104,7 @@
 			</tr>
 
 			<tr>
-				<th>Must have:</th>
+			<th>Must have:</th>
 			</tr>
 			<tr>
 				<td>					
@@ -128,6 +123,12 @@
 		 <div id="chart_div" style="width: auto; height: auto;"></div>
 </div>
 <div class="span10" style="position: relative; margin-left:0px; padding:0 0 0 0px; background:#fff">
+	<div id="map_canvas" style="height: 233px; background-color: #CCC; display:block" style="float:none"></div>	
+
+
+<div style="height:5px;position:relative;background-color:rgb(255,255,255)">
+
+</div>
 	<table class="table" >
 				{% for entry in entries %}
 		<tr>

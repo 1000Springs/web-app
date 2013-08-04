@@ -494,25 +494,30 @@ background-image:-ms-linear-gradient(left, #ffffff 0%, #ffff00 50%,#ff0000 100%)
  background-image:-webkit-gradient(linear, left bottom, right bottom, color-stop(0%,#ffffff), color-stop(50%,#ffff00),color-stop(100%,#ff0000));}
 
 .ui-widget-header
-{
-  
+{  
   background: rgba(125,125,125,0.8);
 }
 
 
 .menuItem
 {
-
-float:right;
-
-margin:64px 10px 0 10px;
-
-padding:5px 5px 0 5px;
-border-top-right-radius: 10px;
-
-border-top-left-radius: 10px;
-
+  float:right;
+  margin:64px 10px 0 10px;
+  padding:5px 5px 0 5px;
+  border-top-right-radius: 10px;
+  border-top-left-radius: 10px;
 }
+
+.dropdown a
+{
+  text-decoration: none;
+}
+
+.caret
+{
+  border-top: 4px solid #1D9BAB;
+}
+
 
 .carousel
 {
@@ -530,7 +535,7 @@ padding: 0 5px;
 #aboutText
 {
   white-space: pre-line; 
-
+  font-family: century gothic;
   padding: 10px 20px;  
 }
 
@@ -624,6 +629,11 @@ padding: 0 5px;
 {
   margin-right:5px;
   margin-left: 5px;
+}
+
+.pagination
+{
+  margin:0px;
 }
 
 

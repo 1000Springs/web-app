@@ -129,15 +129,8 @@
 				<!-- Start Advanced Gallery Html Containers -->
 				<div class="span5">
 				<div id="show_map"></div>
-			
- 
-			
 
-
-	
-
-
-		<div style="height:15px;position:relative;background-color:rgb(255,255,255)"></div>
+		<div class="divider"></div>
 		<div>
 			<div id="gallery" class="content">
 					
@@ -147,9 +140,12 @@
 					</div>
 					
 				</div>
+				<div class="row-fluid">
+				<div class="span1">
+				<div id="backward"><img src="{{url_for('static', filename='img/icons/previous.png')}}" style="margin-top:25px;cursor:pointer;"></div>
+				</div>
 				
-				
-				
+				<div class="span10">
 				<div id="thumbs" class="navigation">
 				
 					<ul class="thumbs noscript">
@@ -160,12 +156,23 @@
 							</a>
 
 						</li>
+
+						<li>
+							<a class="thumb" name="leaf" href="http://farm4.static.flickr.com/3261/2538183196_8baf9a8015.jpg" title="Title #0">
+								<img src="http://farm4.static.flickr.com/3261/2538183196_8baf9a8015_s.jpg" alt="Title #0" />
+							</a>							
+						</li>
 						{% endfor %}
 					
 						
 					</ul>
 				
 				</div>
+				</div>
+				<div class="span1">
+					<div id="forward"><img src="{{url_for('static', filename='img/icons/next.png')}}" style="margin-top:25px;cursor:pointer;"></div>
+				</div>
+			</div>
 			</div>
 			</div>
 		</div>
@@ -254,6 +261,14 @@
 <script type="text/javascript">
 		
  jQuery(document).ready(function($) {
+
+ 				$("#forward img").click(function () {
+				    gallery.next();
+				});
+
+				$("#backward img").click(function () {
+				    gallery.previous();
+				});
 				// We only want these styles applied when javascript is enabled
 				$('div.navigation').css({'width' : '300px', 'float' : 'left'});
 				$('div.content').css('display', 'block');
@@ -277,7 +292,7 @@
 					enableBottomPager:         true,
 					maxPagesToShow:            7,
 					imageContainerSel:         '#slideshow',
-					controlsContainerSel:      '#controls',
+					 controlsContainerSel:      '#controls',					
 					captionContainerSel:       '#caption',
 					loadingContainerSel:       '#loading',
 					renderSSControls:          true,
@@ -306,6 +321,8 @@
 					}
 				});
 			});
+
+
 
 </script>
 {% endblock %}
