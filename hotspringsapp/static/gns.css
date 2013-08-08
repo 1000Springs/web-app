@@ -482,22 +482,31 @@ th
 
 }
 
-
-.ui-widget-content{
- background-color:#ffffff;
- filter:progid:DXImageTransform.Microsoft.gradient(GradientType=1,startColorstr=#ffffff, endColorstr=#ffff00);
- background-image:-moz-linear-gradient(left, #ffffff 0%, #ffff00 50%,#ff0000 100%);
+/*Slider Customisation */
+#slider-range {
+background-color:#ffffff;
+filter:progid:DXImageTransform.Microsoft.gradient(GradientType=1,startColorstr=#ffffff, endColorstr=#ffff00);
+background-image:-moz-linear-gradient(left, #ffffff 0%, #ffff00 50%,#ff0000 100%);
 background-image:linear-gradient(left, #ffffff 0%, #ffff00 50%,#ff0000 100%);
 background-image:-webkit-linear-gradient(left, #ffffff 0%, #ffff00 50%,#ff0000 100%);
 background-image:-o-linear-gradient(left, #ffffff 0%, #ffff00 50%,#ff0000 100%);
 background-image:-ms-linear-gradient(left, #ffffff 0%, #ffff00 50%,#ff0000 100%);
- background-image:-webkit-gradient(linear, left bottom, right bottom, color-stop(0%,#ffffff), color-stop(50%,#ffff00),color-stop(100%,#ff0000));}
+background-image:-webkit-gradient(linear, left bottom, right bottom, color-stop(0%,#ffffff), color-stop(50%,#ffff00),color-stop(100%,#ff0000));}
 
 .ui-widget-header
 {  
   background: rgba(125,125,125,0.8);
 }
 
+.ui-accordion-header
+{
+  background:rgba(29,155,171,0.75);
+  color: white;
+  font-family: century gothic;
+}
+
+
+/* end */
 
 .menuItem
 {
