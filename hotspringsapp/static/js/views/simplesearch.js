@@ -1,28 +1,5 @@
-var max = 150;
+var max = 100;
 var min = 0;
-
-//Slider code
-$(function()
-{
-  $("#slider-range").slider(
-  {
-    range: true,
-    min: min,
-    max: max,
-    animate: "fast",
-    values: [25, 75],
-    change: function(event, ui)
-    {
-      $("#amount").val($("#slider-range").slider("values", 0) + "°C" + " - " + $("#slider-range").slider("values", 1) + "°C");
-    },
-    slide: function(event, ui)
-    {
-      $("#amount").val(ui.values[0] + "°C - " + ui.values[1] + "°C");
-    }
-  });
-  $("#amount").val($("#slider-range").slider("values", 0) + "°C" + " - " + $("#slider-range").slider("values", 1) + "°C");
-});
-
 
 
 //Highlight filter items
@@ -53,8 +30,7 @@ function presetTemp(id,low,high)
 {
   $(id).click(function()
    {
-    $( "#slider-range" ).slider( "values", 1, high );
-    setTimeout(function() {$( "#slider-range" ).slider( "values", 0, low )},150);      
+    $("#slider").rangeSlider("values", low, high);  
    });  
 }
 

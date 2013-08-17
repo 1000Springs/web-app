@@ -4,10 +4,12 @@
 {{ super() }}
 <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?sensor=true"></script>
 <script type="text/javascript" src="{{ url_for('static', filename='js/maps.js') }}"></script>
-<script type="text/javascript" src="{{ url_for('static', filename='js/jquery.js') }}"></script>
 <script type="text/javascript" src="{{ url_for('static', filename='js/views/simplesearch.js') }}"></script>
-<link rel="stylesheet" href="http://code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css" />
-<script src="http://code.jquery.com/ui/1.10.3/jquery-ui.js"></script>
+<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.js"></script>
+<!-- <link rel="stylesheet" href="http://code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css" /> -->
+<link rel="stylesheet" href="{{url_for('static', filename='iThing.css')}}" />
+<script src="{{url_for('static', filename='js/jquery-ui.custom.min.js')}}"></script>
+<script type="text/javascript" src="{{ url_for('static', filename='js/jQEditRangeSlider-min.js') }}"></script>
 
 <script type="text/javascript">
 
@@ -16,7 +18,29 @@
   $("#search img").attr("src","{{ url_for('static', filename='img/icons/search_Selected.png') }}");
   $("#search p").css("color","#ffffff");
 
+  $("#slider").rangeSlider({
+  formatter:function(val){
+         var value = parseInt(Math.round(val * 5) / 5);
+          
+         return value.toString()  + "°C";
+     
+      }});
+
+  $( "#safe" ).click(function() {
+  $( "#slider" ).animate({
+    value: 5,
+   
+  }, 5000, function() {
+    // Animation complete.
+  });
 });
+
+});
+
+
+
+
+
 
 </script>
 {% endblock %}
@@ -54,15 +78,12 @@
             </td>
          </tr>
          <tr>
-            <th style="text-align:left;"> Temperature </th>
+            <th style="text-align:left;margin:10px 0"> Temperature </th>
          </tr>
          <tr>
-            <td>               
-               <input type="text" id="amount" style="border: 0;" />
-               </p>
-               <div style="margin-bottom:10px;"id="slider-range"></div>
-            </td>
-            <td>            
+            <td>     
+               <div style="margin:15px 0" id="slider"></div>
+            </td>                    
          </tr>
          <tr>
             <td>
@@ -76,8 +97,8 @@
                </div>
             </td>
          </tr>
-         <tr align =center >
-            <td ><input type="submit" value="Search" class="btn" style="margin:35px 0;"></td>
+         <tr>
+            <td ><input type="submit" value="Search" class="btn btn-primary btn-large" style="margin:35px 0 0 0;"></td>
          </tr>
 <!--          <tr>
             <th style="text-align:left"> Misc <br> </th>
@@ -108,4 +129,6 @@
    <a class="btn" onclick="history.back()" style=" z-index:2">Back</a>!
    </div> -->
 </div>
+
+
 {% endblock %}
