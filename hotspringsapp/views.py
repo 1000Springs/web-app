@@ -2,9 +2,11 @@ import MySQLdb
 import datetime
 import time
 from hotspringsapp import app
+from hotspringsapp.database import db_session
 
 from flask import Flask, url_for, render_template, request, g, session, flash, redirect
 from models import *
+from forms import *
 
 def get_user_name():
     """ Fetch the logged in User"""
@@ -31,8 +33,6 @@ def attemptLogin():
 @app.route('/login', methods=['POST','GET'])
 def login():
 	error = None
-	
-
 	return render_template('login.html', error=None,site_id=None)
 
 
@@ -46,6 +46,7 @@ def browseby():
 	return render_template('browseby.html');
 
 
+#Old database Connection
 @app.before_request
 def before_request():
 	g.db = connect_db()
@@ -56,7 +57,7 @@ def teardown_request(exception):
 	
 def connect_db():
 	return MySQLdb.connect(host="localhost",user="root",passwd="admin",db="geothermaldb")
-	
+#	
 @app.route('/')
 def index():
 	return render_template('index.html')
@@ -114,7 +115,7 @@ def mapResults():
 	
 	sampleSites = "(" + ','.join(["'"+x+"'" for x in sampleSites]) + ")"
 
-	query = """Select p.sample_id,p.phys_id,p.temperature,p.ph_level,p.redox,p.dissolved_oxygen,p.conductivity 
+	query = """Select p.sample_id,p.phys_id,p.initialTemp,p.ph_level,p.redox,p.dissolved_oxygen,p.conductivity 
 			   from physical_data p, location l, sample s 
 			   where s.sample_id = p.sample_id 
 			   and s.location_feature_nc = l.feature_nc 
@@ -133,7 +134,7 @@ def mapsearch():
 
 	cur = g.db.cursor()
 	
-	cur.execute("""select s.location_feature_nc,l.common_feature_name,l.feature_system,l.description,p.temperature, l.eastings,l.northings
+	cur.execute("""select s.location_feature_nc,l.common_feature_name,l.feature_system,l.description,p.initialTemp, l.eastings,l.northings
 				from sample s, physical_data p, location l 
 				where l.FEATURE_NC = s.location_feature_nc
 				and p.sample_id = s.sample_id
@@ -152,229 +153,213 @@ def mapsearch():
 	return render_template('mapsearch.html',positions=positions)
 
 	
-@app.route('/simpleresults/<filter>')
-def simpleresults(filter):
+@app.route('/simpleresults')
+def simpleresults():
 	
 	cur = g.db.cursor()
 	
+	#sampleSites = Sample.query.filter(Physical_data.id == Sample.phys_id,Physical_data.initialTemp >= 80, Physical_data.initialTemp <= 90)
 	
-	
-	session['filter'] = filter
 	
 
-	tempMin = 0
 
-	tempMax = 100
 	
-	query = """select s.location_feature_nc,l.common_feature_name,l.feature_system,l.description,p.temperature, l.eastings,l.northings,l.toilet, l.parkbench,l.track, l.private, i.image_path
-					from sample s, physical_data p, location l, images i
-					where l.FEATURE_NC = s.location_feature_nc
-					and p.sample_id = s.sample_id
-					and i.sample_id = s.sample_id
-					and s.sample_id =
-       								( SELECT sample_id
-           							FROM sample
-									where location_feature_nc = s.location_feature_nc
-									order by date_gathered desc
-									limit 1
-   									)"""
 
-	if filter == "city":
-		queryCity = request.args.get('city')
-		query += "and l.feature_system = '{city}'".format(city=queryCity);
+	# tempMin = request.args.get('min')
+	# tempMax = request.args.get('max')
+	tempMin = 60
+	tempMax = 70
+
+	sampleSites = Sample.query.filter(Physical_data.id == Sample.phys_id,
+									  Physical_data.initialTemp>= tempMin,
+									  Physical_data.initialTemp < tempMax).order_by(Sample.location_id,Sample.date_gathered.desc())
+	# app.logger.debug(dir(sampleSites.all()[0]))
+	latestSamples = []	
+	prev = sampleSites.all()[0].location_id
+	tempSamples = []
+	for s in sampleSites.all():
+		
+		if(s.location_id != prev):
+			# print s.location_id,prev
+			# print sampleList
+			# print "Next location"
+			latestSamples.append(tempSamples[0])
+			tempSamples = []
+
+		tempSamples.append(s)
+		prev = s.location_id
+		
+		
+
+	
+	# for s in sampleSites:		
+	# 	print s.location_id,s.date_gathered
+
+
+	# app.logger.debug(sampleSites.count())
+	# app.logger.debug(dir(sampleSites[0]))
+	# session['filter'] = filter
+	
+
+	# tempMin = 0
+
+	# tempMax = 100
+	
+	# query = """select s.location_feature_nc,l.common_feature_name,l.feature_system,l.description,p.initialTemp, l.eastings,l.northings,l.toilet, l.parkbench,l.track, l.private, i.image_path
+	# 				from sample s, physical_data p, location l, images i
+	# 				where l.FEATURE_NC = s.location_feature_nc
+	# 				and p.sample_id = s.sample_id
+	# 				and i.sample_id = s.sample_id
+	# 				and s.sample_id =
+ #       								( SELECT sample_id
+ #           							FROM sample
+	# 								where location_feature_nc = s.location_feature_nc
+	# 								order by date_gathered desc
+	# 								limit 1
+ #   									)"""
+
+	# if filter == "city":
+	# 	queryCity = request.args.get('city')
+	# 	query += "and l.feature_system = '{city}'".format(city=queryCity);
 				
 
 		
-		filter = queryCity
-		session['filter'] = queryCity
-	elif filter.lower() == "safe":
+	# 	filter = queryCity
+	# 	session['filter'] = queryCity
+	# elif filter.lower() == "safe":
 		
-		tempMax = 60
-		query += "and p.temperature <= {tempMax}".format(tempMax=tempMax)
+	# 	tempMax = 60
+	# 	query += "and p.initialTemp <= {tempMax}".format(tempMax=tempMax)
 		
 						
-	elif filter.lower() == "unsafe":
+	# elif filter.lower() == "unsafe":
 	
-		tempMin =60
+	# 	tempMin =60
 
-		query += "and p.temperature >= {tempMin}".format(tempMin=tempMin)
+	# 	query += "and p.initialTemp >= {tempMin}".format(tempMin=tempMin)
 		
 		
 	
-	elif filter.lower() == "hottest":
-		tempMin = 90
-		query += "and p.temperature >= {tempMin}".format(tempMin=tempMin)
+	# elif filter.lower() == "hottest":
+	# 	tempMin = 90
+	# 	query += "and p.initialTemp >= {tempMin}".format(tempMin=tempMin)
 		
 	
-	elif filter.lower() == "unique":
-		site_id = "WAI_TPU"
-		query += "and l.feature_nc = '{site_id}'".format(site_id=site_id)
+	# elif filter.lower() == "unique":
+	# 	site_id = "WAI_TPU"
+	# 	query += "and l.feature_nc = '{site_id}'".format(site_id=site_id)
 		
 		
-	else:
-		if request.args.get('tempMin') is not None:
-			tempMin = request.args.get('tempMin')
+	# else:
+	# 	if request.args.get('tempMin') is not None:
+	# 		tempMin = request.args.get('tempMin')
 		
-		if request.args.get('tempMax') is not None:
-			tempMax = request.args.get('tempMax')
+	# 	if request.args.get('tempMax') is not None:
+	# 		tempMax = request.args.get('tempMax')
 
 		
-		query += """and p.temperature >= {tempMin}
-					and p.temperature <= {tempMax}""".format(tempMin=tempMin,tempMax=tempMax)
+	# 	query += """and p.initialTemp >= {tempMin}
+	# 				and p.initialTemp <= {tempMax}""".format(tempMin=tempMin,tempMax=tempMax)
 		
 	
-	temp = ""
-	springAtt = request.args.getlist("items");
+	# temp = ""
+	# springAtt = request.args.getlist("items");
 	
-	for att in springAtt:
-		temp += "and " + att + "= true ";
+	# for att in springAtt:
+	# 	temp += "and " + att + "= true ";
 	
-	query += temp
-	app.logger.debug (app.config['SQLALCHEMY_DATABASE_URI'])
-	cur.execute(query)
-	entries = [dict(location_id=row[0],
-					feature_name=row[1], 
-					city=row[2], 
-					desc=row[3], 
-					temp=row[4],
-					eastings=row[5],
-					northings=row[6],
-					toilet=row[7], 
-					parkbench=row[8], 
-					track=row[9], 
-					private=row[10],
-					imagepath=row[11]) for row in cur.fetchall()]
+	# query += temp
+	# app.logger.debug (app.config['SQLALCHEMY_DATABASE_URI'])
+	# cur.execute(query)
+	entries = [dict(location_id=s.location_id,
+					feature_name=s.location.feature_name, 
+					city=s.location.feature_system, 
+					desc=s.location.description, 
+					temp=s.phys.initialTemp,
+					eastings=s.location.eastings,
+					northings=s.location.northings,
+					toilet=s.location.toilet, 
+					parkbench=s.location.parkbench, 
+					track=s.location.track, 
+					private=s.location.private,
+					imagepath=s.image.image_path) for s in latestSamples]
 
 	
 	
-	query = """
-		select t.range as "Range", count(*) as "Occurances"
-	from (
-	  select case  
-	    when temperature between 50 and 59 then ' 50- 59'
-	    when temperature between 60 and 69 then ' 60- 69'
-		when temperature between 60 and 79 then ' 70- 79'
-		when temperature between 80 and 89 then ' 80- 89'
-	    else '90-' end as "range"
-	  from physical_data) t
-	group by t.range"""
+	# query = """
+	# 	select t.range as "Range", count(*) as "Occurances"
+	# from (
+	#   select case  
+	#     when initialTemp between 50 and 59 then ' 50- 59'
+	#     when initialTemp between 60 and 69 then ' 60- 69'
+	# 	when initialTemp between 60 and 79 then ' 70- 79'
+	# 	when initialTemp between 80 and 89 then ' 80- 89'
+	#     else '90-' end as "range"
+	#   from physical_data) t
+	# group by t.range"""
 
-	cur.execute(query)
-
-
-	pieChart = [dict(range=row[0],count=row[1]) for row in cur.fetchall()]
+	# cur.execute(query)
 
 
+	# pieChart = [dict(range=row[0],count=row[1]) for row in cur.fetchall()]
 
-	slices = [["90-100",10],["0-89",12],["blah",12],["test",50]]
 
-	cur.close()	
+
+	# slices = [["90-100",10],["0-89",12],["blah",12],["test",50]]
+
+	# cur.close()	
 	return render_template('simpleresults.html',entries=entries,
-												filtertype=filter,
+												# filtertype=filter,
 												tempMin=tempMin,
 												tempMax=tempMax,
-												slices=slices,
-												pieChart=pieChart
+												# slices=slices,
+												# pieChart=pieChart
 												)
+
+
+	# return render_template('about.html')
 
 @app.route('/searchbyimage')
 def searchbyimage():
 
-	cur = g.db.cursor()
+	imageList = Images.query.filter(Images.sample_id == Sample.id)
 
-	cur.execute("""select i.image_path, i.image_name, i.sample_id,s.location_feature_nc
-					from images i, sample s
-					where i.sample_id = s.sample_id;
-					""")
-
-	images = [dict(imagepath=row[0],
-				   imagename=row[1],
-				   site_id=row[3]) for row in cur.fetchall()]
-
-	cur.close()
+	images = [dict(imagepath=image.image_path,				 
+				   site_id=image.Sample.location_id) for image in imageList]
 
 	return render_template('searchbyimage.html',images=images)
+
+
+
 
 @app.route('/samplesite/<site_id>')
 def samplesite(site_id):	
 
-	cur = g.db.cursor()
-
-	id = site_id
-	cur.execute("""select s.location_feature_nc,l.common_feature_name,l.feature_system,l.description,p.temperature,l.eastings,l.northings,l.toilet, l.parkbench,l.track, l.private  
-				from sample s, physical_data p, location l 
-				where l.FEATURE_NC = s.location_feature_nc
-				and p.sample_id = s.sample_id 
-				and feature_NC=%s
-				order by s.date_gathered Desc
-				limit 1""",id)
-	
-
-	imageLocation = "img/hotsprings1.jpg"
-
-	imageLocation2 = "img/hotsprings2.jpg"
-	
 
 	
+	locationSamples = Sample.query.filter(Location.id == Sample.location_id, Location.id == site_id)
 
-	# entries = [dict(location_id=row[0],
-	# 				feature_name=row[1],
-	# 				city=row[2], 
-	# 				desc=row[3], 
-	# 				temp=row[4], 
-	# 				eastings=row[5],
-	# 				northings=row[6], 
-	# 				toilet=row[7], 
-	# 				parkbench=row[8], 
-	# 				track=row[9], 
-	# 				private=row[10], 
-	# 				img=imageLocation,
-	# 				img2 = imageLocation2) for row in cur.fetchmany(1)]
-
-	cur.execute("""select s.location_feature_nc,l.common_feature_name,l.feature_system,l.description,p.temperature,l.eastings,l.northings,l.toilet, l.parkbench,l.track, l.private  
-				from sample s, physical_data p, location l 
-				where l.FEATURE_NC = s.location_feature_nc
-				and p.sample_id = s.sample_id 
-				and feature_NC=%s
-				order by s.date_gathered Desc
-				limit 1""",id)
-	siteData = cur.fetchone()
-
-	siteInfo = dict(location_id=siteData[0],
-					feature_name=siteData[1],
-					city=siteData[2], 
-					desc=siteData[3], 
-					temp=siteData[4], 
-					eastings=siteData[5],
-					northings=siteData[6], 
-					toilet=siteData[7], 
-					parkbench=siteData[8], 
-					track=siteData[9], 
-					private=siteData[10], 
-					img=imageLocation,
-					img2 = imageLocation2)
-	app.logger.debug (siteInfo)
-
-	query = """select i.image_path, i.image_name
-				   from images i, sample s
-				   where s.sample_id = i.sample_id
-				   and s.location_feature_nc = '{id}'""".format(id=id)
-
+	latestSample = locationSamples.order_by(Sample.date_gathered.desc()).first()
 	
 
-	cur.execute(query)
+	siteInfo = dict(location_id=latestSample.location_id,
+					feature_name=latestSample.location.feature_name,
+					city=latestSample.location.feature_system, 
+					desc=latestSample.location.description, 
+					temp=latestSample.phys.initialTemp, 
+					eastings=latestSample.location.eastings,
+					northings=latestSample.location.northings, 
+					toilet=latestSample.location.toilet, 
+					parkbench=latestSample.location.toilet, 
+					track=latestSample.location.toilet, 
+					private=latestSample.location.toilet)
+					
 
 
-	images = [dict(imagepath=row[0],
-				   imagename=row[1]) for row in cur.fetchall()]
-	
 
-	
-	
-	
-	cur.close()
-	
-	
+	images = [dict(imagepath=s.image_path,
+				   imagename=s.image_name) for s in latestSample.image]	
+
 	
 	return render_template('samplesite.html',sample_site=siteInfo,
 											 images=images)
@@ -429,8 +414,7 @@ def GetSOTD():
 	f.write(str(springIndex))
 	
 	f.close()
-	return results[springIndex]
-				  
+	return results[springIndex]  
 
 
 	

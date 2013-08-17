@@ -1,4 +1,4 @@
-from flask_sqlalchemy import SQLAlchemy
+from flask.ext.sqlalchemy import SQLAlchemy
 from hotspringsapp import app
 from werkzeug.security import generate_password_hash, check_password_hash
 
@@ -8,8 +8,8 @@ db = SQLAlchemy(app)
 
 class Location(db.Model):
 
-	Feature_nc = db.Column(db.String, primary_key=True)
-	common_feature_name = db.Column(db.String)
+	id = db.Column(db.String, primary_key=True)
+	feature_name = db.Column(db.String)
 	eastings = db.Column(db.Numeric)
 	northings = db.Column(db.Numeric)
 	feature_system = db.Column(db.String)
@@ -18,11 +18,14 @@ class Location(db.Model):
 	parkbench = db.Column(db.Boolean)
 	track = db.Column(db.Boolean)
 	private = db.Column(db.Boolean)
+	colour = db.Column(db.String)
 
- 	def __init__(self,feature_nc,fName,e,n,fSystem,desc,toilet,pbench,track,private):
 
-	 	self.Feature_nc = feature_nc
-	 	self.common_feature_name = fName
+
+ 	def __init__(self,location_id,fName,e,n,fSystem,desc,toilet,pbench,track,private,colour):
+
+	 	self.id = location_id
+	 	self.feature_name = fName
 	 	self.eastings = e
 	 	self.northings = n
 	 	self.feature_system = fSystem
@@ -31,42 +34,68 @@ class Location(db.Model):
 	 	self.parkbench = pbench
 	 	self.track = track
 	 	self.private = private
+	 	self.colour = colour
+	
 
-class Sample(db.Model):
-
-	SAMPLE_ID = db.Column(db.Integer, primary_key=True)
-	date_gathered = db.Column(db.DateTime)
-	LOCATION_FEATURE_NC = db.Column(db.String, db.ForeignKey("location.Feature_nc"))
-	feature_nc = db.relationship("Location",backref="Sample",lazy="select")
-
-	def __init__(self,id,date,location):
-		self.SAMPLE_ID = id
-		self.date_gathered = date
-		self.LOCATION_FEATURE_NC = location
 
 
 class Physical_data(db.Model):
 
-	Phys_ID = db.Column(db.Integer, primary_key=True)
-	sample_id = db.Column(db.Integer, db.ForeignKey('sample.SAMPLE_ID'))
-	sample = db.relationship("Sample",backref="Physical_data",lazy='select')
-
-	Temperature = db.Column(db.Float)
-	ph_level = db.Column(db.Float)
-	redox = db.Column(db.Float)
-	dissolved_oxygen = db.Column(db.Float)
-	conductivity = db.Column(db.Float)
+	id = db.Column(db.Integer, primary_key=True)
+	initialTemp = db.Column(db.Numeric)
+	pH = db.Column(db.Numeric)
+	redox = db.Column(db.Numeric)
+	dO = db.Column(db.Numeric)
+	conductivity = db.Column(db.Numeric)
 	date_gathered = db.Column(db.Float)
+	sampleTemp = db.Column(db.Numeric)
 
-	def __init__(self, pid,sid,temp,ph,red,dis_ox,cond,date):
-		self.Phys_ID          = pid
-		self.sample_id        = sid
-		self.Temperature      = temp
-		self.ph_level         = ph
+	def __init__(self, phys_id,iTemp,ph,red,dis_ox,cond,date,sTemp):
+		self.id               = phys_id
+		self.initialTemp      = iTemp
+		self.pH               = ph
 		self.redox            = red
-		self.dissolved_oxygen = dis_ox
+		self.dO               = dis_ox
 		self.conductivity     = cond
 		self.date_gathered    = date
+		self.sampleTemp		  = sTemp
+
+class Sample(db.Model):
+
+	id = db.Column(db.Integer, primary_key=True)
+	date_gathered = db.Column(db.DateTime)
+	location_id = db.Column(db.String, db.ForeignKey("location.id"))
+	phys_id = db.Column(db.Integer, db.ForeignKey("physical_data.id"))
+
+	location = db.relationship("Location",backref="Sample",lazy="select")
+	phys = db.relationship("Physical_data",backref="Sample",lazy="select")
+	image = db.relationship("Images",backref="Sample",lazy="select" , uselist=True)
+
+	def __init__(self,id,date,location,physID):
+		self.id = id
+		self.date_gathered = date
+		self.location_id = location
+		self.phys_id = physID
+
+	def __repr__(self):
+		return '<Sample {0} {1} {2}>'.format(self.id,self.location_id,self.date_gathered)
+
+
+class Images(db.Model):
+
+	id = db.Column(db.Integer, primary_key=True)
+	sample_id = db.Column(db.Integer, db.ForeignKey("sample.id"))
+	image_path = db.Column(db.String (150))
+	image_name = db.Column(db.String (150))
+
+
+
+	def __init__(self,id,sid,iPath,iName):
+		self.id = id
+		self.sample_id = sid
+		self.image_path = iPath
+		self.image_name = iName
+
 
 		
 		
@@ -82,5 +111,8 @@ class User(db.Model):
 
 	def check_password(self, password):
 		return check_password_hash(self.password,password)
+
+
+
 
 db.create_all()

@@ -25,33 +25,33 @@
 		$('i').tooltip();
 	};
 
-	google.load("visualization", "1", {packages:["corechart"]});
+	// google.load("visualization", "1", {packages:["corechart"]});
 
-    google.setOnLoadCallback(drawChart);
-      function drawChart() 
-      {
-      	var raw = []
+ //    google.setOnLoadCallback(drawChart);
+ //      function drawChart() 
+ //      {
+ //      	var raw = []
 
-      	raw.push(["Range","Count"]);
+ //      	raw.push(["Range","Count"]);
 
-      	{% for slice in pieChart %}
-      		raw.push(["{{slice.range}}",{{slice.count}}]);
-      	{% endfor %}
+ //      	{% for slice in pieChart %}
+ //      		raw.push(["{{slice.range}}",{{slice.count}}]);
+ //      	{% endfor %}
 
-        var data = google.visualization.arrayToDataTable(raw);
+ //        var data = google.visualization.arrayToDataTable(raw);
 
-        var options = 
-        {
-          title: 'Hot Spring Temperatures',
-          chartArea: {left:5,top:20, height:"100%", width:"100%"},
-          colors:["#FFE71E","#EDAD16","#DC730F","#CB3907","#ba0000"],
-          backgroundColor: 'transparent'
+ //        var options = 
+ //        {
+ //          title: 'Hot Spring Temperatures',
+ //          chartArea: {left:5,top:20, height:"100%", width:"100%"},
+ //          colors:["#FFE71E","#EDAD16","#DC730F","#CB3907","#ba0000"],
+ //          backgroundColor: 'transparent'
 
-        };
+ //        };
 
-        var chart = new google.visualization.PieChart(document.getElementById('chart_div'));
-        chart.draw(data, options);
-      }
+ //        var chart = new google.visualization.PieChart(document.getElementById('chart_div'));
+ //        chart.draw(data, options);
+ //      }
 	
 
 	</script>
@@ -62,7 +62,7 @@
 {% endblock %}
 {% block content %}
 <div class="contrast" style="height:73px;position:relative;background-color:rgba(29,155,171,0.5); ">
-<h2 style="padding:25px 15px 0 15px; margin:0; float:left; ">{{filtertype}} Springs</h2>
+<h2 style="padding:25px 15px 0 15px; margin:0; float:left; ">Springs</h2>
 <div align="right">
 	<input type="button" value="Enlarge Map" id="expand" style="margin:37px 5px 0 0">	
 </div>
