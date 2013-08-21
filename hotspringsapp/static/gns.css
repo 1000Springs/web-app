@@ -463,7 +463,8 @@ height: 100%;*/
 .filterIcons img
 {
   width:60px;
-  opacity: 0.6;
+    opacity: 0.6;
+  float:left;
 }
 
 p,a,span,th,h2,input,h5,h4,i

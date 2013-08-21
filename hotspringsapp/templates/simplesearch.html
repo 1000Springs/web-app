@@ -4,7 +4,7 @@
 {{ super() }}
 <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?sensor=true"></script>
 <script type="text/javascript" src="{{ url_for('static', filename='js/maps.js') }}"></script>
-<script type="text/javascript" src="{{ url_for('static', filename='js/views/simplesearch.js') }}"></script>
+
 <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.js"></script>
 <!-- <link rel="stylesheet" href="http://code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css" /> -->
 <link rel="stylesheet" href="{{url_for('static', filename='iThing.css')}}" />
@@ -18,24 +18,9 @@
   $("#search img").attr("src","{{ url_for('static', filename='img/icons/search_Selected.png') }}");
   $("#search p").css("color","#ffffff");
 
-  $("#slider").rangeSlider({
-  formatter:function(val){
-         var value = parseInt(Math.round(val * 5) / 5);
-          
-         return value.toString()  + "°C";
-     
-      }});
 
-  $( "#safe" ).click(function() {
-  $( "#slider" ).animate({
-    value: 5,
-   
-  }, 5000, function() {
-    // Animation complete.
-  });
-});
 
-});
+ });
 
 
 
@@ -43,6 +28,12 @@
 
 
 </script>
+
+<style>
+input[type=checkbox] {
+display: none;
+}
+</style>
 {% endblock %}
 {% block content %}
 <div class="row-fluid" style="top:75px;" >
@@ -50,35 +41,52 @@
    <div class="bodytype span6 contrast" style="padding-top:15px;" >
       <h2 style="padding:10px 0 25px 0 ; margin-top:0;"> search for springs </h2>
        <form action="{{ url_for('simpleresults', filter='city')}}">
+      <div style="background-color:rgba(29,155,171,0.75);padding:10px;border-radius:10px">
       <table >
          <tr>
             <th style="text-align:left"> Location </th>
          </tr>
          <tr>
-            <td>
-              
-                  <p> Find hot springs near a city: </p>
-                  <input style="margin: 0 0 20px;" type="text" data-provide="typeahead" name="city" id="myLoc" >  
-                
-              
+            <td>              
+                  {{form.city.label}}
+                  {{form.city}}             
             </td>
          </tr>
          <tr>            
             <th style="text-align:left; "> Filters </th>
          </tr>
-         <tr   class="filterIcons">
+         <tr class="filterIcons">
             <td>
                <div style="margin: 0 0 20px;">
-                  <img rel="tooltip" data-original-title="Benches" src="{{ url_for('static', filename='img/icons/bench_Selected.png') }}">               
+                  <!-- <img rel="tooltip" data-original-title="Benches" src="{{ url_for('static', filename='img/icons/bench_Selected.png') }}">               
                   <img rel="tooltip" data-original-title="Private" src="{{ url_for('static', filename='img/icons/private_Selected.png') }}">               
                   <img rel="tooltip" data-original-title="Toilet" src="{{ url_for('static', filename='img/icons/toilet_Selected.png') }}">               
-                  <img rel="tooltip" data-original-title="Track" src="{{ url_for('static', filename='img/icons/track_Selected.png') }}">   
+                  <img rel="tooltip" data-original-title="Track" src="{{ url_for('static', filename='img/icons/track_Selected.png') }}">    -->
+
+                  {{form.hidden_tag()}}
+                  <div class="filterImage">                    
+                    {{form.toilet}} 
+                    <label for="toilet"><img rel="tooltip" data-original-title="Toilet" src="{{ url_for('static', filename='img/icons/toilet_Selected.png') }}"></label>
+                  </div>
+                  <div class="filterImage">              
+                    {{form.bench}} 
+                    <label for="bench"><img rel="tooltip" data-original-title="Bench" src="{{ url_for('static', filename='img/icons/bench_Selected.png') }}"></label>
+                  </div>
+                  <div class="filterImage">           
+                    {{form.private}} 
+                    <label for="private"><img rel="tooltip" data-original-title="Private" src="{{ url_for('static', filename='img/icons/private_Selected.png') }}"></label>
+                  </div>
+                  <div class="filterImage">           
+                    {{form.track}} 
+                    <label for="track"><img rel="tooltip" data-original-title="track" src="{{ url_for('static', filename='img/icons/track_Selected.png') }}"></label>
+                  </div>
                   
                </div>
             </td>
          </tr>
          <tr>
             <th style="text-align:left;margin:10px 0"> Temperature </th>
+            
          </tr>
          <tr>
             <td>     
@@ -87,8 +95,7 @@
          </tr>
          <tr>
             <td>
-               <div class="btn-group" >
-                  <!-- <a class="btn" href="{{url_for('simpleresults',filter='Safe')}}">Safe</a> -->
+               <div class="btn-group">                  
                   <a class="btn" id="safe">Safe</a>
                   <a class="btn" id="unsafe">Unsafe</a>
                   <a class="btn" id="hottest">Hottest</a>
@@ -98,7 +105,7 @@
             </td>
          </tr>
          <tr>
-            <td ><input type="submit" value="Search" class="btn btn-primary btn-large" style="margin:35px 0 0 0;"></td>
+            <td ></td>
          </tr>
 <!--          <tr>
             <th style="text-align:left"> Misc <br> </th>
@@ -113,8 +120,9 @@
             </td>
          </tr> -->
       </table>
-    
 
+    </div>
+ <input type="submit" value="Search" class="btn btn-primary btn-large" style="margin:35px 0 0 0;">
    
    </form>
 </div>
@@ -130,5 +138,5 @@
    </div> -->
 </div>
 
-
+<script type="text/javascript" src="{{ url_for('static', filename='js/views/simplesearch.js') }}"></script>
 {% endblock %}
