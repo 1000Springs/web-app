@@ -69,11 +69,10 @@ def search():
 @app.route('/simplesearch')
 def simplesearch():
 
-	location = Location.query.filter().all()
-	entries = [row.feature_system for row in location]
-	app.logger.debug(entries)
 
-	return render_template('simplesearch.html',cities = entries)
+	form = SearchForm()	
+
+	return render_template('simplesearch.html',form=form)
 	
 @app.route('/results')
 def results():
@@ -165,10 +164,10 @@ def simpleresults():
 
 	
 
-	# tempMin = request.args.get('min')
-	# tempMax = request.args.get('max')
-	tempMin = 60
-	tempMax = 70
+	tempMin = request.args.get('minTemp')
+	tempMax = request.args.get('maxTemp')
+	# tempMin = 60
+	# tempMax = 70
 
 	sampleSites = Sample.query.filter(Physical_data.id == Sample.phys_id,
 									  Physical_data.initialTemp>= tempMin,
@@ -271,6 +270,7 @@ def simpleresults():
 	# query += temp
 	# app.logger.debug (app.config['SQLALCHEMY_DATABASE_URI'])
 	# cur.execute(query)
+
 	entries = [dict(location_id=s.location_id,
 					feature_name=s.location.feature_name, 
 					city=s.location.feature_system, 
@@ -282,7 +282,7 @@ def simpleresults():
 					parkbench=s.location.parkbench, 
 					track=s.location.track, 
 					private=s.location.private,
-					imagepath=s.image.image_path) for s in latestSamples]
+					imagepath=s.image[0].image_path) for s in latestSamples]
 
 	
 	
