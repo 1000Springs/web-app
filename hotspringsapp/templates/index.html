@@ -52,6 +52,7 @@
         </div>
     </div>
     <div class="item">
+      <a href="{{ url_for('searchbycat')}}">
       <div id="cat-images">
          
         <img src="{{ url_for('static', filename='img/springsbycat/murkyhotspring.jpg') }}">
@@ -64,33 +65,42 @@
         </div>
       </div>
     </div>
-  </div> 
-    <div class="item">
-    	<img src="{{ url_for('static', filename='img/carousel/carouselimage2.jpg') }}">
-    	<div class="container">
-            <div class="carousel-caption">
-              <h4>spring of the day</h4>             
-            </div>
-        </div>
-    </div>
+  </a>
+  </div>   
 
     <div class="item">
+      <a href="{{ url_for('searchbyimage')}}">
       <img src="{{ url_for('static', filename='img/carousel/searchbyimage.jpg') }}">
       <div class="container">
             <div class="carousel-caption">
               <h4>browse by image</h4>             
             </div>
         </div>
+      </a>
+    </div>
+
+     <div class="item">
+      <a href="{{ url_for('sotd')}}">
+      <img src="{{ url_for('static', filename='img/carousel/carouselimage2.jpg') }}">
+      <div class="container">
+            <div class="carousel-caption">
+              <h4>spring of the day</h4>             
+            </div>
+        </div>
+      </a>
     </div>
 
     <div class="item">
+      <a href="{{ url_for('simplesearch')}}">
       <img src="{{ url_for('static', filename='img/carousel/carouselimage2.jpg') }}">
       <div class="container">
             <div class="carousel-caption">
               <h4>search</h4>             
             </div>
         </div>
+        </a>
     </div>
+
   </div>
   <!-- Carousel nav -->
   <a class="carousel-control left" href="#myCarousel" data-slide="prev">&lsaquo;</a>
