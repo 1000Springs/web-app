@@ -87,38 +87,3 @@
 	</div>
 
 
-  <script type="text/javascript">
-
- $(function () 
-	{
-		$('#browse').click
-		(
-			function()
-			{
-			if ($(this).hasClass("clicked"))
-			{
-				$("#browse").css("background-color" , "white");
-				$("#browse img").attr("src","{{ url_for('static', filename='img/icons/browse.png') }}");
-				$("#browse p").css("color","rgb(29,155,171)");
-				$("#browse .caret").css("border-top","4px solid #1D9BAB");
-				$(this).removeClass("clicked");
-			}
-			else
-			{
-				$("#browse").css("background-color" , "rgba(29,155,171,0.75)");
-				$("#browse img").attr("src","{{ url_for('static', filename='img/icons/browse_Selected.png') }}");
-				$("#browse p").css("color","#ffffff");
-				$("#browse .caret").css("border-top","4px solid white");
-				$(this).addClass("clicked");
-			}
-			});
-
-		
-
-   		
-
-
-
-	});
-
-  </script>
