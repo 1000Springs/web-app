@@ -8,11 +8,9 @@
   
 
 
- $(document).ready(function () {
-  
-  $("#adsearch").css("background-color" , "rgba(29,155,171,0.75)");
-  $("#adsearch img").attr("src","{{ url_for('static', filename='img/icons/general_Selected.png') }}");
-  $("#adsearch p").css("color","#ffffff");
+ $(document).ready(function () {  
+
+  MenuSelect("#adsearch","{{ url_for('static', filename='img/icons/general_Selected.png') }}");
 
   $('input[type=radio]').hide();
   

@@ -6,13 +6,24 @@
 
 	<script type="text/javascript" src="{{ url_for('static', filename='js/jquery.js') }}"></script>
 
+	<script type="text/javascript">
+
+	$(function()
+	{
+	MenuSelect("#browse","{{ url_for('static', filename='img/icons/browse_Selected.png') }}");
+		$("#browse .caret").css("border-top","4px solid white");
+});
+
+
+	</script>
+
 
 {% endblock %}
 {% block content %}
-<div class="contrast" style="height:73px;position:relative;background-color:rgba(29,155,171,0.5); padding-left:15px;">
 
-<h2 style="margin:0;">Search by Colour</h2>
 
+<div class="title">
+	<h2> browse by colour </h2>
 </div>
 
 

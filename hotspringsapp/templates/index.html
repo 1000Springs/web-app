@@ -8,19 +8,19 @@
 
 
 
- $(function () {
-  $("#home").css("background-color" , "rgba(29,155,171,0.75)");
-  $("#home img").attr("src","{{ url_for('static', filename='img/icons/home_Selected.png') }}");
-  $("#home p").css("color","#ffffff");
+ $(function () 
+  {
+  MenuSelect("#home","{{ url_for('static', filename='img/icons/home_Selected.png') }}");
+  });
 
-});
+
   </script>
 
 
 {% endblock %}
 {% block content %}
 
-<div class="title contrast" id="index">
+<div class="title contrast" id="index" style="">
   <h2>welcome</h2>
   <p> 
     Our project collects biodiversity information from 1,000 hot springs in and around Taupo.

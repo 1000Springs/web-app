@@ -3,12 +3,26 @@
 {% block head %}
   {{ super() }}
   <script type="text/javascript" src="{{ url_for('static', filename='js/jquery.js') }}"></script>
+
+  	<script type="text/javascript">
+
+	$(function()
+	{
+	MenuSelect("#browse","{{ url_for('static', filename='img/icons/browse_Selected.png') }}");
+		$("#browse .caret").css("border-top","4px solid white");
+});
+
+
+	</script>
   {% endblock %}
 
 
 {% block content %}
 
 <div style="height:73px;position:relative;background-color:rgba(29,155,171,0.5); ">
+	<div class="title">
+		<h2> browse by image </h2>
+	</div>
 </div>
 
 <div style="position:relative; padding-left:40px; background:#fff;">
