@@ -370,7 +370,9 @@ color: #404040;
   background-color: white;
 }
 .carousel-caption {
+  background-color:#1D9BAB; /* IE */
       background-color: rgba(29,155,171,0.75);
+
 /*      top: 0;
 left: 0;
 width: 200px;
@@ -484,7 +486,7 @@ th
 }
 
 /*Slider Customisation */
-#slider-range {
+.ui-rangeSlider-container {
 background-color:#ffffff;
 filter:progid:DXImageTransform.Microsoft.gradient(GradientType=1,startColorstr=#ffffff, endColorstr=#ffff00);
 background-image:-moz-linear-gradient(left, #ffffff 0%, #ffff00 50%,#ff0000 100%);
@@ -494,7 +496,7 @@ background-image:-o-linear-gradient(left, #ffffff 0%, #ffff00 50%,#ff0000 100%);
 background-image:-ms-linear-gradient(left, #ffffff 0%, #ffff00 50%,#ff0000 100%);
 background-image:-webkit-gradient(linear, left bottom, right bottom, color-stop(0%,#ffffff), color-stop(50%,#ffff00),color-stop(100%,#ff0000));}
 
-.ui-widget-header
+.ui-rangeSlider-bar
 {  
   background: rgba(125,125,125,0.8);
 }
@@ -506,6 +508,31 @@ background-image:-webkit-gradient(linear, left bottom, right bottom, color-stop(
   font-family: century gothic;
 }
 
+
+.ui-rangeSlider-label,.ui-rangeSlider-arrow{
+  background: white;
+}
+
+.ui-rangeSlider-rightArrow .ui-rangeSlider-arrow-inner
+{
+  border-left:10px solid #1D9BAB;
+}
+
+.ui-rangeSlider-leftArrow .ui-rangeSlider-arrow-inner
+{
+  border-right:10px solid #1D9BAB;
+}
+
+.ui-rangeSlider-label-inner
+{
+  border-top:10px solid white;
+}
+
+
+.ui-rangeSlider-label
+{
+  color:rgb(29,155,171);
+}
 
 /* end */
 
@@ -577,6 +604,13 @@ padding: 0 5px;
 
 
 /* Simple Search */
+
+.colourClick:active
+{
+
+  background-color: rgb(29,155,171);
+  color:white;
+}
 
 /* Browse by */
 
@@ -668,8 +702,11 @@ padding: 0 5px;
 .title
 {
   position:relative;
-  background-color:rgba(29,155,171,0.75);
+  background-color:#1D9BAB; /* IE */
+  background-color:rgba(29,155,171,0.5);
   padding:25px 15px 15px 15px;
+
+
 }
 
 .title h2
