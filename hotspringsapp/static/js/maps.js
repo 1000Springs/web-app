@@ -20,23 +20,40 @@ function initialize() {
 	searchMap = new google.maps.Map(document.getElementById("show_map"),mapOptions);
 	
   
- $("#expand").toggle(function () {
-    $("#map_canvas").animate({
-        "height": "500px"
-    }, "slow", function () {
-		//Resizes map once animation has finished
-        google.maps.event.trigger(map, 'resize');		
-    });
-    $("#expand").prop('value', 'Reduce Map');
-}, function () {
-    $("#map_canvas").animate({
-        "height": "233px"
-    }, "slow", function () {
-        google.maps.event.trigger(map, 'resize');
-    });
-    $("#expand").prop('value', 'Enlarge Map');
-    google.maps.event.trigger(map, 'resize');
-});
+//  $("#expand").toggle(function () {
+//     $("#map_canvas").animate({
+//         "height": "500px"
+//     }, "slow", function () {
+// 		//Resizes map once animation has finished
+//         google.maps.event.trigger(map, 'resize');		
+//     });
+//     $("#expand").prop('value', 'Reduce Map');
+// }, function () {
+//     $("#map_canvas").animate({
+//         "height": "233px"
+//     }, "slow", function () {
+//         google.maps.event.trigger(map, 'resize');
+//     });
+//     $("#expand").prop('value', 'Enlarge Map');
+//     google.maps.event.trigger(map, 'resize');
+// });
+  var expanded = false;
+  $("#expand").click(function() {
+        if(expanded === false)
+        {
+          expanded = true
+          $("#map_canvas").css("height","500px")
+          google.maps.event.trigger(map, 'resize'); 
+        }
+        else
+        {
+           expanded = false
+          $("#map_canvas").css("height","233px")
+          google.maps.event.trigger(map, 'resize'); 
+        }
+  }); 
+
+
 
 }
 
