@@ -6,49 +6,41 @@
 <script type="text/javascript" src="{{ url_for('static', filename='js/maps.js') }}"></script>
 
 <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.js"></script>
-<!-- <link rel="stylesheet" href="http://code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css" /> -->
 <link rel="stylesheet" href="{{url_for('static', filename='iThing.css')}}" />
 <script src="{{url_for('static', filename='js/jquery-ui.custom.min.js')}}"></script>
 <script type="text/javascript" src="{{ url_for('static', filename='js/jQEditRangeSlider-min.js') }}"></script>
 
 <script type="text/javascript">
 
- $(function () {
-  $("#search").css("background-color" , "rgba(29,155,171,0.75)");
-  $("#search img").attr("src","{{ url_for('static', filename='img/icons/search_Selected.png') }}");
-  $("#search p").css("color","#ffffff");
-
-
-
+ $(function () 
+ {
+   MenuSelect("#search","{{ url_for('static', filename='img/icons/search_Selected.png') }}");
  });
-
-
-
-
-
 
 </script>
 
 <style>
-input[type=checkbox] {
+input[type=checkbox],#minTemp,#maxTemp {
 display: none;
 }
 </style>
 {% endblock %}
 {% block content %}
-<div class="row-fluid" style="top:75px;" >
-
+<div class="row-fluid">
+ <div class="title">
+      <h2> search for springs </h2>
+    </div>
    <div class="bodytype span6 contrast" style="padding-top:15px;" >
-      <h2 style="padding:10px 0 25px 0 ; margin-top:0;"> search for springs </h2>
+
        <form action="{{ url_for('simpleresults', filter='city')}}">
       <div style="background-color:rgba(29,155,171,0.75);padding:10px;border-radius:10px">
-      <table >
+      <table style="width:100%">
          <tr>
             <th style="text-align:left"> Location </th>
          </tr>
          <tr>
             <td>              
-                  {{form.city.label}}
+                  
                   {{form.city}}             
             </td>
          </tr>
@@ -91,16 +83,15 @@ display: none;
          <tr>
             <td>     
                <div style="margin:15px 0" id="slider"></div>
+                {{form.minTemp}} {{form.maxTemp}}
             </td>                    
          </tr>
          <tr>
-            <td>
+            <td align=center>
                <div class="btn-group">                  
                   <a class="btn" id="safe">Safe</a>
                   <a class="btn" id="unsafe">Unsafe</a>
-                  <a class="btn" id="hottest">Hottest</a>
-                 <!--  <a class="btn" href="{{url_for('simpleresults',filter='Unsafe')}}">Unsafe</a>
-                  <a class="btn" href="{{url_for('simpleresults',filter='Hottest')}}">Hottest <i class="icon-fire"></i></a> -->
+                  <a class="btn" id="hottest">Hottest</a>               
                </div>
             </td>
          </tr>
@@ -122,20 +113,17 @@ display: none;
       </table>
 
     </div>
- <input type="submit" value="Search" class="btn btn-primary btn-large" style="margin:35px 0 0 0;">
+ <input type="submit" value="Search" class="btn btn-large colourClick" style="margin:35px 0 0 40%;  width: 100px;height: 100px;  border-radius: 50px;">
    
    </form>
 </div>
-<div class="span6" style="position:relative;" >
+<!-- <div class="span6" style="position:relative;" >
 <div class="contrast"style="background-color: rgba(29,155,171,0.5); height:73px; width:522px; "> 
 
-   </div>
+   </div> -->
   </div>
 </div>
  <div style="background-color: rgba(29,155,171,0.75); height:30px; opacity: 0.7;  "> </div>
-<!--    <div>
-   <a class="btn" onclick="history.back()" style=" z-index:2">Back</a>!
-   </div> -->
 </div>
 
 <script type="text/javascript" src="{{ url_for('static', filename='js/views/simplesearch.js') }}"></script>

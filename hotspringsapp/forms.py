@@ -3,8 +3,8 @@ from flask.ext.wtf import Required, Form
 
 class SearchForm(Form):
 	city = TextField('City')
-	minTemp = HiddenField('minTemp')
-	maxTemp = HiddenField('maxTemp')
+	minTemp = IntegerField('minTemp')
+	maxTemp = IntegerField('maxTemp')
 	toilet = BooleanField('toilet', default = False)
 	bench = BooleanField('bench', default = False)
 	
