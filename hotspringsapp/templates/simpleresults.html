@@ -10,7 +10,8 @@
 	
 	<script type="text/javascript">
 	
-	
+	var max = 100;
+var min = 0;
 	function loadMarkers()
 	{
 		{% for pos in entries %}		
@@ -22,8 +23,59 @@
 	{
 		initialize();
 		loadMarkers();
+		$("#minTemp").val({{minTemp}});
+		$("#maxTemp").val({{maxTemp}});
 		$('i').tooltip();
+		$('img').tooltip();
 	};
+
+	 $(function () 
+ {
+  MenuSelect("#search","{{ url_for('static', filename='img/icons/search_Selected.png') }}");
+ });
+
+	 $(function()
+{
+  $('.filterImage input').change(function()
+  {
+      if($(this).is(':checked'))
+      {      
+        $(this).siblings('label').children().animate(
+          {
+            "opacity": "1"
+          }, "fast");
+      }
+      else
+      {
+        $(this).siblings('label').children().animate(
+          {
+            "opacity": "0.6"
+          }, "fast");
+      }
+  });
+});
+
+function presetTemp(id,low,high)
+{
+  $(id).click(function()
+   {
+    
+    $("#minTemp").val(low);
+    $("#maxTemp").val(high);
+   });  
+}
+
+//Setting up preset temperature ranges
+$(function()
+{
+
+presetTemp("#safe",min,35);
+presetTemp("#unsafe",35,max);
+presetTemp("#hottest",Math.ceil(max*0.90),max);
+
+
+
+});
 
 	// google.load("visualization", "1", {packages:["corechart"]});
 
@@ -58,7 +110,19 @@
 
 	
 
-		
+<style>
+
+#minTemp,#maxTemp{
+width:30px; 
+display:inline;
+}
+
+input[type=checkbox]
+{
+	display: none;
+}
+
+</style>		
 {% endblock %}
 {% block content %}
 <div class="contrast" style="height:73px;position:relative;background-color:rgba(29,155,171,0.5); ">
@@ -77,54 +141,78 @@
 <div class="span3 bodytype contrast" style="height:676px;">	
 	
 
-	<form action="{{url_for('simpleresults', filter=filtertype)}}">
+	<form action="{{url_for('simpleresults')}}">
 		<table>
 		<tr>
-			<th style="text-align:left"> Temperature </th>
+			<th style="text-align:left;padding:10px 0"> Location </th>
+		</tr>
+		<tr>
+			<td>{{form.city}}</td>
+		</tr>
+
+		<tr>	
+		<th style="text-align:left;padding:15px 0"> Filters </th>
+		</tr>	
+			<tr>
+				<td>					
+					<div class="filterIcons">		
+					{{form.hidden_tag()}}
+                  <div class="filterImage">                    
+                    {{form.toilet}} 
+                    <label for="toilet"><img rel="tooltip" data-original-title="Toilet" src="{{ url_for('static', filename='img/icons/toilet_Selected.png') }}"></label>
+                  </div>
+                  <div class="filterImage">              
+                    {{form.bench}} 
+                    <label for="bench"><img rel="tooltip" data-original-title="Bench" src="{{ url_for('static', filename='img/icons/bench_Selected.png') }}"></label>
+                  </div>
+                  <div class="filterImage">           
+                    {{form.private}} 
+                    <label for="private"><img rel="tooltip" data-original-title="Private" src="{{ url_for('static', filename='img/icons/private_Selected.png') }}"></label>
+                  </div>
+                  <div class="filterImage">           
+                    {{form.track}} 
+                    <label for="track"><img rel="tooltip" data-original-title="track" src="{{ url_for('static', filename='img/icons/track_Selected.png') }}"></label>
+                  </div>
+					</div>
+				</td>
+			</tr>
+			<tr>
+			<th style="text-align:left;padding:25px 0"> Temperature </th>
+			</tr>
+			<tr>
+				<td >
+						
+					
+						<p style="display:inline;"> Between </p> 
+						{{form.minTemp}} 
+
+						<p style="display:inline;"> and </p> 
+						{{form.maxTemp}}			
+					
+						
+					
+				</td>
 			</tr>
 			<tr>
 				<td>
-						
-					{% if filtertype=="All" %} 
-						<p style="display:inline;"> Between </p> 
-						<input type="text" style="width:30px; display:inline;" value="{{tempMin}}" name="tempMin"> 
-
-						<p style="display:inline;"> and </p> 
-						<input type="text" style="width:30px; display:inline;" value="{{tempMax}}" name="tempMax">
-					{% else %}
-						<p style="display:inline;"> Between </p> 
-						<input type="text" style="width:30px; display:inline;" value="{{tempMin}}" name="tempMin" disabled> 
-
-						<p style="display:inline;"> and </p> 
-						<input type="text" style="width:30px; display:inline;" value="{{tempMax}}" name="tempMax" disabled>
-					{% endif %}
-						
-					
-				</td>
-			</tr>
-
-			<tr>
-			<th>Must have:</th>
-			</tr>
-			<tr>
-				<td>					
-						<label class="checkbox"><i class="icon-trash"></i><input type="checkbox" name="items" value="toilet"> Toilet </label>
-						<label class="checkbox"><i class="icon-road"></i><input type="checkbox" name="items" value="track"> Track </label>
-						<label class="checkbox"><i class="icon-hdd"></i><input type="checkbox" name="items" value="parkbench"> Park Bench</label>
-						<label class="checkbox"><i class="icon-warning-sign"></i><input type="checkbox" name="items" value="private"> Private</label>
-						<a class="btn" onclick="history.back()">Back</a>
-						<input type="submit" value="Go" class="btn">
-					
-				</td>
+					<div class="btn-group">                  
+                  <a class="btn" id="safe">Safe</a>
+                  <a class="btn" id="unsafe">Unsafe</a>
+                  <a class="btn" id="hottest">Hottest</a>               
+               		</div>
+               	</td>
 			</tr>			
 		</table>
+		<input type="submit" value="Search" class="btn btn-small colourClick" style="margin:35px 0 0 30%;  width: 75px;height: 75px;  border-radius: 38px;">
 		</form>
 
 		 <div id="chart_div" style="width: auto; height: auto;"></div>
 </div>
-<div class="span10" style="position: relative; margin-left:0px; padding:0 0 0 0px; background:#fff">
-	<div id="map_canvas" style="height: 233px; background-color: #CCC; display:block" style="float:none"></div>	
 
+	<div id="map_canvas" style="height: 233px; overflow:hidden"></div>	
+	
+<div class="span10" style="position: relative; margin-left:0px; padding:0 0 0 0px; background:#fff">
+	
 
 <div style="height:5px;position:relative;background-color:rgb(255,255,255)">
 
@@ -182,11 +270,6 @@
 						<a href="#myModal" role="button" class="btn" data-toggle="modal" onclick="modalInit.call(this);" style="display:block; ">Show on Map</a>
 					</div>
 				
-					
-
-					
-
-					
 				</div> 
 				
 			</td>

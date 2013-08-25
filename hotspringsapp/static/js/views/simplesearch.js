@@ -15,26 +15,6 @@ $(function()
 });
 
 
-// $(function()
-// {
-//   // $("#searchMenuItem").addClass("active");
-//   $(".filterIcons img").toggle(
-
-//   function()
-//   {
-//     $(this).animate(
-//     {
-//       "opacity": "1"
-//     }, "fast");
-//   }, function()
-//   {
-//     $(this).animate(
-//     {
-//       "opacity": "0.7"
-//     }, "fast");
-//   });
-// });
-
 
 //Highlight filter items
 $(function()
