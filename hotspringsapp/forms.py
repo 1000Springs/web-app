@@ -1,5 +1,5 @@
 from wtforms import TextField, BooleanField, IntegerField, HiddenField
-from flask.ext.wtf import Required, Form
+from flask.ext.wtf import Form
 
 class SearchForm(Form):
 	city = TextField('City')

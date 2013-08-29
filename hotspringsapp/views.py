@@ -2,7 +2,6 @@ import MySQLdb
 import datetime
 import time
 from hotspringsapp import app
-from hotspringsapp.database import db_session
 
 from flask import Flask, url_for, render_template, request, g, session, flash, redirect
 from models import *
