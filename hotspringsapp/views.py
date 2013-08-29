@@ -172,12 +172,25 @@ def simpleresults():
 
 	sampleSites = Sample.query.filter(Physical_data.id == Sample.phys_id,
 									  Physical_data.initialTemp>= minTemp,
-									  Physical_data.initialTemp < maxTemp).order_by(Sample.location_id,Sample.date_gathered.desc()).all()
+									  Physical_data.initialTemp < maxTemp,
+									  Sample.location_id == Location.id).order_by(Sample.location_id,Sample.date_gathered.desc())
 
-	
 
-	
+	if "toilet" in request.args:		
+		sampleSites = sampleSites.filter(Location.toilet == True)
 
+	if "private" in request.args:		
+		sampleSites = sampleSites.filter(Location.private == True)
+
+	if "track" in request.args:		
+		sampleSites = sampleSites.filter(Location.track == True)
+
+	if "bench" in request.args:		
+		sampleSites = sampleSites.filter(Location.parkbench == True)
+
+
+
+	#This for loop will add the newest sample taken from a sample site to 'latestSamples'
 	latestSamples = []	
 	prev = sampleSites[0].location_id
 	tempSamples = []
@@ -186,14 +199,14 @@ def simpleresults():
 		if(s.location_id != prev):
 			latestSamples.append(tempSamples[0])
 			tempSamples = []
+			
 
 		tempSamples.append(s)
 		prev = s.location_id
 		
 	
-	latestSamples = Pagination(None,1,5,4,latestSamples).items
-
-	app.logger.debug(len(latestSamples))
+	# latestSamples = latestSamples.paginate(2,app.config['IMAGES_PER_PAGE'],False)
+	
 	# for s in sampleSites:		
 	# 	print s.location_id,s.date_gathered
 
