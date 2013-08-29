@@ -77,36 +77,36 @@ presetTemp("#hottest",Math.ceil(max*0.90),max);
 
 });
 
-	// google.load("visualization", "1", {packages:["corechart"]});
 
- //    google.setOnLoadCallback(drawChart);
- //      function drawChart() 
- //      {
- //      	var raw = []
+	google.load("visualization", "1", {packages:["corechart"]});
 
- //      	raw.push(["Range","Count"]);
+    google.setOnLoadCallback(drawChart);
+      function drawChart() 
+      {
+      	var raw = []
 
- //      	{% for slice in pieChart %}
- //      		raw.push(["{{slice.range}}",{{slice.count}}]);
- //      	{% endfor %}
+      	raw.push(["Range","Count"]);
 
- //        var data = google.visualization.arrayToDataTable(raw);
+      	{% for slice in pieChart %}
+      		raw.push(["{{slice.range}}",{{slice.count}}]);
+      	{% endfor %}
 
- //        var options = 
- //        {
- //          title: 'Hot Spring Temperatures',
- //          chartArea: {left:5,top:20, height:"100%", width:"100%"},
- //          colors:["#FFE71E","#EDAD16","#DC730F","#CB3907","#ba0000"],
- //          backgroundColor: 'transparent'
+        var data = google.visualization.arrayToDataTable(raw);
 
- //        };
+        var options = 
+        {
+          title: 'Hot Spring Temperatures',
+          chartArea: {left:5,top:20, height:"100%", width:"100%"},
+          colors:["#FFE71E","#EDAD16","#DC730F","#CB3907","#ba0000"],
+          backgroundColor: 'transparent'
 
- //        var chart = new google.visualization.PieChart(document.getElementById('chart_div'));
- //        chart.draw(data, options);
- //      }
-	
+        };
 
-	</script>
+        var chart = new google.visualization.PieChart(document.getElementById('chart_div'));
+        chart.draw(data, options);
+      }
+
+</script>
 
 	
 
@@ -206,13 +206,20 @@ input[type=checkbox]
 		<input type="submit" value="Search" class="btn btn-small colourClick" style="margin:35px 0 0 30%;  width: 75px;height: 75px;  border-radius: 38px;">
 		</form>
 
-		 <div id="chart_div" style="width: auto; height: auto;"></div>
+		 
 </div>
 
-	<div id="map_canvas" style="height: 233px; overflow:hidden"></div>	
+	
 	
 <div class="span10" style="position: relative; margin-left:0px; padding:0 0 0 0px; background:#fff">
-	
+
+<div class="span3">
+	<div id="map_canvas" style="height: 233px; overflow:hidden"></div>
+</div>	
+
+<div class="span3">
+	<div id="chart_div" style="width: auto; height: auto;"></div>
+</div>	
 
 <div style="height:5px;position:relative;background-color:rgb(255,255,255)">
 
@@ -248,16 +255,16 @@ input[type=checkbox]
 
 					<div style=" margin:5px 0 5px 5px; display:block;" class="contrast">
 						{% if entry.toilet %}
-							<i rel="tooltip" data-original-title="Trash cans available" class="icon-trash" style="float:right; margin:0 2px;"></i>
+							<img src="{{url_for('static',filename='img/icons/toiletNoCircle.png')}}" rel="tooltip" data-original-title="Toilets available" style="float:right; margin:0 2px; width:14px;height:14px">
 						{% endif %}
 						{% if entry.track %}
-							<i rel="tooltip" data-original-title="Walking track available" class="icon-road" style="float:right; margin:0 2px;"></i>
+							<img src="{{url_for('static',filename='img/icons/trackNoCircle.png')}}" rel="tooltip" data-original-title="Walking track available" style="float:right; margin:0 2px; width:14px;height:14px">
 						{% endif %}
 						{% if entry.parkbench %}
-							<i rel="tooltip" data-original-title="Park benches available" class="icon-hdd" style="float:right; margin:0 2px;"></i>
+							<img src="{{url_for('static',filename='img/icons/benchNoCircle.png')}}" rel="tooltip" data-original-title="Park benches available" style="float:right; margin:0 2px; width:14px;height:14px">
 						{% endif %}
 						{% if entry.private %}
-							<i rel="tooltip" data-original-title="Private Property" class="icon-warning-sign" style="float:right; margin:0 2px;"></i>
+							<img src="{{url_for('static',filename='img/icons/privateNoCircle.png')}}" rel="tooltip" data-original-title="Private Property" style="float:right; margin:0 2px; width:14px;height:14px">
 						{% endif %}
 			
 					</div>
@@ -303,4 +310,7 @@ input[type=checkbox]
 					<button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
 				  </div>
 				</div>
+
+
+
 {% endblock %}	
