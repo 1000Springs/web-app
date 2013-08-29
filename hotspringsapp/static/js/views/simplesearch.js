@@ -7,10 +7,8 @@ $(function()
 
  $("#slider").rangeSlider({
   formatter:function(val){
-         var value = parseInt(Math.round(val * 5) / 5);
-          
-         return value.toString()  + "°C";
-     
+         var value = Math.round(val);          
+         return value.toString()  + "°C";     
       }});
 });
 
@@ -63,12 +61,12 @@ presetTemp("#hottest",Math.ceil(max*0.90),max);
 
 $(function()
 {
-    $("#minTemp").val(Math.round(parseInt($("#slider").rangeSlider("values").min) * 5) / 5);
-    $("#maxTemp").val(Math.round(parseInt($("#slider").rangeSlider("values").max) * 5) / 5);
+    $("#minTemp").val(Math.round($("#slider").rangeSlider("values").min));
+    $("#maxTemp").val(Math.round($("#slider").rangeSlider("values").max));
   $("#slider").bind("valuesChanged", function(e, data)
   {  
-    $("#minTemp").val(Math.round(parseInt(data.values.min) * 5) / 5);
-    $("#maxTemp").val(Math.round(parseInt(data.values.max) * 5) / 5);
+    $("#minTemp").val(Math.round(data.values.min));
+    $("#maxTemp").val(Math.round(data.values.max));
   });
 });
 
