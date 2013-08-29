@@ -5,14 +5,11 @@
   <script type="text/javascript" src="{{ url_for('static', filename='js/jquery.js') }}"></script>
 
   	<script type="text/javascript">
-
 	$(function()
 	{
-	MenuSelect("#browse","{{ url_for('static', filename='img/icons/browse_Selected.png') }}");
+		MenuSelect("#browse","{{ url_for('static', filename='img/icons/browse_Selected.png') }}");
 		$("#browse .caret").css("border-top","4px solid white");
-});
-
-
+	});
 	</script>
   {% endblock %}
 
@@ -24,27 +21,34 @@
 		<h2> browse by image </h2>
 	</div>
 </div>
-
+<div class="divider"></div>
 <div style="position:relative; padding-left:40px; background:#fff;">
 
 
 <ul class="thumbnails">
-  
 
-
-{% for image in images %}
+{% for image in images.items %}
 
 	<li class="span2">
-    	<a href="{{url_for('samplesite', site_id=image.site_id)}}" class="thumbnail">
-      		<img data-src="holder.js/160x120" src="{{url_for('static', filename=image.imagepath)}}">
+    	<a href="{{url_for('samplesite', site_id=image.Sample.location_id)}}" class="thumbnail">
+      		<img data-src="holder.js/160x120" src="{{url_for('static', filename=image.image_path)}}">
     	</a>
 	</li>
 
 {% endfor %}
 
-
 </ul>
+<div style="width:100%;text-align:center;">
+{% if images.has_prev %}<a href="{{ url_for('searchbyimage', page = images.prev_num) }}"><< Prev Page</a>{% endif %}
+{% if images.has_next %}<a href="{{ url_for('searchbyimage', page = images.next_num) }}">Next Page >></a>{% endif %}
 </div>
+
+
+
+
+</div>
+
+
 
 
   {% endblock %}

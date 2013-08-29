@@ -8,6 +8,9 @@ from flask import Flask, url_for, render_template, request, g, session, flash, r
 from models import *
 from forms import *
 
+
+
+
 def get_user_name():
     """ Fetch the logged in User"""
     return session['logged_in'] if session.has_key('logged_in') else None
@@ -64,6 +67,10 @@ def index():
 
 @app.route('/search')
 def search():
+
+	
+	return redirect(url_for('login')) 
+
 	return render_template('search.html')
 	
 @app.route('/simplesearch')
@@ -77,6 +84,8 @@ def simplesearch():
 @app.route('/results')
 def results():
 	
+	
+
 	cur = g.db.cursor()
 	
 	#e.g. [u'temperature,=,50', u'redox,=,60', u'dissolved_oxygen,=,90']
@@ -155,42 +164,36 @@ def mapsearch():
 @app.route('/simpleresults')
 def simpleresults():
 	
-	cur = g.db.cursor()
-	
-	#sampleSites = Sample.query.filter(Physical_data.id == Sample.phys_id,Physical_data.initialTemp >= 80, Physical_data.initialTemp <= 90)
-	
-	
+	cur = g.db.cursor()	
 
+	minTemp = request.args.get('minTemp')
+	maxTemp = request.args.get('maxTemp')
 
-	
-
-	tempMin = request.args.get('minTemp')
-	tempMax = request.args.get('maxTemp')
-	# tempMin = 60
-	# tempMax = 70
 
 	sampleSites = Sample.query.filter(Physical_data.id == Sample.phys_id,
-									  Physical_data.initialTemp>= tempMin,
-									  Physical_data.initialTemp < tempMax).order_by(Sample.location_id,Sample.date_gathered.desc())
-	# app.logger.debug(dir(sampleSites.all()[0]))
+									  Physical_data.initialTemp>= minTemp,
+									  Physical_data.initialTemp < maxTemp).order_by(Sample.location_id,Sample.date_gathered.desc()).all()
+
+	
+
+	
+
 	latestSamples = []	
-	prev = sampleSites.all()[0].location_id
+	prev = sampleSites[0].location_id
 	tempSamples = []
-	for s in sampleSites.all():
+	for s in sampleSites:
 		
 		if(s.location_id != prev):
-			# print s.location_id,prev
-			# print sampleList
-			# print "Next location"
 			latestSamples.append(tempSamples[0])
 			tempSamples = []
 
 		tempSamples.append(s)
 		prev = s.location_id
 		
-		
-
 	
+	latestSamples = Pagination(None,1,5,4,latestSamples).items
+
+	app.logger.debug(len(latestSamples))
 	# for s in sampleSites:		
 	# 	print s.location_id,s.date_gathered
 
@@ -282,52 +285,52 @@ def simpleresults():
 					parkbench=s.location.parkbench, 
 					track=s.location.track, 
 					private=s.location.private,
-					imagepath=s.image[0].image_path) for s in latestSamples]
+					imagepath=s.image[0].image_path) for s in latestSamples]	
 
+
+	form = SearchForm()	
+
+	phys_data = Physical_data.query.order_by(Physical_data.initialTemp).all()
+
+	count = {'1-25':0,'26-50':0,'51-75':0,'76-100':0}
+	pieChart = []
+	for t in phys_data:
+		if t.initialTemp >= 1 and t.initialTemp <= 25:
+			count["1-25"] +=1
+		if t.initialTemp >= 26 and t.initialTemp <= 50:
+			count["26-50"] +=1
+		if t.initialTemp >= 51 and t.initialTemp <= 75:
+			count["51-75"] +=1
+		if t.initialTemp >= 76 and t.initialTemp <= 100:
+			count["76-100"] +=1
 	
 	
-	# query = """
-	# 	select t.range as "Range", count(*) as "Occurances"
-	# from (
-	#   select case  
-	#     when initialTemp between 50 and 59 then ' 50- 59'
-	#     when initialTemp between 60 and 69 then ' 60- 69'
-	# 	when initialTemp between 60 and 79 then ' 70- 79'
-	# 	when initialTemp between 80 and 89 then ' 80- 89'
-	#     else '90-' end as "range"
-	#   from physical_data) t
-	# group by t.range"""
-
-	# cur.execute(query)
 
 
-	# pieChart = [dict(range=row[0],count=row[1]) for row in cur.fetchall()]
+	pieChart = [dict(range=k,count=v) for k,v in zip(count.keys(),count.values())]
 
 
 
-	# slices = [["90-100",10],["0-89",12],["blah",12],["test",50]]
 
-	# cur.close()	
 	return render_template('simpleresults.html',entries=entries,
-												# filtertype=filter,
-												tempMin=tempMin,
-												tempMax=tempMax,
-												# slices=slices,
-												# pieChart=pieChart
+												form=form,
+												minTemp=minTemp,
+												maxTemp=maxTemp,
+												
+												 pieChart=pieChart
 												)
 
 
 	# return render_template('about.html')
-
 @app.route('/searchbyimage')
-def searchbyimage():
+@app.route('/searchbyimage/<int:page>')
+def searchbyimage(page = 1):
 
-	imageList = Images.query.filter(Images.sample_id == Sample.id)
+	imageList = Images.query.filter(Images.sample_id == Sample.id).group_by(Sample.location_id)
 
-	images = [dict(imagepath=image.image_path,				 
-				   site_id=image.Sample.location_id) for image in imageList]
-
-	return render_template('searchbyimage.html',images=images)
+	imageList = imageList.paginate(page,app.config['IMAGES_PER_PAGE'],False)
+	
+	return render_template('searchbyimage.html',images=imageList)
 
 
 

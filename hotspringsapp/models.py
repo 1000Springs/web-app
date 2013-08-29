@@ -1,4 +1,4 @@
-from flask.ext.sqlalchemy import SQLAlchemy
+from flask.ext.sqlalchemy import SQLAlchemy, Pagination
 from hotspringsapp import app
 from werkzeug.security import generate_password_hash, check_password_hash
 
