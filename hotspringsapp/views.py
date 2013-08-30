@@ -297,6 +297,7 @@ def simpleresults():
 					parkbench=s.location.parkbench, 
 					track=s.location.track, 
 					private=s.location.private,
+					date_gathered = s.date_gathered,
 					imagepath=s.image[0].image_path) for s in latestSamples]	
 
 

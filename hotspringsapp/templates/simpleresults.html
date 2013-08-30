@@ -112,7 +112,8 @@ presetTemp("#hottest",Math.ceil(max*0.90),max);
 
 <style>
 
-#minTemp,#maxTemp{
+#minTemp,#maxTemp
+{
 width:30px; 
 display:inline;
 }
@@ -120,6 +121,14 @@ display:inline;
 input[type=checkbox]
 {
 	display: none;
+}
+
+#smallIcons img
+{
+	float:right; 
+	margin:0 2px; 
+	width:14px;
+	height:14px;
 }
 
 </style>		
@@ -180,17 +189,12 @@ input[type=checkbox]
 			<th style="text-align:left;padding:25px 0"> Temperature </th>
 			</tr>
 			<tr>
-				<td >
-						
-					
-						<p style="display:inline;"> Between </p> 
-						{{form.minTemp}} 
+				<td>				
+					<p style="display:inline;"> Between </p> 
+					{{form.minTemp}} 
 
-						<p style="display:inline;"> and </p> 
-						{{form.maxTemp}}			
-					
-						
-					
+					<p style="display:inline;"> and </p> 
+					{{form.maxTemp}}				
 				</td>
 			</tr>
 			<tr>
@@ -249,22 +253,23 @@ input[type=checkbox]
 				<div class="row-fluid">
 
 					
-					<div style="margin:25px 0 0 0;">
+					<div style="margin-top:10px;">
+						<p  class="small muted" style="text-align:right"> Gathered: {{entry.date_gathered}}
 						<p style="text-align:right"> Temp: {{ entry.temp}} </p>
 					</div>
 
-					<div style=" margin:5px 0 5px 5px; display:block;" class="contrast">
+					<div style=" margin:5px 0 5px 5px; display:block;" class="contrast" id="smallIcons">
 						{% if entry.toilet %}
-							<img src="{{url_for('static',filename='img/icons/toiletNoCircle.png')}}" rel="tooltip" data-original-title="Toilets available" style="float:right; margin:0 2px; width:14px;height:14px">
+							<img src="{{url_for('static',filename='img/icons/results_list/toilet.png')}}" rel="tooltip" data-original-title="Toilets available" >
 						{% endif %}
 						{% if entry.track %}
-							<img src="{{url_for('static',filename='img/icons/trackNoCircle.png')}}" rel="tooltip" data-original-title="Walking track available" style="float:right; margin:0 2px; width:14px;height:14px">
+							<img src="{{url_for('static',filename='img/icons/results_list/track.png')}}" rel="tooltip" data-original-title="Walking track available" >
 						{% endif %}
 						{% if entry.parkbench %}
-							<img src="{{url_for('static',filename='img/icons/benchNoCircle.png')}}" rel="tooltip" data-original-title="Park benches available" style="float:right; margin:0 2px; width:14px;height:14px">
+							<img src="{{url_for('static',filename='img/icons/results_list/bench.png')}}" rel="tooltip" data-original-title="Park benches available">
 						{% endif %}
 						{% if entry.private %}
-							<img src="{{url_for('static',filename='img/icons/privateNoCircle.png')}}" rel="tooltip" data-original-title="Private Property" style="float:right; margin:0 2px; width:14px;height:14px">
+							<img src="{{url_for('static',filename='img/icons/results_list/private.png')}}" rel="tooltip" data-original-title="Private Property" >
 						{% endif %}
 			
 					</div>
