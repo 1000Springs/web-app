@@ -337,11 +337,17 @@ def simpleresults():
 	# return render_template('about.html')
 @app.route('/searchbyimage')
 @app.route('/searchbyimage/<int:page>')
-def searchbyimage(page = 1):
+@app.route('/searchbyimage/<showAll>')
+def searchbyimage(page = 1,showAll = None):
 
 	imageList = Images.query.filter(Images.sample_id == Sample.id).group_by(Sample.location_id)
 
-	imageList = imageList.paginate(page,app.config['IMAGES_PER_PAGE'],False)
+	imagesPerPage = app.config['IMAGES_PER_PAGE']
+
+	if showAll == "all":
+		imagesPerPage = len(imageList.all())
+
+	imageList = imageList.paginate(page,imagesPerPage,False)
 	
 	return render_template('searchbyimage.html',images=imageList)
 
