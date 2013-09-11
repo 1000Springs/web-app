@@ -174,6 +174,11 @@ def simpleresults():
 									  Physical_data.initialTemp < maxTemp,
 									  Sample.location_id == Location.id).order_by(Sample.location_id,Sample.date_gathered.desc())
 
+	if "city" in request.args:
+		if request.args.get("city") != "":
+			sampleSites = sampleSites.filter(Location.feature_system == request.args.get('city'))
+			app.logger.debug(request.args.get("city"))
+			app.logger.debug(len(sampleSites.all()))
 
 	if "toilet" in request.args:		
 		sampleSites = sampleSites.filter(Location.toilet == True)
@@ -187,7 +192,7 @@ def simpleresults():
 	if "bench" in request.args:		
 		sampleSites = sampleSites.filter(Location.parkbench == True)
 
-
+	app.logger.debug(len(sampleSites.all()))
 
 	#This for loop will add the newest sample taken from a sample site to 'latestSamples'
 	latestSamples = []	
@@ -202,8 +207,9 @@ def simpleresults():
 
 		tempSamples.append(s)
 		prev = s.location_id
-		
 	
+	latestSamples.append(tempSamples[0])	
+	# latestSamples = sampleSites
 	# latestSamples = latestSamples.paginate(2,app.config['IMAGES_PER_PAGE'],False)
 	
 	# for s in sampleSites:		
@@ -354,7 +360,7 @@ def searchbyimage(page = 1,showAll = None):
 
 
 
-@app.route('/samplesite/<site_id>')
+@app.route('/samplesite/<int:site_id>')
 def samplesite(site_id):	
 
 
@@ -383,8 +389,9 @@ def samplesite(site_id):
 				   imagename=s.image_name) for s in latestSample.image]	
 
 	
-	return render_template('samplesite.html',sample_site=siteInfo,
-											 images=images)
+	return render_template('samplesite.html',sample_site=latestSample,
+											 images=images,
+											 old = siteInfo)
 	 
 
 
