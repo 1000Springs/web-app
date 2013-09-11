@@ -573,7 +573,7 @@ padding: 0 5px;
 {
   white-space: pre-line; 
   font-family: century gothic;
-  padding: 10px 20px;  
+  
 }
 
 
@@ -654,25 +654,34 @@ padding: 0 5px;
 .descTable
 {
   margin-top: 35px;
+  white-space:nowrap;
 }
 
 .descTable .progress
 {
   width:50%;
-  margin-bottom:0; 
   float:left;
+  margin: 0 5px;
+}
+
+.progress p
+{
+  color: black;
+
 }
 
 .descTable td
 {
   text-align: right;
+  padding: 5px;
 
 }
 
-.descTable p
+.descTable p,h5
 {
   margin-right:5px;
   margin-left: 5px;
+  margin-bottom: 0px;
 }
 
 .pagination
@@ -688,9 +697,11 @@ padding: 0 5px;
   background-color:rgba(29,155,171,0.75);
 }
 
-.to-front
+.opaque 
 {
-  position:relative;
+  background-color:#1D9BAB; 
+  background-color:rgba(29,155,171,0.5);
+  position: relative;
 }
 
 .contrast 
@@ -726,4 +737,20 @@ padding: 0 5px;
   height:15px;
   position:relative;
   background-color:white;
+}
+
+.smallIcons img
+{
+  float:right; 
+  margin:0 2px; 
+  width:14px;
+  height:14px;
+}
+
+.mediumIcons img
+{
+  float:right; 
+  margin:0 2px; 
+  width:42px;
+  height:42px;
 }
