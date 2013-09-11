@@ -12,39 +12,43 @@
 <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?sensor=true"></script>
 
 
-<script type="text/javascript">
-	
-	
+<script type="text/javascript">	
 
 
-	window.onload=function()
+
+	$(function()
 	{
-	initalizeSampleSite();
-	var markerPosition = new  google.maps.LatLng({{sample_site.eastings}},{{sample_site.northings}});
-	addNewMarker(markerPosition,"http://maps.google.com/mapfiles/ms/icons/red-dot.png");
-	$('i').tooltip();
+		var sampleSiteMap = setupMap("show_map");
+		var markerPosition = new  google.maps.LatLng({{sample_site.location.eastings}},{{sample_site.location.northings}});		
+
+		addInfoWindowMarker("{{sample_site.location.feature_system}}",
+							"{{sample_site.location.eastings}}",
+							"{{sample_site.location.northings}}",
+							"{{sample_site.location.feature_name}}",
+							"{{sample_site.location.description}}",
+							sampleSiteMap)
+		
+		
+		$('img').tooltip();
 
 	/*
 		Gives focus to username textbox.
 		The timeout is because the model window needs time to load so without it, the focus would be set to nothing
 	*/
-	$('#loginButton').click(function() {
+	// $('#loginButton').click(function() {
 
-		window.setTimeout(function() {
-			$('#usernameTextbox').focus();
-		}, 700, true);
+	// 	window.setTimeout(function() {
+	// 		$('#usernameTextbox').focus();
+	// 	}, 700, true);
 		 
 
-	});
+	// });
 
 		$('.accordion').on('show hide', function (n) 
 		{
 			$(n.target).siblings('.accordion-heading').find('.accordion-toggle i').toggleClass('icon-chevron-up icon-chevron-down');
 		});
-	};
-
-
-
+	});
 	</script>
 
 
@@ -57,8 +61,8 @@
 
 	<div class="row-fluid contrast" style="height:73px;position:relative;background-color:rgba(29,155,171,0.5);padding-left:15px">
 		
-		<h2>{{sample_site.feature_name}}</h2>	
-		<!-- <p class="muted">Sample Site {{sample_site.location_id}}</p> -->	
+		<h2>{{sample_site.location.feature_name}}</h2>	
+		
 		
 
 		
@@ -70,62 +74,79 @@
 	<div class="span7">	
 		
 		
-		<p>{{sample_site.desc}}</p>
-		<div style="margin-left:15px;">
+		<p>{{sample_site.location.description}}</p>
+		<div>
 
 			
-			<div class="span9">
+			<div class="span12">
+				<div class="mediumIcons" >				
+					{% if sample_site.location.toilet %}
+						<img src="{{url_for('static',filename='img/icons/results_list/toilet.png')}}" rel="tooltip" data-original-title="Toilets available" >
+					{% endif %}
+					{% if sample_site.location.track %}
+						<img src="{{url_for('static',filename='img/icons/results_list/track.png')}}" rel="tooltip" data-original-title="Walking track available" >
+					{% endif %}
+					{% if sample_site.location.parkbench %}
+						<img src="{{url_for('static',filename='img/icons/results_list/bench.png')}}" rel="tooltip" data-original-title="Park benches available">
+					{% endif %}
+					{% if sample_site.location.private %}
+						<img src="{{url_for('static',filename='img/icons/results_list/private.png')}}" rel="tooltip" data-original-title="Private Property" >
+					{% endif %}
+				</div>	
 			<table class="descTable" style="width:100%">				
 				<tr>
 					<td >			
 						<h5 style="margin-top:0px;" >Location: </h5> 
 					</td>
-					<td style="width:100%; text-align:left;">
-						<p>{{sample_site.city}}</p>
+					<td style="text-align:left;">
+						<p>{{sample_site.location.feature_system}}</p>
 					</td>				
+				</tr>
+				<tr>
+					<td>			
+						<h5 style="margin-top:0px;" >Sample Date: </h5>
+					</td>
+					<td style="text-align:left;">
+						<p class="muted">{{sample_site.date_gathered}}</p>
+					</td>
 				</tr>
 				<tr>
 					<td >			
 						<h5 style="margin-top:0px;" >Temperature: </h5> 
 					</td>
-					<td style="width:100%">
+					<!-- <td >
 						<p class="unitText" > 1°C </p>
-						<div class="progress">
-							<div class="bar" style="width:{{sample_site.temp}}%;"><p> {{sample_site.temp}} </p></div>
+					</td> -->
+					<td style="width:100%">
+						<!-- <div class="progress">
+							<div class="bar" style="width:{{sample_site.phys.initialTemp}}%;"> -->
+								<p> {{sample_site.phys.initialTemp}}°C </p>
+							<!-- </div> -->
 						</div>
-						<p class="unitText"> 100°C </p>			
+						<!-- <p class="unitText"> 100°C </p>	 -->		
 					</td>
 				</tr>
 				<tr>
 					<td >			
 						<h5 style="margin-top:0px;" >Redox: </h5> 
 					</td>
+					<!-- <td >
+						<p class="unitText"> 1mV </p>
+					</td> -->
 					<td style="width:100%">
-						<p class="unitText"> 1°C </p>
-						<div class="progress">
-							<div class="bar" style="width:{{sample_site.temp}}%;"><p> {{sample_site.temp}} </p></div>
+						<!-- <div class="progress">
+							<div class="bar" style="width:{{sample_site.phys.redox}}%;"> -->
+								<p> {{sample_site.phys.redox}}mV </p>
+						<!-- 	</div> -->
 						</div>
-						<p class="unitText" > 100°C </p>			
+						<!-- <p class="unitText" > 100mV </p>		 -->
 					</td>
 				</tr>
 		
 			</table>
 			</div>
 		
-			<div>
-				{% if sample_site.toilet %}
-						<i rel="tooltip" data-original-title="Trash cans available" class="icon-trash" style="margin:0 2px;"></i>
-					{% endif %}
-					{% if sample_site.track %}
-						<i rel="tooltip" data-original-title="Walking track available" class="icon-road" style="margin:0 2px;"></i>
-					{% endif %}
-					{% if sample_site.parkbench %}
-						<i rel="tooltip" data-original-title="Park benches available" class="icon-hdd" style="margin:0 2px;"></i>
-					{% endif %}
-					{% if sample_site.private %}
-						<i rel="tooltip" data-original-title="Private Property" class="icon-warning-sign" style="margin:0 2px;"></i>
-					{% endif %}
-			</div>	
+			
 			</div>
 			
 	</div>
@@ -222,15 +243,15 @@
 <div class="accordion">
     <div class="accordion-group">
         <div class="accordion-heading"> 
-            <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#collapseOne">
+            <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion1" href="#collapseOne">
                 <i class="icon-chevron-down"></i>
                 Collapsible Group Item #1
             </a>
         </div>
-         <div id="collapseOne" class="accordion-body collapse">
-      <div class="accordion-inner">
-        Anim pariatur cliche...
-      </div>
+    <div id="collapseOne" class="accordion-body collapse">
+	    <div class="accordion-inner">
+	        Anim pariatur cliche...
+	    </div>
     </div>
     </div>
 
@@ -240,13 +261,14 @@
                 <i class="icon-chevron-down"></i>
                 Collapsible Group Item #2
             </a>
-        </div>
+        </div>    
+    <div id="collapseTwo" class="accordion-body collapse">
+	    <div class="accordion-inner">
+	        Anim pariatur cliche...
+	    </div>
     </div>
-     <div id="collapseTwo" class="accordion-body collapse">
-      <div class="accordion-inner">
-        Anim pariatur cliche...
-      </div>
     </div>
+
 </div>
 
 

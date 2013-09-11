@@ -7,5 +7,6 @@ Thumbs.db
 *.pyc
 
 Old_Assets/
-
+Vis/
+results_list/
 stockphotos/

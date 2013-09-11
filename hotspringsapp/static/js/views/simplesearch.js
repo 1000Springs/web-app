@@ -78,3 +78,23 @@ $(function()
    $('img').tooltip();
  });
 
+// function codeLatLng(latLng) 
+// {
+//     geocoder = new google.maps.Geocoder();
+   
+//     geocoder.geocode({'latLng': latLng}, function(results, status) {
+//    if (status == google.maps.GeocoderStatus.OK) {
+//      if (results[5]) 
+//      {
+//        var cityName = results[5].formatted_address;        
+
+//        $('#myLoc').val($.trim(cityName.split(",")[0]));
+//        $('#nearby').val($.trim(cityName.split(",")[0]));
+//      }   
+//    }
+//    else
+//    {
+//      $('#myLoc').val("Could not find your location");
+//    }   
+//     });
+//   }

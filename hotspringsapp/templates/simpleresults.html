@@ -3,6 +3,7 @@
 {% block head %}
   {{ super() }}
     <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?sensor=true"></script>
+    <script type="text/javascript" src="{{ url_for('static', filename='js/views/simpleresults.js') }}"></script>
     <script type="text/javascript" src="{{ url_for('static', filename='js/maps.js') }}"></script>
 	<script type="text/javascript" src="{{ url_for('static', filename='js/jquery.js') }}"></script>
 	<script type="text/javascript" src="https://www.google.com/jsapi"></script>
@@ -11,17 +12,18 @@
 	<script type="text/javascript">
 	
 	var max = 100;
-var min = 0;
+    var min = 0;
 	function loadMarkers()
 	{
 		{% for pos in entries %}		
-			addMarker("{{pos.city}}", "{{pos.eastings}}", "{{pos.northings}}", "{{pos.feature_name}}", "{{pos.desc}}");
+			addInfoWindowMarker("{{pos.city}}", "{{pos.eastings}}", "{{pos.northings}}", "{{pos.feature_name}}", "{{pos.desc}}", mainMap);
 		{% endfor %}
 	}
 
 	window.onload=function()
 	{
-		initialize();
+		initializeMaps();
+		
 		loadMarkers();
 		$("#minTemp").val({{minTemp}});
 		$("#maxTemp").val({{maxTemp}});
@@ -72,11 +74,36 @@ $(function()
 presetTemp("#safe",min,35);
 presetTemp("#unsafe",35,max);
 presetTemp("#hottest",Math.ceil(max*0.90),max);
-
-
+var expanded = false;
+$("#expandGraph").click(function() 
+	{
+		
+		if(expanded === false)
+		{
+			expanded = true;
+			$("#map_canvas").parent().css("display","none");
+			$("#chart_div").css("height","500px");
+			$("#chart_div").css("width","760px");
+			chart.draw(data,options)
+			$(this).attr("value", "Shrink Graph");
+			
+		}
+		else
+		{
+			expanded = false;
+			$("#map_canvas").parent().css("display","block");
+			$("#chart_div").css("height","233px");
+			$("#chart_div").css("width","100%");
+			chart.draw(data,options)
+			$(this).attr("value", "Enlarge Graph");
+			
+		}
+	}); 
 
 });
-
+	var chart;
+	var data;
+	var options;
 
 	google.load("visualization", "1", {packages:["corechart"]});
 
@@ -91,9 +118,9 @@ presetTemp("#hottest",Math.ceil(max*0.90),max);
       		raw.push(["{{slice.range}}",{{slice.count}}]);
       	{% endfor %}
 
-        var data = google.visualization.arrayToDataTable(raw);
+        data = google.visualization.arrayToDataTable(raw);
 
-        var options = 
+        options = 
         {
           title: 'Hot Spring Temperatures',
           chartArea: {left:5,top:20, height:"100%", width:"100%"},
@@ -101,8 +128,8 @@ presetTemp("#hottest",Math.ceil(max*0.90),max);
           backgroundColor: 'transparent'
 
         };
-
-        var chart = new google.visualization.PieChart(document.getElementById('chart_div'));
+        
+        chart = new google.visualization.PieChart(document.getElementById('chart_div'));
         chart.draw(data, options);
       }
 
@@ -123,13 +150,6 @@ input[type=checkbox]
 	display: none;
 }
 
-#smallIcons img
-{
-	float:right; 
-	margin:0 2px; 
-	width:14px;
-	height:14px;
-}
 
 </style>		
 {% endblock %}
@@ -137,7 +157,8 @@ input[type=checkbox]
 <div class="contrast" style="height:73px;position:relative;background-color:rgba(29,155,171,0.5); ">
 <h2 style="padding:25px 15px 0 15px; margin:0; float:left; ">Springs</h2>
 <div align="right">
-	<input type="button" value="Enlarge Map" id="expand" style="margin:37px 5px 0 0">	
+	<input type="button" value="Enlarge Map" id="expandMap" style="margin:37px 5px 0 0">	
+	<input type="button" value="Enlarge Graph" id="expandGraph" style="margin:37px 5px 0 0">	
 </div>
 </div>
 
@@ -254,11 +275,11 @@ input[type=checkbox]
 
 					
 					<div style="margin-top:10px;">
-						<p  class="small muted" style="text-align:right"> Gathered: {{entry.date_gathered}}
+						
 						<p style="text-align:right"> Temp: {{ entry.temp}} </p>
 					</div>
 
-					<div style=" margin:5px 0 5px 5px; display:block;" class="contrast" id="smallIcons">
+					<div style=" margin:5px 0 5px 5px; display:block;" class="contrast smallIcons">
 						{% if entry.toilet %}
 							<img src="{{url_for('static',filename='img/icons/results_list/toilet.png')}}" rel="tooltip" data-original-title="Toilets available" >
 						{% endif %}
