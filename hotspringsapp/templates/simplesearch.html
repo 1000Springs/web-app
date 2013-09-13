@@ -7,8 +7,8 @@
 
 <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.js"></script>
 <link rel="stylesheet" href="{{url_for('static', filename='iThing.css')}}" />
-<script src="{{url_for('static', filename='js/jquery-ui.custom.min.js')}}"></script>
-<script type="text/javascript" src="{{ url_for('static', filename='js/jQEditRangeSlider-min.js') }}"></script>
+<script src="{{url_for('static', filename='js/jQuery/jquery-ui.custom.min.js')}}"></script>
+<script type="text/javascript" src="{{ url_for('static', filename='js/jQuery/jQEditRangeSlider-min.js') }}"></script>
 
 <script type="text/javascript">
 
@@ -20,8 +20,11 @@
 </script>
 
 <style>
-input[type=checkbox],#minTemp,#maxTemp {
+input[type=checkbox],#minTemp,#maxTemp 
+{
+  
 display: none;
+
 }
 </style>
 {% endblock %}
