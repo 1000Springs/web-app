@@ -141,7 +141,7 @@ def mapsearch():
 
 	cur = g.db.cursor()
 	
-	cur.execute("""select s.location_feature_nc,l.common_feature_name,l.feature_system,l.description,p.initialTemp, l.eastings,l.northings
+	cur.execute("""select s.location_feature_nc,l.common_feature_name,l.feature_system,l.description,p.initialTemp, l.lat,l.lng
 				from sample s, physical_data p, location l 
 				where l.FEATURE_NC = s.location_feature_nc
 				and p.sample_id = s.sample_id
@@ -151,7 +151,7 @@ def mapsearch():
 					by location_feature_nc
 					having max(date_gathered))""")
 	
-	positions = [dict(eastings=float(row[5]),northings=row[6],city=row[2],  desc=row[3], feature_name=row[1],id=row[0]) for row in cur.fetchall()]
+	positions = [dict(lat=float(row[5]),lng=row[6],city=row[2],  desc=row[3], feature_name=row[1],id=row[0]) for row in cur.fetchall()]
 	
 	app.logger.debug(positions)
 	
@@ -225,7 +225,7 @@ def simpleresults():
 
 	# tempMax = 100
 	
-	# query = """select s.location_feature_nc,l.common_feature_name,l.feature_system,l.description,p.initialTemp, l.eastings,l.northings,l.toilet, l.parkbench,l.track, l.private, i.image_path
+	# query = """select s.location_feature_nc,l.common_feature_name,l.feature_system,l.description,p.initialTemp, l.lat,l.lng,l.toilet, l.parkbench,l.track, l.private, i.image_path
 	# 				from sample s, physical_data p, location l, images i
 	# 				where l.FEATURE_NC = s.location_feature_nc
 	# 				and p.sample_id = s.sample_id
@@ -297,8 +297,8 @@ def simpleresults():
 					city=s.location.feature_system, 
 					desc=s.location.description, 
 					temp=s.phys.initialTemp,
-					eastings=s.location.eastings,
-					northings=s.location.northings,
+					lat=s.location.lat,
+					lng=s.location.lng,
 					toilet=s.location.toilet, 
 					parkbench=s.location.parkbench, 
 					track=s.location.track, 
@@ -370,20 +370,36 @@ def samplesite(site_id):
 	latestSample = locationSamples.order_by(Sample.date_gathered.desc()).first()
 	
 
-	siteInfo = dict(location_id=latestSample.location_id,
-					feature_name=latestSample.location.feature_name,
-					city=latestSample.location.feature_system, 
-					desc=latestSample.location.description, 
-					temp=latestSample.phys.initialTemp, 
-					eastings=latestSample.location.eastings,
-					northings=latestSample.location.northings, 
-					toilet=latestSample.location.toilet, 
-					parkbench=latestSample.location.toilet, 
-					track=latestSample.location.toilet, 
-					private=latestSample.location.toilet)
+	# siteInfo = dict(location_id=latestSample.location_id,
+	# 				feature_name=latestSample.location.feature_name,
+	# 				city=latestSample.location.feature_system, 
+	# 				desc=latestSample.location.description, 
+	# 				temp=latestSample.phys.initialTemp, 
+	# 				lat=latestSample.location.lat,
+	# 				lng=latestSample.location.lng, 
+	# 				toilet=latestSample.location.toilet, 
+	# 				parkbench=latestSample.location.toilet, 
+	# 				track=latestSample.location.toilet, 
+	# 				private=latestSample.location.toilet)
 					
+	app.logger.debug(latestSample.chem.returnElements())
+	json = {"name":"", "children":[{"name":"Elements", "children":[]},{"name":"Gases","children":[]},{"name":"Compounds","children":[]}]};	
 
 
+	app.logger.debug(json)
+
+	for e in latestSample.chem.returnElements():
+		json["children"][0]["children"].append({"name":e[0], "children":[{"name":e[0],"size":e[1]}]})
+
+	for e in latestSample.chem.returnGases():
+		json["children"][1]["children"].append({"name":e[0],"size":e[1]})
+
+	for e in latestSample.chem.returnCompounds():
+		json["children"][2]["children"].append({"name":e[0],"size":e[1]})
+		
+
+	app.logger.debug(json["children"][0]["children"])
+	app.logger.debug(json["children"][1]["children"])
 
 	images = [dict(imagepath=s.image_path,
 				   imagename=s.image_name) for s in latestSample.image]	
@@ -391,7 +407,8 @@ def samplesite(site_id):
 	
 	return render_template('samplesite.html',sample_site=latestSample,
 											 images=images,
-											 old = siteInfo)
+											 json=json)
+											 # old = siteInfo)
 	 
 
 

@@ -19,11 +19,11 @@
 	$(function()
 	{
 		var sampleSiteMap = setupMap("show_map");
-		var markerPosition = new  google.maps.LatLng({{sample_site.location.eastings}},{{sample_site.location.northings}});		
+		var markerPosition = new  google.maps.LatLng({{sample_site.location.lat}},{{sample_site.location.lng}});		
 
 		addInfoWindowMarker("{{sample_site.location.feature_system}}",
-							"{{sample_site.location.eastings}}",
-							"{{sample_site.location.northings}}",
+							"{{sample_site.location.lat}}",
+							"{{sample_site.location.lng}}",
 							"{{sample_site.location.feature_name}}",
 							"{{sample_site.location.description}}",
 							sampleSiteMap)
@@ -93,7 +93,7 @@
 						<img src="{{url_for('static',filename='img/icons/results_list/private.png')}}" rel="tooltip" data-original-title="Private Property" >
 					{% endif %}
 				</div>	
-			<table class="descTable" style="width:100%">				
+			<table class="descTable" >				
 				<tr>
 					<td >			
 						<h5 style="margin-top:0px;" >Location: </h5> 
@@ -107,7 +107,7 @@
 						<h5 style="margin-top:0px;" >Sample Date: </h5>
 					</td>
 					<td style="text-align:left;">
-						<p class="muted">{{sample_site.date_gathered}}</p>
+						<p class="muted">{{sample_site.date_gathered.strftime('%d-%m-%Y')}}</p>
 					</td>
 				</tr>
 				<tr>
@@ -117,7 +117,7 @@
 					<!-- <td >
 						<p class="unitText" > 1°C </p>
 					</td> -->
-					<td style="width:100%">
+					<td style="text-align:left;">
 						<!-- <div class="progress">
 							<div class="bar" style="width:{{sample_site.phys.initialTemp}}%;"> -->
 								<p> {{sample_site.phys.initialTemp}}°C </p>
@@ -133,7 +133,7 @@
 					<!-- <td >
 						<p class="unitText"> 1mV </p>
 					</td> -->
-					<td style="width:100%">
+					<td style="text-align:left;">
 						<!-- <div class="progress">
 							<div class="bar" style="width:{{sample_site.phys.redox}}%;"> -->
 								<p> {{sample_site.phys.redox}}mV </p>
@@ -250,7 +250,7 @@
         </div>
     <div id="collapseOne" class="accordion-body collapse">
 	    <div class="accordion-inner">
-	        Anim pariatur cliche...
+	       {% include "Vis/bubblechart/zoomable.html" %}
 	    </div>
     </div>
     </div>

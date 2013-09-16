@@ -15,7 +15,7 @@
 	function loadMarkers()
 	{
 		{% for pos in entries %}		
-			addInfoWindowMarker("{{pos.city}}", "{{pos.eastings}}", "{{pos.northings}}", "{{pos.feature_name}}", "{{pos.desc}}", mainMap);
+			addInfoWindowMarker("{{pos.city}}", "{{pos.lat}}", "{{pos.lng}}", "{{pos.feature_name}}", "{{pos.desc}}", mainMap);
 		{% endfor %}
 	}
 
@@ -296,7 +296,7 @@ input[type=checkbox]
 					<div style="float:right;">
 						<a href="{{url_for('samplesite',site_id=entry.location_id)}}" class="btn" style="display:block; margin:10px 0;" > More Details</a>
 
-						<input type="hidden" value="{{entry.eastings}},{{entry.northings}}">
+						<input type="hidden" value="{{entry.lat}},{{entry.lng}}">
 
 						<!-- Button to trigger modal -->
 						<a href="#myModal" role="button" class="btn" data-toggle="modal" onclick="modalInit.call(this);" style="display:block; ">Show on Map</a>
