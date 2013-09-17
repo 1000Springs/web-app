@@ -1,4 +1,4 @@
-dbscripts/
+
 SOTD.ini
 Start.bat
 
@@ -7,7 +7,10 @@ Thumbs.db
 *.pyc
 
 Old_Assets/
-Vis/
+
 results_list/
 stockphotos/
 db_repository/
+
+alembic/
+alembic.*
