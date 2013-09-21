@@ -120,8 +120,8 @@ def simplesearch():
 
 # 	return render_template('results.html',entries=entries)
 	
-# @app.route('/mapsearch')
-# def mapsearch():
+@app.route('/mapsearch')
+def mapsearch():
 
 # 	cur = g.db.cursor()
 	
@@ -142,6 +142,7 @@ def simplesearch():
 # 	cur.close()
 
 # 	return render_template('mapsearch.html',positions=positions)
+	return "Coming Soon"
 
 	
 @app.route('/simpleresults')
