@@ -1,15 +1,11 @@
-from wtforms import TextField, BooleanField, IntegerField, HiddenField
+from wtforms import TextField, BooleanField, IntegerField, HiddenField, RadioField
 from flask.ext.wtf import Form
 
 class SearchForm(Form):
 	city = TextField('City')
 	minTemp = IntegerField('minTemp')
 	maxTemp = IntegerField('maxTemp')
-	toilet = BooleanField('toilet', default = False)
-	bench = BooleanField('bench', default = False)
-	
-	track = BooleanField('track', default = False)
-	private = BooleanField('private', default = False)
+	filters = RadioField('Filters', choices=[('all', 'All'), ('PUBLIC_FREE', 'Free'), ('PUBLIC_PAID', 'Paid')])
 
 
 

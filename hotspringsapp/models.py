@@ -18,6 +18,7 @@ class Location(db.Model):
 	track = db.Column(db.Boolean)
 	private = db.Column(db.Boolean)
 	colour = db.Column(db.String(50))
+	access = db.Column(db.String(15))
 
 
 
