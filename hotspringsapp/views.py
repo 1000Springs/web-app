@@ -2,6 +2,7 @@ import MySQLdb
 import datetime
 import time
 from hotspringsapp import app
+from sqlalchemy.sql import func
 
 from flask import Flask, url_for, render_template, request, g, session, flash, redirect
 from models import *
@@ -35,6 +36,13 @@ def login():
 	error = None
 	return render_template('login.html', error=None,site_id=None)
 
+@app.before_first_request
+def getMax():
+	maxTemp = db.session.query(func.max(Physical_data.initialTemp).label("max_Temp"))
+	session['maxTemp'] = maxTemp.all()[0].max_Temp
+
+	minTemp = db.session.query(func.min(Physical_data.initialTemp).label("min_Temp"))
+	session['minTemp'] = minTemp.all()[0].min_Temp
 
 
 @app.route('/about')
@@ -59,10 +67,11 @@ def search():
 @app.route('/simplesearch')
 def simplesearch():
 
-
-	form = SearchForm()	
-
-	return render_template('simplesearch.html',form=form)
+	tempRanges = dict(minTemp = session["minTemp"],maxTemp = session["maxTemp"])
+	form = SearchForm(filters = 'all')
+	locations = Sample.query.filter(Sample.location_id == Location.id).group_by(Sample.location_id).all()	
+	app.logger.debug(locations[0].location)
+	return render_template('simplesearch.html',form=form, tempRanges=tempRanges,locations=locations)
 	
 # @app.route('/results')
 # def results():
@@ -160,37 +169,28 @@ def simpleresults():
 	if "city" in request.args:
 		if request.args.get("city") != "":
 			sampleSites = sampleSites.filter(Location.feature_system == request.args.get('city'))
-			app.logger.debug(request.args.get("city"))
-			app.logger.debug(len(sampleSites.all()))
 
-	if "toilet" in request.args:		
-		sampleSites = sampleSites.filter(Location.toilet == True)
+	if "filters" in request.args:
+		if request.args.get("filters") != "all":
+			sampleSites = sampleSites.filter(Location.access == request.args.get("filters"))
 
-	if "private" in request.args:		
-		sampleSites = sampleSites.filter(Location.private == True)
 
-	if "track" in request.args:		
-		sampleSites = sampleSites.filter(Location.track == True)
-
-	if "bench" in request.args:		
-		sampleSites = sampleSites.filter(Location.parkbench == True)
-
-	app.logger.debug(len(sampleSites.all()))
 
 	#This for loop will add the newest sample taken from a sample site to 'latestSamples'
-	latestSamples = []	
-	prev = sampleSites[0].location_id
-	tempSamples = []
-	for s in sampleSites:
-		
-		if(s.location_id != prev):
-			latestSamples.append(tempSamples[0])
-			tempSamples = []			
+	latestSamples = []
+	if len(sampleSites.all()) != 0:
+		prev = sampleSites[0].location_id
+		tempSamples = []
+		for s in sampleSites:
+			
+			if(s.location_id != prev):
+				latestSamples.append(tempSamples[0])
+				tempSamples = []			
 
-		tempSamples.append(s)
-		prev = s.location_id
-	
-	latestSamples.append(tempSamples[0])	
+			tempSamples.append(s)
+			prev = s.location_id
+		
+		latestSamples.append(tempSamples[0])	
 
 	entries = [dict(location_id=s.location_id,
 					feature_name=s.location.feature_name, 
@@ -235,7 +235,7 @@ def simpleresults():
 												form=form,
 												minTemp=minTemp,
 												maxTemp=maxTemp,												
-												 pieChart=pieChart
+												pieChart=pieChart
 												)
 
 

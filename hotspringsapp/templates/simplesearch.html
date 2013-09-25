@@ -1,26 +1,39 @@
 {% extends "layout.html" %}
 {% block title %}Index{% endblock %}
 {% block head %}
+<!-- <link rel="stylesheet" href="{{url_for('static', filename='js/chosen_v1.0.0/docsupport/style.css')}}" /> -->
 {{ super() }}
 <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?sensor=true"></script>
 <script type="text/javascript" src="{{ url_for('static', filename='js/maps.js') }}"></script>
 
 <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.js"></script>
-<link rel="stylesheet" href="{{url_for('static', filename='iThing.css')}}" />
+
 <script src="{{url_for('static', filename='js/jQuery/jquery-ui.custom.min.js')}}"></script>
 <script type="text/javascript" src="{{ url_for('static', filename='js/jQuery/jQEditRangeSlider-min.js') }}"></script>
+<script type="text/javascript" src="{{ url_for('static', filename='js/chosen_v1.0.0/chosen.jquery.min.js') }}"></script>
+
+<link rel="stylesheet" href="{{url_for('static', filename='iThing.css')}}" />
+<link rel="stylesheet" href="{{url_for('static', filename='js/chosen_v1.0.0/chosen.css')}}" />
+
 
 <script type="text/javascript">
 
  $(function () 
  {
    MenuSelect("#search","{{ url_for('static', filename='img/icons/search_Selected.png') }}");
+   setup({{tempRanges|safe}});
+   initSliders();
+    $(".chosen-select").chosen();
+    {% for sites in locations %}
+    $('.chosen-select').append('<option value="{{sites.location.feature_system}}">{{sites.location.feature_system}}</option>');
+    {% endfor %}
+    $('.chosen-select').trigger("chosen:updated");
  });
 
 </script>
 
 <style>
-input[type=checkbox],#minTemp,#maxTemp 
+#minTemp,#maxTemp 
 {
   
 display: none;
@@ -33,7 +46,7 @@ display: none;
  <div class="title">
       <h2> search for springs </h2>
     </div>
-   <div class="bodytype span6 contrast" style="padding-top:15px;" >
+   <div class="bodytype span6 contrast" >
 
        <form action="{{ url_for('simpleresults', filter='city')}}">
       <div style="background-color:rgba(29,155,171,0.75);padding:10px;border-radius:10px">
@@ -42,42 +55,27 @@ display: none;
             <th style="text-align:left"> Location </th>
          </tr>
          <tr>
-            <td>              
-                  
-                  {{form.city}}             
+            <td style="color:black;">        
+                  <select name="city" data-placeholder="Choose a Location..." style="width:350px;color:black;" class="chosen-select">
+                  <option></option>
+                  </select>
+                
             </td>
          </tr>
          <tr>            
-            <th style="text-align:left; "> Filters </th>
+            <th style="text-align:left; "> Access </th>
          </tr>
-         <tr class="filterIcons">
-            <td>
-               <div style="margin: 0 0 20px;">
-                  <!-- <img rel="tooltip" data-original-title="Benches" src="{{ url_for('static', filename='img/icons/bench_Selected.png') }}">               
-                  <img rel="tooltip" data-original-title="Private" src="{{ url_for('static', filename='img/icons/private_Selected.png') }}">               
-                  <img rel="tooltip" data-original-title="Toilet" src="{{ url_for('static', filename='img/icons/toilet_Selected.png') }}">               
-                  <img rel="tooltip" data-original-title="Track" src="{{ url_for('static', filename='img/icons/track_Selected.png') }}">    -->
+         <tr>       
 
-                  {{form.hidden_tag()}}
-                  <div class="filterImage">                    
-                    {{form.toilet}} 
-                    <label for="toilet"><img rel="tooltip" data-original-title="Toilet" src="{{ url_for('static', filename='img/icons/toilet_Selected.png') }}"></label>
-                  </div>
-                  <div class="filterImage">              
-                    {{form.bench}} 
-                    <label for="bench"><img rel="tooltip" data-original-title="Bench" src="{{ url_for('static', filename='img/icons/bench_Selected.png') }}"></label>
-                  </div>
-                  <div class="filterImage">           
-                    {{form.private}} 
-                    <label for="private"><img rel="tooltip" data-original-title="Private" src="{{ url_for('static', filename='img/icons/private_Selected.png') }}"></label>
-                  </div>
-                  <div class="filterImage">           
-                    {{form.track}} 
-                    <label for="track"><img rel="tooltip" data-original-title="track" src="{{ url_for('static', filename='img/icons/track_Selected.png') }}"></label>
-                  </div>
-                  
-               </div>
-            </td>
+              <td>
+              {{form.hidden_tag()}}
+              {% for subfield in form.filters %}
+              <div style="float:left;margin:0 10px">
+                  {{ subfield }}
+                  {{ subfield.label }}
+              </div>
+              {% endfor %}
+              </td>           
          </tr>
          <tr>
             <th style="text-align:left;margin:10px 0"> Temperature </th>
@@ -85,7 +83,7 @@ display: none;
          </tr>
          <tr>
             <td>     
-               <div style="margin:15px 0" id="slider"></div>
+               <div style="margin:15px 0" id="tempSlider"></div>
                 {{form.minTemp}} {{form.maxTemp}}
             </td>                    
          </tr>
@@ -99,20 +97,36 @@ display: none;
             </td>
          </tr>
          <tr>
-            <td ></td>
-         </tr>
-<!--          <tr>
-            <th style="text-align:left"> Misc <br> </th>
+            <th style="text-align:left;margin:10px 0"> pH <button class="btn btn-small" type="button" id="phHide"> hide </button></th>
          </tr>
          <tr>
-            <td>
-               <p>
-               <div class="btn-group" >
-                  <a class="btn" href="{{url_for('simpleresults',filter='Unique')}}">Unique</a>
-                  <a class="btn" href="{{url_for('simpleresults',filter='All')}}">All</a>
-               </div>
-            </td>
-         </tr> -->
+            <td>     
+               <div style="margin:15px 0" id="pHSlider"></div>
+                {{form.minTemp}} {{form.maxTemp}}
+            </td>                    
+         </tr>
+         <tr>
+            <th style="text-align:left;margin:10px 0"> Saltiness <button class="btn btn-small" type="button" id="saltHide"> hide </button> </th>
+            
+         </tr>
+         <tr>
+            <td>     
+               <div style="margin:15px 0" id="saltSlider"></div>
+                {{form.minTemp}} {{form.maxTemp}}
+            </td>                    
+         </tr>
+         <tr>
+            <th style="text-align:left;margin:10px 0"> Clarity <button class="btn btn-small" type="button" id="clarityHide"> hide </button> </th>
+            
+         </tr>
+         <tr>
+            <td>     
+               <div style="margin:15px 0" id="claritySlider"></div>
+                {{form.minTemp}} {{form.maxTemp}}
+            </td>                    
+         </tr>
+        
+
       </table>
 
     </div>

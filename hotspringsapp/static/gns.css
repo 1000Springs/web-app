@@ -486,7 +486,7 @@ th
 }
 
 /*Slider Customisation */
-.ui-rangeSlider-container {
+#tempSlider .ui-rangeSlider-container {
 background-color:#ffffff;
 filter:progid:DXImageTransform.Microsoft.gradient(GradientType=1,startColorstr=#ffffff, endColorstr=#ffff00);
 background-image:-moz-linear-gradient(left, #ffffff 0%, #ffff00 50%,#ff0000 100%);
@@ -496,7 +496,7 @@ background-image:-o-linear-gradient(left, #ffffff 0%, #ffff00 50%,#ff0000 100%);
 background-image:-ms-linear-gradient(left, #ffffff 0%, #ffff00 50%,#ff0000 100%);
 background-image:-webkit-gradient(linear, left bottom, right bottom, color-stop(0%,#ffffff), color-stop(50%,#ffff00),color-stop(100%,#ff0000));}
 
-.ui-rangeSlider-bar
+#tempSlider .ui-rangeSlider-bar
 {  
   background: rgba(125,125,125,0.8);
 }
