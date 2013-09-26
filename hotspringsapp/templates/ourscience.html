@@ -1,0 +1,57 @@
+{% extends "layout.html" %}
+{% block title %}Our Science{% endblock %}
+{% block head %}
+
+	
+
+  {{ super() }}
+
+  <script type="text/javascript">
+	
+	$(function () 
+	{		
+		MenuSelect("#ourScience","{{ url_for('static', filename='img/icons/ourscience_Selected.png') }}");
+		
+	});
+  </script>
+
+{% endblock %}
+{% block content %}
+
+<div class="title">
+<h2> Our Science </h2>
+</div>
+
+
+
+<div style="position:relative; background-color:white;padding:10px 20px;">	
+
+<h3 style="margin-top:0px"> Our Goal </h3>
+<p> To scoop up a bunch of water and test it for stuff. </p>
+
+<ul>
+	<li>
+		<a href="https://wiki.gns.cri.nz/Extremophiles"> GNS Extremophiles Page </a>
+	</li>
+	<li>	
+		<a href="#"> UW Thermophiles Page </a>
+	</li>
+	<li>	
+		<a href="#"> MBIE? </a>
+	</li>
+	<li>
+		<a href="#"> What is a germ? </a>
+	</li>
+	<li>
+		<a href="#"> What is a hotspring? </a>
+	</li>
+	<li>
+		<a href="#"> Technical Things</a>
+	</li>
+</ul>
+<div class="divider"></div>
+</div>
+
+
+
+{% endblock %}

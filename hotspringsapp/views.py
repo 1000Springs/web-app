@@ -257,7 +257,10 @@ def searchbyimage(page = 1,showAll = None):
 	return render_template('searchbyimage.html',images=imageList)
 
 
+@app.route('/ourscience')
+def ourscience():
 
+	return render_template('ourscience.html')
 
 @app.route('/samplesite/<int:site_id>')
 def samplesite(site_id):	
