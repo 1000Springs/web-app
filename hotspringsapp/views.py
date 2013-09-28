@@ -36,22 +36,9 @@ def login():
 	error = None
 	return render_template('login.html', error=None,site_id=None)
 
-@app.before_first_request
-def getMax():
-	maxTemp = db.session.query(func.max(Physical_data.initialTemp).label("max_Temp"))
-	session['maxTemp'] = maxTemp.all()[0].max_Temp
-
-	minTemp = db.session.query(func.min(Physical_data.initialTemp).label("min_Temp"))
-	session['minTemp'] = minTemp.all()[0].min_Temp
-
-
 @app.route('/about')
 def about():
 	return render_template('about.html');
-
-@app.route('/browseby')
-def browseby():
-	return render_template('browseby.html');
 
 @app.route('/')
 def index():
@@ -67,10 +54,13 @@ def search():
 @app.route('/simplesearch')
 def simplesearch():
 
-	tempRanges = dict(minTemp = session["minTemp"],maxTemp = session["maxTemp"])
+	#finds max temp in database	
+	maxTemp = db.session.query(func.max(Physical_data.initialTemp).label("max_Temp")).all()[0].max_Temp
+
+	tempRanges = dict(minTemp = 0,maxTemp = maxTemp)
 	form = SearchForm(filters = 'all')
 	locations = Sample.query.filter(Sample.location_id == Location.id).group_by(Sample.location_id).all()	
-	app.logger.debug(locations[0].location)
+	
 	return render_template('simplesearch.html',form=form, tempRanges=tempRanges,locations=locations)
 	
 # @app.route('/results')
