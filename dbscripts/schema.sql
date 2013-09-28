@@ -12,6 +12,7 @@ CREATE TABLE `location` (
   `track` tinyint(1) DEFAULT NULL,
   `private` tinyint(1) DEFAULT NULL,
   `colour` varchar(50) DEFAULT NULL,
+  `access` varchar(15) DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `feature_name` (`feature_name`)
 );
