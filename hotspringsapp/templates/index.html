@@ -19,7 +19,7 @@
 
 {% endblock %}
 {% block content %}
-
+<!-- 
 <div class="title contrast" id="index" style="">
   <h2>welcome</h2>
   <p> 
@@ -28,85 +28,38 @@
     Here we make our research results accessible to the public.
   </p>
 
+</div> -->
+
+<div class="row-fluid">
+ 
+    <div class="opaque" style="height:90px; position:relative;"> </div>
+  
+
+   <div class="bodytype span4 contrast" style="margin-left:0;" >
+    
+      <h2> Welcome </h2>
+        <p> 
+    Our project collects biodiversity information from 1,000 hot springs in and around Taupo.
+    These springs are hotspots for unique populations of bugs and microbes about which we know very little.
+    Here we make our research results accessible to the public.
+  </p>
+    
+    <div style="height:200px"></div>  
+      
+
+
+    </div>
+ 
+   
+  
 </div>
+<!-- <div class="span6" style="position:relative;" >
+<div class="contrast"style="background-color: rgba(29,155,171,0.5); height:73px; width:522px; "> 
 
+   </div> -->
 
-<div class="divider"></div>
+  <div class="opaque" style="height:30px; position:relative;"> </div>
 
-<div id="myCarousel" class="carousel slide" >
-  <ol class="carousel-indicators">
-    <li data-target="#myCarousel" data-slide-to="0" class="active"></li>
-    <li data-target="#myCarousel" data-slide-to="1"></li>
-    <li data-target="#myCarousel" data-slide-to="2"></li>
-    <li data-target="#myCarousel" data-slide-to="3"></li>
-    <li data-target="#myCarousel" data-slide-to="4"></li>
-  </ol>
-  <!-- Carousel items -->
-  <div class="carousel-inner">
-    <div class="active item">
-    	<img  src="{{ url_for('static', filename='img/carousel/searchbylocation.jpg') }}">
-    	<div class="container">
-            <div class="carousel-caption">
-              <h4>browse by location</h4>            
-            </div>
-        </div>
-    </div>
-    <div class="item">
-      <a href="{{ url_for('searchbycat')}}">
-      <div id="cat-images">
-         
-        <img src="{{ url_for('static', filename='img/springsbycat/murkyhotspring.jpg') }}">
-        <img style="padding:0 60px;" src="{{ url_for('static', filename='img/springsbycat/colouredhotspring.jpg') }}">
-        <img src="{{ url_for('static', filename='img/springsbycat/clearhotspring.jpg') }}">
-
-    	<div class="container">
-        <div class="carousel-caption">
-          <h4>browse by colour</h4>
-        </div>
-      </div>
-    </div>
-  </a>
-  </div>   
-
-    <div class="item">
-      <a href="{{ url_for('searchbyimage')}}">
-      <img src="{{ url_for('static', filename='img/carousel/searchbyimage.jpg') }}">
-      <div class="container">
-            <div class="carousel-caption">
-              <h4>browse by image</h4>             
-            </div>
-        </div>
-      </a>
-    </div>
-
-     <div class="item">
-      <a href="{{ url_for('sotd')}}">
-      <img src="{{ url_for('static', filename='img/carousel/carouselimage2.jpg') }}">
-      <div class="container">
-            <div class="carousel-caption">
-              <h4>spring of the day</h4>             
-            </div>
-        </div>
-      </a>
-    </div>
-
-    <div class="item">
-      <a href="{{ url_for('simplesearch')}}">
-      <img src="{{ url_for('static', filename='img/carousel/search.png') }}">
-      <div class="container">
-            <div class="carousel-caption">
-              <h4>search</h4>             
-            </div>
-        </div>
-        </a>
-    </div>
-
-  </div>
-  <!-- Carousel nav -->
-  <a class="carousel-control left" href="#myCarousel" data-slide="prev">&lsaquo;</a>
-  <a class="carousel-control right" href="#myCarousel" data-slide="next">&rsaquo;</a>
-</div>
-</div>
 
 
 
