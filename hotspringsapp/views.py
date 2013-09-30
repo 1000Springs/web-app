@@ -235,7 +235,7 @@ def simpleresults():
 @app.route('/searchbyimage/<showAll>')
 def searchbyimage(page = 1,showAll = None):
 
-	imageList = Images.query.filter(Images.sample_id == Sample.id).group_by(Sample.location_id)
+	imageList = Image.query.filter(Image.sample_id == Sample.id).group_by(Sample.location_id)
 
 	imagesPerPage = app.config['IMAGES_PER_PAGE']
 
@@ -293,8 +293,7 @@ def samplesite(site_id):
 	app.logger.debug(json["children"][0]["children"])
 	app.logger.debug(json["children"][1]["children"])
 
-	images = [dict(imagepath=s.image_path,
-				   imagename=s.image_name) for s in latestSample.image]	
+	images = [dict(imagepath=s.image_path) for s in latestSample.image]	
 
 	
 	return render_template('samplesite.html',sample_site=latestSample,

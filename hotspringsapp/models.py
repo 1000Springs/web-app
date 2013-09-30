@@ -47,8 +47,7 @@ class Physical_data(db.Model):
 	pH = db.Column(db.Float)
 	redox = db.Column(db.Float)
 	dO = db.Column(db.Float)
-	conductivity = db.Column(db.Float)
-	date_gathered = db.Column(db.DateTime)
+	conductivity = db.Column(db.Float)	
 	size = db.Column(db.String(20))
 	colour = db.Column(db.String(7))
 	ebullition = db.Column(db.String(50))
@@ -79,7 +78,7 @@ class Sample(db.Model):
 
 	location = db.relationship("Location",backref="Sample",lazy="select")
 	phys = db.relationship("Physical_data",backref="Sample",lazy="select")
-	image = db.relationship("Images",backref="Sample",lazy="select" , uselist=True)
+	image = db.relationship("Image",backref="Sample",lazy="select" , uselist=True)
 	chem = db.relationship("Chemical_data",backref="Sample",lazy="select")
 
 	# def __init__(self,id,date,location,physID):
@@ -92,12 +91,12 @@ class Sample(db.Model):
 		return '<Sample {0} {1} {2}>'.format(self.id,self.location_id,self.date_gathered)
 
 
-class Images(db.Model):
+class Image(db.Model):
 
 	id = db.Column(db.Integer, primary_key=True)
 	sample_id = db.Column(db.Integer, db.ForeignKey("sample.id"), nullable=False)
 	image_path = db.Column(db.String (150), nullable = False)
-	image_name = db.Column(db.String (150))
+	image_type = db.Column(db.String (150))
 
 
 

@@ -1,26 +1,3 @@
-
-
-CREATE TABLE `location` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `feature_name` varchar(50) DEFAULT NULL,
-  `lat` double DEFAULT NULL,
-  `lng` double DEFAULT NULL,
-  `feature_system` varchar(50) DEFAULT NULL,
-  `description` varchar(200) DEFAULT NULL,
-  `toilet` tinyint(1) DEFAULT NULL,
-  `parkbench` tinyint(1) DEFAULT NULL,
-  `track` tinyint(1) DEFAULT NULL,
-  `private` tinyint(1) DEFAULT NULL,
-  `colour` varchar(50) DEFAULT NULL,
-  `access` varchar(15) DEFAULT NULL,
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `feature_name` (`feature_name`)
-);
-
-
-
-delimiter $$
-
 CREATE TABLE `chemical_data` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `Li` float DEFAULT NULL,
@@ -72,8 +49,22 @@ CREATE TABLE `chemical_data` (
   PRIMARY KEY (`id`)
 );
 
-
-
+CREATE TABLE `location` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `feature_name` varchar(50) DEFAULT NULL,
+  `lat` double DEFAULT NULL,
+  `lng` double DEFAULT NULL,
+  `feature_system` varchar(50) DEFAULT NULL,
+  `description` varchar(200) DEFAULT NULL,
+  `toilet` tinyint(1) DEFAULT NULL,
+  `parkbench` tinyint(1) DEFAULT NULL,
+  `track` tinyint(1) DEFAULT NULL,
+  `private` tinyint(1) DEFAULT NULL,
+  `colour` varchar(50) DEFAULT NULL,
+  `access` varchar(15) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `feature_name` (`feature_name`)
+) ;
 
 CREATE TABLE `physical_data` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -82,7 +73,6 @@ CREATE TABLE `physical_data` (
   `redox` double DEFAULT NULL,
   `dO` double DEFAULT NULL,
   `conductivity` double DEFAULT NULL,
-  `date_gathered` datetime DEFAULT NULL,
   `size` varchar(20) DEFAULT NULL,
   `colour` varchar(7) DEFAULT NULL,
   `ebullition` varchar(50) DEFAULT NULL,
@@ -90,12 +80,10 @@ CREATE TABLE `physical_data` (
   `dnaVolume` double DEFAULT NULL,
   `ferrousIronAbs` double DEFAULT NULL,
   `sampleTemp` double DEFAULT NULL,
+  `soilCollected` tinyint(1) DEFAULT NULL,
+  `waterColumnCollected` tinyint(1) DEFAULT NULL,
   PRIMARY KEY (`id`)
 );
-
-
-
-
 
 CREATE TABLE `sample` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -107,30 +95,45 @@ CREATE TABLE `sample` (
   PRIMARY KEY (`id`),
   KEY `FK_SAMPLE_location` (`location_id`),
   KEY `FK_SAMPLE_phys` (`phys_id`),
+  KEY `FK_SAMPLE_chem` (`chem_id`),
+  CONSTRAINT `FK_SAMPLE_chem` FOREIGN KEY (`chem_id`) REFERENCES `chemical_data` (`id`),
   CONSTRAINT `FK_SAMPLE_location` FOREIGN KEY (`location_id`) REFERENCES `location` (`id`),
   CONSTRAINT `FK_SAMPLE_phys` FOREIGN KEY (`phys_id`) REFERENCES `physical_data` (`id`)
 );
 
+CREATE TABLE `taxonomy` (
+  `sample_id` int(11) NOT NULL,
+  `id` int(11) NOT NULL,
+  `taxName` varchar(50) NOT NULL,
+  `otuNum` int(11) NOT NULL,
+  `otuPer` double NOT NULL,
+  `total` int(11) NOT NULL,
+  `totalPer` int(11) NOT NULL,
+  `sequence` text,
+  `seqLen` int(11) DEFAULT NULL,
+  `phylum` varchar(50) DEFAULT NULL,
+  `phylum_Confidence` double DEFAULT NULL,
+  `class` varchar(50) DEFAULT NULL,
+  `class_Confidence` double DEFAULT NULL,
+  `order` varchar(50) DEFAULT NULL,
+  `order_Confidence` double DEFAULT NULL,
+  `family` varchar(50) DEFAULT NULL,
+  `family_Confidence` double DEFAULT NULL,
+  `Genus` varchar(50) DEFAULT NULL,
+  `genus_Confidence` double DEFAULT NULL,
+  `species` varchar(50) DEFAULT NULL,
+  `species_Confidence` double DEFAULT NULL,
+  PRIMARY KEY (`sample_id`,`id`),
+  UNIQUE KEY `taxName` (`taxName`),
+  CONSTRAINT `FK_taxonomy_sample` FOREIGN KEY (`sample_id`) REFERENCES `sample` (`id`)
+);
 
-
-
-
-CREATE TABLE `images` (
+CREATE TABLE `image` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `sample_id` int(11) NOT NULL,
   `image_path` varchar(150) NOT NULL,
-  `image_name` varchar(150) DEFAULT '',
-  PRIMARY KEY (`id`),
+  `image_type` varchar(50) DEFAULT NULL,
+  PRIMARY KEY (`id`,`sample_id`),
   KEY `FK_images_samples` (`sample_id`),
   CONSTRAINT `FK_images_samples` FOREIGN KEY (`sample_id`) REFERENCES `sample` (`id`)
 );
-
-
-
-CREATE TABLE `user` (
-  `username` varchar(100) NOT NULL,
-  `password` varchar(100) DEFAULT NULL,
-  PRIMARY KEY (`username`)
-);
-
-
