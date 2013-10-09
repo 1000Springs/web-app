@@ -20,7 +20,8 @@ class Location(db.Model):
 	colour = db.Column(db.String(50))
 	access = db.Column(db.String(15))
 
-
+	def latestSample(self):
+		return Sample.query.filter(Location.id == self.id, Sample.location_id == Location.id ).order_by(Sample.location_id,Sample.date_gathered.desc()).first()
 
  	# def __init__(self,location_id,fName,latPos,lngPos,fSystem,desc,toilet,pbench,track,private,colour):
 
@@ -35,6 +36,9 @@ class Location(db.Model):
 	 # 	self.track = track
 	 # 	self.private = private
 	 # 	self.colour = colour
+
+	def __repr__(self):
+		return '<Location {0} {1}>'.format(self.id,self.feature_name)
 	
 
 

@@ -143,61 +143,53 @@ def mapsearch():
 # 	return render_template('mapsearch.html',positions=positions)
 	return "Coming Soon"
 
-	
-@app.route('/simpleresults')
-def simpleresults():	
+@app.route('/simpleresults')	
+@app.route('/simpleresults/<int:page>')
+@app.route('/simpleresults/<showAll>')
+def simpleresults(page = 1, showAll = None):	
 
-	minTemp = request.args.get('minTemp')
-	maxTemp = request.args.get('maxTemp')
+	if len(request.args) > 0:	
+		session['minTemp'] = request.args.get('minTemp')
+		session['maxTemp'] = request.args.get('maxTemp')
+
+	app.logger.debug(len(request.args))
+
+	minTemp = session['minTemp']
+	maxTemp = session['maxTemp']
+		
+
+	listOfAllLocations = Location.query.filter(Sample.location_id == Location.id).order_by(Location.id).all()
+	latestSampleIds = []
+
+	for l in listOfAllLocations:		
+		latestSampleIds.append(l.latestSample().id)
 
 
-	sampleSites = Sample.query.filter(Physical_data.id == Sample.phys_id,
-									  Physical_data.initialTemp>= minTemp,
-									  Physical_data.initialTemp < maxTemp,
-									  Sample.location_id == Location.id).order_by(Sample.location_id,Sample.date_gathered.desc())
+	latestFilteredSamples = Sample.query.filter(Physical_data.id == Sample.phys_id,
+												Physical_data.initialTemp>= minTemp,
+												Physical_data.initialTemp < maxTemp,
+												Sample.location_id == Location.id,
+												Sample.id.in_(latestSampleIds)).order_by(Sample.location_id,Sample.date_gathered.desc()).group_by(Sample.location_id)
+
+
 
 	if "city" in request.args:
 		if request.args.get("city") != "":
-			sampleSites = sampleSites.filter(Location.feature_system == request.args.get('city'))
+			latestFilteredSamples = latestFilteredSamples.filter(Location.feature_system == request.args.get('city'))
 
 	if "filters" in request.args:
 		if request.args.get("filters") != "all":
-			sampleSites = sampleSites.filter(Location.access == request.args.get("filters"))
+			latestFilteredSamples = latestFilteredSamples.filter(Location.access == request.args.get("filters"))
 
+	
+	if showAll == "all":
+		resultsPerPage = latestFilteredSamples.count()
+	else:
+		resultsPerPage = app.config["RESULTS_PER_PAGE"]	
 
-
-	#This for loop will add the newest sample taken from a sample site to 'latestSamples'
-	latestSamples = []
-	if len(sampleSites.all()) != 0:
-		prev = sampleSites[0].location_id
-		tempSamples = []
-		for s in sampleSites:
-			
-			if(s.location_id != prev):
-				latestSamples.append(tempSamples[0])
-				tempSamples = []			
-
-			tempSamples.append(s)
-			prev = s.location_id
-		
-		latestSamples.append(tempSamples[0])	
-
-	entries = [dict(location_id=s.location_id,
-					feature_name=s.location.feature_name, 
-					city=s.location.feature_system, 
-					desc=s.location.description, 
-					temp=s.phys.initialTemp,
-					lat=s.location.lat,
-					lng=s.location.lng,
-					toilet=s.location.toilet, 
-					parkbench=s.location.parkbench, 
-					track=s.location.track, 
-					private=s.location.private,
-					date_gathered = s.date_gathered,
-					imagepath=s.image[0].image_path) for s in latestSamples]	
-
-
-	form = SearchForm()	
+	latestFilteredSamples = latestFilteredSamples.paginate(page,resultsPerPage,False)
+	
+	form = SearchForm()
 
 	phys_data = Physical_data.query.order_by(Physical_data.initialTemp).all()
 
@@ -212,23 +204,15 @@ def simpleresults():
 			count["51-75"] +=1
 		if t.initialTemp >= 76 and t.initialTemp <= 100:
 			count["76-100"] +=1
-	
-	
-
 
 	pieChart = [dict(range=k,count=v) for k,v in zip(count.keys(),count.values())]
 
-
-
-
-	return render_template('simpleresults.html',entries=entries,
+	return render_template('simpleresults.html',entries=latestFilteredSamples,
 												form=form,
 												minTemp=minTemp,
 												maxTemp=maxTemp,												
 												pieChart=pieChart
 												)
-
-
 
 @app.route('/searchbyimage')
 @app.route('/searchbyimage/<int:page>')
@@ -240,8 +224,8 @@ def searchbyimage(page = 1,showAll = None):
 	imagesPerPage = app.config['IMAGES_PER_PAGE']
 
 	if showAll == "all":
-		imagesPerPage = len(imageList.all())
-
+		imagesPerPage = imageList.count()
+	
 	imageList = imageList.paginate(page,imagesPerPage,False)
 	
 	return render_template('searchbyimage.html',images=imageList)
@@ -261,7 +245,7 @@ def samplesite(site_id):
 
 	latestSample = locationSamples.order_by(Sample.date_gathered.desc()).first()
 	
-
+	# app.logger.debug(latestSample.location.locationSamples())
 	# siteInfo = dict(location_id=latestSample.location_id,
 	# 				feature_name=latestSample.location.feature_name,
 	# 				city=latestSample.location.feature_system, 
@@ -274,11 +258,11 @@ def samplesite(site_id):
 	# 				track=latestSample.location.toilet, 
 	# 				private=latestSample.location.toilet)
 					
-	app.logger.debug(latestSample.chem.returnElements())
+	# app.logger.debug(latestSample.chem.returnElements())
 	json = {"name":"", "children":[{"name":"Elements", "children":[]},{"name":"Gases","children":[]},{"name":"Compounds","children":[]}]};	
 
 
-	app.logger.debug(json)
+	# app.logger.debug(json)
 
 	for e in latestSample.chem.returnElements():
 		json["children"][0]["children"].append({"name":e[0], "children":[{"name":e[0],"size":e[1]}]})
@@ -290,8 +274,8 @@ def samplesite(site_id):
 		json["children"][2]["children"].append({"name":e[0],"size":e[1]})
 		
 
-	app.logger.debug(json["children"][0]["children"])
-	app.logger.debug(json["children"][1]["children"])
+	# app.logger.debug(json["children"][0]["children"])
+	# app.logger.debug(json["children"][1]["children"])
 
 	images = [dict(imagepath=s.image_path) for s in latestSample.image]	
 
