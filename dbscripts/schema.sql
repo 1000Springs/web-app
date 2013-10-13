@@ -87,6 +87,7 @@ CREATE TABLE `physical_data` (
 
 CREATE TABLE `sample` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
+  `sample_number` varchar(10),
   `date_gathered` datetime NOT NULL,
   `location_id` int(11) DEFAULT NULL,
   `phys_id` int(11) DEFAULT NULL,
