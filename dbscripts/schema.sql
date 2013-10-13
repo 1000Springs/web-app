@@ -51,7 +51,7 @@ CREATE TABLE `chemical_data` (
 
 CREATE TABLE `location` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `feature_name` varchar(50) DEFAULT NULL,
+  `feature_name` varchar(60) DEFAULT NULL,
   `lat` double DEFAULT NULL,
   `lng` double DEFAULT NULL,
   `feature_system` varchar(50) DEFAULT NULL,
