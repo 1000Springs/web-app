@@ -1,0 +1,965 @@
+<link type="text/css" rel="stylesheet" href="{{ url_for('static', filename='tipsy.css') }}"/>
+<style>
+
+.node circle {
+  fill: #fff;
+  stroke: steelblue;
+  stroke-width: 1.5px;
+}
+
+.inner circle:hover
+{
+  stroke: red;
+  stroke-width: 4px;
+} 
+
+.node {
+  font: 12px sans-serif;
+}
+
+.link {
+  fill: none;
+  stroke: #ccc;
+  stroke-width: 1.5px;
+}
+
+</style>
+
+ <script type="text/javascript">
+(function(){
+var radius = 960 / 2;
+
+var cluster = d3.layout.cluster()
+    .size([360, radius - 120]);
+
+var diagonal = d3.svg.diagonal.radial()
+    .projection(function(d) { return [d.y, d.x / 180 * Math.PI]; });
+
+var svg = d3.select("#radialTree").append("svg")
+    .attr("width", radius * 2)
+    .attr("height", radius * 2)
+  .append("g")
+    .attr("transform", "translate(" + radius + "," + radius + ")");
+
+var root = {
+    "name": "Bacteria",
+    "children": [
+        {
+            "name": "Proteobacteria",
+            "children": [
+                {
+                    "name": "Gammaproteobacteria",
+                    "children": [
+                        {
+                            "name": "Alteromonadales",
+                            "children": [
+                                {
+                                    "name": "Alteromonadaceae"
+                                },
+                                {
+                                    "name": "Psychromonadaceae"
+                                },
+                                {
+                                    "name": "Ferrimonadaceae"
+                                },
+                                {
+                                    "name": "Pseudoalteromonadaceae"
+                                },
+                                {
+                                    "name": "Shewanellaceae"
+                                }
+                            ]
+                        },
+                        {
+                            "name": "Oceanospirillales",
+                            "children": [
+                                {
+                                    "name": "Oceanospirillaceae"
+                                },
+                                {
+                                    "name": "Litoricolaceae"
+                                },
+                                {
+                                    "name": "Halomonadaceae"
+                                }
+                            ]
+                        },
+                        {
+                            "name": "Xanthomonadales",
+                            "children": [
+                                {
+                                    "name": "Xanthomonadaceae"
+                                }
+                            ]
+                        },
+                        {
+                            "name": "Chromatiales",
+                            "children": [
+                                {
+                                    "name": "Chromatiaceae"
+                                }
+                            ]
+                        },
+                        {
+                            "name": "Gammaproteobacteria_incertae_sedis",
+                            "children": [
+                                {
+                                    "name": "Thiohalorhabdus"
+                                },
+                                {
+                                    "name": "Methylohalomonas"
+                                }
+                            ]
+                        },
+                        {
+                            "name": "Legionellales",
+                            "children": [
+                                {
+                                    "name": "Coxiellaceae"
+                                }
+                            ]
+                        },
+                        {
+                            "name": "Pseudomonadales",
+                            "children": [
+                                {
+                                    "name": "Pseudomonadaceae"
+                                },
+                                {
+                                    "name": "Pseudomonadales_incertae_sedis"
+                                }
+                            ]
+                        },
+                        {
+                            "name": "Salinisphaerales",
+                            "children": [
+                                {
+                                    "name": "Salinisphaeraceae"
+                                }
+                            ]
+                        },
+                        {
+                            "name": "Thiotrichales",
+                            "children": [
+                                {
+                                    "name": "Piscirickettsiaceae"
+                                }
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "name": "Alphaproteobacteria",
+                    "children": [
+                        {
+                            "name": "Rhodobacterales",
+                            "children": [
+                                {
+                                    "name": "Rhodobacteraceae"
+                                }
+                            ]
+                        },
+                        {
+                            "name": "Kordiimonadales",
+                            "children": [
+                                {
+                                    "name": "Kordiimonadaceae"
+                                }
+                            ]
+                        },
+                        {
+                            "name": "Rhizobiales",
+                            "children": [
+                                {
+                                    "name": "Hyphomicrobiaceae"
+                                },
+                                {
+                                    "name": "Cohaesibacteraceae"
+                                },
+                                {
+                                    "name": "Xanthobacteraceae"
+                                },
+                                {
+                                    "name": "Rhodobiaceae"
+                                },
+                                {
+                                    "name": "Phyllobacteriaceae"
+                                }
+                            ]
+                        },
+                        {
+                            "name": "Caulobacterales",
+                            "children": [
+                                {
+                                    "name": "Hyphomonadaceae"
+                                }
+                            ]
+                        },
+                        {
+                            "name": "Rhodospirillales",
+                            "children": [
+                                {
+                                    "name": "Rhodospirillaceae"
+                                },
+                                {
+                                    "name": "Acetobacteraceae"
+                                }
+                            ]
+                        },
+                        {
+                            "name": "Sphingomonadales",
+                            "children": [
+                                {
+                                    "name": "Sphingomonadaceae"
+                                },
+                                {
+                                    "name": "Erythrobacteraceae"
+                                }
+                            ]
+                        },
+                        {
+                            "name": "Rickettsiales",
+                            "children": [
+                                {
+                                    "name": "Anaplasmataceae"
+                                }
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "name": "Epsilonproteobacteria",
+                    "children": [
+                        {
+                            "name": "Campylobacterales",
+                            "children": [
+                                {
+                                    "name": "Helicobacteraceae"
+                                },
+                                {
+                                    "name": "Campylobacteraceae"
+                                }
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "name": "Betaproteobacteria",
+                    "children": [
+                        {
+                            "name": "Burkholderiales",
+                            "children": [
+                                {
+                                    "name": "Comamonadaceae"
+                                },
+                                {
+                                    "name": "Alcaligenaceae"
+                                },
+                                {
+                                    "name": "Burkholderiales_incertae_sedis"
+                                }
+                            ]
+                        },
+                        {
+                            "name": "Nitrosomonadales",
+                            "children": [
+                                {
+                                    "name": "Nitrosomonadaceae"
+                                }
+                            ]
+                        },
+                        {
+                            "name": "Methylophilales",
+                            "children": [
+                                {
+                                    "name": "Methylophilaceae"
+                                }
+                            ]
+                        },
+                        {
+                            "name": "Neisseriales",
+                            "children": [
+                                {
+                                    "name": "Neisseriaceae"
+                                }
+                            ]
+                        },
+                        {
+                            "name": "Rhodocyclales",
+                            "children": [
+                                {
+                                    "name": "Rhodocyclaceae"
+                                }
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "name": "Deltaproteobacteria",
+                    "children": [
+                        {
+                            "name": "Desulfobacterales",
+                            "children": [
+                                {
+                                    "name": "Desulfobacteraceae"
+                                },
+                                {
+                                    "name": "Desulfobulbaceae"
+                                }
+                            ]
+                        },
+                        {
+                            "name": "Bdellovibrionales",
+                            "children": [
+                                {
+                                    "name": "Bacteriovoracaceae"
+                                },
+                                {
+                                    "name": "Bdellovibrionaceae"
+                                }
+                            ]
+                        },
+                        {
+                            "name": "Desulfuromonadales",
+                            "children": [
+                                {
+                                    "name": "Desulfuromonadaceae"
+                                },
+                                {
+                                    "name": "Geobacteraceae"
+                                }
+                            ]
+                        },
+                        {
+                            "name": "Myxococcales",
+                            "children": [
+                                {
+                                    "name": "Cystobacterineae"
+                                },
+                                {
+                                    "name": "Sorangiineae"
+                                }
+                            ]
+                        },
+                        {
+                            "name": "Syntrophobacterales",
+                            "children": [
+                                {
+                                    "name": "Syntrophobacteraceae"
+                                },
+                                {
+                                    "name": "Syntrophaceae"
+                                }
+                            ]
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "name": "Bacteroidetes",
+            "children": [
+                {
+                    "name": "Flavobacteria",
+                    "children": [
+                        {
+                            "name": "Flavobacteriales",
+                            "children": [
+                                {
+                                    "name": "Flavobacteriaceae"
+                                },
+                                {
+                                    "name": "Cryomorphaceae"
+                                }
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "name": "Sphingobacteria",
+                    "children": [
+                        {
+                            "name": "Sphingobacteriales",
+                            "children": [
+                                {
+                                    "name": "Chitinophagaceae"
+                                },
+                                {
+                                    "name": "Sphingobacteriaceae"
+                                },
+                                {
+                                    "name": "Saprospiraceae"
+                                },
+                                {
+                                    "name": "Cytophagaceae"
+                                },
+                                {
+                                    "name": "Cyclobacteriaceae"
+                                },
+                                {
+                                    "name": "Flammeovirgaceae"
+                                }
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "name": "Bacteroidetes_incertae_sedis",
+                    "children": [
+                        {
+                            "name": "Prolixibacter"
+                        },
+                        {
+                            "name": "Marinifilum"
+                        }
+                    ]
+                },
+                {
+                    "name": "Bacteroidia",
+                    "children": [
+                        {
+                            "name": "Bacteroidales",
+                            "children": [
+                                {
+                                    "name": "Porphyromonadaceae"
+                                },
+                                {
+                                    "name": "Marinilabiaceae"
+                                }
+                            ]
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "name": "Firmicutes",
+            "children": [
+                {
+                    "name": "Erysipelotrichi",
+                    "children": [
+                        {
+                            "name": "Erysipelotrichales",
+                            "children": [
+                                {
+                                    "name": "Erysipelotrichaceae"
+                                }
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "name": "Clostridia",
+                    "children": [
+                        {
+                            "name": "Clostridiales",
+                            "children": [
+                                {
+                                    "name": "IncertaeSedisXI"
+                                },
+                                {
+                                    "name": "IncertaeSedisXII"
+                                },
+                                {
+                                    "name": "IncertaeSedisXIV"
+                                },
+                                {
+                                    "name": "IncertaeSedisXIII"
+                                },
+                                {
+                                    "name": "Peptococcaceae"
+                                },
+                                {
+                                    "name": "Ruminococcaceae"
+                                },
+                                {
+                                    "name": "Eubacteriaceae"
+                                },
+                                {
+                                    "name": "Veillonellaceae"
+                                },
+                                {
+                                    "name": "Gracilibacteraceae"
+                                },
+                                {
+                                    "name": "Peptostreptococcaceae"
+                                },
+                                {
+                                    "name": "Syntrophomonadaceae"
+                                },
+                                {
+                                    "name": "Lachnospiraceae"
+                                }
+                            ]
+                        },
+                        {
+                            "name": "Thermoanaerobacterales",
+                            "children": [
+                                {
+                                    "name": "Thermodesulfobiaceae"
+                                }
+                            ]
+                        },
+                        {
+                            "name": "Halanaerobiales",
+                            "children": [
+                                {
+                                    "name": "Halobacteroidaceae"
+                                }
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "name": "Bacilli",
+                    "children": [
+                        {
+                            "name": "Lactobacillales",
+                            "children": [
+                                {
+                                    "name": "Carnobacteriaceae"
+                                }
+                            ]
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "name": "Aquificae",
+            "children": [
+                {
+                    "name": "Aquificales",
+                    "children": [
+                        {
+                            "name": "Hydrogenothermaceae"
+                        },
+                        {
+                            "name": "Desulfurobacteriaceae"
+                        },
+                        {
+                            "name": "Aquificales_incertae_sedis"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "name": "Verrucomicrobia",
+            "children": [
+                {
+                    "name": "Verrucomicrobiae",
+                    "children": [
+                        {
+                            "name": "Verrucomicrobiales",
+                            "children": [
+                                {
+                                    "name": "Verrucomicrobiaceae"
+                                },
+                                {
+                                    "name": "Rubritaleaceae"
+                                }
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "name": "Subdivision5",
+                    "children": [
+                        {
+                            "name": "Subdivision5_genera_incertae_sedis",
+                            "children": [
+                                {
+                                    "name": ""
+                                }
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "name": "Opitutae",
+                    "children": [
+                        {
+                            "name": "Puniceicoccales",
+                            "children": [
+                                {
+                                    "name": "Puniceicoccaceae"
+                                }
+                            ]
+                        },
+                        {
+                            "name": "Opitutales",
+                            "children": [
+                                {
+                                    "name": "Opitutaceae"
+                                }
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "name": "Spartobacteria",
+                    "children": [
+                        {
+                            "name": "Spartobacteria_genera_incertae_sedis"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "name": "Chloroflexi",
+            "children": [
+                {
+                    "name": "Herpetosiphonales",
+                    "children": [
+                        {
+                            "name": "Herpetosiphonaceae"
+                        }
+                    ]
+                },
+                {
+                    "name": "Caldilineae",
+                    "children": [
+                        {
+                            "name": "Caldilineales",
+                            "children": [
+                                {
+                                    "name": "Caldilineaceae"
+                                }
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "name": "Dehalococcoidetes",
+                    "children": [
+                        {
+                            "name": "Dehalogenimonas"
+                        }
+                    ]
+                },
+                {
+                    "name": "Anaerolineae",
+                    "children": [
+                        {
+                            "name": "Anaerolineales",
+                            "children": [
+                                {
+                                    "name": "Anaerolineaceae"
+                                }
+                            ]
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "name": "OD1",
+            "children": [
+                {
+                    "name": "OD1_genera_incertae_sedis"
+                }
+            ]
+        },
+        {
+            "name": "Cyanobacteria",
+            "children": [
+                {
+                    "name": "Chloroplast",
+                    "children": [
+                        {
+                            "name": "Cryptomonadaceae"
+                        },
+                        {
+                            "name": "Chlorarachniophyceae"
+                        },
+                        {
+                            "name": "Bacillariophyta"
+                        }
+                    ]
+                },
+                {
+                    "name": "FamilyIV",
+                    "children": [
+                        {
+                            "name": "GpIV"
+                        }
+                    ]
+                },
+                {
+                    "name": "FamilyI",
+                    "children": [
+                        {
+                            "name": "GpI"
+                        }
+                    ]
+                },
+                {
+                    "name": "FamilyVI",
+                    "children": [
+                        {
+                            "name": "GpVI"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "name": "Planctomycetes",
+            "children": [
+                {
+                    "name": "Planctomycetacia",
+                    "children": [
+                        {
+                            "name": "Planctomycetales",
+                            "children": [
+                                {
+                                    "name": "Planctomycetaceae"
+                                }
+                            ]
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "name": "Actinobacteria",
+            "children": [
+                {
+                    "name": "Actinobacteridae",
+                    "children": [
+                        {
+                            "name": "Actinomycetales"
+                        }
+                    ]
+                },
+                {
+                    "name": "Acidimicrobidae",
+                    "children": [
+                        {
+                            "name": "Acidimicrobidae_incertae_sedis"
+                        }
+                    ]
+                },
+                {
+                    "name": "Coriobacteridae",
+                    "children": [
+                        {
+                            "name": "Coriobacteriales"
+                        }
+                    ]
+                },
+                {
+                    "name": "Rubrobacteridae",
+                    "children": [
+                        {
+                            "name": "Solirubrobacterales"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "name": "TM7",
+            "children": [
+                {
+                    "name": "TM7_genera_incertae_sedis"
+                }
+            ]
+        },
+        {
+            "name": "Chlamydiae",
+            "children": [
+                {
+                    "name": "Chlamydiales",
+                    "children": [
+                        {
+                            "name": "Parachlamydiaceae"
+                        },
+                        {
+                            "name": "Chlamydiaceae"
+                        },
+                        {
+                            "name": "Waddliaceae"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "name": "Deinococcus-Thermus",
+            "children": [
+                {
+                    "name": "Deinococci",
+                    "children": [
+                        {
+                            "name": "Thermales",
+                            "children": [
+                                {
+                                    "name": "Thermaceae"
+                                }
+                            ]
+                        },
+                        {
+                            "name": "Deinococcales",
+                            "children": [
+                                {
+                                    "name": "Trueperaceae"
+                                }
+                            ]
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "name": "Spirochaetes",
+            "children": [
+                {
+                    "name": "Spirochaetales",
+                    "children": [
+                        {
+                            "name": "Spirochaetaceae"
+                        },
+                        {
+                            "name": "Spirochaetales_incertae_sedis"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "name": "Gemmatimonadetes",
+            "children": [
+                {
+                    "name": "Gemmatimonadales",
+                    "children": [
+                        {
+                            "name": "Gemmatimonadaceae"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "name": "SR1",
+            "children": [
+                {
+                    "name": "SR1_genera_incertae_sedis"
+                }
+            ]
+        },
+        {
+            "name": "Acidobacteria",
+            "children": [
+                {
+                    "name": "Acidobacteria_Gp6",
+                    "children": [
+                        {
+                            "name": "Gp6"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "name": "Lentisphaerae",
+            "children": [
+                {
+                    "name": "Lentisphaeria",
+                    "children": [
+                        {
+                            "name": "Victivallales",
+                            "children": [
+                                {
+                                    "name": "Victivallaceae"
+                                }
+                            ]
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "name": "Synergistetes",
+            "children": [
+                {
+                    "name": "Synergistia",
+                    "children": [
+                        {
+                            "name": "Synergistales",
+                            "children": [
+                                {
+                                    "name": "Synergistaceae"
+                                }
+                            ]
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "name": "Thermodesulfobacteria",
+            "children": [
+                {
+                    "name": "Thermodesulfobacteriales",
+                    "children": [
+                        {
+                            "name": "Thermodesulfobacteriaceae"
+                        }
+                    ]
+                }
+            ]
+        }
+    ]
+};
+
+  var nodes = cluster.nodes(root);
+
+
+  var link = svg.selectAll("path.link")
+      .data(cluster.links(nodes))
+    .enter().append("path")
+      .attr("class", "link")
+      .attr("d", diagonal);
+
+  var node = svg.selectAll("g.node")
+      .data(nodes)
+    .enter().append("g")
+      .attr("class", function(n) {
+          if (n.children) {
+            return "inner node"
+          } else {
+            return "leaf node"
+          }
+        })
+      .attr("transform", function(d) { return "rotate(" + (d.x - 90) + ")translate(" + d.y + ")"; });
+  
+
+
+  node.append("circle")
+      .attr("r", 4.5);
+
+  var endnodes = svg.selectAll(".leaf").append("text")
+      .attr("dy", ".31em")
+      .attr("text-anchor", function(d) { return d.x < 180 ? "start" : "end"; })
+      .attr("transform", function(d) { return d.x < 180 ? "translate(8)" : "rotate(180)translate(-8)"; })
+      .text(function(d) { return d.name; })
+      ;
+
+$('svg .inner').tipsy({ 
+        gravity: 'w', 
+        html: true,
+         title: function (d) 
+         {
+           var d = this.__data__;
+           return d.name;
+          }       
+      });
+
+
+
+d3.select(self.frameElement).style("height", radius * 2 + "px");
+})();
+</script>

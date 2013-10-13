@@ -9,6 +9,8 @@
 <script type="text/javascript" src="{{ url_for('static', filename='js/jQuery/jquery.galleriffic.js') }}"></script>
 <script type="text/javascript" src="{{ url_for('static', filename='js/jQuery/jquery.opacityrollover.js') }}"></script>
 <script type="text/javascript" src="{{ url_for('static', filename='js/maps.js') }}"></script>
+<script type="text/javascript" src="{{ url_for('static', filename='js/Vis/radialTree/d3.js') }}"></script>
+<script type="text/javascript" src="{{ url_for('static', filename='js/jQuery/jquery.tipsy.js') }}"></script>
 <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?sensor=true"></script>
 
 
@@ -31,18 +33,8 @@
 		
 		$('img').tooltip();
 
-	/*
-		Gives focus to username textbox.
-		The timeout is because the model window needs time to load so without it, the focus would be set to nothing
-	*/
-	// $('#loginButton').click(function() {
 
-	// 	window.setTimeout(function() {
-	// 		$('#usernameTextbox').focus();
-	// 	}, 700, true);
-		 
 
-	// });
 
 		$('.accordion').on('show hide', function (n) 
 		{
@@ -249,7 +241,7 @@
             </a>
         </div>
     <div id="collapseOne" class="accordion-body collapse">
-	    <div class="accordion-inner">
+	    <div class="accordion-inner" id="bubbles">
 	       {% include "Vis/bubblechart/zoomable.html" %}
 	    </div>
     </div>
@@ -259,12 +251,12 @@
         <div class="accordion-heading"> 
             <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#collapseTwo">
                 <i class="icon-chevron-down"></i>
-                Collapsible Group Item #2
+                Microbial Diversity
             </a>
         </div>    
     <div id="collapseTwo" class="accordion-body collapse">
-	    <div class="accordion-inner">
-	        Anim pariatur cliche...
+	    <div class="accordion-inner" id="radialTree">
+	       {% include "Vis/radialTree/index.html" %}
 	    </div>
     </div>
     </div>
