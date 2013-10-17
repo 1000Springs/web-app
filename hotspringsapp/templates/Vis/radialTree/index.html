@@ -35,6 +35,9 @@
  <script type="text/javascript">
 (function()
 {
+
+
+
 var radius = 960 / 2;
 
 var cluster = d3.layout.cluster()
@@ -936,8 +939,8 @@ var root = {
   var node = svg.selectAll("g.node")
       .data(nodes)
     .enter().append("g")
-    .on("mouseout", function(){d3.selectAll(".link").style("stroke","#ccc")}) 
-    .on("mouseover",function(n) { highlightLinks(n)}) 
+    .on("mouseover",function(n) { highlightChildLinks(n)}) 
+    .on("mouseout", function(){d3.selectAll(".link").style("stroke","#ccc")})     
       .attr("class", function(n) {
           if (n.children) {
             return "inner node"
@@ -953,12 +956,15 @@ var root = {
   node.append("circle")
       .attr("r", 4.5);
 
-  var endnodes = svg.selectAll(".leaf").append("text")
-      .attr("dy", ".31em")
-      .attr("text-anchor", function(d) { return d.x < 180 ? "start" : "end"; })
-      .attr("transform", function(d) { return d.x < 180 ? "translate(8)" : "rotate(180)translate(-8)"; })
-      .text(function(d) { return d.name; })
-      ;
+  var endnodes = svg.selectAll(".leaf")
+                    .on("mouseover",function(n) { highlightParentLinks(n)}) 
+                    .on("mouseout", function(){d3.selectAll(".link").style("stroke","#ccc")})     
+                    .append("text")
+                    .attr("dy", ".31em")
+                    .attr("text-anchor", function(d) { return d.x < 180 ? "start" : "end"; })
+                    .attr("transform", function(d) { return d.x < 180 ? "translate(8)" : "rotate(180)translate(-8)"; })
+                    .text(function(d) { return d.name; });
+
 
 $('svg .inner').tipsy({ 
         gravity: 'w', 
@@ -970,18 +976,59 @@ $('svg .inner').tipsy({
           }       
       });
 
-function highlightLinks(selectedNode)
+function highlightChildLinks(selectedNode)
 {
     var name = selectedNode.name;
     
     link.each( function(o) {     
         if(o.source.name === name)
         {
-            console.log("TRUE");
-            d3.select(this).style("stroke","red");
+           
+            d3.select(this).style("stroke","red")
+            // node.each( function(j) {
+            //     if(j.name === o.target.name)
+            //     {
+            //         alert(o.target.name)
+            //         $(this).tipsy("show");
+            //     }
+            // });
         }        
-    })
+    });
 }
+
+
+function highlightParentLinks(leafNode)
+{
+    var name = leafNode.name;
+
+    highlight(name);
+
+ 
+}
+
+function highlight(target)
+{
+    var sourceName = "";
+    if(target !== "Bacteria")
+    {
+
+    link.each( function(o)
+    {
+
+    if(o.target.name === target)
+        {
+           
+            d3.select(this).style("stroke","red")
+            sourceName = o.source.name;
+        }
+
+        
+    });
+    
+    highlight(sourceName);
+    }
+}
+
 
 })();
 </script>
