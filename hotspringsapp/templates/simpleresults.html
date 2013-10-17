@@ -14,8 +14,10 @@
     var min = 0;
 	function loadMarkers()
 	{
-		{% for pos in entries.items %}		
+		{% for pos in entries.items %}	
+			{% if pos.location.access != "PRIVATE" %}	
 			addInfoWindowMarker("{{pos.location.feature_system}}", "{{pos.location.lat}}", "{{pos.location.lng}}", "{{pos.location.feature_name}}", "{{pos.location.description}}", mainMap);
+			{% endif %}
 		{% endfor %}
 	}
 

@@ -20,7 +20,9 @@
 
 	$(function()
 	{
+		{% if sample_site.location.access != "PRIVATE" %}
 		var sampleSiteMap = setupMap("show_map");
+
 		var markerPosition = new  google.maps.LatLng({{sample_site.location.lat}},{{sample_site.location.lng}});		
 
 		addInfoWindowMarker("{{sample_site.location.feature_system}}",
@@ -30,7 +32,7 @@
 							"{{sample_site.location.description}}",
 							sampleSiteMap)
 		
-		
+		{% endif %}
 		$('img').tooltip();
 
 
@@ -68,11 +70,16 @@
 				
 			<table class="descTable" >					
 				<tr>
-					<td>			
+					<td>						
 						<h5 style="margin-top:0px;" >Location: </h5> 
 					</td>
 					<td style="text-align:left;">
-						<p>{{sample_site.location.feature_system}}</p>
+						{% if sample_site.location.access != "PRIVATE" %}
+							<p>{{sample_site.location.feature_system}}</p>
+						{% else %}
+							<p style="text-align:center"> Private Property </p>							
+						{% endif %}	
+						
 					</td>				
 				</tr>
 				<tr>
@@ -109,7 +116,15 @@
 		
 
 <div class="span5">
-	<div id="show_map"></div>
+	{% if sample_site.location.access != "PRIVATE" %}
+		<div id="show_map"></div>
+	{% else %}
+		<div id="map_placeholder">
+
+			<p style="text-align:center"> Private Property </p>
+
+		</div>
+	{% endif %}
 
 	<div class="divider"></div>
 	<div>
