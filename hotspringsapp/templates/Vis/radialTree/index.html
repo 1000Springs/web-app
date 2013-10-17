@@ -13,6 +13,13 @@
   stroke-width: 4px;
 } 
 
+.selected
+{
+    stroke:red;
+    stroke-width:4px;
+    fill:none;
+}   
+
 .node {
   font: 12px sans-serif;
 }
@@ -26,7 +33,8 @@
 </style>
 
  <script type="text/javascript">
-(function(){
+(function()
+{
 var radius = 960 / 2;
 
 var cluster = d3.layout.cluster()
@@ -924,17 +932,21 @@ var root = {
       .attr("class", "link")
       .attr("d", diagonal);
 
+
   var node = svg.selectAll("g.node")
       .data(nodes)
     .enter().append("g")
+    .on("mouseout", function(){d3.selectAll(".link").style("stroke","#ccc")}) 
+    .on("mouseover",function(n) { highlightLinks(n)}) 
       .attr("class", function(n) {
           if (n.children) {
             return "inner node"
           } else {
             return "leaf node"
           }
-        })
-      .attr("transform", function(d) { return "rotate(" + (d.x - 90) + ")translate(" + d.y + ")"; });
+        }).attr("transform", function(d) { return "rotate(" + (d.x - 90) + ")translate(" + d.y + ")"; });        
+       
+
   
 
 
@@ -958,8 +970,18 @@ $('svg .inner').tipsy({
           }       
       });
 
+function highlightLinks(selectedNode)
+{
+    var name = selectedNode.name;
+    
+    link.each( function(o) {     
+        if(o.source.name === name)
+        {
+            console.log("TRUE");
+            d3.select(this).style("stroke","red");
+        }        
+    })
+}
 
-
-d3.select(self.frameElement).style("height", radius * 2 + "px");
 })();
 </script>
