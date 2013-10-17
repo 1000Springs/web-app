@@ -30,7 +30,7 @@
 
 	<li class="span2">
     	<a href="{{url_for('samplesite', site_id=image.Sample.location_id)}}" class="thumbnail">
-      		<img data-src="holder.js/160x120" src="{{url_for('static', filename=image.image_path)}}">
+      		<img data-src="holder.js/160x120" src="{{image.image_path}}">
     	</a>
 	</li>
 

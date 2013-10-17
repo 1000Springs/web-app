@@ -164,13 +164,12 @@ def simpleresults(page = 1, showAll = None):
 	for l in listOfAllLocations:		
 		latestSampleIds.append(l.latestSample().id)
 
-
 	latestFilteredSamples = Sample.query.filter(Physical_data.id == Sample.phys_id,
 												Physical_data.initialTemp>= minTemp,
 												Physical_data.initialTemp < maxTemp,
-												Sample.location_id == Location.id,
-												Sample.id.in_(latestSampleIds)).order_by(Sample.location_id,Sample.date_gathered.desc()).group_by(Sample.location_id)
-
+												Sample.location_id == Location.id,																																											
+												Sample.id.in_(latestSampleIds)
+												)
 
 
 	if "city" in request.args:
@@ -186,6 +185,7 @@ def simpleresults(page = 1, showAll = None):
 		resultsPerPage = latestFilteredSamples.count()
 	else:
 		resultsPerPage = app.config["RESULTS_PER_PAGE"]	
+
 
 	latestFilteredSamples = latestFilteredSamples.paginate(page,resultsPerPage,False)
 	
@@ -214,12 +214,13 @@ def simpleresults(page = 1, showAll = None):
 												pieChart=pieChart
 												)
 
+
 @app.route('/searchbyimage')
 @app.route('/searchbyimage/<int:page>')
 @app.route('/searchbyimage/<showAll>')
 def searchbyimage(page = 1,showAll = None):
 
-	imageList = Image.query.filter(Image.sample_id == Sample.id).group_by(Sample.location_id)
+	imageList = Image.query.filter(Image.sample_id == Sample.id, Image.image_type == "BESTPHOTO").group_by(Sample.location_id)
 
 	imagesPerPage = app.config['IMAGES_PER_PAGE']
 

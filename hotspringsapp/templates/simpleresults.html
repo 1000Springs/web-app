@@ -167,7 +167,7 @@ input[type=checkbox]
 	
 
 
-<div class="span3 bodytype contrast" style="height:676px;">	
+<div class="span3 bodytype contrast" style="height:936px;">	
 	
 
 	<form action="{{url_for('simpleresults')}}">
@@ -234,8 +234,16 @@ input[type=checkbox]
 		<tr>
 			<td>
 				<div class="span2">
-					<img style="padding-top:10px" src="{{ url_for('static', filename=entry.image[0].image_path) }}">
-					
+
+					<!-- I must apologise for this, I could not for the life of me get it to filter by "BESTPHOTO"
+						 I tried (almost) everything, tears were shed...It got ugly
+						 it has something to do with the one to many relationship between Sample and Image
+						 because it works fine when filtering just using the Image table, that's all I got-->
+					{% for image in entry.image %}
+						{% if image.image_type == "BESTPHOTO" %}
+							<img style="padding-top:10px" src="{{image.image_path}}">
+						{% endif %}						
+					{% endfor %}
 				</div>
 				<div class="span5">
 					<ul class="unstyled">
