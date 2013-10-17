@@ -263,15 +263,15 @@ def samplesite(site_id):
 
 
 	# app.logger.debug(json)
+	if latestSample.chem is not None:
+		for e in latestSample.chem.returnElements():
+			json["children"][0]["children"].append({"name":e[0], "children":[{"name":e[0],"size":e[1]}]})
 
-	for e in latestSample.chem.returnElements():
-		json["children"][0]["children"].append({"name":e[0], "children":[{"name":e[0],"size":e[1]}]})
+		for e in latestSample.chem.returnGases():
+			json["children"][1]["children"].append({"name":e[0],"size":e[1]})
 
-	for e in latestSample.chem.returnGases():
-		json["children"][1]["children"].append({"name":e[0],"size":e[1]})
-
-	for e in latestSample.chem.returnCompounds():
-		json["children"][2]["children"].append({"name":e[0],"size":e[1]})
+		for e in latestSample.chem.returnCompounds():
+			json["children"][2]["children"].append({"name":e[0],"size":e[1]})
 		
 
 	# app.logger.debug(json["children"][0]["children"])
