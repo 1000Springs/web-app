@@ -179,6 +179,8 @@
 				    <div class="accordion-inner" id="bubbles">
 				    	{% if sample_site.chem != None %}
 				       {% include "Vis/bubblechart/zoomable.html" %}
+				       {% else %}
+				       <p> Chemical data not yet available </p>
 				       {% endif %}
 				    </div>
 			    </div>
