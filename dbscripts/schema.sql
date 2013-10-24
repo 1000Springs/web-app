@@ -82,17 +82,19 @@ CREATE TABLE `physical_data` (
   `sampleTemp` double DEFAULT NULL,
   `soilCollected` tinyint(1) DEFAULT NULL,
   `waterColumnCollected` tinyint(1) DEFAULT NULL,
+  `gasVolume` double DEFAULT NULL,
   PRIMARY KEY (`id`)
 );
 
 CREATE TABLE `sample` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `sample_number` varchar(10),
+  `sample_number` varchar(10) NOT NULL,
   `date_gathered` datetime NOT NULL,
   `location_id` int(11) DEFAULT NULL,
   `phys_id` int(11) DEFAULT NULL,
   `sampler` varchar(50) NOT NULL,
   `chem_id` int(11) DEFAULT NULL,
+  `comments` varchar(200) DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `FK_SAMPLE_location` (`location_id`),
   KEY `FK_SAMPLE_phys` (`phys_id`),
@@ -100,6 +102,7 @@ CREATE TABLE `sample` (
   CONSTRAINT `FK_SAMPLE_chem` FOREIGN KEY (`chem_id`) REFERENCES `chemical_data` (`id`),
   CONSTRAINT `FK_SAMPLE_location` FOREIGN KEY (`location_id`) REFERENCES `location` (`id`),
   CONSTRAINT `FK_SAMPLE_phys` FOREIGN KEY (`phys_id`) REFERENCES `physical_data` (`id`)
+  UNIQUE KEY `sample_number` (`sample_number`)
 );
 
 CREATE TABLE `taxonomy` (
