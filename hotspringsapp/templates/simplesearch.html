@@ -28,6 +28,11 @@
     $('.chosen-select').append('<option value="{{sites.location.feature_system}}">{{sites.location.feature_system}}</option>');
     {% endfor %}
     $('.chosen-select').trigger("chosen:updated");
+
+$('.accordion').on('show hide', function (n) 
+    {
+      $(n.target).siblings('.accordion-heading').find('.accordion-toggle i').toggleClass('icon-chevron-up icon-chevron-down');
+    });
  });
 
 </script>
@@ -43,10 +48,10 @@ display: none;
 {% endblock %}
 {% block content %}
 <div class="row-fluid">
- <div class="title">
-      <h2> search for springs </h2>
-    </div>
-   <div class="bodytype span6 contrast" >
+  <div class="title">
+    <h2> search for springs </h2>
+  </div>
+  <div class="bodytype span6 contrast" >
 
        <form action="{{ url_for('simpleresults', filter='city')}}">
       <div style="background-color:rgba(29,155,171,0.75);padding:10px;border-radius:10px">
@@ -78,8 +83,7 @@ display: none;
               </td>           
          </tr>
          <tr>
-            <th style="text-align:left;margin:10px 0"> Temperature </th>
-            
+            <th style="text-align:left;margin:10px 0"> Temperature </th>            
          </tr>
          <tr>
             <td>     
@@ -96,8 +100,21 @@ display: none;
                </div>
             </td>
          </tr>
+         </table>
+
+<div class="accordion" id="accordion2" style="margin-top:15px;">
+  <div class="accordion-group" style="border:none;">
+    <div class="accordion-heading" style="background-color:transparent;">
+      <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#collapseOne">
+        <i class="icon-chevron-down"></i>
+        Show Advanced
+      </a>
+    </div>
+    <div id="collapseOne" class="accordion-body collapse">
+      <div class="accordion-inner" style="border:none">
+        <table style="width:100%">
          <tr>
-            <th style="text-align:left;margin:10px 0"> pH <button class="btn btn-small" type="button" id="phHide"> hide </button></th>
+            <th style="text-align:left;margin:10px 0"> pH </th>
          </tr>
          <tr>
             <td>     
@@ -106,7 +123,7 @@ display: none;
             </td>                    
          </tr>
          <tr>
-            <th style="text-align:left;margin:10px 0"> Saltiness <button class="btn btn-small" type="button" id="saltHide"> hide </button> </th>
+            <th style="text-align:left;margin:10px 0"> Saltiness </th>
             
          </tr>
          <tr>
@@ -116,7 +133,7 @@ display: none;
             </td>                    
          </tr>
          <tr>
-            <th style="text-align:left;margin:10px 0"> Clarity <button class="btn btn-small" type="button" id="clarityHide"> hide </button> </th>
+            <th style="text-align:left;margin:10px 0"> Clarity </th>
             
          </tr>
          <tr>
@@ -128,6 +145,10 @@ display: none;
         
 
       </table>
+         </div>
+    </div>
+  </div>
+    </div>
 
     </div>
  <input type="submit" value="Search" class="btn btn-large colourClick" style="margin:35px 0 0 40%;  width: 100px;height: 100px;  border-radius: 50px;">
