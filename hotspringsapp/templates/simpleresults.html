@@ -156,7 +156,7 @@ input[type=checkbox]
 {% endblock %}
 {% block content %}
 <div class="contrast" style="height:73px;position:relative;background-color:rgba(29,155,171,0.5); ">
-<h2 style="padding:25px 15px 0 15px; margin:0; float:left; ">Springs</h2>
+<h2 style="padding:25px 15px 0 15px; margin:0; float:left; ">search results</h2>
 <div align="right">
 	<input type="button" value="Enlarge Map" id="expandMap" style="margin:37px 5px 0 0">	
 	<input type="button" value="Enlarge Graph" id="expandGraph" style="margin:37px 5px 0 0">	
@@ -231,7 +231,7 @@ input[type=checkbox]
 <div style="height:5px;position:relative;background-color:rgb(255,255,255)">
 
 </div>
-	<table class="table" >
+	<table class="table table-hover" >
 				{% for entry in entries.items %}
 		<tr>
 			<td>
@@ -249,7 +249,11 @@ input[type=checkbox]
 				</div>
 				<div class="span5">
 					<ul class="unstyled">
-						<li>	<h4 class="feature_name" style="margin-bottom:0"> {{entry.location.feature_name}} </h4></li>
+						<li>	
+							<a href="{{url_for('samplesite',site_id=entry.location_id)}}" style="text-decoration:none;" >
+								<h4 class="feature_name" style="margin-bottom:0"> {{entry.location.feature_name}} </h4>
+							</a>
+						</li>
 						<li> <p><em> {{ entry.location.feature_system }} </em></p> </li>	
 
 
