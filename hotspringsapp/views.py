@@ -59,8 +59,9 @@ def simplesearch():
 
 	tempRanges = dict(minTemp = 0,maxTemp = maxTemp)
 	form = SearchForm(filters = 'all')
-	locations = Sample.query.filter(Sample.location_id == Location.id).group_by(Sample.location_id).all()	
-	
+	locations = Sample.query.filter(Sample.location_id == Location.id).group_by(Location.feature_system)
+
+
 	return render_template('simplesearch.html',form=form, tempRanges=tempRanges,locations=locations)
 	
 # @app.route('/results')
