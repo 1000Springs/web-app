@@ -187,7 +187,7 @@ def simpleresults(page = 1, showAll = None):
 		resultsPerPage = app.config["RESULTS_PER_PAGE"]	
 
 
-	latestFilteredSamples = latestFilteredSamples.paginate(page,resultsPerPage,False)
+	paginatedSamples = latestFilteredSamples.paginate(page,resultsPerPage,False)
 	
 	form = SearchForm()
 
@@ -195,19 +195,19 @@ def simpleresults(page = 1, showAll = None):
 
 	count = {'1-25':0,'26-50':0,'51-75':0,'76-100':0}
 	pieChart = []
-	for t in phys_data:
-		if t.initialTemp >= 1 and t.initialTemp <= 25:
+	for s in latestFilteredSamples:
+		if s.phys.initialTemp >= 1 and s.phys.initialTemp <= 25:
 			count["1-25"] +=1
-		if t.initialTemp >= 26 and t.initialTemp <= 50:
+		if s.phys.initialTemp >= 26 and s.phys.initialTemp <= 50:
 			count["26-50"] +=1
-		if t.initialTemp >= 51 and t.initialTemp <= 75:
+		if s.phys.initialTemp >= 51 and s.phys.initialTemp <= 75:
 			count["51-75"] +=1
-		if t.initialTemp >= 76 and t.initialTemp <= 100:
+		if s.phys.initialTemp >= 76 and s.phys.initialTemp <= 100:
 			count["76-100"] +=1
 
 	pieChart = [dict(range=k,count=v) for k,v in zip(count.keys(),count.values())]
 
-	return render_template('simpleresults.html',entries=latestFilteredSamples,
+	return render_template('simpleresults.html',entries=paginatedSamples,
 												form=form,
 												minTemp=minTemp,
 												maxTemp=maxTemp,												
