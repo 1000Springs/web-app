@@ -239,31 +239,15 @@ def ourscience():
 
 @app.route('/samplesite/<int:site_id>')
 def samplesite(site_id):	
-
-
 	
 	locationSamples = Sample.query.filter(Location.id == Sample.location_id, Location.id == site_id)
 
 	latestSample = locationSamples.order_by(Sample.date_gathered.desc()).first()
 	
-	# app.logger.debug(latestSample.location.locationSamples())
-	# siteInfo = dict(location_id=latestSample.location_id,
-	# 				feature_name=latestSample.location.feature_name,
-	# 				city=latestSample.location.feature_system, 
-	# 				desc=latestSample.location.description, 
-	# 				temp=latestSample.phys.initialTemp, 
-	# 				lat=latestSample.location.lat,
-	# 				lng=latestSample.location.lng, 
-	# 				toilet=latestSample.location.toilet, 
-	# 				parkbench=latestSample.location.toilet, 
-	# 				track=latestSample.location.toilet, 
-	# 				private=latestSample.location.toilet)
-					
-	# app.logger.debug(latestSample.chem.returnElements())
 	json = {"name":"", "children":[{"name":"Elements", "children":[]},{"name":"Gases","children":[]},{"name":"Compounds","children":[]}]};	
 
 
-	# app.logger.debug(json)
+	
 	if latestSample.chem is not None:
 		for e in latestSample.chem.returnElements():
 			json["children"][0]["children"].append({"name":e[0], "children":[{"name":e[0],"size":e[1]}]})
@@ -272,20 +256,13 @@ def samplesite(site_id):
 			json["children"][1]["children"].append({"name":e[0],"size":e[1]})
 
 		for e in latestSample.chem.returnCompounds():
-			json["children"][2]["children"].append({"name":e[0],"size":e[1]})
-		
+			json["children"][2]["children"].append({"name":e[0],"size":e[1]})		
 
-	# app.logger.debug(json["children"][0]["children"])
-	# app.logger.debug(json["children"][1]["children"])
 
-	images = [dict(imagepath=s.image_path) for s in latestSample.image]	
 
 	
-	return render_template('samplesite.html',sample_site=latestSample,
-											 images=images,
-											 json=json)
-											 # old = siteInfo)
-	 
+	return render_template('samplesite.html',sample_site=latestSample,											 
+											 json=json)	 
 
 
 @app.route("/sotd")

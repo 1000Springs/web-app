@@ -146,12 +146,14 @@
 				<div id="thumbs" class="navigation">
 
 					<ul class="thumbs noscript">
-						{% for image in images %}
+						{% for image in sample_site.image %}
+							{% if image.image_type != "BESTSKETCH" %}
 							<li>
-								<a class="thumb" name="leaf" href="{{image.imagepath}}">
-									<img src="{{image.imagepath}}"/>
+								<a class="thumb" name="leaf" href="{{image.image_path}}">
+									<img src="{{image.image_path}}"/>
 								</a>
-							</li>						
+							</li>
+							{% endif %}					
 						{% endfor %}					
 					</ul>
 
