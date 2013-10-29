@@ -51,6 +51,7 @@ CREATE TABLE `chemical_data` (
 
 CREATE TABLE `location` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
+  `observation_id` varchar(80) DEFAULT NULL,
   `feature_name` varchar(60) DEFAULT NULL,
   `lat` double DEFAULT NULL,
   `lng` double DEFAULT NULL,
@@ -63,7 +64,7 @@ CREATE TABLE `location` (
   `colour` varchar(50) DEFAULT NULL,
   `access` varchar(15) DEFAULT NULL,
   PRIMARY KEY (`id`),
-  UNIQUE KEY `feature_name` (`feature_name`)
+  UNIQUE KEY `observation_id` (`observation_id`)
 ) ;
 
 CREATE TABLE `physical_data` (
