@@ -15,11 +15,11 @@
 
 {% block content %}
 
-<div style="height:73px;position:relative;background-color:rgba(29,155,171,0.5); ">
+
 	<div class="title">
 		<h2> browse by image </h2>
 	</div>
-</div>
+
 <div class="divider"></div>
 <div style="position:relative; padding-left:40px; background:#fff;">
 
@@ -30,7 +30,7 @@
 
 	<li class="span2">
     	<a href="{{url_for('samplesite', site_id=image.Sample.location_id)}}" class="thumbnail">
-      		<img data-src="holder.js/160x120" src="{{url_for('static', filename=image.image_path)}}">
+      		<img data-src="holder.js/160x120" src="{{image.image_path}}">
     	</a>
 	</li>
 

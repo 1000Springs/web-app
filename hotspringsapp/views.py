@@ -59,8 +59,9 @@ def simplesearch():
 
 	tempRanges = dict(minTemp = 0,maxTemp = maxTemp)
 	form = SearchForm(filters = 'all')
-	locations = Sample.query.filter(Sample.location_id == Location.id).group_by(Sample.location_id).all()	
-	
+	locations = Sample.query.filter(Sample.location_id == Location.id).group_by(Location.feature_system)
+
+
 	return render_template('simplesearch.html',form=form, tempRanges=tempRanges,locations=locations)
 	
 # @app.route('/results')
@@ -164,13 +165,12 @@ def simpleresults(page = 1, showAll = None):
 	for l in listOfAllLocations:		
 		latestSampleIds.append(l.latestSample().id)
 
-
 	latestFilteredSamples = Sample.query.filter(Physical_data.id == Sample.phys_id,
 												Physical_data.initialTemp>= minTemp,
 												Physical_data.initialTemp < maxTemp,
-												Sample.location_id == Location.id,
-												Sample.id.in_(latestSampleIds)).order_by(Sample.location_id,Sample.date_gathered.desc()).group_by(Sample.location_id)
-
+												Sample.location_id == Location.id,																																											
+												Sample.id.in_(latestSampleIds)
+												)
 
 
 	if "city" in request.args:
@@ -187,7 +187,8 @@ def simpleresults(page = 1, showAll = None):
 	else:
 		resultsPerPage = app.config["RESULTS_PER_PAGE"]	
 
-	latestFilteredSamples = latestFilteredSamples.paginate(page,resultsPerPage,False)
+
+	paginatedSamples = latestFilteredSamples.paginate(page,resultsPerPage,False)
 	
 	form = SearchForm()
 
@@ -195,31 +196,32 @@ def simpleresults(page = 1, showAll = None):
 
 	count = {'1-25':0,'26-50':0,'51-75':0,'76-100':0}
 	pieChart = []
-	for t in phys_data:
-		if t.initialTemp >= 1 and t.initialTemp <= 25:
+	for s in latestFilteredSamples:
+		if s.phys.initialTemp >= 1 and s.phys.initialTemp <= 25:
 			count["1-25"] +=1
-		if t.initialTemp >= 26 and t.initialTemp <= 50:
+		if s.phys.initialTemp >= 26 and s.phys.initialTemp <= 50:
 			count["26-50"] +=1
-		if t.initialTemp >= 51 and t.initialTemp <= 75:
+		if s.phys.initialTemp >= 51 and s.phys.initialTemp <= 75:
 			count["51-75"] +=1
-		if t.initialTemp >= 76 and t.initialTemp <= 100:
+		if s.phys.initialTemp >= 76 and s.phys.initialTemp <= 100:
 			count["76-100"] +=1
 
 	pieChart = [dict(range=k,count=v) for k,v in zip(count.keys(),count.values())]
 
-	return render_template('simpleresults.html',entries=latestFilteredSamples,
+	return render_template('simpleresults.html',entries=paginatedSamples,
 												form=form,
 												minTemp=minTemp,
 												maxTemp=maxTemp,												
 												pieChart=pieChart
 												)
 
+
 @app.route('/searchbyimage')
 @app.route('/searchbyimage/<int:page>')
 @app.route('/searchbyimage/<showAll>')
 def searchbyimage(page = 1,showAll = None):
 
-	imageList = Image.query.filter(Image.sample_id == Sample.id).group_by(Sample.location_id)
+	imageList = Image.query.filter(Image.sample_id == Sample.id, Image.image_type == "BESTPHOTO").group_by(Sample.location_id)
 
 	imagesPerPage = app.config['IMAGES_PER_PAGE']
 
@@ -238,53 +240,30 @@ def ourscience():
 
 @app.route('/samplesite/<int:site_id>')
 def samplesite(site_id):	
-
-
 	
 	locationSamples = Sample.query.filter(Location.id == Sample.location_id, Location.id == site_id)
 
 	latestSample = locationSamples.order_by(Sample.date_gathered.desc()).first()
 	
-	# app.logger.debug(latestSample.location.locationSamples())
-	# siteInfo = dict(location_id=latestSample.location_id,
-	# 				feature_name=latestSample.location.feature_name,
-	# 				city=latestSample.location.feature_system, 
-	# 				desc=latestSample.location.description, 
-	# 				temp=latestSample.phys.initialTemp, 
-	# 				lat=latestSample.location.lat,
-	# 				lng=latestSample.location.lng, 
-	# 				toilet=latestSample.location.toilet, 
-	# 				parkbench=latestSample.location.toilet, 
-	# 				track=latestSample.location.toilet, 
-	# 				private=latestSample.location.toilet)
-					
-	# app.logger.debug(latestSample.chem.returnElements())
 	json = {"name":"", "children":[{"name":"Elements", "children":[]},{"name":"Gases","children":[]},{"name":"Compounds","children":[]}]};	
 
 
-	# app.logger.debug(json)
+	
+	if latestSample.chem is not None:
+		for e in latestSample.chem.returnElements():
+			json["children"][0]["children"].append({"name":e[0], "children":[{"name":e[0],"size":e[1]}]})
 
-	for e in latestSample.chem.returnElements():
-		json["children"][0]["children"].append({"name":e[0], "children":[{"name":e[0],"size":e[1]}]})
+		for e in latestSample.chem.returnGases():
+			json["children"][1]["children"].append({"name":e[0],"size":e[1]})
 
-	for e in latestSample.chem.returnGases():
-		json["children"][1]["children"].append({"name":e[0],"size":e[1]})
+		for e in latestSample.chem.returnCompounds():
+			json["children"][2]["children"].append({"name":e[0],"size":e[1]})		
 
-	for e in latestSample.chem.returnCompounds():
-		json["children"][2]["children"].append({"name":e[0],"size":e[1]})
-		
 
-	# app.logger.debug(json["children"][0]["children"])
-	# app.logger.debug(json["children"][1]["children"])
-
-	images = [dict(imagepath=s.image_path) for s in latestSample.image]	
 
 	
-	return render_template('samplesite.html',sample_site=latestSample,
-											 images=images,
-											 json=json)
-											 # old = siteInfo)
-	 
+	return render_template('samplesite.html',sample_site=latestSample,											 
+											 json=json)	 
 
 
 @app.route("/sotd")

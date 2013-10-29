@@ -55,26 +55,6 @@ function presetTemp(id,low,high)
    });  
 }
 
-function hideSlider(button,slider)
-{  
-
-
-  $(button).click(function()
-  {
-    if($(slider).is(":visible"))
-    {
-      $(button).html("show")
-      $(slider).hide("fast");
-    }
-    else
-    {
-      $(button).html("hide")
-      $(slider).show("fast");
-    }
-  });
-}
-
-
 //Setting up preset temperature ranges
 $(function()
 {
@@ -82,14 +62,6 @@ $(function()
 presetTemp("#safe",minTemp,35);
 presetTemp("#unsafe",36,maxTemp);
 presetTemp("#hottest",Math.ceil(maxTemp*0.90),maxTemp);
-
-hideSlider("#phHide","#pHSlider");
-hideSlider("#saltHide","#saltSlider");
-hideSlider("#clarityHide","#claritySlider");
-
-$("#phHide").trigger("click");
-$("#saltHide").trigger("click");
-$("#clarityHide").trigger("click");
 
 });
 

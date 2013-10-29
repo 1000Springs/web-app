@@ -20,7 +20,9 @@
 
 	$(function()
 	{
+		{% if sample_site.location.access != "PRIVATE" %}
 		var sampleSiteMap = setupMap("show_map");
+
 		var markerPosition = new  google.maps.LatLng({{sample_site.location.lat}},{{sample_site.location.lng}});		
 
 		addInfoWindowMarker("{{sample_site.location.feature_system}}",
@@ -30,7 +32,7 @@
 							"{{sample_site.location.description}}",
 							sampleSiteMap)
 		
-		
+		{% endif %}
 		$('img').tooltip();
 
 
@@ -51,47 +53,33 @@
 {% block content %}
 
 
-	<div class="row-fluid contrast" style="height:73px;position:relative;background-color:rgba(29,155,171,0.5);padding-left:15px">
-		
-		<h2>{{sample_site.location.feature_name}}</h2>	
-		
-		
+	<div class="title">
 
-		
+		<h2>{{sample_site.location.feature_name}}</h2>
+
 	</div>
 
-	<div class="divider"></div>
+<div class="divider"></div>
 
-<div class="row-fluid" style="position:relative;background-color:white">
-	<div class="span7">	
+<div class="row-fluid" style="position:relative;background-color:white;">
+	<div class="span7">			
 		
-		
-		<p>{{sample_site.location.description}}</p>
-		<div>
-
+		<p>{{sample_site.location.description}}</p> 
 			
-			<div class="span12">
-				<div class="mediumIcons" >				
-					{% if sample_site.location.toilet %}
-						<img src="{{url_for('static',filename='img/icons/results_list/toilet.png')}}" rel="tooltip" data-original-title="Toilets available" >
-					{% endif %}
-					{% if sample_site.location.track %}
-						<img src="{{url_for('static',filename='img/icons/results_list/track.png')}}" rel="tooltip" data-original-title="Walking track available" >
-					{% endif %}
-					{% if sample_site.location.parkbench %}
-						<img src="{{url_for('static',filename='img/icons/results_list/bench.png')}}" rel="tooltip" data-original-title="Park benches available">
-					{% endif %}
-					{% if sample_site.location.private %}
-						<img src="{{url_for('static',filename='img/icons/results_list/private.png')}}" rel="tooltip" data-original-title="Private Property" >
-					{% endif %}
-				</div>	
-			<table class="descTable" >				
+			
+				
+			<table class="descTable" >					
 				<tr>
-					<td >			
+					<td>						
 						<h5 style="margin-top:0px;" >Location: </h5> 
 					</td>
 					<td style="text-align:left;">
-						<p>{{sample_site.location.feature_system}}</p>
+						{% if sample_site.location.access != "PRIVATE" %}
+							<p>{{sample_site.location.feature_system}}</p>
+						{% else %}
+							<p style="text-align:center"> Private Property </p>							
+						{% endif %}	
+						
 					</td>				
 				</tr>
 				<tr>
@@ -103,166 +91,121 @@
 					</td>
 				</tr>
 				<tr>
-					<td >			
+					<td>			
 						<h5 style="margin-top:0px;" >Temperature: </h5> 
 					</td>
-					<!-- <td >
-						<p class="unitText" > 1°C </p>
-					</td> -->
-					<td style="text-align:left;">
-						<!-- <div class="progress">
-							<div class="bar" style="width:{{sample_site.phys.initialTemp}}%;"> -->
-								<p> {{sample_site.phys.initialTemp}}°C </p>
-							<!-- </div> -->
-						</div>
-						<!-- <p class="unitText"> 100°C </p>	 -->		
+
+					<td style="text-align:left;">						
+						<p> {{sample_site.phys.initialTemp}}°C </p>	
 					</td>
 				</tr>
 				<tr>
-					<td >			
+					<td>			
 						<h5 style="margin-top:0px;" >Redox: </h5> 
 					</td>
-					<!-- <td >
-						<p class="unitText"> 1mV </p>
-					</td> -->
-					<td style="text-align:left;">
-						<!-- <div class="progress">
-							<div class="bar" style="width:{{sample_site.phys.redox}}%;"> -->
-								<p> {{sample_site.phys.redox}}mV </p>
-						<!-- 	</div> -->
-						</div>
-						<!-- <p class="unitText" > 100mV </p>		 -->
+
+					<td style="text-align:left;">						
+						<p> {{sample_site.phys.redox}}mV </p>
 					</td>
 				</tr>
 		
 			</table>
-			</div>
-		
-			
-			</div>
-			
+					
 	</div>
-			
 		
-				<!-- Start Advanced Gallery Html Containers -->
-				<div class="span5">
-				<div id="show_map"></div>
+		
 
-		<div class="divider"></div>
-		<div>
-			<div id="gallery" class="content">
-					
-					<div class="slideshow-container">
-					
-						<div id="slideshow" class="slideshow"></div>
-					</div>
-					
-				</div>
-				<div class="row-fluid">
-				<div class="span1">
+<div class="span5">
+	{% if sample_site.location.access != "PRIVATE" %}
+		<div id="show_map"></div>
+	{% else %}
+		<div id="map_placeholder">
+
+			<p style="text-align:center"> Private Property </p>
+
+		</div>
+	{% endif %}
+
+	<div class="divider"></div>
+	<div>
+		<div id="gallery" class="content">
+
+			<div class="slideshow-container">
+
+				<div id="slideshow" class="slideshow"></div>
+
+			</div>
+
+		</div>
+		<div class="row-fluid">
+			<div class="span1">
 				<div id="backward"><img src="{{url_for('static', filename='img/icons/previous.png')}}" style="margin-top:25px;cursor:pointer;"></div>
-				</div>
-				
-				<div class="span10">
+			</div>
+
+			<div class="span10">
 				<div id="thumbs" class="navigation">
-				
+
 					<ul class="thumbs noscript">
-						{% for image in images %}
-						<li>
-							<a class="thumb" name="leaf" href="{{url_for('static', filename=image.imagepath)}}" title="{{image.imagename}}">
-								<img src="{{url_for('static', filename=image.imagepath)}}" alt="{{image.imagename}}" />
-							</a>
-
-						</li>
-
-						<li>
-							<a class="thumb" name="leaf" href="http://farm4.static.flickr.com/3261/2538183196_8baf9a8015.jpg" title="Title #0">
-								<img src="http://farm4.static.flickr.com/3261/2538183196_8baf9a8015_s.jpg" alt="Title #0" />
-							</a>							
-						</li>
-						{% endfor %}
-					
-						
+						{% for image in sample_site.image %}
+							{% if image.image_type != "BESTSKETCH" %}
+							<li>
+								<a class="thumb" name="leaf" href="{{image.image_path}}">
+									<img src="{{image.image_path}}"/>
+								</a>
+							</li>
+							{% endif %}					
+						{% endfor %}					
 					</ul>
-				
-				</div>
-				</div>
-				<div class="span1">
-					<div id="forward"><img src="{{url_for('static', filename='img/icons/next.png')}}" style="margin-top:25px;cursor:pointer;"></div>
+
 				</div>
 			</div>
-			</div>
+			<div class="span1">
+				<div id="forward"><img src="{{url_for('static', filename='img/icons/next.png')}}" style="margin-top:25px;cursor:pointer;"></div>
 			</div>
 		</div>
-		<div style="height:15px;position:relative;background-color:rgb(255,255,255)"></div>
-	
-
-			<!-- <a href="#myModal" role="button" class="btn" data-toggle="modal" style="float:right;" id="loginButton">Advanced</a> -->
-		 
-{% if session.logged_in %}
-	<div id="advanced">
-		<H1> HEY THERE! YOU CAN SEE ME BECAUSE YOU ARE LOGGED IN, GOOD FOR YOU! </h1>
 	</div>
-{% endif %}
-
-<!-- <div class="accordion" id="accordion2" style="margin:15px 0">
-  <div class="accordion-group">
-    <div class="accordion-heading">
-      <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#collapseOne">
-        Collapsible Group Item #1
-      </a>
-    </div>
-    <div id="collapseOne" class="accordion-body collapse">
-      <div class="accordion-inner">
-        Anim pariatur cliche...
-      </div>
-    </div>
-  </div>
-  <div class="accordion-group">
-    <div class="accordion-heading">
-      <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#collapseTwo">
-        Collapsible Group Item #2
-      </a>
-    </div>
-    <div id="collapseTwo" class="accordion-body collapse">
-      <div class="accordion-inner">
-        Anim pariatur cliche...
-      </div>
-    </div>
-  </div>
-</div> -->
-
-<div class="accordion">
-    <div class="accordion-group">
-        <div class="accordion-heading"> 
-            <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion1" href="#collapseOne">
-                <i class="icon-chevron-down"></i>
-                Collapsible Group Item #1
-            </a>
-        </div>
-    <div id="collapseOne" class="accordion-body collapse">
-	    <div class="accordion-inner" id="bubbles">
-	       {% include "Vis/bubblechart/zoomable.html" %}
-	    </div>
-    </div>
-    </div>
-
-    <div class="accordion-group">
-        <div class="accordion-heading"> 
-            <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#collapseTwo">
-                <i class="icon-chevron-down"></i>
-                Microbial Diversity
-            </a>
-        </div>    
-    <div id="collapseTwo" class="accordion-body collapse">
-	    <div class="accordion-inner" id="radialTree">
-	       {% include "Vis/radialTree/index.html" %}
-	    </div>
-    </div>
-    </div>
-
 </div>
+		
 
+
+	<div class="span12" style="margin:0">
+		<div class="accordion" style="position:relative;background-color:white">
+		    <div class="accordion-group">
+		        <div class="accordion-heading"> 
+		            <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion1" href="#collapseOne">
+		                <i class="icon-chevron-down"></i>
+		                Chemical Bubble Chart
+		            </a>
+		        </div>
+			    <div id="collapseOne" class="accordion-body collapse">
+				    <div class="accordion-inner" id="bubbles">
+				    	{% if sample_site.chem != None %}
+				       {% include "Vis/bubblechart/zoomable.html" %}
+				       {% else %}
+				       <p> Chemical data not yet available </p>
+				       {% endif %}
+				    </div>
+			    </div>
+		    </div>
+
+		    <div class="accordion-group">
+		        <div class="accordion-heading"> 
+		            <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#collapseTwo">
+		                <i class="icon-chevron-down"></i>
+		                Microbial Diversity
+		            </a>
+		        </div>    
+			    <div id="collapseTwo" class="accordion-body collapse">
+				    <div class="accordion-inner" id="radialTree">
+				    	<h1> Phylogenetic tree </h1>
+						<p> hover over tree to read more </p>
+				       {% include "Vis/radialTree/index.html" %}
+				    </div>
+			    </div>
+		    </div>
+		</div>
+	</div>
+</div>
 
 	<div id="myModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
 				  <!--<div class="modal-header">

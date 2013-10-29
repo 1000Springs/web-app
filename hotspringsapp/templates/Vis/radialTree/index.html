@@ -13,6 +13,13 @@
   stroke-width: 4px;
 } 
 
+.selected
+{
+    stroke:red;
+    stroke-width:4px;
+    fill:none;
+}   
+
 .node {
   font: 12px sans-serif;
 }
@@ -26,7 +33,11 @@
 </style>
 
  <script type="text/javascript">
-(function(){
+(function()
+{
+
+
+
 var radius = 960 / 2;
 
 var cluster = d3.layout.cluster()
@@ -924,29 +935,36 @@ var root = {
       .attr("class", "link")
       .attr("d", diagonal);
 
+
   var node = svg.selectAll("g.node")
       .data(nodes)
     .enter().append("g")
+    .on("mouseover",function(n) { highlightChildLinks(n)}) 
+    .on("mouseout", function(){d3.selectAll(".link").style("stroke","#ccc")})     
       .attr("class", function(n) {
           if (n.children) {
             return "inner node"
           } else {
             return "leaf node"
           }
-        })
-      .attr("transform", function(d) { return "rotate(" + (d.x - 90) + ")translate(" + d.y + ")"; });
+        }).attr("transform", function(d) { return "rotate(" + (d.x - 90) + ")translate(" + d.y + ")"; });        
+       
+
   
 
 
   node.append("circle")
       .attr("r", 4.5);
 
-  var endnodes = svg.selectAll(".leaf").append("text")
-      .attr("dy", ".31em")
-      .attr("text-anchor", function(d) { return d.x < 180 ? "start" : "end"; })
-      .attr("transform", function(d) { return d.x < 180 ? "translate(8)" : "rotate(180)translate(-8)"; })
-      .text(function(d) { return d.name; })
-      ;
+  var endnodes = svg.selectAll(".leaf")
+                    .on("mouseover",function(n) { highlightParentLinks(n)}) 
+                    .on("mouseout", function(){d3.selectAll(".link").style("stroke","#ccc")})     
+                    .append("text")
+                    .attr("dy", ".31em")
+                    .attr("text-anchor", function(d) { return d.x < 180 ? "start" : "end"; })
+                    .attr("transform", function(d) { return d.x < 180 ? "translate(8)" : "rotate(180)translate(-8)"; })
+                    .text(function(d) { return d.name; });
+
 
 $('svg .inner').tipsy({ 
         gravity: 'w', 
@@ -958,8 +976,59 @@ $('svg .inner').tipsy({
           }       
       });
 
+function highlightChildLinks(selectedNode)
+{
+    var name = selectedNode.name;
+    
+    link.each( function(o) {     
+        if(o.source.name === name)
+        {
+           
+            d3.select(this).style("stroke","red")
+            // node.each( function(j) {
+            //     if(j.name === o.target.name)
+            //     {
+            //         alert(o.target.name)
+            //         $(this).tipsy("show");
+            //     }
+            // });
+        }        
+    });
+}
 
 
-d3.select(self.frameElement).style("height", radius * 2 + "px");
+function highlightParentLinks(leafNode)
+{
+    var name = leafNode.name;
+
+    highlight(name);
+
+ 
+}
+
+function highlight(target)
+{
+    var sourceName = "";
+    if(target !== "Bacteria")
+    {
+
+    link.each( function(o)
+    {
+
+    if(o.target.name === target)
+        {
+           
+            d3.select(this).style("stroke","red")
+            sourceName = o.source.name;
+        }
+
+        
+    });
+    
+    highlight(sourceName);
+    }
+}
+
+
 })();
 </script>
