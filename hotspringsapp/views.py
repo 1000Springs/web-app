@@ -97,8 +97,8 @@ def simplesearch():
 	
 # 	return render_template('results.html', entries=entries)
 
-# @app.route('/mapresults')
-# def mapResults():
+@app.route('/mapresults')
+def mapResults():
 
 # 	cur = g.db.cursor()
 
@@ -118,7 +118,7 @@ def simplesearch():
 
 # 	cur.close();
 
-# 	return render_template('results.html',entries=entries)
+	return "Not working yet"
 	
 @app.route('/mapsearch')
 def mapsearch():
@@ -135,14 +135,14 @@ def mapsearch():
 # 					by location_feature_nc
 # 					having max(date_gathered))""")
 	
-# 	positions = [dict(lat=float(row[5]),lng=row[6],city=row[2],  desc=row[3], feature_name=row[1],id=row[0]) for row in cur.fetchall()]
+	# positions = [dict(lat=float(row[5]),lng=row[6],city=row[2],  desc=row[3], feature_name=row[1],id=row[0]) for row in cur.fetchall()]
 	
-# 	app.logger.debug(positions)
+	locations = Location.query.filter(Sample.location_id == Location.id)
 	
 # 	cur.close()
 
-# 	return render_template('mapsearch.html',positions=positions)
-	return "Coming Soon"
+	return render_template('mapsearch.html',positions=locations)
+	# return "Coming Soon"
 
 @app.route('/simpleresults')	
 @app.route('/simpleresults/<int:page>')

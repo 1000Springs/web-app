@@ -4,48 +4,54 @@
   {{ super() }}
       <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?sensor=true"></script>
     <script type="text/javascript" src="{{ url_for('static', filename='js/mapsearch.js') }}"></script>
+    <script type="text/javascript" src="{{ url_for('static', filename='js/maps.js') }}"></script>
 
 
 
 	<script type="text/javascript">
-	
+	var map;
 	
 	function loadMarkers()
 	{
-		{% for pos in positions %}
-		
-			addMarker("{{pos.city}}", "{{pos.eastings}}", "{{pos.northings}}", "{{pos.feature_name}}", "{{pos.desc}}", "{{pos.id}}");
+
+
+		{% for pos in positions %}	
+			{% if pos.access != "PRIVATE" %}	
+				addInfoWindowMarker("{{pos.feature_system}}", "{{pos.lat}}", "{{pos.lng}}", "{{pos.feature_name}}", "{{pos.description}}", map, '{{url_for("samplesite", site_id=pos.id)}}' );
+			{% endif %}
 		{% endfor %}
 	}
 
 	window.onload=function()
 	{
-		initialize();
+		map = setupMap("map_canvas");
+		map.zoom = 8;
 		loadMarkers();
 	};
 
 
-	$(function()
-	{		
-		MenuSelect("#browse","{{ url_for('static', filename='img/icons/browse_Selected.png') }}");
-		$("#browse .caret").css("border-top","4px solid white");
- });
-	});
+	
+	
 
 	</script>
 
 	
 {% endblock %}
 {% block content %}
-<h1>Map Search</h1>
+<div class="title">
+	<h2>Map Search</h2>
+</div>
 
-<div class="span8">
+<div class="row-fluid" style="position:relative">
+<div class="span1" style="background-color:rgba(29,155,171,0.5);height: 500px;">
+</div>
+<div class="span10">
 
 	<div id="map_canvas" style="height: 500px;" ></div>	
 
 </div>
 
-<div class="span4">
+<!-- <div class="span4">
 	<form action="{{url_for('mapResults')}}">
 	<div id="selected" class="bodytype" style="margin:0px">
 		<h3> Selected Springs </h3>
@@ -62,7 +68,11 @@
 	<input type="button" value="Wellington" style="display:block">
 	<input type="button" value="Hawke's Bay" style="display:block">
 
+</div> -->
+<div class="span1" style="background-color:rgba(29,155,171,0.5);height: 500px;">
 </div>
+</div>
+
 
 
 {% endblock %}
