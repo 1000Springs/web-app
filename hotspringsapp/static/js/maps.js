@@ -1,26 +1,29 @@
 
 var myLatlng;
-var markersArray = [];
 
-function addInfoWindowMarker(city, lat, lng, site_name, desc, map)
+
+function addInfoWindowMarker(city, lat, lng, site_name, desc, map,url)
 {
+    var link = "";
+    if(url !== null)
+    {
+      link = '<a href='+url + '> More Details </a>'
+    }
 
  var contentString = '<div id="content" style="height:100px">'+
     '<h5 id="firstHeading" class="firstHeading">'+site_name+'</h5>'+
     '<div id="bodyContent">'+
-    '<p class="muted">'+city+'</p>'+
+    '<p class="muted">'+city+'</p>' +   
+    link + 
     '</div>'+
-    '</div>'; 
+    '</div> '; 
 
 var infoWindow = new google.maps.InfoWindow({
     content: contentString
 });
 
- var marker = new google.maps.Marker({
-     position: new google.maps.LatLng(lat,lng),
-     map: map,
-     title: city
-  });
+ var marker = addNewMarker(new google.maps.LatLng(lat,lng),null,map);
+
  
  google.maps.event.addListener(marker, 'click', function() {
   infoWindow.open(map,marker);
@@ -28,12 +31,25 @@ var infoWindow = new google.maps.InfoWindow({
 
 }
 
+function addNewMarker(markerPosition,icon,mapElement)
+{
+
+  var marker = new google.maps.Marker({
+     position: markerPosition,
+     map: mapElement,
+     icon: icon
+  });
+
+  return marker;
+}
+
+
 
 function setupMap(mapElementId) 
 {
   var mapOptions = 
   {
-      center: new google.maps.LatLng(-37.8256,175.2954),
+      center: new google.maps.LatLng(-38.633098,176.112213),
     zoom: 6,
     mapTypeId: google.maps.MapTypeId.ROADMAP 
   };
@@ -50,28 +66,8 @@ function showUserLocation(position)
   myLatlng = new google.maps.LatLng(latitude,longitude); 
 }
 
-function addNewMarker(markerPosition,markerIcon,mapElement)
-{
 
-  var marker = new google.maps.Marker({
-     position: markerPosition,
-     map: mapElement,
-     icon: markerIcon
-  });
-  markersArray.push(marker);
-  return marker;
-}
 
-function clearMarkers()
-{
-  if (markersArray) 
-  {
-    for (i in markersArray) 
-    {
-      markersArray[i].setMap(null);
-    }
-  }
-}
 
 function resize(marker)
 {

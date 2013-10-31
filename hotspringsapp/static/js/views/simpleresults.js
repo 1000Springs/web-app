@@ -1,5 +1,6 @@
 var mainMap;
 var modalMap;
+var markersArray = [];
 
 function initializeMaps() 
 {
@@ -8,33 +9,18 @@ function initializeMaps()
 	modalMap = setupMap("show_map");
 }
 
-
-function addInfoWindowMarker(city, lat, lng, site_name, desc, map)
+function clearMarkers()
 {
-
- var contentString = '<div id="content" style="height:100px">'+
-    '<h5 id="firstHeading" class="firstHeading">'+site_name+'</h5>'+
-    '<div id="bodyContent">'+
-    '<p class="muted">'+city+'</p>'+
-    '</div>'+
-    '</div>';	
-
-var infoWindow = new google.maps.InfoWindow({
-    content: contentString
-});
-
- var marker = new google.maps.Marker({
-     position: new google.maps.LatLng(lat,lng),
-     map: map,
-     title: city
-  });
- 
- google.maps.event.addListener(marker, 'click', function() {
-  infoWindow.open(map,marker);
-});
-  
-
+  if (markersArray) 
+  {
+    for (i in markersArray) 
+    {
+      markersArray[i].setMap(null);
+    }
+  }
 }
+
+
 
 function modalInit()
 {
@@ -45,19 +31,23 @@ function modalInit()
 
   var feature_name = $(this).closest('tr').find('.feature_name').html();
 
-  addNewMarker(myLatlng,"http://www.google.com/mapfiles/arrow.png",modalMap); 
+  var locationMarker = addNewMarker(myLatlng,"http://www.google.com/mapfiles/arrow.png",modalMap); 
+
+  markersArray.push(locationMarker);
 
   $(".modal-footer").html('<p> View in <a href="http://maps.google.co.nz/maps?t=h&q=loc:'+springPosition.lat()+','+springPosition.lng()+'&z=10"> google maps </a> </p>');
  
   $("#myModalLabel").html(feature_name);
 
   var marker = addNewMarker(springPosition,"http://maps.google.com/mapfiles/ms/icons/blue-dot.png",modalMap);
+
+  markersArray.push(marker);
   
 
   window.setTimeout(function() {
   resize(marker);
 }, 1000, true);
-  modalMap.setCenter(marker.springPosition);
+  modalMap.setCenter(marker.position);
   
 }
 

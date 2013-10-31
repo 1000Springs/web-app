@@ -16,7 +16,7 @@
 	{
 		{% for pos in entries.items %}	
 			{% if pos.location.access != "PRIVATE" %}	
-			addInfoWindowMarker("{{pos.location.feature_system}}", "{{pos.location.lat}}", "{{pos.location.lng}}", "{{pos.location.feature_name}}", "{{pos.location.description}}", mainMap);
+				addInfoWindowMarker("{{pos.location.feature_system}}", "{{pos.location.lat}}", "{{pos.location.lng}}", "{{pos.location.feature_name}}", "{{pos.location.description}}", mainMap,'{{url_for("samplesite", site_id=pos.location_id)}}');
 			{% endif %}
 		{% endfor %}
 	}
