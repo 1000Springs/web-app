@@ -1,5 +1,6 @@
 
 var myLatlng;
+var currentInfoWindow = null;
 
 
 function addInfoWindowMarker(city, lat, lng, site_name, desc, map,url)
@@ -9,6 +10,8 @@ function addInfoWindowMarker(city, lat, lng, site_name, desc, map,url)
     {
       link = '<a href='+url + '> More Details </a>'
     }
+
+   
 
  var contentString = '<div id="content" style="height:100px">'+
     '<h5 id="firstHeading" class="firstHeading">'+site_name+'</h5>'+
@@ -23,11 +26,23 @@ var infoWindow = new google.maps.InfoWindow({
 });
 
  var marker = addNewMarker(new google.maps.LatLng(lat,lng),null,map);
+ marker.infoWindow = infoWindow;
 
  
  google.maps.event.addListener(marker, 'click', function() {
+
+if(currentInfoWindow !== null)
+    {
+       currentInfoWindow.close();
+       currentInfoWindow = null;    
+    }
+    
   infoWindow.open(map,marker);
-});  
+  currentInfoWindow = marker.infoWindow;
+
+
+   
+}); 
 
 }
 
