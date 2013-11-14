@@ -24,7 +24,7 @@
 		var tempMarkers = [{name:"Frozen Water",value:0},
 					   {name:"Human Body", value:37},
 					   {name:"Scalding Water", value:55},
-					   {name:"Pasterisation", value:67},
+					   {name:"Pasteurization", value:67},
 					   {name:"Boiling Water", value:100}];	
 
 		var tempCategories = [];	
@@ -41,7 +41,7 @@
 
 		addProgressBar(tempBar);
 
-		var phMarkers = [{name:"Stomach Acid",value:1},
+		var phMarkers = [{name:"Stomach Acid",value:1,high:true},
 						 {name:"Lemon Juice",value:2},
 						 {name:"Vinegar",value:3},
 						 {name:"Pure Water",value:6},
@@ -63,7 +63,7 @@
 					categories:pHCategories});		
 		
 		addProgressBar(phBar);
-
+	
 
 
 	};
@@ -167,6 +167,7 @@
 						<p> {{sample_site.phys.redox}}mV </p>
 					</td>
 				</tr>
+
 		
 			</table>
 					
@@ -186,7 +187,7 @@
 	{% endif %}
 
 	<div class="divider"></div>
-	<div>
+	<div style="margin-bottom:10px;">
 		<div id="gallery" class="content">
 
 			<div class="slideshow-container">

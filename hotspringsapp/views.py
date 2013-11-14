@@ -27,7 +27,7 @@ def attemptLogin():
 			session['logged_in'] = True
 			flash('You were logged in')
 			
-			return redirect(url_for('samplesite',site_id=request.form['site_id']))
+			return redirect(url_for('index'))
 
 	return render_template('login.html', error=error, site_id=request.form['site_id'])
 

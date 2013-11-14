@@ -1,14 +1,15 @@
 {% extends "layout.html" %}
 {% block title %}Index{% endblock %}
 {% block head %}
-<!-- <link rel="stylesheet" href="{{url_for('static', filename='js/chosen_v1.0.0/docsupport/style.css')}}" /> -->
+
 {{ super() }}
-<script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?sensor=true"></script>
-<script type="text/javascript" src="{{ url_for('static', filename='js/maps.js') }}"></script>
+
 
 <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.js"></script>
 
-<script src="{{url_for('static', filename='js/jQuery/jquery-ui.custom.min.js')}}"></script>
+
+
+<script type="text/javascript" src="{{url_for('static', filename='js/jQuery/jquery-ui.custom.min.js')}}"></script>
 <script type="text/javascript" src="{{ url_for('static', filename='js/jQuery/jQEditRangeSlider-min.js') }}"></script>
 <script type="text/javascript" src="{{ url_for('static', filename='js/chosen_v1.0.0/chosen.jquery.min.js') }}"></script>
 
@@ -87,7 +88,7 @@ display: none;
          </tr>
          <tr>
             <td>     
-               <div style="margin:15px 0" id="tempSlider"></div>
+               <div  id="tempSlider"></div>
                 {{form.minTemp}} {{form.maxTemp}}
             </td>                    
          </tr>
@@ -105,7 +106,7 @@ display: none;
 <div class="accordion" id="accordion2" style="margin-top:15px;">
   <div class="accordion-group" style="border:none;">
     <div class="accordion-heading" style="background-color:transparent;">
-      <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#collapseOne">
+      <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#collapseOne" style="font-size:16px">
         <i class="icon-chevron-down"></i>
         Show Advanced
       </a>
@@ -118,7 +119,7 @@ display: none;
          </tr>
          <tr>
             <td>     
-               <div style="margin:15px 0" id="pHSlider"></div>
+               <div id="pHSlider"></div>
                 {{form.minTemp}} {{form.maxTemp}}
             </td>                    
          </tr>
@@ -128,17 +129,17 @@ display: none;
          </tr>
          <tr>
             <td>     
-               <div style="margin:15px 0" id="saltSlider"></div>
+               <div  id="saltSlider"></div>
                 {{form.minTemp}} {{form.maxTemp}}
             </td>                    
          </tr>
          <tr>
-            <th style="text-align:left;margin:10px 0"> Clarity </th>
+            <th style="text-align:left;margin-top:10px 0"> Clarity </th>
             
          </tr>
          <tr>
             <td>     
-               <div style="margin:15px 0" id="claritySlider"></div>
+               <div  id="claritySlider"></div>
                 {{form.minTemp}} {{form.maxTemp}}
             </td>                    
          </tr>
