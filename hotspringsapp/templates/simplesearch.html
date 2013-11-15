@@ -24,22 +24,44 @@
    MenuSelect("#search","{{ url_for('static', filename='img/icons/search_Selected.png') }}");
    setup({{tempRanges|safe}});
    initSliders();
+
+
     $(".chosen-select").chosen();
+
     {% for sites in locations %}
-    $('.chosen-select').append('<option value="{{sites.location.feature_system}}">{{sites.location.feature_system}}</option>');
+
+      $('.chosen-select').append('<option value="{{sites.location.feature_system}}">{{sites.location.feature_system}}</option>');
+
     {% endfor %}
+
     $('.chosen-select').trigger("chosen:updated");
 
-$('.accordion').on('show hide', function (n) 
+  $('.accordion').on('show hide', function (n) 
     {
       $(n.target).siblings('.accordion-heading').find('.accordion-toggle i').toggleClass('icon-chevron-up icon-chevron-down');
     });
+
+  $('.filterIcons label').click(function ()
+  {
+      $('.filterIcons label').removeClass("selected");
+
+      $(this).addClass("selected");
+
+
+
+  });
+  
+
+
+  
  });
+
+
 
 </script>
 
 <style>
-#minTemp,#maxTemp 
+#minTemp,#maxTemp, input[type=radio]
 {
   
 display: none;
@@ -73,14 +95,26 @@ display: none;
          </tr>
          <tr>       
 
-              <td>
-              {{form.hidden_tag()}}
-              {% for subfield in form.filters %}
-              <div style="float:left;margin:0 10px">
-                  {{ subfield }}
-                  {{ subfield.label }}
-              </div>
+              <td class="filterIcons" style="height:auto">
+             
+
+             
+              <label for="filters-0"><img rel="tooltip" data-original-title="All" src="{{ url_for('static', filename='img/icons/general_circle.png') }}"></label>
+       
+        
+              <label for="filters-1"><img rel="tooltip" data-original-title="Free" src="{{ url_for('static', filename='img/icons/free_access_selected.png') }}"></label>
+      
+       
+              <label for="filters-2"><img rel="tooltip" data-original-title="Paid" src="{{ url_for('static', filename='img/icons/paid_access_selected.png') }}"></label>
+              
+              {{form.hidden_tag()}}             
+              
+              {% for subfield in form.filters %}                    
+                  {{ subfield }}                  
               {% endfor %}
+
+           
+              
               </td>           
          </tr>
          <tr>
