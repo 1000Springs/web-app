@@ -499,7 +499,7 @@ height: 100%;*/
   width: 500px;
 }
 
-p,a,span,th,input,i,h2,h4,h5
+p,a,span,th,input,i,h2,h4,h5,div
 {
 font-family: 'questrialregular';
 font-weight: 400;
@@ -507,10 +507,7 @@ font-weight: 400;
 }
 
 
-p,a,tr,input
-{
-  font-size: 14px;
-}
+
 
 th
 {
@@ -689,6 +686,10 @@ label
 
 }
 
+
+
+
+
 /* Sample Site */
 
 .unitText
@@ -803,4 +804,16 @@ label
   margin:0 2px; 
   width:42px;
   height:42px;
+}
+
+input[type=radio]
+{
+  
+display: none;
+
+}
+
+.textBlock
+{
+  font-size: 16px;
 }
