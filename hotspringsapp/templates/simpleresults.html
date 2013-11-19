@@ -23,6 +23,8 @@
 		{% endfor %}
 	}
 
+
+
 	
  	
 
@@ -43,6 +45,15 @@
  {
 
   MenuSelect("#search","{{ url_for('static', filename='img/icons/search_Selected.png') }}");
+
+  $('.filterIcons label').click(function ()
+  {
+      $('.filterIcons label').removeClass("selected");
+
+      $(this).addClass("selected");
+
+  });
+  
   
  });
 
@@ -168,7 +179,31 @@ input[type=checkbox]
 		</tr>
 		<tr>	
 			<th style="text-align:left;padding:15px 0"> Filters </th>
-		</tr>	
+		</tr>
+		<tr>       
+
+              <td class="filterIcons" style="height:auto">
+             
+
+             
+              <label for="filters-0"><img rel="tooltip" data-original-title="All" src="{{ url_for('static', filename='img/icons/general_circle.png') }}"></label>
+       
+        
+              <label for="filters-1"><img rel="tooltip" data-original-title="Free" src="{{ url_for('static', filename='img/icons/free_access_selected.png') }}"></label>
+      
+       
+              <label for="filters-2"><img rel="tooltip" data-original-title="Paid" src="{{ url_for('static', filename='img/icons/paid_access_selected.png') }}"></label>
+              
+              {{form.hidden_tag()}}             
+              
+              {% for subfield in form.filters %}                    
+                  {{ subfield }}                  
+              {% endfor %}
+
+           
+              
+              </td>           
+         </tr>
 		<tr>
 			<th style="text-align:left;padding:25px 0"> Temperature </th>
 		</tr>
