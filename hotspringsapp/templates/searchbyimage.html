@@ -30,7 +30,7 @@
 	{% if image.Sample.location_id != None %}
 	<li class="span2">
     		<a href="{{url_for('samplesite', site_id=image.Sample.location_id)}}" class="thumbnail">
-    		<img data-src="holder.js/160x120" src="{{image.image_path}}">
+    		<img style="height:98px"src="{{image.image_path}}">
     	</a>
 	</li>
 	{% endif %}
