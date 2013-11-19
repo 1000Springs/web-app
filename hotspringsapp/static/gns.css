@@ -293,11 +293,7 @@ height: 100%;
 
 
 
-.row-fluid .span6
-{
-  margin-left: 0;
 
-}
 
 .springDesc
 { 
@@ -699,6 +695,10 @@ label
 {
   font-size: 10px;
   float: left;
+}
+
+.table td{
+  padding-left: 15px;
 }
 
 .descTable

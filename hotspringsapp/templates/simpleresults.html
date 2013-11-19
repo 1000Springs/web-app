@@ -35,11 +35,15 @@
 		$("#maxTemp").val({{maxTemp}});
 		$('i').tooltip();
 		$('img').tooltip();
+		$("#sidebar").css("height" , $("#results").height());
+
 	};
 
 	 $(function () 
  {
+
   MenuSelect("#search","{{ url_for('static', filename='img/icons/search_Selected.png') }}");
+  
  });
 
 	 $(function()
@@ -151,7 +155,7 @@ input[type=checkbox]
 	
 
 
-<div class="span3 bodytype contrast" style="height:936px;">	
+<div class="span3 bodytype contrast" id="sidebar" style="height:936px;">	
 	
 
 	<form action="{{url_for('simpleresults')}}">
@@ -194,7 +198,7 @@ input[type=checkbox]
 
 	
 	
-<div class="span10" style="position: relative; margin-left:0px; padding:0 0 0 0px; background:#fff">
+<div class="span10" id="results" style="position: relative; margin-left:0px; padding:0 0 0 0px; background:#fff">
 
 <div class="span3">
 	<div id="map_canvas" style="height: 233px; overflow:hidden"></div>
@@ -211,7 +215,8 @@ input[type=checkbox]
 				{% for entry in entries.items %}
 		<tr>
 			<td>
-				<div class="span2">
+				<div class="row-fluid">
+				<div class="span3">
 
 					<!-- I must apologise for this, I could not for the life of me get it to filter by "BESTPHOTO"
 						 I tried (almost) everything, tears were shed...It got ugly
@@ -223,7 +228,7 @@ input[type=checkbox]
 						{% endif %}						
 					{% endfor %}
 				</div>
-				<div class="span5">
+				<div class="span7">
 					<ul class="unstyled">
 						<li>	
 							<a href="{{url_for('samplesite',site_id=entry.location_id)}}" style="text-decoration:none;" >
@@ -238,11 +243,10 @@ input[type=checkbox]
 						</div></li>
 					</ul>
 				</div>
-			</td>
-			<td>
-				<div class="row-fluid">
+			
+				
 
-					
+				<div class="span2">
 					<div style="margin-top:10px;">
 						
 						<p style="text-align:right"> Temp: {{ entry.phys.initialTemp}} </p>
@@ -256,6 +260,7 @@ input[type=checkbox]
 						<!-- Button to trigger modal -->
 						<a href="#myModal" role="button" class="btn" data-toggle="modal" onclick="modalInit.call(this);" style="display:block; ">Show on Map</a>
 					</div>
+				</div>
 				
 				</div> 
 				
