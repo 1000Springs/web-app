@@ -21,18 +21,29 @@ function addProgressBar(barAttr)
 	
 	
 	
-	var progressLine = paper.line(progressX, y+2, progressX, y - 20);
+	var progressLine = paper.line(progressX, y+2, progressX, y - 10);
 	
-	progressLine.attr({
-	stroke: "black",
-		strokeWidth: 1});
+	//var progressArrow = paper.polyline([0, 10, 20, 10],[20,10,10,20],[10,20,0,10]);
+	var pointerSize = 5;
+	var progressArrow = paper.polygon([(progressX)-pointerSize, y - 10, (progressX)+pointerSize, y - 10],
+									  [(progressX)+pointerSize,y - 10,(progressX),y-2.5],
+									  [(progressX),y-2.5,(progressX)-pointerSize,y - 10]);
+	
+	console.log(progressX + percentage);
+	var test = percentage;
+	progressArrow.animate({transform:"t"+test.toString()+",0s"},1000);
+	
+	progressArrow.attr({
+	stroke: "#125e68",
+	fill: "#125e68",
+		strokeWidth: 0.5});
 		
 	//Just finds the length of the string so that it can be positioned in the middle of the progressLine
 	var progressAmount = paper.text(progressX+percentage, y - 20,current.toString());
 	var progressAmountLength = progressAmount.getBBox().width;
 	progressAmount.remove();
 	
-	progressAmount = paper.text(progressX, y - 21,0);
+	progressAmount = paper.text(progressX, y - 25,0);
 
 	//BAR
 	
@@ -47,7 +58,9 @@ function addProgressBar(barAttr)
 	progress.animate({width:percentage}, 1000);
 	progressLine.animate({x2:progressX+percentage}, 1000);
 	progressLine.animate({x1:progressX+percentage}, 1000);
-	progressAmount.animate({text:current.toString()},1000);
+	
+
+	progressAmount.animate({text:current},1000);
 	progressAmount.animate({x:(progressX-progressAmountLength/2)+percentage},1000);
 
 			var outline = paper.rect(x, y, barLength, barHeight, 5);
@@ -62,7 +75,7 @@ function addProgressBar(barAttr)
 	for(var i = 0;i < barAttr.markers.length;i++)
 	{
 		var marker = barAttr.markers[i]
-		drawMarker(marker.name,marker.value);		
+		drawMarker(marker.name,marker.value,marker.high);		
 	}
 	
 	for(var i = 0;i < barAttr.categories.length;i++)
@@ -74,37 +87,58 @@ function addProgressBar(barAttr)
 			
 	var labelHigh = true;	
 	var markerTotalHeight = 0;
-	function drawMarker(text,value)
+	var alternatingBarHeight = barHeight;
+	var labelTop = 1;
+	
+	function drawMarker(text,value,high)
 	{
 		var markerLength = 10;			
 		var offset = 0;
+		labelTop *= -1;
 		if (labelHigh)
 		{
-			markerLength *= 2
+			markerLength *= -1;
 			offset = 0;
 			labelHigh = false;
+			alternatingBarHeight = 0 ;			
 		}
 		else
 		{
+			alternatingBarHeight = barHeight;
 			labelHigh = true;
 		}
 		
+		if(high)
+		{
+			markerLength = 20;
+		}
+		
+		
+		
 		var position = Math.ceil(value/max * (barLength-strokeWidth));
-		var line = paper.line(progressX + position , y+barHeight, progressX+position, y + barHeight + markerLength);				
+		var line = paper.line(progressX + position , y+alternatingBarHeight, progressX+position, y + alternatingBarHeight + markerLength);				
 		line.attr({stroke: "Black",
 				   strokeWidth: 1});
 		
 		var textLabel = paper.text(progressX+position, y - 20,text.toString());
-		textLabel.attr({class:"label"});
+		textLabel.attr
+		({
+		class:"label",
+		fill:"white"
+		});
 		
 		var textLabelWidth = textLabel.getBBox().width;
 		var textLabelHeight = textLabel.getBBox().height;
+		if( !labelHigh)
+		{
+			textLabelHeight = -5;
+		}
 		textLabel.remove();
 		
-		markerTotalHeight =  y + barHeight + textLabelHeight;
+		
 
-		textLabel = paper.text((progressX-textLabelWidth/2)+position, markerTotalHeight + markerLength + offset,text.toString());
-		textLabel.attr({class:"label"});
+		textLabel = paper.text((progressX-textLabelWidth/2)+position, (y + alternatingBarHeight + (textLabelHeight)) + markerLength + offset,text.toString());
+		textLabel.attr({class:"marker"});
 	
 	}
 
@@ -114,7 +148,23 @@ function addProgressBar(barAttr)
 		var maxPosition = Math.ceil((maxRange/max) * (barLength-strokeWidth));
 		
 		
+	
 		
+		
+		var textLabel = paper.text(minPosition + progressX, y - 20,title.toString());
+		textLabel.attr({class:"marker"});
+		
+		var textLabelWidth = textLabel.getBBox().width;
+		var textLabelHeight = textLabel.getBBox().height;
+		textLabel.remove();
+		
+		markerTotalHeight =  y + barHeight + textLabelHeight;
+		
+		textLabel = paper.text(progressX + (maxPosition-minPosition)/2 - (textLabelWidth/2) + minPosition, markerTotalHeight + 30 + (barHeight+5)/2,title.toString());
+		
+		textLabel.attr({class:"marker"});
+		
+			
 		var categoryBox = paper.rect(minPosition + progressX, markerTotalHeight+30, maxPosition-minPosition, barHeight);
 		categoryBox.attr({
 			fill: "white",
@@ -122,20 +172,6 @@ function addProgressBar(barAttr)
 			strokeWidth: strokeWidth		
 		});
 		
-		
-		
-		var textLabel = paper.text(minPosition + progressX, y - 20,title.toString());
-		textLabel.attr({class:"label"});
-		
-		var textLabelWidth = textLabel.getBBox().width;
-		var textLabelHeight = textLabel.getBBox().height;
-		textLabel.remove();
-		
-
-		
-		textLabel = paper.text(progressX + (maxPosition-minPosition)/2 - (textLabelWidth/2) + minPosition, markerTotalHeight + 30 + (barHeight+5)/2,title.toString());
-		
-		textLabel.attr({class:"label"});
 		
 	}		
 }

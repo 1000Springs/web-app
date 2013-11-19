@@ -77,5 +77,30 @@ $(function(){
 		}
 	}); 
 
+	$("#expandGraph").click(function() 
+	{
+		
+		if(expanded === false)
+		{
+			expanded = true;
+			$("#map_canvas").parent().css("display","none");
+			$("#chart_div").css("height","500px");
+			$("#chart_div").css("width","760px");
+			chart.draw(data,options)
+			$(this).attr("value", "Shrink Graph");
+			
+		}
+		else
+		{
+			expanded = false;
+			$("#map_canvas").parent().css("display","block");
+			$("#chart_div").css("height","233px");
+			$("#chart_div").css("width","100%");
+			chart.draw(data,options)
+			$(this).attr("value", "Enlarge Graph");
+			
+		}
+	}); 
+
 	
 });

@@ -4,6 +4,16 @@
    /* background: url('img/geothermalBanner.gif') no-repeat scroll left bottom;*/
 }
 
+@font-face {
+    font-family: 'questrialregular';
+    src: url('fonts/questrial-regular-webfont.eot');
+    src: url('fonts/questrial-regular-webfont.eot?#iefix') format('embedded-opentype'),
+         url('fonts/questrial-regular-webfont.woff') format('woff'),
+         url('fonts/questrial-regular-webfont.ttf') format('truetype'),
+         url('fonts/questrial-regular-webfont.svg#questrialregular') format('svg');
+    font-weight: normal;
+    font-style: normal;
+}
 
 #logo {
     color: #000000;
@@ -317,7 +327,9 @@ padding: 7px 12px;
 
 #show_map
 {
-    height: 400px;
+    height: 250px;
+    width:400px;
+    margin-left:4px;
     background-color: #CCC;
 
 }
@@ -471,14 +483,33 @@ height: 100%;*/
 .filterIcons img
 {
   width:60px;
-    opacity: 0.6;
+  opacity: 0.6;
   float:left;
+  margin: 0 5px;
 }
 
-p,a,span,th,h2,input,h5,h4,i
+.selected img
 {
-font-family: century gothic;
+  opacity: 1;
 }
+
+.filterIcons label
+{
+  margin: 0;
+}
+
+.filterIcons input[type=radio]:checked
+{
+  width: 500px;
+}
+
+p,a,span,th,input,i,h2,h4,h5
+{
+font-family: 'questrialregular';
+font-weight: 400;
+
+}
+
 
 p,a,tr,input
 {
@@ -511,7 +542,7 @@ background-image:-webkit-gradient(linear, left bottom, right bottom, color-stop(
 {
   background:rgba(29,155,171,0.75);
   color: white;
-  font-family: century gothic;
+  font-family: 'questrialregular';
 }
 
 
@@ -538,6 +569,12 @@ background-image:-webkit-gradient(linear, left bottom, right bottom, color-stop(
 .ui-rangeSlider-label
 {
   color:rgb(29,155,171);
+}
+
+.ui-rangeSlider
+{
+  margin-top:0px;
+  margin-bottom: 10px;
 }
 
 /* end */
@@ -575,10 +612,17 @@ padding: 0 5px;
 
 }
 
+label
+{
+  font-size: 16px;
+  font-family: 'questrialregular';
+}
+
 #aboutText
 {
   white-space: pre-line; 
-  font-family: century gothic;
+  font-family: 'questrialregular';
+  font-size: 16px;
   
 }
 

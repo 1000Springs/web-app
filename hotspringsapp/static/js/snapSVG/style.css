@@ -1,12 +1,12 @@
 
 text {
-	font-family: Questrial;
+	font-family: "questrialregular";
 }
 
-text.label
+text.marker
 {
 
-	font-size: 10px;
+	font-size: 12px;
 
 }
 

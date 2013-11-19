@@ -936,7 +936,7 @@ var root = {
       .attr("d", diagonal);
 
 
-  var node = svg.selectAll("g.node")
+  var node = svg.selectAll(".inner")
       .data(nodes)
     .enter().append("g")
     .on("mouseover",function(n) { highlightChildLinks(n)}) 

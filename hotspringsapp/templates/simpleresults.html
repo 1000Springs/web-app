@@ -7,6 +7,8 @@
     <script type="text/javascript" src="{{ url_for('static', filename='js/maps.js') }}"></script>
 	<script type="text/javascript" src="https://www.google.com/jsapi"></script>
 
+
+
 	
 	<script type="text/javascript">
 	
@@ -20,6 +22,9 @@
 			{% endif %}
 		{% endfor %}
 	}
+
+	
+ 	
 
 	window.onload=function()
 	{
@@ -75,31 +80,8 @@ $(function()
 presetTemp("#safe",min,35);
 presetTemp("#unsafe",35,max);
 presetTemp("#hottest",Math.ceil(max*0.90),max);
-var expanded = false;
-$("#expandGraph").click(function() 
-	{
-		
-		if(expanded === false)
-		{
-			expanded = true;
-			$("#map_canvas").parent().css("display","none");
-			$("#chart_div").css("height","500px");
-			$("#chart_div").css("width","760px");
-			chart.draw(data,options)
-			$(this).attr("value", "Shrink Graph");
-			
-		}
-		else
-		{
-			expanded = false;
-			$("#map_canvas").parent().css("display","block");
-			$("#chart_div").css("height","233px");
-			$("#chart_div").css("width","100%");
-			chart.draw(data,options)
-			$(this).attr("value", "Enlarge Graph");
-			
-		}
-	}); 
+
+
 
 });
 	var chart;
@@ -180,36 +162,30 @@ input[type=checkbox]
 		<tr>
 			<td>{{form.city}}</td>
 		</tr>
-
 		<tr>	
-		<th style="text-align:left;padding:15px 0"> Filters </th>
+			<th style="text-align:left;padding:15px 0"> Filters </th>
 		</tr>	
-			<tr>
-				<td>					
-					
-				</td>
-			</tr>
-			<tr>
+		<tr>
 			<th style="text-align:left;padding:25px 0"> Temperature </th>
-			</tr>
-			<tr>
-				<td>				
-					<p style="display:inline;"> Between </p> 
-					{{form.minTemp}} 
+		</tr>
+		<tr>					
+			<td>				
+				<p style="display:inline;"> Between </p> 
+				{{form.minTemp}} 
 
-					<p style="display:inline;"> and </p> 
-					{{form.maxTemp}}				
-				</td>
-			</tr>
-			<tr>
-				<td>
-					<div class="btn-group">                  
-                  <a class="btn" id="safe">Safe</a>
-                  <a class="btn" id="unsafe">Unsafe</a>
-                  <a class="btn" id="hottest">Hottest</a>               
-               		</div>
-               	</td>
-			</tr>			
+				<p style="display:inline;"> and </p> 
+				{{form.maxTemp}}				
+			</td>
+		</tr>
+		<tr>
+			<td>
+				<div class="btn-group">                  
+					<a class="btn" id="safe">Safe</a>
+					<a class="btn" id="unsafe">Unsafe</a>
+					<a class="btn" id="hottest">Hottest</a>               
+				</div>
+			</td>
+		</tr>			
 		</table>
 		<input type="submit" value="Search" class="btn btn-small colourClick" style="margin:35px 0 0 30%;  width: 75px;height: 75px;  border-radius: 38px;">
 		</form>
@@ -304,8 +280,8 @@ input[type=checkbox]
 {% endfor %}
 {% if entries.has_next %}<a href="{{ url_for('simpleresults', page = entries.next_num) }}">Next Page >></a>{% endif %}
 
-{% if entries.has_next == False and entries.has_prev == False %}
-	<p><a href="{{ url_for('simpleresults', page = 1) }}"> Show Pages </a></p>
+{% if entries.has_next == False and entries.has_prev == False %}	
+	<p><a href="{{ url_for('simpleresults', page = 1) }}"> Show 15 </a></p>
 {% else %}
 	<p><a href="{{ url_for('simpleresults', showAll = 'all') }}"> Show All </a></p>
 {% endif %}
