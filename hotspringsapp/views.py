@@ -42,7 +42,10 @@ def about():
 
 @app.route('/')
 def index():
-	return render_template('index.html')
+
+	locations = Sample.query.count()
+
+	return render_template('index.html',springs=locations)
 
 @app.route('/search')
 def search():
@@ -221,7 +224,8 @@ def simpleresults(page = 1, showAll = None):
 @app.route('/searchbyimage/<showAll>')
 def searchbyimage(page = 1,showAll = None):
 
-	imageList = Image.query.filter(Image.sample_id == Sample.id, Image.image_type == "BESTPHOTO").group_by(Sample.location_id)
+	#The reason this query isn't returning the correct number of results is because the "Location.access" field is null on lots of samples
+	imageList = Image.query.filter(Image.sample_id == Sample.id, Image.image_type == "BESTPHOTO",Location.id==Sample.location_id).group_by(Sample.location_id)
 
 	imagesPerPage = app.config['IMAGES_PER_PAGE']
 
