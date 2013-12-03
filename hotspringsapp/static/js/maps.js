@@ -28,6 +28,8 @@ var infoWindow = new google.maps.InfoWindow({
  var marker = addNewMarker(new google.maps.LatLng(lat,lng),null,map);
  marker.infoWindow = infoWindow;
 
+ map.setCenter(marker.position);
+
  
  google.maps.event.addListener(marker, 'click', function() {
 
@@ -45,6 +47,8 @@ if(currentInfoWindow !== null)
 }); 
 
 }
+
+
 
 function addNewMarker(markerPosition,icon,mapElement)
 {

@@ -70,19 +70,18 @@
 
 	$(function()
 	{
+		
+		var sampleSiteMap = setupMap("show_map");	
+
 		{% if sample_site.location.access != "PRIVATE" %}
-		var sampleSiteMap = setupMap("show_map");
-
-		var markerPosition = new  google.maps.LatLng({{sample_site.location.lat}},{{sample_site.location.lng}});		
-
 		addInfoWindowMarker("{{sample_site.location.feature_system}}",
 							"{{sample_site.location.lat}}",
 							"{{sample_site.location.lng}}",
 							"{{sample_site.location.feature_name}}",
 							"{{sample_site.location.description}}",
-							sampleSiteMap)
-		
+							sampleSiteMap)		
 		{% endif %}
+
 		$('img').tooltip();
 
 
@@ -123,13 +122,8 @@
 					<td>						
 						<h5 style="margin-top:0px;" >Location: </h5> 
 					</td>
-					<td style="text-align:left;">
-						{% if sample_site.location.access != "PRIVATE" %}
-							<p>{{sample_site.location.feature_system}}</p>
-						{% else %}
-							<p style="text-align:center"> Private Property </p>							
-						{% endif %}	
-						
+					<td style="text-align:left;">						
+							<p>{{sample_site.location.feature_system}}</p>					
 					</td>				
 				</tr>
 				<tr>
@@ -176,18 +170,13 @@
 		
 
 <div class="span5">
-	{% if sample_site.location.access != "PRIVATE" %}
+	
 		<div id="show_map"></div>
-	{% else %}
-		<div id="map_placeholder">
-
-			<p style="text-align:center"> Private Property </p>
-
-		</div>
-	{% endif %}
+	
 
 	<div class="divider"></div>
 	<div style="margin-bottom:10px;">
+		
 		<div id="gallery" class="content">
 
 			<div class="slideshow-container">
@@ -207,12 +196,14 @@
 
 					<ul class="thumbs noscript">
 						{% for image in sample_site.image %}
-							{% if image.image_type != "BESTSKETCH" %}
-							<li>
-								<a class="thumb" name="leaf" href="{{image.image_path}}">
-									<img src="{{image.image_path}}"/>
-								</a>
-							</li>
+							{% if image.image_type == "BESTPHOTO" %}
+								
+								<li>
+									<a class="thumb" name="leaf" href="{{image.image_path}}">
+										<img src="{{image.image_path}}"/>
+									</a>
+								</li>
+								
 							{% endif %}					
 						{% endfor %}					
 					</ul>
@@ -223,6 +214,7 @@
 				<div id="forward"><img src="{{url_for('static', filename='img/icons/next.png')}}" style="margin-top:25px;cursor:pointer;"></div>
 			</div>
 		</div>
+		
 	</div>
 </div>
 		
