@@ -27,13 +27,15 @@
 <ul class="thumbnails">
 
 {% for image in images.items %}
-	{% if image.Sample.location_id != None %}
+	
+	
 	<li class="span2">
     		<a href="{{url_for('samplesite', site_id=image.Sample.location_id)}}" class="thumbnail">
     		<img style="height:98px"src="{{image.image_path}}">
     	</a>
 	</li>
-	{% endif %}
+	
+	
 
 {% endfor %}
 
