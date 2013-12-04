@@ -1,10 +1,15 @@
 import MySQLdb
 import datetime
 import time
+from xlwt import Workbook, XFStyle, Alignment, easyxf
+import os
+import StringIO
+import mimetypes
 from hotspringsapp import app
 from sqlalchemy.sql import func
+from werkzeug.datastructures import Headers
 
-from flask import Flask, url_for, render_template, request, g, session, flash, redirect
+from flask import Flask, url_for, render_template, request, g, session, flash, redirect, Response
 from models import *
 from forms import *
 
@@ -268,6 +273,102 @@ def samplesite(site_id):
 	
 	return render_template('samplesite.html',sample_site=latestSample,											 
 											 json=json)	 
+
+@app.route('/download/<int:site_id>')
+def download(site_id):
+
+	locationSamples = Sample.query.filter(Location.id == Sample.location_id, Location.id == site_id)
+
+	latestSample = locationSamples.order_by(Sample.date_gathered.desc()).first()
+
+
+
+	response = Response()
+	response.status_code = 200
+
+	
+	alignment = Alignment()
+	# alignment.wrap = True	
+
+	style = XFStyle()
+	style.alignment = alignment
+
+	book = Workbook()
+	sheet1 = book.add_sheet('Sheet 1')
+
+	headings = sheet1.row(0)
+	headings.write(0, 'Feature Name', easyxf('font: bold True;'))
+	headings.write(1, 'Feature System', easyxf('font: bold True;'))
+	headings.write(2, 'Description', easyxf('font: bold True;'))
+	headings.write(3, 'Lat/Lng', easyxf('font: bold True;'))
+	headings.write(4, 'Temperature', easyxf('font: bold True;'))
+	headings.write(5, 'pH', easyxf('font: bold True;'))
+	headings.write(6, 'Redox', easyxf('font: bold True;'))
+	headings.write(7, 'Dissolved Oxygen', easyxf('font: bold True;'))
+	headings.write(8, 'Conductivity', easyxf('font: bold True;'))
+	headings.write(9, 'Ebullition', easyxf('font: bold True;'))
+
+	locationValues = sheet1.row(1)
+	locationValues.write(0, latestSample.location.feature_name, style)
+	locationValues.write(1, latestSample.location.feature_system, style)
+	locationValues.write(2, latestSample.location.description, style)
+	locationValues.write(3, str(latestSample.location.lat) + "," + str(latestSample.location.lng), style)
+	locationValues.write(4, latestSample.phys.initialTemp, style)
+	locationValues.write(5, latestSample.phys.pH, style)
+	locationValues.write(6, latestSample.phys.redox, style)
+	locationValues.write(7, latestSample.phys.dO, style)
+	locationValues.write(8, latestSample.phys.conductivity, style)
+	locationValues.write(9, latestSample.phys.ebullition, style)
+
+
+
+	for i in range(9):
+		sheet1.col(i).width = 5000
+
+	sheet1.col(2).width = 10000
+
+
+	book.save('samplesite_'+str(site_id)+'.xls')
+
+	output = StringIO.StringIO()
+	book.save(output)
+	response.data = output.getvalue()
+
+	filename = 'samplesite_'+str(site_id)+'.xls'
+	mimetype_tuple = mimetypes.guess_type(filename)
+
+	#HTTP headers for forcing file download
+	response_headers = Headers({
+	        'Pragma': "public",  # required,
+	        'Expires': '0',
+	        'Cache-Control': 'must-revalidate, post-check=0, pre-check=0',
+	        'Cache-Control': 'private',  # required for certain browsers,
+	        'Content-Type': mimetype_tuple[0],
+	        'Content-Disposition': 'attachment; filename=\"%s\";' % filename,
+	        'Content-Transfer-Encoding': 'binary',
+	        'Content-Length': len(response.data)
+	    })
+
+	if not mimetype_tuple[1] is None:
+	    response.update({
+	            'Content-Encoding': mimetype_tuple[1]
+	        })
+
+	response.headers = response_headers
+
+	#as per jquery.fileDownload.js requirements
+	response.set_cookie('fileDownload', 'true', path='/')
+
+	################################
+	# Return the response
+	#################################
+	os.remove('samplesite_'+str(site_id)+'.xls')
+
+	return response
+
+
+
+
 
 
 @app.route("/sotd")

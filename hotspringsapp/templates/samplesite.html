@@ -161,6 +161,14 @@
 						<p> {{sample_site.phys.redox}}mV </p>
 					</td>
 				</tr>
+				<tr>
+					<!-- <th colspan=2><strong> Would you like all this data? </strong> </th> -->
+				</tr>
+				<tr>
+					<td> 
+						<a href="{{url_for('download', site_id= sample_site.location_id)}}"> Download data</a>
+					</td>
+				</tr>
 
 		
 			</table>
