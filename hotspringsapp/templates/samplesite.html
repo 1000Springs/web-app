@@ -37,7 +37,9 @@
 					max:100,
 					current:{{sample_site.phys.initialTemp}},
 					markers:tempMarkers,
-					categories:tempCategories});
+					categories:tempCategories,
+					step:10,
+					warning:40});
 
 		addProgressBar(tempBar);
 
@@ -60,7 +62,8 @@
 					max:14,
 					current:{{sample_site.phys.pH}},
 					markers:phMarkers,
-					categories:pHCategories});		
+					categories:pHCategories,
+					step:1});		
 		
 		addProgressBar(phBar);
 	

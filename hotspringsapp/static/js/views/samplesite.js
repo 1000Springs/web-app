@@ -29,7 +29,7 @@ function addProgressBar(barAttr)
 									  [(progressX)+pointerSize,y - 10,(progressX),y-2.5],
 									  [(progressX),y-2.5,(progressX)-pointerSize,y - 10]);
 	
-	console.log(progressX + percentage);
+	// console.log(progressX + percentage);
 	var test = percentage;
 	progressArrow.animate({transform:"t"+test.toString()+",0s"},1000);
 	
@@ -44,6 +44,11 @@ function addProgressBar(barAttr)
 	progressAmount.remove();
 	
 	progressAmount = paper.text(progressX, y - 25,0);
+
+	if(current >= barAttr.warning)
+	{
+		progressAmount.attr({fill:"red"});
+	}
 
 	//BAR
 	
@@ -62,6 +67,8 @@ function addProgressBar(barAttr)
 
 	progressAmount.animate({text:current},1000);
 	progressAmount.animate({x:(progressX-progressAmountLength/2)+percentage},1000);
+
+
 
 			var outline = paper.rect(x, y, barLength, barHeight, 5);
 	outline.attr({
@@ -83,7 +90,15 @@ function addProgressBar(barAttr)
 		var cat = barAttr.categories[i];			
 		drawCategoryRange(cat.name,cat.min,cat.max);
 	}	
-			
+		
+	console.log("Max: " + max);
+	console.log("Step: " + barAttr.step)
+	console.log("Max/Step: " + max/barAttr.step)
+	for(var i = 0; i < max/barAttr.step; i+=1)
+	{	
+	drawStep(i*barAttr.step);
+	//console.log(i);
+	}
 			
 	var labelHigh = true;	
 	var markerTotalHeight = 0;
@@ -122,10 +137,8 @@ function addProgressBar(barAttr)
 		
 		var textLabel = paper.text(progressX+position, y - 20,text.toString());
 		textLabel.attr
-		({
-		class:"label",
-		fill:"white"
-		});
+		({class:"label",
+		fill:"white"});
 		
 		var textLabelWidth = textLabel.getBBox().width;
 		var textLabelHeight = textLabel.getBBox().height;
@@ -137,9 +150,19 @@ function addProgressBar(barAttr)
 		
 		
 
-		textLabel = paper.text((progressX-textLabelWidth/2)+position, (y + alternatingBarHeight + (textLabelHeight)) + markerLength + offset,text.toString());
+		textLabel = paper.text((progressX+position)-textLabelWidth/2+strokeWidth, (y + alternatingBarHeight + (textLabelHeight)) + markerLength + offset,text.toString());
 		textLabel.attr({class:"marker"});
 	
+	}
+
+	function drawStep(value)
+	{
+		
+		var position = Math.ceil(value/max * (barLength-strokeWidth));
+		var line = paper.line(progressX + position , y, progressX+position, y+barHeight);				
+		line.attr({stroke: "black",
+				   strokeWidth: 1});
+
 	}
 
 	function drawCategoryRange(title,minRange,maxRange)
