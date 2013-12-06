@@ -47,7 +47,10 @@
 		$("#maxTemp").val({{maxTemp}});
 		$('i').tooltip();
 		$('img').tooltip();
-		$("#sidebar").css("height" , $("#results").height());
+		if($("#results").height() > $("#sidebar").height())
+		{
+			$("#sidebar").css("height" , $("#results").height());
+		}
 
 	};
 
@@ -175,7 +178,7 @@ input[type=checkbox]
 	
 
 
-<div class="span3 bodytype contrast" id="sidebar" style="height:936px;">	
+<div class="span3 bodytype contrast" id="sidebar">	
 	
 
 	<form action="{{url_for('simpleresults')}}">
