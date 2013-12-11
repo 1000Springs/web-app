@@ -29,7 +29,7 @@ function addProgressBar(barAttr)
 									  [(progressX)+pointerSize,y - 10,(progressX),y-2.5],
 									  [(progressX),y-2.5,(progressX)-pointerSize,y - 10]);
 	
-	// console.log(progressX + percentage);
+
 	var test = percentage;
 	progressArrow.animate({transform:"t"+test.toString()+",0s"},1000);
 	
@@ -65,7 +65,9 @@ function addProgressBar(barAttr)
 	progressLine.animate({x1:progressX+percentage}, 1000);
 	
 
-	progressAmount.animate({text:current},1000);
+	Snap.animate(0, current, function (value) {
+		progressAmount.attr({text:Math.round( value * 10 ) / 10});
+	}, 1000);
 	progressAmount.animate({x:(progressX-progressAmountLength/2)+percentage},1000);
 
 
@@ -91,41 +93,44 @@ function addProgressBar(barAttr)
 		drawCategoryRange(cat.name,cat.min,cat.max);
 	}	
 		
-	console.log("Max: " + max);
-	console.log("Step: " + barAttr.step)
-	console.log("Max/Step: " + max/barAttr.step)
+
 	for(var i = 0; i < max/barAttr.step; i+=1)
 	{	
 	drawStep(i*barAttr.step);
-	//console.log(i);
+
 	}
 			
-	var labelHigh = true;	
+	var labelTop = true;	
 	var markerTotalHeight = 0;
 	var alternatingBarHeight = barHeight;
-	var labelTop = 1;
+	
 	
 	function drawMarker(text,value,high)
 	{
 		var markerLength = 10;			
-		var offset = 0;
-		labelTop *= -1;
-		if (labelHigh)
+		
+		
+		if (labelTop)
 		{
 			markerLength *= -1;
-			offset = 0;
-			labelHigh = false;
+			
+			labelTop = false;
 			alternatingBarHeight = 0 ;			
 		}
 		else
 		{
 			alternatingBarHeight = barHeight;
-			labelHigh = true;
+			labelTop = true;
 		}
 		
 		if(high)
 		{
+			
 			markerLength = 20;
+			if(!labelTop)
+			{
+				markerLength = -20;
+			}
 		}
 		
 		
@@ -142,15 +147,15 @@ function addProgressBar(barAttr)
 		
 		var textLabelWidth = textLabel.getBBox().width;
 		var textLabelHeight = textLabel.getBBox().height;
-		if( !labelHigh)
-		{
+		if( !labelTop)
+		{			
 			textLabelHeight = -5;
 		}
 		textLabel.remove();
 		
 		
 
-		textLabel = paper.text((progressX+position)-textLabelWidth/2+strokeWidth, (y + alternatingBarHeight + (textLabelHeight)) + markerLength + offset,text.toString());
+		textLabel = paper.text((progressX+position)-textLabelWidth/2+strokeWidth, (y + alternatingBarHeight + (textLabelHeight)) + markerLength ,text.toString());
 		textLabel.attr({class:"marker"});
 	
 	}
