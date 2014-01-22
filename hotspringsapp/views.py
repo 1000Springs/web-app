@@ -23,23 +23,27 @@ def attemptLogin():
 
 	user = User.query.filter_by(username=request.form['username']).first()
 	error = None
-	if request.method == 'POST':
-		if user is None:
-			error = 'Invalid Username'
-		elif request.form['password'] != user.password:
-			error = 'Invalid password'
-		else:
+	if request.method == 'POST':		
+		if user is not None and request.form['password'] == user.password:
 			session['logged_in'] = True
 			flash('You were logged in')
-			
 			return redirect(url_for('index'))
-
+		else:
+			error = "Incorrect username or password"			
+		
 	return render_template('login.html', error=error, site_id=request.form['site_id'])
 
 @app.route('/login', methods=['POST','GET'])
 def login():
 	error = None
 	return render_template('login.html', error=None,site_id=None)
+
+@app.route('/logout', methods=['POST','GET'])
+def logout():
+	
+	app.logger.debug(request.url_rule)
+	session.pop('logged_in',None)
+	return redirect(url_for('index'))
 
 @app.route('/about')
 def about():

@@ -1,3 +1,15 @@
+
+ {% if session.logged_in %}
+ <div id="login" class="menuItem">		
+		<a style="text-decoration:none;"href="{{url_for('logout')}}">
+			<div style="position:relative;height:34px;">
+			<img style="height:34px;width:34px;position:absolute;margin-left:-17px;left:50%"src="{{ url_for('static', filename='img/icons/logout.png') }}">
+		</div>
+			<p style="color:#1D9BAB;">Logout</p>
+
+		</a>
+</div>
+{% else %}
 <div id="login" class="menuItem">		
 		<a style="text-decoration:none;"href="{{url_for('login')}}">
 			<div style="position:relative;height:34px;">
@@ -6,7 +18,8 @@
 			<p style="color:#1D9BAB;">Login</p>
 
 		</a>
-	</div>
+</div>
+{% endif %}
 
 <div id="about" class="menuItem">		
 		<a style="text-decoration:none;" href="{{url_for('about')}}">
@@ -19,7 +32,8 @@
 		</a>
 	</div>
 
-	<div id="adsearch" class="menuItem">		
+ {% if session.logged_in %}
+    <div id="adsearch" class="menuItem">		
 		<a style="text-decoration:none;"href="{{url_for('search')}}">
 			<div style="position:relative;height:34px;">
 			<img style="height:34px;width:34px;position:absolute;margin-left:-17px;left:50%"src="{{ url_for('static', filename='img/icons/general.png') }}">
@@ -27,7 +41,9 @@
 			<p style="color:#1D9BAB;">Advanced</p>
 
 		</a>
-	</div>
+	</div> 
+  {% endif %}
+	
 
 	
 
