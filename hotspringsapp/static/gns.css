@@ -613,10 +613,15 @@ label
 
 #aboutText
 {
-  white-space: pre-line; 
+  margin:0 0 20px 0;
   font-family: 'questrialregular';
   font-size: 16px;
   
+}
+
+#aboutText p
+{
+  margin: 20px 0;
 }
 
 
