@@ -2,6 +2,15 @@
 var minTemp = 0;
 var maxTemp = 100;
 
+var minCond = 0;
+var maxCond = 12000;
+
+var minTurb = 0;
+var maxTurb = 1000;
+
+var minpH = 0;
+var maxpH = 14;
+
 function setup(ranges)
 {
     minTemp = ranges.minTemp;
@@ -21,24 +30,24 @@ function initSliders()
       }});
 
  $("#pHSlider").rangeSlider({
-  bounds: {min: 0, max:14},
-  defaultValues: {min:4,max:10},
+  bounds: {min: minpH, max:maxpH},
+  defaultValues: {min:minpH,max:maxpH},
   formatter:function(val){
          var value = Math.round(val);          
          return value.toString();     
       }});
 
  $("#saltSlider").rangeSlider({
-   bounds: {min: 0, max:100},
-defaultValues: {min:30,max:70},
+   bounds: {min: minCond, max:maxCond},
+defaultValues: {min:minCond,max:maxCond},
   formatter:function(val){
          var value = Math.round(val);          
          return value.toString()  + "";     
       }});
 
  $("#claritySlider").rangeSlider({
-  bounds: {min: 0, max:100},
-  defaultValues: {min:30,max:70},
+  bounds: {min: minTurb, max:maxTurb},
+  defaultValues: {min:minTurb,max:maxTurb},
   formatter:function(val){
          var value = Math.round(val);          
          return value.toString()  + "";     

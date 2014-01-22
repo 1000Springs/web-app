@@ -96,16 +96,16 @@ display: none;
          <tr>       
 
               <td class="filterIcons" style="height:auto">
-             
+              <p style="font-size:14px">Note: physical access to some springs is prohibited and their location has not been provided</p>
 
              
               <label for="filters-0"><img rel="tooltip" data-original-title="All" src="{{ url_for('static', filename='img/icons/general_circle.png') }}"></label>
        
         
-              <label for="filters-1"><img rel="tooltip" data-original-title="Free" src="{{ url_for('static', filename='img/icons/free_access_selected.png') }}"></label>
+              <label for="filters-1"><img rel="tooltip" data-original-title="Public Access" src="{{ url_for('static', filename='img/icons/public_access.png') }}"></label>
       
        
-              <label for="filters-2"><img rel="tooltip" data-original-title="Paid" src="{{ url_for('static', filename='img/icons/paid_access_selected.png') }}"></label>
+              <label for="filters-2"><img rel="tooltip" data-original-title="Tourism" src="{{ url_for('static', filename='img/icons/tourism_access.png') }}"></label>
               
               {{form.hidden_tag()}}             
               
@@ -127,13 +127,13 @@ display: none;
             </td>                    
          </tr>
          <tr>
-            <td align=center>
+            <!-- <td align=center>
                <div class="btn-group">                  
                   <a class="btn" id="safe">Safe</a>
                   <a class="btn" id="unsafe">Unsafe</a>
                   <a class="btn" id="hottest">Hottest</a>               
                </div>
-            </td>
+            </td> -->
          </tr>
          </table>
 
@@ -149,7 +149,7 @@ display: none;
       <div class="accordion-inner" style="border:none">
         <table style="width:100%">
          <tr>
-            <th style="text-align:left;margin:10px 0"> pH </th>
+            <th style="text-align:left;margin:10px 0"> pH - is it acidic, neutral or alkaline? </th>
          </tr>
          <tr>
             <td>     
@@ -158,7 +158,7 @@ display: none;
             </td>                    
          </tr>
          <tr>
-            <th style="text-align:left;margin:10px 0"> Saltiness </th>
+            <th style="text-align:left;margin:10px 0"> Conductivity (mS/cm)- a measure of salt content </th>
             
          </tr>
          <tr>
@@ -168,7 +168,7 @@ display: none;
             </td>                    
          </tr>
          <tr>
-            <th style="text-align:left;margin-top:10px 0"> Clarity </th>
+            <th style="text-align:left;margin-top:10px 0"> Turbidity (FNU) - a measure of water clarity </th>
             
          </tr>
          <tr>
