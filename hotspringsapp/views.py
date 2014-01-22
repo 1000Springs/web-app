@@ -307,6 +307,11 @@ def download(site_id):
 	headings.write(7, 'Dissolved Oxygen', easyxf('font: bold True;'))
 	headings.write(8, 'Conductivity', easyxf('font: bold True;'))
 	headings.write(9, 'Ebullition', easyxf('font: bold True;'))
+	headings.write(10, 'Turbidity', easyxf('font: bold True;'))
+	headings.write(11, 'DNA Volume', easyxf('font: bold True;'))
+	headings.write(12, 'Ferrous Iron', easyxf('font: bold True;'))
+
+
 
 	locationValues = sheet1.row(1)
 	locationValues.write(0, latestSample.location.feature_name, style)
@@ -319,7 +324,9 @@ def download(site_id):
 	locationValues.write(7, latestSample.phys.dO, style)
 	locationValues.write(8, latestSample.phys.conductivity, style)
 	locationValues.write(9, latestSample.phys.ebullition, style)
-
+	locationValues.write(10, latestSample.phys.turbidity, style)
+	locationValues.write(11, latestSample.phys.dnaVolume, style)
+	locationValues.write(12, latestSample.phys.ferrousIronAbs, style)
 
 
 	for i in range(9):

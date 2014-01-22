@@ -61,7 +61,7 @@
 </script>
 
 <style>
-#minTemp,#maxTemp, input[type=radio]
+#minTemp,#maxTemp
 {
   
 display: none;
@@ -74,7 +74,7 @@ display: none;
   <div class="title">
     <h2> search for springs </h2>
   </div>
-  <div class="bodytype span6 contrast" >
+  <div class="bodytype span6 contrast" style="margin-left:0px;">
 
        <form action="{{ url_for('simpleresults', filter='city')}}">
       <div style="background-color:rgba(29,155,171,0.75);padding:10px;border-radius:10px">
