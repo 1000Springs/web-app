@@ -1,0 +1,125 @@
+<html>
+	<head>
+	<script src="snap.svg-min.js"></script>
+	<script src="samplesite.js"></script>
+	<link rel="stylesheet" href="style.css">
+	
+	<style>
+	
+	
+	
+	</style>
+	
+	<script>
+	
+		
+		
+	
+		
+		window.onload = function ()		
+		{
+		
+		var paper = Snap("#svg");
+			
+		
+
+					  
+				var pHArray = 
+						[{name:"Stomach Acid",value:1,high:true},
+						 {name:"Lemon Juice",value:2},
+						 {name:"Vinegar",value:3},
+						 {name:"Pure Water",value:6},
+						 {name:"Spa Water",value:8},
+						 {name:"Soap",value:10},
+						 {name:"Ammonia",value:11},
+						 {name:"Bleach",value:12}];
+					   
+		var pHCategories = [{name:"Acidophiles",min:0,max:4},
+							  {name:"Neutophiles",min:4,max:9},
+							  {name:"Alkaliphiles",min:9,max:14}];
+							  
+						
+		var pH = ({svg:paper,
+					  length:250,
+					  x:0,
+					  y:0,
+					  max:14,
+					  current:9,
+					  markers:pHArray,
+					  categories:[],
+					  step:1
+					  });
+					  
+		var tempArray = [{name:"Frozen Water",value:0},
+					   {name:"Human Body", value:37},
+					   {name:"Scalding Water", value:55},
+					   {name:"Pasterisation", value:67},
+					   {name:"Boiling Water", value:100}];		
+
+			
+		var temp = ({svg:paper,
+					length:250,
+					x:0,
+					y:200,
+					max:100,
+					current:37,
+					markers:tempArray,
+					categories:[],
+					step:25,
+					warning:40});
+						
+		addProgressBar(pH);
+		
+		addProgressBar(temp);
+
+
+		// var progressAmount = paper.text(50, 50,0);
+		// progressAmount.animate({text:50},5000);
+		
+		// var position = Math.ceil(value/max * (barLength-strokeWidth));
+		// var line = paper.line(111 + 0 , 30+0, 111+0, 30 + 0 + 40);				
+		// line.attr({stroke: "Black",
+		// 		   strokeWidth: 1});
+		
+		// var textLabel = paper.text(100+0, 30 - 20,"AAAAAAAA");
+		// textLabel.attr
+		// ({class:"label",
+		// fill:"white"
+		// });
+		
+		// var textLabelWidth = textLabel.getBBox().width;
+		// var textLabelHeight = textLabel.getBBox().height;
+	
+		// textLabel.remove();
+		
+		// console.log(textLabelWidth);
+
+
+
+		// textLabel = paper.text((100+0), (30 + (textLabelHeight)) + 10 + 0,"AAAAAAAA");
+		// textLabel.attr({class:"marker"});
+	
+		// console.log(textLabel.attr());
+	
+		
+		
+			
+		}
+		
+		
+
+		
+	</script>
+	
+	</head>
+	<body>
+		
+		<div id="svgContainer">
+		<svg id="svg">
+		
+		
+		</svg>
+		</div>
+	
+	</body>
+</html>
