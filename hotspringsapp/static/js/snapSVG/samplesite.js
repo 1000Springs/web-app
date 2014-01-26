@@ -17,6 +17,8 @@ function addProgressBar(barAttr)
 	var percentage = Math.ceil(current/max * (barLength-strokeWidth));
 	
 	var paper= barAttr.svg;	
+
+	var units = barAttr.units;
 	
 	var pointerWidth = 10;
 	var pointerHeight = 10;
@@ -63,7 +65,7 @@ function addProgressBar(barAttr)
 	}
 		
 	Snap.animate(0, current, function (value) {
-		progressAmount.attr({text: Math.round(value)});
+		progressAmount.attr({text: Math.round(value) + units});
 	}, 1000);
 			
 	for(var i = 0;i < barAttr.markers.length;i++)
