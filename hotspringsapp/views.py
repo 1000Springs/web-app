@@ -57,9 +57,7 @@ def index():
 	return render_template('index.html',springs=locations)
 
 @app.route('/search')
-def search():
-	
-	return redirect(url_for('login')) 
+def search():	
 
 	return render_template('search.html')
 	
@@ -387,50 +385,24 @@ def sotd():
 	# sotdTup = GetSOTD()
 	
 
-	return render_template('sotd.html',sotdimg = sotdTup[0],
-										sotdsite_id = sotdTup[1])
-@app.route("/channel")
-def channel():
-	return render_template('channel.html')
+	springOfTheDay = Image.query.filter(Image.sample_id == Sample.id, Image.image_type == "BESTPHOTO",Location.id==Sample.location_id).group_by(Sample.location_id)[GetSOTD()]
+	
+	app.logger.debug(dir(springOfTheDay.Sample.location_id))
 
+	return render_template('sotd.html',location = springOfTheDay)
 
 @app.route("/searchbycategory")
 def searchbycat():
 	return render_template('searchbycategory.html')
 
-# def GetSOTD():
-# 	g.db = connect_db()
-
-# 	cur = g.db.cursor()
-
-# 	f = open('SOTD.ini','r')
-
+def GetSOTD():
 	
 
-# 	date = f.readline().rstrip()
-# 	springIndex = f.readline().rstrip()
-# 	springIndex = int(springIndex)
-# 	currentDate = datetime.datetime.strptime(date,"%d/%m/%Y")
+	f = open('sotd.cfg','r')
+	index = int(f.readline().strip())
+		
 
-# 	now = datetime.datetime.now()
-
-# 	#now = now.strftime("%d/%m/%Y")
-
-# 	if (now - currentDate) > datetime.timedelta(days=1):
-# 		springIndex+=1
-
-# 	query = """select image_path
-# 				from images"""
-
-# 	cur.execute(query)
-# 	results = cur.fetchall()
-# 	f.close()
-# 	f = open('SOTD.ini','w+')	
-# 	f.write(datetime.datetime.now().strftime("%d/%m/%Y") + "\n")
-# 	f.write(str(springIndex))
-	
-# 	f.close()
-# 	return results[springIndex]  
+	return index
 
 
 	
