@@ -65,7 +65,7 @@ function addProgressBar(barAttr)
 	}
 		
 	Snap.animate(0, current, function (value) {
-		progressAmount.attr({text: Math.round(value) + units});
+		progressAmount.attr({text: Math.round(value*100)/100 + units});
 	}, 1000);
 			
 	for(var i = 0;i < barAttr.markers.length;i++)

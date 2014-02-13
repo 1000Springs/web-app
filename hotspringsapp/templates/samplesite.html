@@ -21,7 +21,7 @@
 
 	window.onload = function()
 	{
-		var tempMarkers = [{name:"Frozen Water",value:0},
+		var tempMarkers = [{name:"Ice",value:0},
 					   {name:"Human Body", value:37},
 					   {name:"Scalding Water", value:55},
 					   {name:"Pasteurization", value:67,high:true},
@@ -40,7 +40,7 @@
 					categories:tempCategories,
 					step:10,
 					warning:40,
-					units:"°C"});
+					units:String.fromCharCode(186)+"C"});
 
 		addProgressBar(tempBar);
 

@@ -65,7 +65,7 @@ function addProgressBar(barAttr)
 	}
 		
 	Snap.animate(0, current, function (value) {
-		progressAmount.attr({text: Math.round(value) + units});
+		progressAmount.attr({text: Math.round(value*100)/100 + units});
 	}, 1000);
 			
 	for(var i = 0;i < barAttr.markers.length;i++)
@@ -150,7 +150,7 @@ function addProgressBar(barAttr)
 	{
 		
 		var position = Math.ceil(value/max * (barLength-strokeWidth));
-		var line = paper.line(progressX + position , y, progressX+position, y+barHeight);				
+		var line = paper.line(progressX + position , y+(barHeight-10), progressX+position, y+barHeight);				
 		line.attr({stroke: "black",
 				   strokeWidth: 1});
 
