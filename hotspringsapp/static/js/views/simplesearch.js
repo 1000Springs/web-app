@@ -76,14 +76,22 @@ presetTemp("#hottest",Math.ceil(maxTemp*0.90),maxTemp);
 
 $(function()
 {
-    $("#minTemp").val(Math.round($("#tempSlider").rangeSlider("values").min));
-    $("#maxTemp").val(Math.round($("#tempSlider").rangeSlider("values").max));
-  $("#tempSlider").bind("valuesChanged", function(e, data)
-  {  
-    $("#minTemp").val(Math.round(data.values.min));
-    $("#maxTemp").val(Math.round(data.values.max));
-  });
+  setMinMaxVals("#minTemp","#maxTemp","#tempSlider");
+  setMinMaxVals("#minPH","#maxPH","#pHSlider");
+  setMinMaxVals("#minTurb","#maxTurb","#claritySlider");
+  setMinMaxVals("#minCond","#maxCond","#saltSlider");
 });
+
+function setMinMaxVals(minVal,maxVal,elementId)
+{
+   $(minVal).val(Math.round($(elementId).rangeSlider("values").min));
+    $(maxVal).val(Math.round($(elementId).rangeSlider("values").max));
+  $(elementId).bind("valuesChanged", function(e, data)
+  {  
+    $(minVal).val(Math.round(data.values.min));
+    $(maxVal).val(Math.round(data.values.max));
+  });
+}
 
 //Start Map
 $(function()
@@ -91,24 +99,5 @@ $(function()
    $('img').tooltip();
  });
 
-// function codeLatLng(latLng) 
-// {
-//     geocoder = new google.maps.Geocoder();
-   
-//     geocoder.geocode({'latLng': latLng}, function(results, status) {
-//    if (status == google.maps.GeocoderStatus.OK) {
-//      if (results[5]) 
-//      {
-//        var cityName = results[5].formatted_address;        
 
-//        $('#myLoc').val($.trim(cityName.split(",")[0]));
-//        $('#nearby').val($.trim(cityName.split(",")[0]));
-//      }   
-//    }
-//    else
-//    {
-//      $('#myLoc').val("Could not find your location");
-//    }   
-//     });
-//   }
 

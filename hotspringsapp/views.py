@@ -154,19 +154,34 @@ def mapsearch():
 	return render_template('mapsearch.html',positions=locations)
 	# return "Coming Soon"
 
-@app.route('/simpleresults')	
-@app.route('/simpleresults/<int:page>')
-@app.route('/simpleresults/<showAll>')
+
+def url_for_other_page(page):
+    args = request.args.copy()    
+    return url_for(request.endpoint,page=page, **args)
+
+app.jinja_env.globals['url_for_other_page'] = url_for_other_page
+
+@app.route('/simpleresults', defaults={'page':1}, methods=['GET'])	
+@app.route('/simpleresults/<int:page>',methods=['GET'])
+@app.route('/simpleresults/<showAll>',methods=['GET'])
+
 def simpleresults(page = 1, showAll = None):	
 
-	if len(request.args) > 0:	
-		session['minTemp'] = request.args.get('minTemp')
-		session['maxTemp'] = request.args.get('maxTemp')
+	args = request.args.copy()
+	app.logger.debug(args)
 
-	app.logger.debug(len(request.args))
+	minTemp = request.args.get('minTemp')
+	maxTemp = request.args.get('maxTemp')
+	city = request.args.get('city')
+	minPH = request.args.get('minPH')
+	maxPH = request.args.get('maxPH')
+	minTurb = request.args.get('minTurb')
+	maxTurb = request.args.get('maxTurb')
+	minCond = request.args.get('minCond')
+	maxCond = request.args.get('maxCond')
+	
 
-	minTemp = session['minTemp']
-	maxTemp = session['maxTemp']
+
 		
 
 	listOfAllLocations = Location.query.filter(Sample.location_id == Location.id).order_by(Location.id).all()
@@ -178,18 +193,22 @@ def simpleresults(page = 1, showAll = None):
 	latestFilteredSamples = Sample.query.filter(Physical_data.id == Sample.phys_id,
 												Physical_data.initialTemp>= minTemp,
 												Physical_data.initialTemp < maxTemp,
+												Physical_data.pH >= minPH,
+												Physical_data.pH < maxPH,
+												Physical_data.conductivity >= minCond,
+												Physical_data.conductivity < maxCond,
+												Physical_data.turbidity >= minTurb,
+												Physical_data.turbidity < maxTurb,
 												Sample.location_id == Location.id,																																											
 												Sample.id.in_(latestSampleIds)
 												)
 
 
-	if "city" in request.args:
-		if request.args.get("city") != "":
-			latestFilteredSamples = latestFilteredSamples.filter(Location.feature_system == request.args.get('city'))
+	
+	if city != "":
+		app.logger.debug("Yep, I'm getting in here")
+		latestFilteredSamples = latestFilteredSamples.filter(Location.feature_system == city)
 
-	if "filters" in request.args:
-		if request.args.get("filters") != "all":
-			latestFilteredSamples = latestFilteredSamples.filter(Location.access == request.args.get("filters"))
 
 	
 	if showAll == "all":
@@ -199,6 +218,8 @@ def simpleresults(page = 1, showAll = None):
 
 
 	paginatedSamples = latestFilteredSamples.paginate(page,resultsPerPage,False)
+
+	
 	
 	form = SearchForm()
 

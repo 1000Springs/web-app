@@ -340,12 +340,13 @@ input[type=checkbox]
 		<a href="{{ url_for('simpleresults', page = pNum) }}"> {{pNum}} </a>
 	{% endif %}
 {% endfor %}
-{% if entries.has_next %}<a href="{{ url_for('simpleresults', page = entries.next_num) }}">Next Page >></a>{% endif %}
+{% if entries.has_next %}<a href="{{ url_for_other_page(entries.next_num)}}">Next &raquo;</a></a>{% endif %}
 
-{% if entries.has_next == False and entries.has_prev == False %}	
-	<p><a href="{{ url_for('simpleresults', page = 1) }}"> Show 15 </a></p>
-{% else %}
+{% if entries.has_next == True or entries.has_prev == True %}	
 	<p><a href="{{ url_for('simpleresults', showAll = 'all') }}"> Show All </a></p>
+
+{% elif entries.has_next != True and entries.has_prev != True and entries.items|length >= 15 %}
+	<p><a href="{{ url_for('simpleresults', page = 1) }}"> Show 15 </a></p>
 {% endif %}
 
 </div>

@@ -61,12 +61,14 @@
 </script>
 
 <style>
-#minTemp,#maxTemp
-{
-  
-display: none;
 
+
+#sliders input
+{
+  display:none;
 }
+
+
 </style>
 {% endblock %}
 {% block content %}
@@ -76,8 +78,8 @@ display: none;
   </div>
   <div class="bodytype span6 contrast" style="margin-left:0px;">
 
-       <form action="{{ url_for('simpleresults', filter='city')}}">
-      <div style="background-color:rgba(29,155,171,0.75);padding:10px;border-radius:10px">
+       <form action="{{ url_for('simpleresults')}}" method="get">
+      <div id="sliders" style="background-color:rgba(29,155,171,0.75);padding:10px;border-radius:10px">
       <table style="width:100%">
          <tr>
             <th style="text-align:left"> Location </th>
@@ -99,7 +101,7 @@ display: none;
               <p style="font-size:14px">Note: physical access to some springs is prohibited and their location has not been provided</p>
 
              
-              <label for="filters-0"><img rel="tooltip" data-original-title="All" src="{{ url_for('static', filename='img/icons/general_circle.png') }}"></label>
+              <label class="selected" for="filters-0"><img  rel="tooltip" data-original-title="All" src="{{ url_for('static', filename='img/icons/general_circle.png') }}"></label>
        
         
               <label for="filters-1"><img rel="tooltip" data-original-title="Public Access" src="{{ url_for('static', filename='img/icons/public_access.png') }}"></label>
@@ -154,7 +156,7 @@ display: none;
          <tr>
             <td>     
                <div id="pHSlider"></div>
-                {{form.minTemp}} {{form.maxTemp}}
+                {{form.minPH}} {{form.maxPH}}
             </td>                    
          </tr>
          <tr>
@@ -164,7 +166,7 @@ display: none;
          <tr>
             <td>     
                <div  id="saltSlider"></div>
-                {{form.minTemp}} {{form.maxTemp}}
+                {{form.minCond}} {{form.maxCond}}
             </td>                    
          </tr>
          <tr>
@@ -174,7 +176,7 @@ display: none;
          <tr>
             <td>     
                <div  id="claritySlider"></div>
-                {{form.minTemp}} {{form.maxTemp}}
+                {{form.minTurb}} {{form.maxTurb}}
             </td>                    
          </tr>
         

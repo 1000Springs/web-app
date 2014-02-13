@@ -5,7 +5,13 @@ class SearchForm(Form):
 	city = TextField('City')
 	minTemp = IntegerField('minTemp')
 	maxTemp = IntegerField('maxTemp')
-	filters = RadioField('Filters', choices=[('all', 'All'), ('PUBLIC_FREE', 'Free'), ('PUBLIC_PAID', 'Paid')])
+	minPH = IntegerField('minPH')
+	maxPH = IntegerField('maxPH')
+	minTurb = IntegerField('minTurb')
+	maxTurb = IntegerField('maxTurb')
+	minCond = IntegerField('minCond')
+	maxCond = IntegerField('maxCond')
+
 
 
 
