@@ -697,6 +697,11 @@ label
 
 /* Sample Site */
 
+#sampleSiteImg
+{
+  margin-left:5px;
+}
+
 .unitText
 {
   font-size: 10px;
