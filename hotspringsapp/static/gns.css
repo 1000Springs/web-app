@@ -753,6 +753,11 @@ label
 
 /* Template */
 
+.row-fluid
+{
+  position: relative;
+}
+
 .default-background
 {
   background-color:rgba(29,155,171,0.75);

@@ -14,6 +14,22 @@ from models import *
 from forms import *
 
 
+
+@app.errorhandler(404)
+def page_not_found(e):
+   
+    title = " 404 Error - Uh oh!"
+    errorMessage = "The page you were looking for could not be found."
+    return render_template('error.html',title=title,message=errorMessage), 404
+
+@app.errorhandler(500)
+def page_not_found(e):
+   
+    title = "500 Error - Oh dear, something's not working!"
+    errorMessage = "Something's gone wrong, sorry about that, but we are working as hard as we can to fix it."
+    return render_template('error.html',title=title,message=errorMessage), 500
+
+
 def get_user_name():
     """ Fetch the logged in User"""
     return session['logged_in'] if session.has_key('logged_in') else None

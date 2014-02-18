@@ -1,0 +1,29 @@
+{% extends "layout.html" %}
+{% block title %}Home{% endblock %}
+{% block head %}
+  {{ super() }}
+
+
+{% endblock %}
+{% block content %}
+<style type="text/css">
+
+.hero-unit
+{
+	
+	margin: 20px 65px 20px 65px;
+	color: white;
+}
+
+</style>
+
+<div class="row-fluid">
+	
+		<div class="hero-unit default-background">
+		  	<h1>{{title}}</h1>
+			<p>{{message}}</p>			
+		</div>
+	
+</div>
+
+{% endblock %}
