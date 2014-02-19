@@ -15,6 +15,15 @@
 <script type="text/javascript" src="{{ url_for('static', filename='js/snapSVG/snap.svg-min.js') }}"></script>
 <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?sensor=true"></script>
 
+<style>
+
+span.units
+{
+	color: rgb(29,155,171);
+	cursor: default;
+}
+
+</style>
 
 <script type="text/javascript">	
 
@@ -87,6 +96,7 @@
 		{% endif %}
 
 		$('img').tooltip();
+		$('span').tooltip();
 
 
 
@@ -104,6 +114,7 @@
 
 {% endblock %}
 {% block content %}
+
 
 
 	<div class="title">
@@ -158,11 +169,38 @@
 				</tr>
 				<tr>
 					<td>			
-						<h5 style="margin-top:0px;" >Redox: </h5> 
+						<h5 style="margin-top:0px;" >Oxidation Reduction <br> Potential: </h5> 
 					</td>
 
 					<td style="text-align:left;">						
-						<p> {{sample_site.phys.redox}}mV </p>
+						<p> {{sample_site.phys.redox}} <span class="units" rel="tooltip" data-original-title="Millivolts">mV</span> </p>
+					</td>
+				</tr>
+				<tr>
+					<td>			
+						<h5 style="margin-top:0px;" >Conductivity: </h5> 
+					</td>
+
+					<td style="text-align:left;">						
+						<p> {{sample_site.phys.conductivity}} <span class="units" rel="tooltip" data-original-title="Microsiemens per Centimeter">&#xB5;S/cm</span></p>
+					</td>
+				</tr>
+				<tr>
+					<td>			
+						<h5 style="margin-top:0px;" >Dissolved Oxygen: </h5> 
+					</td>
+
+					<td style="text-align:left;">						
+						<p> {{sample_site.phys.dO}} <span class="units" rel="tooltip" data-original-title="Milligrams per Litre">mg/L</span></p>
+					</td>
+				</tr>
+				<tr>
+					<td>			
+						<h5 style="margin-top:0px;" >Turbidity: </h5> 
+					</td>
+
+					<td style="text-align:left;">						
+						<p> {{sample_site.phys.turbidity}} <span class="units" rel="tooltip" data-original-title="Formazin Nephelometric Units">FNU</span></p>
 					</td>
 				</tr>
 				<tr>
