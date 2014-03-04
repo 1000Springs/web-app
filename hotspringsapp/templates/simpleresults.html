@@ -46,12 +46,7 @@
 		$("#minTemp").val({{minTemp}});
 		$("#maxTemp").val({{maxTemp}});
 		$('i').tooltip();
-		$('img').tooltip();
-		if($("#results").height() > $("#sidebar").height())
-		{
-			$("#sidebar").css("height" , $("#results").height());
-		}
-
+		$('img').tooltip();		
 	};
 
 	 $(function () 
@@ -178,9 +173,10 @@ input[type=checkbox]
 	
 
 
-<div class="span3 bodytype contrast" id="sidebar">	
+<div class="span3" id="sidebar">	
+	<div class="contrast" style="position:absolute;">
 	
-
+	
 	<form action="{{url_for('simpleresults')}}">
 		<table>
 		<tr>
@@ -194,8 +190,7 @@ input[type=checkbox]
 		</tr>
 		<tr>       
 
-              <td class="filterIcons" style="height:auto">
-             
+              <td class="filterIcons" style="height:auto">        
 
              
               <label for="filters-0"><img rel="tooltip" data-original-title="All" src="{{ url_for('static', filename='img/icons/general_circle.png') }}"></label>
@@ -223,25 +218,18 @@ input[type=checkbox]
 		</tr>
 		<tr>
 			 <td>
-			 	<div style="position:relative"> 
+			 	
 			 		<input type="text" id="range_1" />
 			 		{{form.minTemp}} 			
 					{{form.maxTemp}}	
-			 	</div>
+			 	
 			 </td>
-		</tr>	
-		<tr>
-			<td>
-				<!-- <div class="btn-group">                  
-					<a class="btn" id="safe">Safe</a>
-					<a class="btn" id="unsafe">Unsafe</a>
-					<a class="btn" id="hottest">Hottest</a>               
-				</div> -->
-			</td>
-		</tr>			
+		</tr>				
 		</table>
 		<input type="submit" value="Search" class="btn btn-small colourClick" style="margin:35px 0 0 30%;  width: 75px;height: 75px;  border-radius: 38px;">
 		</form>
+	</div>
+	
 		
 </div>
 

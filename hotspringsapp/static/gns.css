@@ -282,11 +282,11 @@ padding:0px 5px;
 
 .bodytype            
 { 
-font-family: sans-serif; 
+
 background-color:rgba(29,155,171,0.5);
 margin: 0px 0px;
 padding: 0px 15px; 
-position: relative;
+
 
 height: 100%;
 }
@@ -690,6 +690,28 @@ label
   text-decoration: none;
 
 }
+
+
+/* Simple Results */
+#sidebar
+{
+ margin-left:0px;
+ margin-right: 24px;
+
+
+}
+
+#sidebar div{
+
+  background-color:rgba(29,155,171,0.5);
+margin: 0px 0px;
+padding: 0px 11px; 
+
+
+height: 100%;
+}
+}
+
 
 
 
