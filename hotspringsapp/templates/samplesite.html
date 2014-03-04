@@ -31,8 +31,8 @@ span.units
 	{
 		var tempMarkers = [{name:"Ice",value:0},
 					   {name:"Human Body", value:37},
-					   {name:"Scalding Water", value:55},
-					   {name:"Pasteurization", value:67,high:true},
+					   {name:"Scalding Water", value:55,height:2},
+					   {name:"Pasteurization", value:67,height:3},
 					   {name:"Boiling Water", value:100}];	
 
 		var tempCategories = [];	
@@ -40,8 +40,8 @@ span.units
 			
 		var tempBar = ({svg:Snap("#tempBar"),
 					length:250,
-					x:30,
-					y:0,
+					x:50,
+					y:10,
 					max:100,
 					current:{{sample_site.phys.initialTemp}},
 					markers:tempMarkers,
@@ -52,22 +52,22 @@ span.units
 
 		addProgressBar(tempBar);
 
-		var phMarkers = [{name:"Stomach Acid",value:1,high:true},
-						 {name:"Lemon Juice",value:2},
-						 {name:"Vinegar",value:3},
+		var phMarkers = [{name:"Stomach Acid",value:1},
+						 {name:"Lemon Juice",value:2,height:2},
+						 {name:"Vinegar",value:3,height:3},
 						 {name:"Pure Water",value:6},
-						 {name:"Spa Water",value:8},
+						 {name:"Spa Water",value:8,height:2},
 						 {name:"Soap",value:10},
-						 {name:"Ammonia",value:11, high:true},
-						 {name:"Bleach",value:12, high:true}];
+						 {name:"Ammonia",value:11, height:3},
+						 {name:"Bleach",value:12}];
 
 
 		var pHCategories = [];			
 
 		var phBar = ({svg:Snap("#pHBar"),
 					length:250,
-					x:30,
-					y:0,
+					x:50,
+					y:10,
 					max:14,
 					current:{{sample_site.phys.pH}},
 					markers:phMarkers,
