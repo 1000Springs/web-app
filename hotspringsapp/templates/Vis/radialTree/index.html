@@ -1,4 +1,3 @@
-<link type="text/css" rel="stylesheet" href="{{ url_for('static', filename='tipsy.css') }}"/>
 <style>
 
 .node circle {
@@ -947,7 +946,8 @@ var root = {
           } else {
             return "leaf node"
           }
-        }).attr("transform", function(d) { return "rotate(" + (d.x - 90) + ")translate(" + d.y + ")"; });        
+        }).attr("transform", function(d) { return "rotate(" + (d.x - 90) + ")translate(" + d.y + ")"; })
+        .attr("title", function (d)  {var d = this.__data__;return d.name;});        
        
 
   
@@ -965,16 +965,6 @@ var root = {
                     .attr("transform", function(d) { return d.x < 180 ? "translate(8)" : "rotate(180)translate(-8)"; })
                     .text(function(d) { return d.name; });
 
-
-$('svg .inner').tipsy({ 
-        gravity: 'w', 
-        html: true,
-         title: function (d) 
-         {
-           var d = this.__data__;
-           return d.name;
-          }       
-      });
 
 function highlightChildLinks(selectedNode)
 {

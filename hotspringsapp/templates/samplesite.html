@@ -10,7 +10,6 @@
 <script type="text/javascript" src="{{ url_for('static', filename='js/jQuery/jquery.opacityrollover.js') }}"></script>
 <script type="text/javascript" src="{{ url_for('static', filename='js/maps.js') }}"></script>
 <script type="text/javascript" src="{{ url_for('static', filename='js/Vis/radialTree/d3.js') }}"></script>
-<script type="text/javascript" src="{{ url_for('static', filename='js/jQuery/jquery.tipsy.js') }}"></script>
 <script type="text/javascript" src="{{ url_for('static', filename='js/views/samplesite.js') }}"></script>
 <script type="text/javascript" src="{{ url_for('static', filename='js/views/status.js') }}"></script>
 <script type="text/javascript" src="{{ url_for('static', filename='js/snapSVG/snap.svg-min.js') }}"></script>
@@ -98,6 +97,11 @@ span.units
 
 		$('img').tooltip();
 		$('span').tooltip();
+
+		 $("svg circle, .inner").tooltip({
+        'container': 'body',
+        'placement': 'top'
+    	});
 
 		statusGraph("#status",{{statusPos}});
 
@@ -276,10 +280,6 @@ span.units
 				         	<h3>The chemistry data is coming soon</h3>	
 
 				       	{% endif %}
-
-
-				       
-				      
 				    </div>
 			    </div>
 		    </div>
@@ -293,9 +293,6 @@ span.units
 		        </div>    
 			    <div id="collapseTwo" class="accordion-body collapse">
 				    <div class="accordion-inner" id="radialTree">
-
-				       
-
 				       {% if taxJson != None %}
 						<h1> Phylogenetic tree </h1>
 						<p> hover over tree to read more </p>
