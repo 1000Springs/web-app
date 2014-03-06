@@ -2,8 +2,8 @@
 
     <script type="text/javascript">
 (function(){
-// var bubbleData = {{json|safe}};
-var bubbleData = {"name":"","children":[{"name":"Elements","children":[{"name":"Li","size":607},{"name":"B","size":367},{"name":"N","size":213},{"name":"Na","size":271},{"name":"P","size":400},{"name":"Cl","size":219},{"name":"C","size":317},{"name":"Al","size":293},{"name":"Si","size":32},{"name":"K","size":169},{"name":"Ca","size":394},{"name":"V","size":42},{"name":"Cr","size":184},{"name":"Fe","size":246},{"name":"Mn","size":312},{"name":"cobalt","size":226},{"name":"Ni","size":102},{"name":"Cu","size":26},{"name":"Zn","size":34},{"name":"Mg","size":336},{"name":"As","size":272},{"name":"Se","size":365},{"name":"Br","size":398},{"name":"Sr","size":373},{"name":"Mo","size":186},{"name":"Ag","size":15},{"name":"Cd","size":328},{"name":"In","size":146},{"name":"Ba","size":19},{"name":"La","size":280},{"name":"Ti","size":310},{"name":"Pb","size":158},{"name":"Bi","size":53},{"name":"U","size":194}]},{"name":"Gases","children":[{"name":"CH4","size":353},{"name":"H2S","size":339},{"name":"H2","size":242},{"name":"CO","size":36}]},{"name":"Compounds","children":[{"name":"nitrate","size":59},{"name":"nitrite","size":192},{"name":"ammonium","size":120},{"name":"sulfate","size":42},{"name":"chloride","size":28},{"name":"phosphate","size":160},{"name":"iron2","size":397},{"name":"bicarbonate","size":16}]}]};
+ var bubbleData = {{chemJson|safe}};
+//var bubbleData = {"name":"","children":[{"name":"Elements","children":[{"name":"Li","size":607},{"name":"B","size":367},{"name":"N","size":213},{"name":"Na","size":271},{"name":"P","size":400},{"name":"Cl","size":219},{"name":"C","size":317},{"name":"Al","size":293},{"name":"Si","size":32},{"name":"K","size":169},{"name":"Ca","size":394},{"name":"V","size":42},{"name":"Cr","size":184},{"name":"Fe","size":246},{"name":"Mn","size":312},{"name":"cobalt","size":226},{"name":"Ni","size":102},{"name":"Cu","size":26},{"name":"Zn","size":34},{"name":"Mg","size":336},{"name":"As","size":272},{"name":"Se","size":365},{"name":"Br","size":398},{"name":"Sr","size":373},{"name":"Mo","size":186},{"name":"Ag","size":15},{"name":"Cd","size":328},{"name":"In","size":146},{"name":"Ba","size":19},{"name":"La","size":280},{"name":"Ti","size":310},{"name":"Pb","size":158},{"name":"Bi","size":53},{"name":"U","size":194}]},{"name":"Gases","children":[{"name":"CH4","size":353},{"name":"H2S","size":339},{"name":"H2","size":242},{"name":"CO","size":36}]},{"name":"Compounds","children":[{"name":"nitrate","size":59},{"name":"nitrite","size":192},{"name":"ammonium","size":120},{"name":"sulfate","size":42},{"name":"chloride","size":28},{"name":"phosphate","size":160},{"name":"iron2","size":397},{"name":"bicarbonate","size":16}]}]};
 var w = 1024,
     h = 800,
     r = 720,
@@ -30,7 +30,8 @@ var vis = d3.select("#bubbles").insert("svg:svg", "h2")
       .data(nodes)
       .enter()
        .append("svg:circle")
-      .attr("class", function(d) { return d.children ? "parent" : "bubble"; })
+      .attr("class", function(d) { return d.children ? "bubbleVis parent" : "bubble bubbleVis"; })
+      
      
       .attr("cx", function(d) { return d.x; })
       .attr("cy", function(d) { return d.y; })

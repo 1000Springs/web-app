@@ -289,29 +289,47 @@ def ourscience():
 @app.route('/samplesite/<int:site_id>')
 def samplesite(site_id):	
 	
+	gatheredInfoCount = 0
+
 	locationSamples = Sample.query.filter(Location.id == Sample.location_id, Location.id == site_id)
 
 	latestSample = locationSamples.order_by(Sample.date_gathered.desc()).first()
 	
-	json = {"name":"", "children":[{"name":"Elements", "children":[]},{"name":"Gases","children":[]},{"name":"Compounds","children":[]}]};	
+	chemJson = {"name":"", "children":[{"name":"Elements", "children":[]},{"name":"Gases","children":[]},{"name":"Compounds","children":[]}]};	
 
+
+	if latestSample.phys is not None:
+		gatheredInfoCount+= 1
 
 	
+
+
 	if latestSample.chem is not None:
-		for e in latestSample.chem.returnElements():
-			json["children"][0]["children"].append({"name":e[0], "children":[{"name":e[0],"size":e[1]}]})
+		gatheredInfoCount+= 1	
+ 		for e in latestSample.chem.returnElements(): 			
+ 			if e[1] != None and e[1] > 0:
+				chemJson["children"][0]["children"].append({"name":e[0], "children":[{"name":e[0],"size":e[1]}]})
 
 		for e in latestSample.chem.returnGases():
-			json["children"][1]["children"].append({"name":e[0],"size":e[1]})
+			if e[1] != None and e[1] > 0:
+				chemJson["children"][1]["children"].append({"name":e[0],"size":e[1]})
 
 		for e in latestSample.chem.returnCompounds():
-			json["children"][2]["children"].append({"name":e[0],"size":e[1]})		
+			if e[1] != None and e[1] > 0:
+				chemJson["children"][2]["children"].append({"name":e[0],"size":e[1]})
+	else:
+		chemJson = None;
+	
+	#Position of statusGraph starts at zero
+	gatheredInfoCount -= 1;
 
-
+	taxJson = None;
 
 	
 	return render_template('samplesite.html',sample_site=latestSample,											 
-											 json=json)	 
+											 chemJson=chemJson,
+											 statusPos = gatheredInfoCount,
+											 taxJson=taxJson)	 
 
 @app.route('/download/<int:site_id>')
 def download(site_id):
@@ -434,8 +452,9 @@ def searchbycat():
 
 def GetSOTD():
 	
+	path = app.config['DEFAULT_PATH']
 
-	f = open('sotd.cfg','r')
+	f = open(path +'sotd.cfg','r')
 	index = int(f.readline().strip())
 		
 
