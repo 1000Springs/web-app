@@ -86,6 +86,8 @@ CREATE TABLE `physical_data` (
   `soilCollected` tinyint(1) DEFAULT NULL,
   `waterColumnCollected` tinyint(1) DEFAULT NULL,
   `gasVolume` double DEFAULT NULL,
+  `tds` double DEFAULT NULL,
+  `settledAtFourDegC` tinyint(1) DEFAULT NULL
   PRIMARY KEY (`id`)
 );
 
