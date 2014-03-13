@@ -63,6 +63,8 @@ CREATE TABLE `location` (
   `private` tinyint(1) DEFAULT NULL,
   `colour` varchar(50) DEFAULT NULL,
   `access` varchar(15) DEFAULT NULL,
+  `district` varchar(50) DEFAULT NULL,
+  `location` varchar(50) DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `observation_id` (`observation_id`)
 ) ;
