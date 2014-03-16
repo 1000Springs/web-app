@@ -46,6 +46,7 @@ CREATE TABLE `chemical_data` (
   `phosphate` float DEFAULT NULL,
   `iron2` float DEFAULT NULL,
   `bicarbonate` float DEFAULT NULL,
+  `thallium` float DEFAULT NULL,
   PRIMARY KEY (`id`)
 );
 
