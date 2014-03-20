@@ -9,7 +9,7 @@ from hotspringsapp import app
 from sqlalchemy.sql import func
 from werkzeug.datastructures import Headers
 
-from flask import Flask, url_for, render_template, request, g, session, flash, redirect, Response
+from flask import Flask, url_for, render_template, request, g, session, flash, redirect, Response, abort
 from models import *
 from forms import *
 
@@ -292,6 +292,8 @@ def samplesite(site_id):
 
 	locationSamples = Location.query.filter(Location.id == Sample.location_id, Location.id == site_id)
 
+	if locationSamples.count() == 0:
+		abort(404)
 
 	latestSample = locationSamples.first().latestSample()
 	
