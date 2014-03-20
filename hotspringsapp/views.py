@@ -171,30 +171,34 @@ def mapsearch():
 	# return "Coming Soon"
 
 
-def url_for_other_page(page):
-    args = request.args.copy()    
-    return url_for(request.endpoint,page=page, **args)
+def url_for_other_page(page = 1,showAll=None):
+   
+	args = request.args.copy()	
+
+	return url_for(request.endpoint,page=page,showAll = showAll, **args)
 
 app.jinja_env.globals['url_for_other_page'] = url_for_other_page
 
 @app.route('/simpleresults', defaults={'page':1}, methods=['GET'])	
 @app.route('/simpleresults/<int:page>',methods=['GET'])
-@app.route('/simpleresults/<showAll>',methods=['GET'])
+@app.route('/simpleresults/<int:page>/<showAll>',methods=['GET'])
 
 def simpleresults(page = 1, showAll = None):	
 
-	args = request.args.copy()
-	app.logger.debug(args)
 
-	minTemp = request.args.get('minTemp')
-	maxTemp = request.args.get('maxTemp')
-	city = request.args.get('city')
-	minPH = request.args.get('minPH')
-	maxPH = request.args.get('maxPH')
-	minTurb = request.args.get('minTurb')
-	maxTurb = request.args.get('maxTurb')
-	minCond = request.args.get('minCond')
-	maxCond = request.args.get('maxCond')
+
+	args = request.args.copy()
+	
+
+	minTemp = args.get('minTemp')
+	maxTemp = args.get('maxTemp')
+	city = args.get('city')
+	minPH = args.get('minPH')
+	maxPH = args.get('maxPH')
+	minTurb = args.get('minTurb')
+	maxTurb = args.get('maxTurb')
+	minCond = args.get('minCond')
+	maxCond = args.get('maxCond')
 	
 
 
@@ -217,20 +221,15 @@ def simpleresults(page = 1, showAll = None):
 												Physical_data.turbidity < maxTurb,
 												Sample.location_id == Location.id,																																											
 												Sample.id.in_(latestSampleIds)
-												)
-
-
-	
-	if city != "":
-		app.logger.debug("Yep, I'm getting in here")
-		latestFilteredSamples = latestFilteredSamples.filter(Location.feature_system == city)
+												)	
 
 
 	
 	if showAll == "all":
 		resultsPerPage = latestFilteredSamples.count()
 	else:
-		resultsPerPage = app.config["RESULTS_PER_PAGE"]	
+		resultsPerPage = app.config["RESULTS_PER_PAGE"]
+
 
 
 	paginatedSamples = latestFilteredSamples.paginate(page,resultsPerPage,False)
@@ -291,9 +290,11 @@ def samplesite(site_id):
 	
 	gatheredInfoCount = 0
 
-	locationSamples = Sample.query.filter(Location.id == Sample.location_id, Location.id == site_id)
+	locationSamples = Location.query.filter(Location.id == Sample.location_id, Location.id == site_id)
 
-	latestSample = locationSamples.order_by(Sample.date_gathered.desc()).first()
+
+	latestSample = locationSamples.first().latestSample()
+	
 	
 	chemJson = {"name":"", "children":[{"name":"Elements", "children":[]},{"name":"Gases","children":[]},{"name":"Compounds","children":[]}]};	
 
