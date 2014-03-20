@@ -46,6 +46,7 @@ CREATE TABLE `chemical_data` (
   `phosphate` float DEFAULT NULL,
   `iron2` float DEFAULT NULL,
   `bicarbonate` float DEFAULT NULL,
+  `thallium` float DEFAULT NULL,
   PRIMARY KEY (`id`)
 );
 
@@ -63,6 +64,8 @@ CREATE TABLE `location` (
   `private` tinyint(1) DEFAULT NULL,
   `colour` varchar(50) DEFAULT NULL,
   `access` varchar(15) DEFAULT NULL,
+  `district` varchar(50) DEFAULT NULL,
+  `location` varchar(50) DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `observation_id` (`observation_id`)
 ) ;
@@ -84,6 +87,8 @@ CREATE TABLE `physical_data` (
   `soilCollected` tinyint(1) DEFAULT NULL,
   `waterColumnCollected` tinyint(1) DEFAULT NULL,
   `gasVolume` double DEFAULT NULL,
+  `tds` double DEFAULT NULL,
+  `settledAtFourDegC` tinyint(1) DEFAULT NULL
   PRIMARY KEY (`id`)
 );
 
