@@ -45,7 +45,7 @@
 		loadMarkers();
 		$("#minTemp").val({{minTemp}});
 		$("#maxTemp").val({{maxTemp}});
-		$('i').tooltip();
+		
 		$('img').tooltip();		
 	};
 
@@ -174,7 +174,7 @@ input[type=checkbox]
 
 
 <div class="span3" id="sidebar">	
-	<div class="contrast" style="position:absolute;">
+	<div class="contrast" id="sidebar-contents" style="position:absolute;">
 	
 	
 	<form action="{{url_for('simpleresults')}}">
