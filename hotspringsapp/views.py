@@ -72,10 +72,13 @@ def index():
 
 	return render_template('index.html',springs=locations)
 
-@app.route('/search')
+@app.route('/search', methods=['GET'])
 def search():	
 
-	return render_template('search.html')
+	if session.get('logged_in') != None:
+		return render_template('search.html')
+	else:
+		return redirect(url_for('login'))
 	
 @app.route('/simplesearch')
 def simplesearch():
