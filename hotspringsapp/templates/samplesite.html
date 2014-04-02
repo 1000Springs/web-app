@@ -148,6 +148,16 @@ span.units
 							<p>{{sample_site.location.feature_system}}</p>					
 					</td>				
 				</tr>
+
+				<tr>
+					<td>						
+						<h5 style="margin-top:0px;" >Sample Number: </h5> 
+					</td>
+					<td style="text-align:left;">						
+							<p>{{sample_site.sample_number}}</p>					
+					</td>				
+				</tr>
+
 				<tr>
 					<td>			
 						<h5 style="margin-top:0px;" >Sample Date: </h5>
@@ -173,6 +183,24 @@ span.units
 							<svg width="400px" height="110px" id="pHBar"></svg>
 						
 					</td>					
+				</tr>
+				<tr>
+					<td>			
+						<h5 style="margin-top:0px;" >Size (approx): </h5> 
+					</td>
+
+					<td style="text-align:left;">						
+						<p> {{sample_site.phys.size}}</p>
+					</td>
+				</tr>
+				<tr>
+					<td>			
+						<h5 style="margin-top:0px;" >Ebullition: </h5> 
+					</td>
+
+					<td style="text-align:left;">						
+						<p> {{sample_site.phys.ebullition|capitalize}}</p>
+					</td>
 				</tr>
 				<tr>
 					<td>			
