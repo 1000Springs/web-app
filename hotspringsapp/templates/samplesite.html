@@ -135,6 +135,10 @@ span.units
 <div class="row-fluid" style="position:relative;background-color:white;">
 	<div class="span7">			
 		
+{% if sample_site.location.access == "PUBLIC_PAID" %}
+				<p> <strong> Hot springs can cause serious injury and death. Follow the safety instructions.  Never climb over barriers and step off paths. </strong></p>
+			{% endif %}
+		
 		<p>{{sample_site.location.description}}</p> 
 			
 			

@@ -63,7 +63,15 @@ def logout():
 
 @app.route('/about')
 def about():
-	return render_template('about.html');
+	return render_template('about.html')
+
+@app.route('/licence')
+def licence():
+	return render_template('licence.html')
+
+@app.before_first_request
+def showBlah():
+	app.logger.debug("First_Request")
 
 @app.route('/')
 def index():
@@ -226,6 +234,8 @@ def simpleresults(page = 1, showAll = None):
 												Sample.id.in_(latestSampleIds)
 												)	
 
+	if city != "":
+		latestFilteredSamples = latestFilteredSamples.filter(Location.feature_system == city)
 
 	
 	if showAll == "all":

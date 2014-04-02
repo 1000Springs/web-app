@@ -11,6 +11,30 @@
  $(function () 
   {
   MenuSelect("#home","{{ url_for('static', filename='img/icons/home_Selected.png') }}");
+  if(typeof(Storage)!=="undefined")
+  {
+       if (!sessionStorage.visited)
+      {
+        $('#myModal').modal({
+            backdrop: 'static',
+            keyboard: false
+          });
+         $('#myModal').modal('show');
+        sessionStorage.visited = true;
+      }
+
+  }
+else
+  {
+  $('#myModal').modal({
+            backdrop: 'static',
+            keyboard: false
+          });
+  $('#myModal').modal('show');
+  }
+ 
+  
+  
   });
 
 
@@ -19,16 +43,6 @@
 
 {% endblock %}
 {% block content %}
-<!-- 
-<div class="title contrast" id="index" style="">
-  <h2>welcome</h2>
-  <p> 
-    Our project collects biodiversity information from 1,000 hot springs in and around Taupo.
-    These springs are hotspots for unique populations of bugs and microbes about which we know very little.
-    Here we make our research results accessible to the public.
-  </p>
-
-</div> -->
 
 <div class="row-fluid">
  
@@ -40,8 +54,8 @@
         <p style="font-size:18px;"> 
          Geothermal ecosystems are globally rare and are an iconic feature of the New Zealand landscape. 
          Yet, little is known about the unique populations of microorganisms (<em>Bacteria</em> and <em>Archaea</em>) which 
-         inhabit these environments or the ecological conditions that support them. Here we share a catalogue 
-         of the microbial biodiversity and geochemical information for 1,000 geothermal hotsprings in New Zealand’s
+         inhabit these environments or the ecological conditions that support them albeit unique and extraordinary enzymes can be isolated from them.
+         Here we share a catalogue of the microbial biodiversity and geochemical information for 1,000 geothermal hotsprings in New Zealand’s
          central North Island. 
         </p>
     
@@ -62,7 +76,22 @@
         <a href="{{url_for('sotd')}}" style="float:right;color:white;font-size:16px;height:15px;  margin:5px 20px"> Check out our spring of the day! </a>  
   </div>
 
+<!-- Modal -->
+        <div id="myModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+          <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+          <h3 id="myModalLabel">Safety Warning </h3>
+          </div>
+          <div class="modal-body">
+          <p>Hot springs and heated soils are potentially dangerous natural features.  The information about the hotsprings on this website reflects the condition of the spring at the time the sample was taken. This temperature and other information on this website should NEVER be used to assess the safety of a spring for bathing or for any other activities in or near the spring. </p>
 
+
+          </div>
+          <div class="modal-footer">
+
+          <button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
+          </div>
+        </div>
 
 
 

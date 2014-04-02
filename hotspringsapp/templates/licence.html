@@ -1,0 +1,36 @@
+{% extends "layout.html" %}
+{% block title %}Licence for Use/Disclaimer{% endblock %}
+{% block head %}
+  {{ super() }}
+{% endblock %}
+{% block content %}
+
+	<div class="title">
+
+		<h2>Licence for Use/Disclaimer</h2>
+
+	</div>
+
+	<div class="row-fluid" style="position:relative;background:#ffffff">
+	<div id="aboutText" style="padding: 10px 20px;">
+
+	<h3>Licence for Use</h3>
+		<p> 
+		The content on this website is copyright GNS Science, and is licensed under Creative Commons Attribution - Non Commercial -Share Alike 4.0 International. 
+	</p>
+	<p>
+		This means that you are free to copy, distribute and adapt the content for non commercial purposes ( that is to say, purposes not primarily directed at commercial advantage or monetary compensation) provided that you attribute the content to the authors, GNS Science and the University of Waikato, license your new creations under this same license terms and abide by the other license terms.  To view a copy of the license, visit [logo and link here] 
+	</p>
+	<p>
+		Any person wishing to access the biological material collected under this project for research purposes should contact <a href="{{url_for('about', _anchor='contact-details')}}"> Matt and Craig </a> 
+	</p>
+
+	<h3>Disclaimer</h3>
+
+	<p>
+		Although all reasonable endeavours are made to ensure the accuracy of the information on this website, the information is provided without warranties of any kind. GNS Science and Waikato University exclude, to the full extent permitted by law, liability for any loss, damage or expense, direct or indirect, and however caused, resulting from any person or organisation's use of, or reliance on, the information provided on this website.
+	</p>
+	
+	</div>
+</div>
+{% endblock %}
