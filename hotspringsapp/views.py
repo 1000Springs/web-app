@@ -69,10 +69,6 @@ def about():
 def licence():
 	return render_template('licence.html')
 
-@app.before_first_request
-def showBlah():
-	app.logger.debug("First_Request")
-
 @app.route('/')
 def index():
 
