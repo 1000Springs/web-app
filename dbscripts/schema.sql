@@ -66,6 +66,7 @@ CREATE TABLE `location` (
   `access` varchar(15) DEFAULT NULL,
   `district` varchar(50) DEFAULT NULL,
   `location` varchar(50) DEFAULT NULL,
+  `feature_type` varchar(50) DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `observation_id` (`observation_id`)
 ) ;
