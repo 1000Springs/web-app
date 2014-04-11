@@ -23,20 +23,21 @@ class Location(db.Model):
 	def latestSample(self):
 		return Sample.query.filter(Location.id == self.id, Sample.location_id == Location.id ).order_by(Sample.location_id,Sample.date_gathered.desc()).first()
 
- 	# def __init__(self,location_id,fName,latPos,lngPos,fSystem,desc,toilet,pbench,track,private,colour):
+ 	def __init__(self,location_id,fName,latPos,lngPos,fSystem,desc,toilet,pbench,track,private,colour,access):
 
-	 # 	self.id = location_id
-	 # 	self.feature_name = fName
-	 # 	self.lat = latPos
-	 # 	self.lng = lngPos
-	 # 	self.feature_system = fSystem
-	 # 	self.description = desc
-	 # 	self.toilet = toilet
-	 # 	self.parkbench = pbench
-	 # 	self.track = track
-	 # 	self.private = private
-	 # 	self.colour = colour
-
+		self.id = location_id
+		self.feature_name = fName
+		self.feature_system = fSystem
+		self.lat = latPos
+		self.lng = lngPos
+		self.description = desc
+		self.toilet = toilet
+		self.parkbench = pbench
+		self.track = track
+		self.private = private
+		self.colour = colour
+		self.access = access
+		
 	def __repr__(self):
 		return '<Location {0} {1}>'.format(self.id,self.feature_name)
 	
@@ -57,25 +58,30 @@ class Physical_data(db.Model):
 	ebullition = db.Column(db.String(50))
 	turbidity = db.Column(db.Float)
 	dnaVolume = db.Column(db.Float)
-	ferrousIronAbs = db.Column(db.Float)
+	ferrousIronAbs = db.Column(db.Float)	
 
-	
-
-	# def __init__(self, phys_id,iTemp,sTemp,ph,red,dis_ox,cond,date):
-	# 	self.id               = phys_id
-	# 	self.initialTemp      = iTemp
-	# 	self.pH               = ph
-	# 	self.redox            = red
-	# 	self.dO               = dis_ox
-	# 	self.conductivity     = cond
-	# 	self.date_gathered    = date
-	# 	self.sampleTemp		  = sTemp
+	def __init__(self, phys_id,iTemp,sTemp,ph,red,dis_ox,cond,date,size,colour,ebul,turb,dnaVol,ferIron):
+		self.id               = phys_id
+		self.initialTemp      = iTemp
+		self.pH               = ph
+		self.redox            = red
+		self.dO               = dis_ox
+		self.conductivity     = cond
+		self.size			  = size
+		self.colour           = colour
+		self.ebullition       = ebul
+		self.turbidity        = turb
+		self.dnaVolume        = dnaVol
+		self.ferrousIronAbs   = ferIron
+		self.date_gathered    = date
+		self.sampleTemp		  = sTemp
 
 class Sample(db.Model):
 
 	id = db.Column(db.Integer, primary_key=True)
 	date_gathered = db.Column(db.DateTime, nullable=False)
 	sampler = db.Column(db.String(50), nullable=False)
+	sample_number = db.Column(db.String(50), nullable=False)
 	location_id = db.Column(db.Integer, db.ForeignKey("location.id"))
 	phys_id = db.Column(db.Integer, db.ForeignKey("physical_data.id"))
 	chem_id = db.Column(db.Integer, db.ForeignKey("chemical_data.id"))
@@ -85,11 +91,13 @@ class Sample(db.Model):
 	image = db.relationship("Image",backref="Sample",lazy="select" , uselist=True)
 	chem = db.relationship("Chemical_data",backref="Sample",lazy="select")
 
-	# def __init__(self,id,date,location,physID):
-	# 	self.id = id
-	# 	self.date_gathered = date
-	# 	self.location_id = location
-	# 	self.phys_id = physID
+	def __init__(self,id,date,location,physID,chemID,sampleNum):
+		self.id = id
+		self.date_gathered = date
+		self.location_id = location
+		self.phys_id = physID
+		self.chem_id = chemID
+		self.sample_number = sampleNum
 
 	def __repr__(self):
 		return '<Sample {0} {1} {2}>'.format(self.id,self.location_id,self.date_gathered)
@@ -104,11 +112,11 @@ class Image(db.Model):
 
 
 
-	# def __init__(self,id,sid,iPath,iName):
-	# 	self.id = id
-	# 	self.sample_id = sid
-	# 	self.image_path = iPath
-	# 	self.image_name = iName
+	def __init__(self,id,sid,iPath,iName):
+		self.id = id
+		self.sample_id = sid
+		self.image_path = iPath
+		self.image_name = iName
 
 
 class User(db.Model):
