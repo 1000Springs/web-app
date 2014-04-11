@@ -207,12 +207,14 @@ def simpleresults(page = 1, showAll = None):
 	minCond = args.get('minCond')
 	maxCond = args.get('maxCond')
 	
-
+	
 
 		
 
 	listOfAllLocations = Location.query.filter(Sample.location_id == Location.id).order_by(Location.id).all()
 	latestSampleIds = []
+
+
 
 	for l in listOfAllLocations:		
 		latestSampleIds.append(l.latestSample().id)
@@ -229,6 +231,8 @@ def simpleresults(page = 1, showAll = None):
 												Sample.location_id == Location.id,																																											
 												Sample.id.in_(latestSampleIds)
 												)	
+
+	app.logger.debug("Testing")
 
 	if city != "":
 		latestFilteredSamples = latestFilteredSamples.filter(Location.feature_system == city)
@@ -452,9 +456,11 @@ def sotd():
 	# sotdTup = GetSOTD()
 	
 
-	springOfTheDay = Image.query.filter(Image.sample_id == Sample.id, Image.image_type == "BESTPHOTO",Location.id==Sample.location_id).group_by(Sample.location_id)[GetSOTD()]
+	springOfTheDay = Image.query.filter(Image.sample_id == Sample.id, Image.image_type == "LARGE",Location.id==Sample.location_id).group_by(Sample.location_id)[GetSOTD()]
 	
-	app.logger.debug(dir(springOfTheDay.Sample.location_id))
+
+
+	app.logger.debug(springOfTheDay.image_path)
 
 	return render_template('sotd.html',location = springOfTheDay)
 
