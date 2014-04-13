@@ -10,32 +10,28 @@ class Location(db.Model):
 	id = db.Column(db.Integer, primary_key=True)
 	feature_name = db.Column(db.String(50))
 	feature_system = db.Column(db.String(50))
+	district = db.Column(db.String(50))
+	location = db.Column(db.String(50))
 	lat = db.Column(db.Float)
 	lng = db.Column(db.Float)	
 	description = db.Column(db.String(200))
-	toilet = db.Column(db.Boolean)
-	parkbench = db.Column(db.Boolean)
-	track = db.Column(db.Boolean)
-	private = db.Column(db.Boolean)
-	colour = db.Column(db.String(50))
+	private = db.Column(db.Boolean)	
 	access = db.Column(db.String(15))
 
 	def latestSample(self):
 		return Sample.query.filter(Location.id == self.id, Sample.location_id == Location.id ).order_by(Sample.location_id,Sample.date_gathered.desc()).first()
 
- 	def __init__(self,location_id,fName,latPos,lngPos,fSystem,desc,toilet,pbench,track,private,colour,access):
+ 	def __init__(self,location_id,fName,latPos,lngPos,fSystem,dist,loc,desc,private,access):
 
 		self.id = location_id
 		self.feature_name = fName
 		self.feature_system = fSystem
+		self.district = dist
+		self.location = loc
 		self.lat = latPos
 		self.lng = lngPos
-		self.description = desc
-		self.toilet = toilet
-		self.parkbench = pbench
-		self.track = track
+		self.description = desc		
 		self.private = private
-		self.colour = colour
 		self.access = access
 		
 	def __repr__(self):
