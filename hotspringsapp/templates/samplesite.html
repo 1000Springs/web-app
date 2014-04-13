@@ -84,9 +84,9 @@ span.units
 	$(function()
 	{
 		
-		var sampleSiteMap = setupMap("show_map");	
-
+		var sampleSiteMap = setupMap("show_map");		
 		{% if sample_site.location.access != "PRIVATE" %}
+
 		addInfoWindowMarker("{{sample_site.location.feature_system}}",
 							"{{sample_site.location.lat}}",
 							"{{sample_site.location.lng}}",
@@ -134,13 +134,20 @@ span.units
 
 <div class="row-fluid" style="position:relative;background-color:white;">
 	<div class="span7">			
-		
-{% if sample_site.location.access == "PUBLIC_PAID" %}
+			
+			<div>
+			{% if sample_site.location.access == "PUBLIC_PAID" %}
 				<p> <strong> Hot springs can cause serious injury and death. Follow the safety instructions.  Never climb over barriers and step off paths. </strong></p>
 			{% endif %}
-		
-		<p>{{sample_site.location.description}}</p> 
 			
+			{%if sample_site.location.access == "PRIVATE"%}
+				<img rel="tooltip" style="width:10%;float:right" data-original-title="Private" src="{{ url_for('static', filename='img/icons/private.png') }}">
+			{%endif%}
+
+			<p>{{sample_site.location.description}}</p> 
+
+			
+			</div>
 			
 				
 			<table class="descTable" >					
@@ -149,7 +156,8 @@ span.units
 						<h5 style="margin-top:0px;" >Location: </h5> 
 					</td>
 					<td style="text-align:left;">						
-							<p>{{sample_site.location.feature_system}}</p>					
+							<p>{{sample_site.location.feature_system}}</p>
+												
 					</td>				
 				</tr>
 
@@ -170,6 +178,12 @@ span.units
 						<p class="muted">{{sample_site.date_gathered.strftime('%d-%m-%Y')}}</p>
 					</td>
 				</tr>
+				<td>						
+						<h5 style="margin-top:0px;" >Feature Type: </h5> 
+					</td>
+					<td style="text-align:left;">						
+							<p>{{sample_site.location.feature_type}}</p>					
+				</td>
 				<tr>
 					<td>			
 						<h5 style="margin-top:0px;" >Temperature: </h5> 
