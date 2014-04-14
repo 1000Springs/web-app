@@ -57,7 +57,7 @@ CREATE TABLE `location` (
   `lat` double DEFAULT NULL,
   `lng` double DEFAULT NULL,
   `feature_system` varchar(50) DEFAULT NULL,
-  `description` varchar(200) DEFAULT NULL,
+  `description` varchar(500) DEFAULT NULL,
   `toilet` tinyint(1) DEFAULT NULL,
   `parkbench` tinyint(1) DEFAULT NULL,
   `track` tinyint(1) DEFAULT NULL,
