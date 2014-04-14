@@ -785,6 +785,25 @@ height: 100%;
 
 /* Template */
 
+.article h4:first-child
+{
+  background-color:rgb(29,155,171);
+  padding:10px;
+  margin:0;
+  margin-bottom:5px;
+  border-radius:10px;
+  font-weight:bold;
+  color: white;
+}
+
+
+.element-background
+{
+    background-color:rgb(29,155,171);
+  padding:10px;
+  border-radius:10px
+}
+
 .row-fluid
 {
   position: relative;
@@ -863,4 +882,42 @@ display: none;
 .textBlock
 {
   font-size: 16px;
+}
+
+.zoom-in
+{
+  cursor:-webkit-zoom-in;
+  cursor:-moz-zoom-in;
+}
+
+figure
+{
+  border: 1px solid black;
+  border-radius: 10px;
+  margin: 0px;
+  padding: 10px;
+  margin-bottom: 5px;
+}
+
+figure img
+{
+margin-left: auto;
+margin-right: auto;
+display: block;
+margin-bottom: 5px;
+}
+
+
+figcaption
+{
+  color:white;
+  text-align:center;
+  background-color:rgb(29,155,171);
+  border-radius: 5px;
+}
+
+figcaption a
+{
+   color:white;
+   
 }

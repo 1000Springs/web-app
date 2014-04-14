@@ -12,9 +12,10 @@
     <p style="font-size:16px;"><span>about</span> project</p>
      
     <ul>
-    <li><a href="#">safety about springs</a></li>
-    <li><a href="#">contact</a></li>
-    <li><a href="#">disclaimer</a></li>
+    <li><a href="{{ url_for('licence' )}}">licence for use</a></li>
+    <li><a href="{{ url_for('licence' )}}">disclaimer</a></li>
+    <li><a href="{{url_for('about', _anchor='contact-details')}}">contact</a></li>
+    
     </ul>
      
     </div>

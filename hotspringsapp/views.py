@@ -9,7 +9,7 @@ from hotspringsapp import app
 from sqlalchemy.sql import func
 from werkzeug.datastructures import Headers
 
-from flask import Flask, url_for, render_template, request, g, session, flash, redirect, Response, abort
+from flask import Flask, url_for, render_template, request, g, session, flash, redirect, Response, abort, jsonify
 from models import *
 from forms import *
 
@@ -63,7 +63,11 @@ def logout():
 
 @app.route('/about')
 def about():
-	return render_template('about.html');
+	return render_template('about.html')
+
+@app.route('/licence')
+def licence():
+	return render_template('licence.html')
 
 @app.route('/')
 def index():
@@ -88,10 +92,39 @@ def simplesearch():
 
 	tempRanges = dict(minTemp = 0,maxTemp = maxTemp)
 	form = SearchForm(filters = 'all')
-	locations = Sample.query.filter(Sample.location_id == Location.id).group_by(Location.feature_system)
+	locations = Location.query.with_entities(Location.feature_system).group_by(Location.feature_system)
+
+	locations = [i[0] for i in locations if i[0] != None]
 
 
 	return render_template('simplesearch.html',form=form, tempRanges=tempRanges,locations=locations)
+
+@app.route('/getLocationTier', methods =['POST'])
+def getLocationTier():
+	location = request.form['location']
+	tier = int(request.form['tier'])
+
+
+
+	
+	if tier == 1:		
+		results = Location.query.with_entities(Location.feature_system).filter_by(district = location).group_by(Location.feature_system)
+
+	
+	if tier == 2:
+		results = Location.query.with_entities(Location.location).filter_by(feature_system = location).group_by(Location.location)
+		
+	
+
+	app.logger.debug(results.all())
+
+	results = [i[0] for i in results if i[0] != None]
+
+	
+
+	
+
+	return jsonify({'results':results,'tier':tier})
 	
 # @app.route('/results')
 # def results():
@@ -203,12 +236,14 @@ def simpleresults(page = 1, showAll = None):
 	minCond = args.get('minCond')
 	maxCond = args.get('maxCond')
 	
-
+	
 
 		
 
 	listOfAllLocations = Location.query.filter(Sample.location_id == Location.id).order_by(Location.id).all()
 	latestSampleIds = []
+
+
 
 	for l in listOfAllLocations:		
 		latestSampleIds.append(l.latestSample().id)
@@ -226,6 +261,10 @@ def simpleresults(page = 1, showAll = None):
 												Sample.id.in_(latestSampleIds)
 												)	
 
+	app.logger.debug("Testing")
+
+	if city != "":
+		latestFilteredSamples = latestFilteredSamples.filter(Location.feature_system == city)
 
 	
 	if showAll == "all":
@@ -446,9 +485,11 @@ def sotd():
 	# sotdTup = GetSOTD()
 	
 
-	springOfTheDay = Image.query.filter(Image.sample_id == Sample.id, Image.image_type == "BESTPHOTO",Location.id==Sample.location_id).group_by(Sample.location_id)[GetSOTD()]
+	springOfTheDay = Image.query.filter(Image.sample_id == Sample.id, Image.image_type == "LARGE",Location.id==Sample.location_id).group_by(Sample.location_id)[GetSOTD()]
 	
-	app.logger.debug(dir(springOfTheDay.Sample.location_id))
+
+
+	app.logger.debug(springOfTheDay.image_path)
 
 	return render_template('sotd.html',location = springOfTheDay)
 

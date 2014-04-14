@@ -26,15 +26,17 @@
    initSliders();
 
 
+
+
     $(".chosen-select").chosen();
 
     {% for sites in locations %}
 
-      $('.chosen-select').append('<option value="{{sites.location.feature_system}}">{{sites.location.feature_system}}</option>');
+      $('#districtList').append('<option value="{{sites}}">{{sites}}</option>');
 
     {% endfor %}
 
-    $('.chosen-select').trigger("chosen:updated");
+    $('#districtList').trigger("chosen:updated");
 
   $('.accordion').on('show hide', function (n) 
     {
@@ -50,11 +52,73 @@
 
 
   });
+
+   $('#districtList').on('change', function(evt, params) {
+    district = $(this).find("option:selected").val()  
+   getLocationTier(1,district);
+  });
+
+    $('#featureSystemList').on('change', function(evt, params) {
+       featureSystem = $(this).find("option:selected").val()     
+     getLocationTier(2,featureSystem);
+  });
+
+  
+
+  
   
 
 
   
  });
+
+ function getLocationTier(t,selected) {  
+   
+
+
+    $.post('/getLocationTier', {
+        location: selected,
+        tier: t
+
+    }).done(function(location) {
+      var list = "";
+      console.log(location.results)
+      if(location.tier == 1)
+      {
+        list = '#featureSystemList'
+      }
+      else
+      {
+        list = '#locationList'
+      }
+      $(list).empty();
+      $(list).append('<option value="'+null+'">None</option>');
+
+      location.results.forEach(function(entry) 
+      {
+          $(list).append('<option value="'+entry+'">'+entry+'</option>');
+      });
+
+      $(list).trigger("chosen:updated");
+      
+    }).fail(function() {
+
+       if(location.tier == 1)
+      {
+        list = '#featureSystemList'
+      }
+      else
+      {
+        list = '#locationList'
+      }
+
+       $(list).empty();
+      $(list).append('<option value="'+null+'">No information found</option>');
+       
+       
+    });
+  
+}
 
 
 
@@ -86,9 +150,17 @@
          </tr>
          <tr>
             <td style="color:black;">        
-                  <select name="city" data-placeholder="Choose a Location..." style="width:350px;color:black;" class="chosen-select">
+                  <select name="city" data-placeholder="Choose a Location..." style="width:350px;color:black;" class="chosen-select" id="districtList">
                   <option></option>
                   </select>
+
+                  <!-- <select name="city" data-placeholder="Choose a Location..." style="width:350px;color:black;" class="chosen-select" id="featureSystemList">
+                  <option></option>
+                  </select>
+
+                  <select name="city" data-placeholder="Choose a Location..." style="width:350px;color:black;" class="chosen-select" id="locationList">
+                  <option></option>
+                  </select> -->
                 
             </td>
          </tr>
