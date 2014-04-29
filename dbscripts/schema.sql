@@ -47,6 +47,10 @@ CREATE TABLE `chemical_data` (
   `iron2` float DEFAULT NULL,
   `bicarbonate` float DEFAULT NULL,
   `thallium` float DEFAULT NULL,
+  `S` float DEFAULT NULL,
+  `Rb` float DEFAULT NULL,
+  `Cs` float DEFAULT NULL,
+  `Hg` float DEFAULT NULL,
   PRIMARY KEY (`id`)
 );
 
