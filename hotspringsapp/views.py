@@ -92,7 +92,7 @@ def simplesearch():
 
 	tempRanges = dict(minTemp = 0,maxTemp = maxTemp)
 	form = SearchForm(filters = 'all')
-	locations = Location.query.with_entities(Location.feature_system).group_by(Location.feature_system)
+	locations = Location.query.with_entities(Location.district).group_by(Location.district)
 
 	locations = [i[0] for i in locations if i[0] != None]
 
@@ -228,13 +228,17 @@ def simpleresults(page = 1, showAll = None):
 
 	minTemp = args.get('minTemp')
 	maxTemp = args.get('maxTemp')
-	city = args.get('city')
+	district = args.get('dist')
+	feature_system = args.get('fsys')
+	location = args.get('loc')
 	minPH = args.get('minPH')
 	maxPH = args.get('maxPH')
 	minTurb = args.get('minTurb')
 	maxTurb = args.get('maxTurb')
 	minCond = args.get('minCond')
 	maxCond = args.get('maxCond')
+
+
 	
 	
 
@@ -261,10 +265,14 @@ def simpleresults(page = 1, showAll = None):
 												Sample.id.in_(latestSampleIds)
 												)	
 
-	app.logger.debug("Testing")
+	if district != "":
+		latestFilteredSamples = latestFilteredSamples.filter(Location.district == district)
 
-	if city != "":
-		latestFilteredSamples = latestFilteredSamples.filter(Location.feature_system == city)
+	if feature_system != "":		
+		latestFilteredSamples = latestFilteredSamples.filter(Location.feature_system == feature_system)
+
+	if location != "":
+		latestFilteredSamples = latestFilteredSamples.filter(Location.location == location)
 
 	
 	if showAll == "all":
@@ -507,7 +515,8 @@ def GetSOTD():
 
 	return index
 
-
+def d(o):
+	app.logger.debug(o)
 	
 if __name__ == "__main__":
 	app.run()

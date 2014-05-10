@@ -660,6 +660,17 @@ label
   color:white;
 }
 
+.chosen-container
+{
+  display: block;
+}
+
+.tiers
+{
+  color: black;
+}
+
+
 /* Browse by */
 
 .browseby-caption
