@@ -493,8 +493,11 @@ def sotd():
 	# sotdTup = GetSOTD()
 	
 
-	springOfTheDay = Image.query.filter(Image.sample_id == Sample.id, Image.image_type == "LARGE",Location.id==Sample.location_id).group_by(Sample.location_id)[GetSOTD()]
+	springOfTheDay = Image.query.filter(Image.sample_id == Sample.id, Image.image_type == "LARGE",Location.id==Sample.location_id).group_by(Sample.location_id)
 	
+
+	#modulo is to make sure it doesn't index out of bounds
+	springOfTheDay = springOfTheDay[GetSOTD() % springOfTheDay.count()]
 
 
 	app.logger.debug(springOfTheDay.image_path)
