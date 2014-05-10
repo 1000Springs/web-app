@@ -6,14 +6,14 @@ var currentInfoWindow = null;
 function addInfoWindowMarker(city, lat, lng, site_name, desc, map,url)
 {
     var link = "";
-    if(url !== null)
+    if(url != null)
     {
       link = '<a href='+url + '> More Details </a>'
     }
 
    
 
- var contentString = '<div id="content" style="height:100px">'+
+ var contentString = '<div id="content" class="infoWindow" style="height:100px">'+
     '<h5 id="firstHeading" class="firstHeading">'+site_name+'</h5>'+
     '<div id="bodyContent">'+
     '<p class="muted">'+city+'</p>' +   
@@ -73,17 +73,12 @@ function setupMap(mapElementId)
     mapTypeId: google.maps.MapTypeId.ROADMAP 
   };
 
-  navigator.geolocation.getCurrentPosition(showUserLocation);
+
   return new google.maps.Map(document.getElementById(mapElementId),mapOptions);
 
 }
 
-function showUserLocation(position) 
-{
-  var latitude = position.coords.latitude;
-  var longitude = position.coords.longitude;
-  myLatlng = new google.maps.LatLng(latitude,longitude); 
-}
+
 
 
 

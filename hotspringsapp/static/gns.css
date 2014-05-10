@@ -309,6 +309,11 @@ padding: 7px 12px;
 }
 
 
+.infoWindow h5
+{
+  margin-bottom: 0; 
+}
+
 #map_canvas
 { 
     /*height: 200px;*/
@@ -771,7 +776,7 @@ height: 100%;
 
 }
 
-.descTable p,h5
+.descTable p
 {
   margin-right:5px;
   margin-left: 5px;
