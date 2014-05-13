@@ -348,7 +348,7 @@ def samplesite(site_id):
 	latestSample = locationSamples.first().latestSample()
 	
 	
-	chemJson = {"name":"", "children":[{"name":"Elements", "children":[]},{"name":"Gases","children":[]},{"name":"Compounds","children":[]}]};	
+	chemJson = {"name":"", "children":[{"name":"", "children":[]}]};	
 
 
 	if latestSample.phys is not None:
@@ -361,15 +361,15 @@ def samplesite(site_id):
 		gatheredInfoCount+= 1	
  		for e in latestSample.chem.returnElements(): 			
  			if e[1] != None and e[1] > 0:
-				chemJson["children"][0]["children"].append({"name":e[0], "children":[{"name":e[0],"size":e[1]}]})
+				chemJson["children"][0]["children"].append({"name":e[0],"size":e[1]})
 
 		for e in latestSample.chem.returnGases():
 			if e[1] != None and e[1] > 0:
-				chemJson["children"][1]["children"].append({"name":e[0],"size":e[1]})
+				chemJson["children"][0]["children"].append({"name":e[0],"size":e[1]})
 
 		for e in latestSample.chem.returnCompounds():
 			if e[1] != None and e[1] > 0:
-				chemJson["children"][2]["children"].append({"name":e[0],"size":e[1]})
+				chemJson["children"][0]["children"].append({"name":e[0],"size":e[1]})
 	else:
 		chemJson = None;
 	
