@@ -83,7 +83,6 @@ span.units
 
 	$(function()
 	{
-		
 		var sampleSiteMap = setupMap("show_map");		
 		{% if sample_site.location.access != "PRIVATE" %}
 
@@ -111,6 +110,7 @@ span.units
 			$(n.target).siblings('.accordion-heading').find('.accordion-toggle i').toggleClass('icon-chevron-up icon-chevron-down');
 		});
 	});
+
 
 	
 	</script>
@@ -312,15 +312,22 @@ span.units
 		        <div class="accordion-heading"> 
 		            <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion1" href="#collapseOne">
 		                <i class="icon-chevron-down"></i>
-		                Chemical Bubble Chart
+		                Chemical Composition of Sample
 		            </a>
 		        </div>
 			    <div id="collapseOne" class="accordion-body collapse">
 				    <div class="accordion-inner" id="bubbles">					
 						{% if chemJson != None %}
-						<h1> Chemical Concentrations</h1>
+						<h1> Chemical Composition of Sample</h1>
 						<p> ppm: parts per million </p>
+						
 				       {% include "Vis/bubblechart/zoomable.html" %}
+				       <div id="bubbleDesc">
+				       	<figure>
+				       	<p>The chemical bubble chart represents the measured chemical composition of this particular geothermal sample. The relative size of each bubble reflects the concentration of the named species (the larger the bubble, the higher the concentration and vice versa). The concentration of the chemical species in parts per million (ppm) which is equivalent to mg per litre can be visualised by holding the cursor in each bubble. </p>
+				       	</figure>
+				       </div>
+
 				         {% else %}
 
 				         	<h3>The chemistry data is coming soon</h3>	
