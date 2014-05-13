@@ -62,6 +62,7 @@
 
   });
   
+  $("#sidebar").css('min-height',$("#resultsForm").css('height'));
   	
  });
 
@@ -177,7 +178,7 @@ input[type=checkbox]
 	<div class="contrast" id="sidebar-contents" style="position:absolute;">
 	
 	
-	<form action="{{url_for('simpleresults')}}">
+	<form id="resultsForm" action="{{url_for('simpleresults')}}">
 		<table>
 		<tr>
 			<th style="text-align:left;padding:10px 0"> Location </th>

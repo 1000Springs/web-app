@@ -9,7 +9,7 @@ function statusGraph(element,pos)
 				var strokeWidth = 2;
 				var distanceApart = 150;
 				var radius = 15;			
-				var startX = radius/2;
+				var startX = (radius/2)-5;
 				var startY = (radius*2) + pointerHeight;
 				var numberOfSteps = 3;
 				

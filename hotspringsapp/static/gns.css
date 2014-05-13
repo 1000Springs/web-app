@@ -713,6 +713,7 @@ label
 {
  margin-left:0px;
  margin-right: 24px;
+ padding-bottom: 15px;
 
 
 }
@@ -780,7 +781,7 @@ height: 100%;
 {
   margin-right:5px;
   margin-left: 5px;
-  margin-bottom: 0px;
+
 }
 
 .pagination
