@@ -117,30 +117,39 @@ CREATE TABLE `sample` (
 );
 
 CREATE TABLE `taxonomy` (
-  `sample_id` int(11) NOT NULL,
-  `id` int(11) NOT NULL,
-  `taxName` varchar(50) NOT NULL,
-  `otuNum` int(11) NOT NULL,
-  `otuPer` double NOT NULL,
-  `total` int(11) NOT NULL,
-  `totalPer` int(11) NOT NULL,
-  `sequence` text,
-  `seqLen` int(11) DEFAULT NULL,
+  `id` int(11) AUTO_INCREMENT PRIMARY KEY,
+  `created_date`     DATETIME DEFAULT CURRENT_TIMESTAMP,
+  `last_modified_date` DATETIME ON UPDATE CURRENT_TIMESTAMP,
+  `data_file_name` varchar(50) NOT NULL,
+  `otu_id` varchar(20) NOT NULL,
+  `sequence` varchar(400) DEFAULT NULL,
+  `domain` varchar(50) DEFAULT NULL,
+  `domain_confidence` double DEFAULT NULL,
   `phylum` varchar(50) DEFAULT NULL,
-  `phylum_Confidence` double DEFAULT NULL,
+  `phylum_confidence` double DEFAULT NULL,
   `class` varchar(50) DEFAULT NULL,
-  `class_Confidence` double DEFAULT NULL,
+  `class_confidence` double DEFAULT NULL,
   `order` varchar(50) DEFAULT NULL,
-  `order_Confidence` double DEFAULT NULL,
+  `order_confidence` double DEFAULT NULL,
   `family` varchar(50) DEFAULT NULL,
-  `family_Confidence` double DEFAULT NULL,
-  `Genus` varchar(50) DEFAULT NULL,
-  `genus_Confidence` double DEFAULT NULL,
+  `family_confidence` double DEFAULT NULL,
+  `genus` varchar(50) DEFAULT NULL,
+  `genus_confidence` double DEFAULT NULL,
   `species` varchar(50) DEFAULT NULL,
-  `species_Confidence` double DEFAULT NULL,
-  PRIMARY KEY (`sample_id`,`id`),
-  UNIQUE KEY `taxName` (`taxName`),
-  CONSTRAINT `FK_taxonomy_sample` FOREIGN KEY (`sample_id`) REFERENCES `sample` (`id`)
+  `species_confidence` double DEFAULT NULL,
+  UNIQUE KEY `uk_data_file_name_otu_id` (`data_file_name`,`otu_id`)
+);
+
+
+CREATE TABLE `sample_taxonomy` (
+  `id` int(11) AUTO_INCREMENT PRIMARY KEY,
+  `sample_id` int(11) NOT NULL,
+  `taxonomy_id` int(11) NOT NULL,
+  `read_count` int NOT NULL,
+  INDEX `idx_sample_taxonomy_sample_id` (`sample_id` ASC),
+  CONSTRAINT `fk_st_sample` FOREIGN KEY (`sample_id`) REFERENCES `sample` (`id`),
+  CONSTRAINT `fk_st_taxonomy` FOREIGN KEY (`taxonomy_id`) REFERENCES `taxonomy` (`id`),
+  UNIQUE KEY `uk_sample_id_taxonomy_id` (`sample_id`,`taxonomy_id`)
 );
 
 CREATE TABLE `image` (
