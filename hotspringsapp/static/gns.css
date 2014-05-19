@@ -309,6 +309,11 @@ padding: 7px 12px;
 }
 
 
+.infoWindow h5
+{
+  margin-bottom: 0; 
+}
+
 #map_canvas
 { 
     /*height: 200px;*/
@@ -660,6 +665,17 @@ label
   color:white;
 }
 
+.chosen-container
+{
+  display: block;
+}
+
+.tiers
+{
+  color: black;
+}
+
+
 /* Browse by */
 
 .browseby-caption
@@ -697,6 +713,7 @@ label
 {
  margin-left:0px;
  margin-right: 24px;
+ padding-bottom: 15px;
 
 
 }
@@ -760,11 +777,11 @@ height: 100%;
 
 }
 
-.descTable p,h5
+.descTable p
 {
   margin-right:5px;
   margin-left: 5px;
-  margin-bottom: 0px;
+
 }
 
 .pagination

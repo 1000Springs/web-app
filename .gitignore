@@ -15,3 +15,4 @@ db_repository/
 alembic/
 alembic.*
 *.lnk
+*.cfg

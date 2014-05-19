@@ -19,6 +19,10 @@
 
 <script type="text/javascript">
 
+    var tier0 = '#districtList'
+    var tier1 = '#featureSystemList'
+    var tier2 = '#locationList' 
+
  $(function () 
  {
    MenuSelect("#search","{{ url_for('static', filename='img/icons/search_Selected.png') }}");
@@ -28,7 +32,7 @@
 
 
 
-    $(".chosen-select").chosen();
+    $(".chosen-select").chosen({width: "350px"});
 
     {% for sites in locations %}
 
@@ -53,26 +57,33 @@
 
   });
 
-   $('#districtList').on('change', function(evt, params) {
+
+
+   $(tier0).on('change', function(evt, params) {
     district = $(this).find("option:selected").val()  
-   getLocationTier(1,district);
+
+    $(tier1).empty();
+    $(tier1).trigger("chosen:updated");
+
+    getLocationTier(1,district,tier1);
+
   });
 
-    $('#featureSystemList').on('change', function(evt, params) {
-       featureSystem = $(this).find("option:selected").val()     
-     getLocationTier(2,featureSystem);
+    $(tier1).on('change', function(evt, params) {
+      featureSystem = $(this).find("option:selected").val()     
+      getLocationTier(2,featureSystem,tier2);
   });
 
   
 
-  
+
   
 
 
   
  });
 
- function getLocationTier(t,selected) {  
+ function getLocationTier(t,selected,tselector) {  
    
 
 
@@ -80,43 +91,29 @@
         location: selected,
         tier: t
 
-    }).done(function(location) {
-      var list = "";
-      console.log(location.results)
-      if(location.tier == 1)
-      {
-        list = '#featureSystemList'
-      }
-      else
-      {
-        list = '#locationList'
-      }
-      $(list).empty();
-      $(list).append('<option value="'+null+'">None</option>');
+    }).done(function(location) {   
+   
+      $(tselector).append('<option value="">All</option>');
 
       location.results.forEach(function(entry) 
       {
-          $(list).append('<option value="'+entry+'">'+entry+'</option>');
+          $(tselector).append('<option value="'+entry+'">'+entry+'</option>');
       });
 
-      $(list).trigger("chosen:updated");
+      $(tselector).trigger("chosen:updated");
       
-    }).fail(function() {
+    }).fail(function() {    
 
-       if(location.tier == 1)
-      {
-        list = '#featureSystemList'
-      }
-      else
-      {
-        list = '#locationList'
-      }
-
-       $(list).empty();
-      $(list).append('<option value="'+null+'">No information found</option>');
+       $(tselector).empty();
+      $(tselector).append('<option value="">No information found</option>');
        
        
     });
+
+
+
+      $(tier2).empty();
+      $(tier2).trigger("chosen:updated");
   
 }
 
@@ -146,26 +143,37 @@
       <div id="sliders" style="background-color:rgba(29,155,171,0.75);padding:10px;border-radius:10px">
       <table style="width:100%">
          <tr>
-            <th style="text-align:left"> Location </th>
+            <th style="text-align:left"> District </th>
          </tr>
          <tr>
-            <td style="color:black;">        
-                  <select name="city" data-placeholder="Choose a Location..." style="width:350px;color:black;" class="chosen-select" id="districtList">
-                  <option></option>
-                  </select>
-
-                  <!-- <select name="city" data-placeholder="Choose a Location..." style="width:350px;color:black;" class="chosen-select" id="featureSystemList">
-                  <option></option>
-                  </select>
-
-                  <select name="city" data-placeholder="Choose a Location..." style="width:350px;color:black;" class="chosen-select" id="locationList">
-                  <option></option>
-                  </select> -->
-                
-            </td>
+          <td class="tiers">        
+              <select name="dist" data-placeholder="Choose a District..."  class="chosen-select" id="districtList">
+               <option></option>
+              </select>
+          </td>
+          </tr>
+           <tr>
+            <th style="text-align:left"> System </th>
          </tr>
+          <tr>
+            <td class="tiers">    
+              <select name="fsys" data-placeholder="Choose a System..."  class="chosen-select" id="featureSystemList">
+                <option></option>
+              </select>
+            </td>
+          </tr>
+           <tr>
+            <th style="text-align:left"> Location </th>
+         </tr>
+          <tr>
+            <td class="tiers">    
+              <select name="loc" data-placeholder="Choose a Location..."  class="chosen-select" id="locationList">
+                <option></option>
+              </select>
+            </td>
+          </tr>
          <tr>            
-            <th style="text-align:left; "> Access </th>
+            <th style="text-align:left;padding-top:10px;"> Access </th>
          </tr>
          <tr>       
 

@@ -92,7 +92,7 @@ def simplesearch():
 
 	tempRanges = dict(minTemp = 0,maxTemp = maxTemp)
 	form = SearchForm(filters = 'all')
-	locations = Location.query.with_entities(Location.feature_system).group_by(Location.feature_system)
+	locations = Location.query.with_entities(Location.district).group_by(Location.district)
 
 	locations = [i[0] for i in locations if i[0] != None]
 
@@ -228,13 +228,17 @@ def simpleresults(page = 1, showAll = None):
 
 	minTemp = args.get('minTemp')
 	maxTemp = args.get('maxTemp')
-	city = args.get('city')
+	district = args.get('dist')
+	feature_system = args.get('fsys')
+	location = args.get('loc')
 	minPH = args.get('minPH')
 	maxPH = args.get('maxPH')
 	minTurb = args.get('minTurb')
 	maxTurb = args.get('maxTurb')
 	minCond = args.get('minCond')
 	maxCond = args.get('maxCond')
+
+
 	
 	
 
@@ -261,10 +265,14 @@ def simpleresults(page = 1, showAll = None):
 												Sample.id.in_(latestSampleIds)
 												)	
 
-	app.logger.debug("Testing")
+	if district != "":
+		latestFilteredSamples = latestFilteredSamples.filter(Location.district == district)
 
-	if city != "":
-		latestFilteredSamples = latestFilteredSamples.filter(Location.feature_system == city)
+	if feature_system != "":		
+		latestFilteredSamples = latestFilteredSamples.filter(Location.feature_system == feature_system)
+
+	if location != "":
+		latestFilteredSamples = latestFilteredSamples.filter(Location.location == location)
 
 	
 	if showAll == "all":
@@ -340,7 +348,7 @@ def samplesite(site_id):
 	latestSample = locationSamples.first().latestSample()
 	
 	
-	chemJson = {"name":"", "children":[{"name":"Elements", "children":[]},{"name":"Gases","children":[]},{"name":"Compounds","children":[]}]};	
+	chemJson = {"name":"", "children":[{"name":"", "children":[]}]};	
 
 
 	if latestSample.phys is not None:
@@ -353,15 +361,15 @@ def samplesite(site_id):
 		gatheredInfoCount+= 1	
  		for e in latestSample.chem.returnElements(): 			
  			if e[1] != None and e[1] > 0:
-				chemJson["children"][0]["children"].append({"name":e[0], "children":[{"name":e[0],"size":e[1]}]})
+				chemJson["children"][0]["children"].append({"name":e[0],"size":e[1]})
 
 		for e in latestSample.chem.returnGases():
 			if e[1] != None and e[1] > 0:
-				chemJson["children"][1]["children"].append({"name":e[0],"size":e[1]})
+				chemJson["children"][0]["children"].append({"name":e[0],"size":e[1]})
 
 		for e in latestSample.chem.returnCompounds():
 			if e[1] != None and e[1] > 0:
-				chemJson["children"][2]["children"].append({"name":e[0],"size":e[1]})
+				chemJson["children"][0]["children"].append({"name":e[0],"size":e[1]})
 	else:
 		chemJson = None;
 	
@@ -485,8 +493,11 @@ def sotd():
 	# sotdTup = GetSOTD()
 	
 
-	springOfTheDay = Image.query.filter(Image.sample_id == Sample.id, Image.image_type == "LARGE",Location.id==Sample.location_id).group_by(Sample.location_id)[GetSOTD()]
+	springOfTheDay = Image.query.filter(Image.sample_id == Sample.id, Image.image_type == "LARGE",Location.id==Sample.location_id).group_by(Sample.location_id)
 	
+
+	#modulo is to make sure it doesn't index out of bounds
+	springOfTheDay = springOfTheDay[GetSOTD() % springOfTheDay.count()]
 
 
 	app.logger.debug(springOfTheDay.image_path)
@@ -507,7 +518,8 @@ def GetSOTD():
 
 	return index
 
-
+def d(o):
+	app.logger.debug(o)
 	
 if __name__ == "__main__":
 	app.run()
