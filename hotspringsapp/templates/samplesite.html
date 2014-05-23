@@ -345,15 +345,11 @@ span.units
 		            </a>
 		        </div>    
 			    <div id="collapseTwo" class="accordion-body collapse">
-				    <div class="accordion-inner" id="radialTree">
-				       {% if taxJson != None %}
-						<h1> Phylogenetic tree </h1>
-						<p> hover over tree to read more </p>
-				      {% include "Vis/radialTree/index.html" %}
-				         {% else %}
-
+				    <div class="accordion-inner">
+						{% if taxJson != None %}
+							{% include "Vis/radialTree/collapsibleTree.html" %}
+						{% else %}
 				         	<h3>The Taxonomy data is coming soon</h3>	
-
 				       	{% endif %}
 
 				    </div>

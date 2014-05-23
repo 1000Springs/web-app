@@ -1,31 +1,87 @@
+.domainColour { color: #006699; }
+.phylumColour { color: #ff0000; }
+.classColour { color: #ff6600; }
+.orderColour { color: #0066ff; }
+.familyColour { color: #009900; }
+.genusColour { color: #cc0099; }
+.speciesColour { color: #6600cc; }
+
+.domainBackColour { background-color: #006699; }
+.phylumBackColour { background-color: #ff0000; }
+.classBackColour { background-color: #ff6600; }
+.orderBackColour { background-color: #0066ff; }
+.familyBackColour { background-color: #009900; }
+.genusBackColour { background-color: #cc0099; }
+.speciesBackColour { background-color: #6600cc; }
+
 /*Zoomable Bubble Chart*/
 
-text {
+#bubbles text {
   font-size: 11px;
   pointer-events: none;
 }
 
-text.parent {
+#bubbles text.parent {
   fill: #1f77b4;
 }
 
-circle.bubbleVis {
+#bubbles circle.bubbleVis {
   fill: #ccc;
   stroke: #999;
   pointer-events: all;
 }
 
-circle.bubbleVis.parent {
+#bubbles circle.bubbleVis.parent {
   fill: #1f77b4;
   fill-opacity: .1;
   stroke: steelblue;
 }
 
-circle.parent.bubbleVis:hover {
+#bubbles circle.parent.bubbleVis:hover {
   stroke: #ff7f0e;
   stroke-width: .5px;
 }
 
-circle.child.bubbleVis {
+#bubbles circle.child.bubbleVis {
   pointer-events: none;
 }
+
+/* Collapsible Tree */
+#collapsibleTreeChart circle.node {
+  cursor: pointer;
+  stroke: #000;
+  stroke-width: .5px;
+}
+
+#collapsibleTreeChart line.link {
+  fill: none;
+  stroke: #9ecae1;
+  stroke-width: 1.5px;
+}
+
+#collapsibleTreeTaxonomy table td:nth-child(3) {
+	padding-left: 5px;
+}
+
+#collapsibleTreeTaxonomy .taxaSwatch {
+	width: 40px;
+	height: 20px;
+}
+
+#collapsibleTreeTaxonomy .taxon {
+	text-overflow:ellipsis;
+	text-align: right;
+	overflow:hidden;
+	width: 194px;
+}
+
+#collapsibleTreeAjaxWaiting { display: none; color: #999999; }
+#collapsibleTreeAjaxWaiting>img { margin-right: 10px; }
+
+#collapsibleTreeInfoPanel #collapsibleTreeDetailWrapper { width: 300px; height: 320px; margin: 20px 10px 0 0; }
+#collapsibleTreeInfoPanel .taxonDetailsHeader { height: 80px; }
+#collapsibleTreeInfoPanel .taxonDetailsName { font-weight: bold; } 
+#collapsibleTreeInfoPanel .taxonDetailsHeaderText { float: left; }
+#collapsibleTreeInfoPanel .taxonDetailsRankLabel { font-weight: bold; margin-right: 10px; }
+#collapsibleTreeInfoPanel .taxonDetailsImage { float: right; height: 70px; }
+#collapsibleTreeInfoPanel .taxonDetailsDescription { width: 300px; max-height: 140px; overflow: hidden; text-overflow:ellipsis; }

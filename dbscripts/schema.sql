@@ -152,6 +152,28 @@ CREATE TABLE `sample_taxonomy` (
   UNIQUE KEY `uk_sample_id_taxonomy_id` (`sample_id`,`taxonomy_id`)
 );
 
+CREATE OR REPLACE VIEW confident_taxonomy AS (
+    SELECT s.id as sample_id, s.sample_number, SUM(st.read_count) as read_count, t.domain AS domain,
+	    CASE WHEN t.phylum_confidence >= 0.5 THEN t.phylum ELSE NULL END AS phylum,
+	    CASE WHEN t.class_confidence >= 0.5 THEN t.class ELSE NULL END AS class,
+	    CASE WHEN t.order_confidence >= 0.5 THEN t.`order` ELSE NULL END AS `order`,    
+	    CASE WHEN t.family_confidence >= 0.5 THEN t.family ELSE NULL END AS family,
+	    CASE WHEN t.genus_confidence >= 0.5 THEN t.genus ELSE NULL END AS genus,
+	    CASE WHEN t.species_confidence >= 0.5 THEN t.species ELSE NULL END AS species
+    FROM sample s
+    JOIN sample_taxonomy st on s.id = st.sample_id
+    JOIN taxonomy t on st.taxonomy_id = t.id
+    WHERE t.domain_confidence >= 0.5
+    GROUP BY s.id, s.sample_number, t.domain, 
+        CASE WHEN t.phylum_confidence >= 0.5 THEN t.phylum ELSE NULL END, 
+        CASE WHEN t.class_confidence >= 0.5 THEN t.class ELSE NULL END, 
+        CASE WHEN t.order_confidence >= 0.5 THEN t.`order` ELSE NULL END, 
+        CASE WHEN t.family_confidence >= 0.5 THEN t.family ELSE NULL END, 
+        CASE WHEN t.genus_confidence >= 0.5 THEN t.genus ELSE NULL END, 
+        CASE WHEN t.species_confidence >= 0.5 THEN t.species ELSE NULL END 
+    ORDER BY domain DESC, phylum DESC, class DESC, `order` DESC, family DESC, genus DESC, species DESC
+);
+
 CREATE TABLE `image` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `sample_id` int(11) NOT NULL,
