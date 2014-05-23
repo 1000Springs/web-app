@@ -1,5 +1,5 @@
-<div id ="collapsibleTreeWrapper" style="width: 1024px; height: 500px">
-	<div id="collapsibleTreeChart" style="width: 700px; float: left;"></div>
+<div id ="collapsibleTreeWrapper" style="width: 1000px; height: 500px">
+	<div id="collapsibleTreeChart" style="width: 680px; float: left;"></div>
 	<div id="collapsibleTreeInfoPanel" style="float: left; padding: 10px; width: 300px;">
 	    <div id="collapsibleTreeDetailWrapper" style="width: 290px; height: 320px; margin-top: 15px">	
 	    	<div id="collapsibleTreeAjaxWaiting"><img src="{{ url_for('static', filename='img/ajax-waiting.gif') }}">Loading summary, please wait </div>
@@ -24,7 +24,7 @@
 <script type="text/javascript">
 
 var treeData = {{taxJson|safe}};
-var w = 700,
+var w = 680,
     h = 480,
     node,
     link,
