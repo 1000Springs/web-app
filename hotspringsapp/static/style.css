@@ -72,13 +72,13 @@
 	text-overflow:ellipsis;
 	text-align: right;
 	overflow:hidden;
-	width: 194px;
+	width: 185px;
+	margin-right: 5px;
 }
 
 #collapsibleTreeAjaxWaiting { display: none; color: #999999; }
 #collapsibleTreeAjaxWaiting>img { margin-right: 10px; }
 
-#collapsibleTreeInfoPanel #collapsibleTreeDetailWrapper { width: 300px; height: 320px; margin: 20px 10px 0 0; }
 #collapsibleTreeInfoPanel .taxonDetailsHeader { height: 80px; }
 #collapsibleTreeInfoPanel .taxonDetailsName { font-weight: bold; } 
 #collapsibleTreeInfoPanel .taxonDetailsHeaderText { float: left; }

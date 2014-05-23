@@ -101,7 +101,10 @@ class Sample(db.Model):
 		# Queries of views without primary keys don't fit very well in the
 		# SQLAlchemy ORM, so query the DB with raw SQL
 		column_names = ["read_count", "domain", "phylum", "class", "order", "family", "genus", "species"]
-		query = text('select `' + ('`,`'.join(column_names)) + '` from confident_taxonomy where sample_id = :sample_id')
+		query = text(
+					'select `' + ('`,`'.join(column_names)) + '` from confident_taxonomy where sample_id = :sample_id' +
+					' order by `'+ ('`,`'.join(column_names[1:])) +'`'
+					)
 		rows = db.engine.execute(query, sample_id=self.id).fetchall()
 		return [dict(zip(column_names,row)) for row in rows]
 

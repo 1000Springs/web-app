@@ -153,25 +153,50 @@ CREATE TABLE `sample_taxonomy` (
 );
 
 CREATE OR REPLACE VIEW confident_taxonomy AS (
-    SELECT s.id as sample_id, s.sample_number, SUM(st.read_count) as read_count, t.domain AS domain,
-	    CASE WHEN t.phylum_confidence >= 0.5 THEN t.phylum ELSE NULL END AS phylum,
-	    CASE WHEN t.class_confidence >= 0.5 THEN t.class ELSE NULL END AS class,
-	    CASE WHEN t.order_confidence >= 0.5 THEN t.`order` ELSE NULL END AS `order`,    
-	    CASE WHEN t.family_confidence >= 0.5 THEN t.family ELSE NULL END AS family,
-	    CASE WHEN t.genus_confidence >= 0.5 THEN t.genus ELSE NULL END AS genus,
-	    CASE WHEN t.species_confidence >= 0.5 THEN t.species ELSE NULL END AS species
-    FROM sample s
-    JOIN sample_taxonomy st on s.id = st.sample_id
-    JOIN taxonomy t on st.taxonomy_id = t.id
-    WHERE t.domain_confidence >= 0.5
-    GROUP BY s.id, s.sample_number, t.domain, 
-        CASE WHEN t.phylum_confidence >= 0.5 THEN t.phylum ELSE NULL END, 
-        CASE WHEN t.class_confidence >= 0.5 THEN t.class ELSE NULL END, 
-        CASE WHEN t.order_confidence >= 0.5 THEN t.`order` ELSE NULL END, 
-        CASE WHEN t.family_confidence >= 0.5 THEN t.family ELSE NULL END, 
-        CASE WHEN t.genus_confidence >= 0.5 THEN t.genus ELSE NULL END, 
-        CASE WHEN t.species_confidence >= 0.5 THEN t.species ELSE NULL END 
-    ORDER BY domain DESC, phylum DESC, class DESC, `order` DESC, family DESC, genus DESC, species DESC
+   select
+   `s`.`id` AS `sample_id`,
+   `s`.`sample_number` AS `sample_number`,
+   sum(`st`.`read_count`) AS `read_count`,
+   `t`.`domain` AS `domain`,
+   (case when (`t`.`phylum_confidence` >= 0.5) then `t`.`phylum` else NULL end) AS `phylum`,
+   (case when (`t`.`class_confidence` >= 0.5) then `t`.`class` else NULL end) AS `class`,
+   (case when (`t`.`order_confidence` >= 0.5) then `t`.`order` else NULL end) AS `order`,
+   (case when (`t`.`family_confidence` >= 0.5) then `t`.`family` else NULL end) AS `family`,
+   (case when (`t`.`genus_confidence` >= 0.5) then `t`.`genus` else NULL end) AS `genus`,
+   (
+      case when (`t`.`species_confidence` >= 0.5) then `t`.`species` else NULL end
+   )
+   AS `species`
+   from
+   (
+      (
+         `springsdb`.`sample` `s`
+         join `springsdb`.`sample_taxonomy` `st` on((`s`.`id` = `st`.`sample_id`))
+      )
+      join `springsdb`.`taxonomy` `t` on((`st`.`taxonomy_id` = `t`.`id`))
+   )
+   where (`t`.`domain_confidence` >= 0.5)
+   group by `s`.`id`,
+   `s`.`sample_number`,
+   `t`.`domain`,
+   (case when (`t`.`phylum_confidence` >= 0.5) then `t`.`phylum` else NULL end),
+   (case when (`t`.`class_confidence` >= 0.5) then `t`.`class` else NULL end),
+   (case when (`t`.`order_confidence` >= 0.5) then `t`.`order` else NULL end),
+   (case when (`t`.`family_confidence` >= 0.5) then `t`.`family` else NULL end),
+   (case when (`t`.`genus_confidence` >= 0.5) then `t`.`genus` else NULL end),
+   (
+      case when (`t`.`species_confidence` >= 0.5) then `t`.`species` else NULL end
+   )
+   order by `t`.`domain` desc,
+   (case when (`t`.`phylum_confidence` >= 0.5) then `t`.`phylum` else NULL end) desc,
+   (case when (`t`.`class_confidence` >= 0.5) then `t`.`class` else NULL end) desc,
+   (case when (`t`.`order_confidence` >= 0.5) then `t`.`order` else NULL end) desc,
+   (case when (`t`.`family_confidence` >= 0.5) then `t`.`family` else NULL end) desc,
+   (case when (`t`.`genus_confidence` >= 0.5) then `t`.`genus` else NULL end) desc,
+   (
+      case when (`t`.`species_confidence` >= 0.5) then `t`.`species` else NULL end
+   )
+   desc
 );
 
 CREATE TABLE `image` (

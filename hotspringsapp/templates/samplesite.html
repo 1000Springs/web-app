@@ -347,6 +347,7 @@ span.units
 			    <div id="collapseTwo" class="accordion-body collapse">
 				    <div class="accordion-inner">
 						{% if taxJson != None %}
+							{# % include "Vis/radialTree/sunburst.html" % #}
 							{% include "Vis/radialTree/collapsibleTree.html" %}
 						{% else %}
 				         	<h3>The Taxonomy data is coming soon</h3>	
