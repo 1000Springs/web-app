@@ -1,0 +1,15 @@
+{% if error %}	
+	<h4 class="taxonDetailsError">Summary unavailable</h4>
+{% else %}
+	<div class="taxonDetailsSummary">
+		<div class="taxonDetailsHeader" >
+			<div class="taxonDetailsHeaderText">
+				<h4 class="taxonDetailsName">{{taxon}}</h4>
+				{% if rank is not none %}<div><span class="taxonDetailsRankLabel">Rank:</span><span class="taxonDetailsRank">{{rank}}</span></div>{% endif %}
+			</div>
+			{% if imageUrl is not none %}<img  class="taxonDetailsImage" src="{{imageUrl}}" />{% endif %}
+		</div>
+		<p class="taxonDetailsDescription">{{description}}</p>
+		{% if wikiUrl is not none %}<a class="taxonDetailsWikiLink" href="{{wikiUrl}}">Wikipedia</a>{% endif %}	
+	</div>
+{% endif %}
