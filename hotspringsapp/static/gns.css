@@ -668,6 +668,22 @@ label
 .chosen-container
 {
   display: block;
+  color: black;
+}
+
+.district-tier .chosen-container
+{
+
+}
+
+.system-tier .chosen-container
+{
+  padding-left: 25px;
+}
+
+.location-tier .chosen-container
+{
+  padding-left: 50px;
 }
 
 .tiers
@@ -727,7 +743,7 @@ padding: 0px 11px;
 
 height: 100%;
 }
-}
+
 
 
 
