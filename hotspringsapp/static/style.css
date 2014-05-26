@@ -46,6 +46,14 @@
   pointer-events: none;
 }
 
+/* Microbial diversity view */
+#diversityToggleView {
+	cursor: pointer;
+	color: #08c;	
+	text-decoration: none;
+	font-size: 15px;
+}
+
 /* Collapsible Tree */
 #collapsibleTreeChart circle.node {
   cursor: pointer;
@@ -53,10 +61,18 @@
   stroke-width: .5px;
 }
 
+#collapsibleTreeChart circle.root.node {
+  display: none;
+}
+
 #collapsibleTreeChart line.link {
   fill: none;
   stroke: #9ecae1;
   stroke-width: 1.5px;
+}
+
+#collapsibleTreeChart line.root.link {
+  display: none;
 }
 
 #collapsibleTreeTaxonomy table td:nth-child(3) {

@@ -347,8 +347,18 @@ span.units
 			    <div id="collapseTwo" class="accordion-body collapse">
 				    <div class="accordion-inner">
 						{% if taxJson != None %}
-							{# % include "Vis/radialTree/sunburst.html" % #}
-							{% include "Vis/radialTree/collapsibleTree.html" %}
+							<div id="diversityToggleView">Change view</div>
+							<div class="diversityView">
+								{% include "Vis/radialTree/collapsibleTree.html" %}
+							</div>								
+							<div class="diversityView" style="display: none;">
+								{% include "Vis/radialTree/sunburst.html" %}
+							</div>						
+							<script type="text/javascript">
+								$('#diversityToggleView').click(function(){
+									$('.diversityView').toggle();
+								});
+							</script>
 						{% else %}
 				         	<h3>The Taxonomy data is coming soon</h3>	
 				       	{% endif %}
