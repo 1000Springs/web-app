@@ -267,13 +267,17 @@ def simpleresults(page = 1, showAll = None):
                                                 Sample.id.in_(latestSampleIds)
                                                 )
 
-    if district != "":
+    
+    
+   
+
+    if district != "" and district != None:        
         latestFilteredSamples = latestFilteredSamples.filter(Location.district == district)
 
-    if feature_system != "":
+    if feature_system != "" and feature_system != None:        
         latestFilteredSamples = latestFilteredSamples.filter(Location.feature_system == feature_system)
 
-    if location != "":
+    if location != "" and location != None:        
         latestFilteredSamples = latestFilteredSamples.filter(Location.location == location)
 
 

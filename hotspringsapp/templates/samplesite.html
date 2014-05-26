@@ -153,11 +153,10 @@ span.units
 			<table class="descTable" >					
 				<tr>
 					<td>						
-						<h5 style="margin-top:0px;" >Location: </h5> 
+						<h5 style="margin-top:0px;" >Location: </h5> 	
 					</td>
 					<td style="text-align:left;">						
-							<p>{{sample_site.location.feature_system}}</p>
-												
+							<p>{{sample_site.location.location}}, {{sample_site.location.feature_system}}, {{sample_site.location.district}}</p>												
 					</td>				
 				</tr>
 
@@ -315,27 +314,35 @@ span.units
 		                Chemical Composition of Sample
 		            </a>
 		        </div>
-			    <div id="collapseOne" class="accordion-body collapse">
-				    <div class="accordion-inner" id="bubbles">					
+				<div id="collapseOne" class="accordion-body collapse">
+					<div class="accordion-inner">
 						{% if chemJson != None %}
-						<h1> Chemical Composition of Sample</h1>
-						<p> ppm: parts per million </p>
-						
-				       {% include "Vis/bubblechart/zoomable.html" %}
-				       <div id="bubbleDesc">
-				       	<figure>
-				       	<p>The chemical bubble chart represents the measured chemical composition of this particular geothermal sample. The relative size of each bubble reflects the concentration of the named species (the larger the bubble, the higher the concentration and vice versa). The concentration of the chemical species in parts per million (ppm) which is equivalent to mg per litre can be visualised by holding the cursor in each bubble. </p>
-				       	</figure>
-				       </div>
+							<h1 class="vis-heading"> Chemical Composition of Sample</h1>			
+							<div class="row-fluid">
+								<div class="span4">
+									<div id="bubbleDesc">
+										<figure>
+											<p><strong>Instructions:</strong>Clicking on a bubble will zoom in to get a closer look. While zoomed in, to focus on an adjacent bubble simply click it. Selecting the currently zoomed bubble will zoom back out.</p>
+											<br>
+											<p>The chemical bubble chart represents the measured chemical composition of this particular geothermal sample. The relative size of each bubble reflects the concentration of the named species (the larger the bubble, the higher the concentration and vice versa). The concentration of the chemical species in parts per million (ppm) which is equivalent to mg per litre can be visualised by holding the cursor in each bubble. </p>
+										</figure>
+									</div>
+								</div>
+								<div class="span8">
+									<div id="bubbles">				
+										{% include "Vis/bubblechart/zoomable.html" %}
+									</div>
+								</div>
+							</div>	
+						{% else %}
 
-				         {% else %}
+							<h3>The chemistry data is coming soon</h3>	
 
-				         	<h3>The chemistry data is coming soon</h3>	
+						{% endif %}
+					</div>
 
-				       	{% endif %}
-				    </div>
-			    </div>
-		    </div>
+				</div>
+			</div>
 
 		    <div class="accordion-group">
 		        <div class="accordion-heading"> 
