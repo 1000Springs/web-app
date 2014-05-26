@@ -77,6 +77,10 @@
   stroke-width: .5px;
 }
 
+#collapsibleTreeChart circle.node.selectedBranch {
+  stroke-width: 2px;
+}
+
 #collapsibleTreeChart circle.root.node {
   display: none;
 }
@@ -85,6 +89,10 @@
   fill: none;
   stroke: #9ecae1;
   stroke-width: 1.5px;
+}
+
+#collapsibleTreeChart line.link.selectedBranch {
+    stroke: #006699;
 }
 
 #collapsibleTreeChart line.root.link {

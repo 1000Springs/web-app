@@ -85,8 +85,11 @@ function update(positionNodes) {
 	
 	// Update the nodes…
 	node = vis.selectAll("circle.node")
-	    .data(nodes, function(d) { return d.id; });
-	   // .style("fill", function (d) {return color(d)});
+	    .data(nodes, function(d) { return d.id; })
+	    .style("fill", function (d) {
+	    	var colour = getNodeColour(d);
+	    	return colour;
+	     });
 	
 	
 	node.transition()
@@ -97,8 +100,8 @@ function update(positionNodes) {
 	    .attr("class", function(d) { return (d.depth == 1) ? "root node" : "node"})
 	    .attr("cx", function(d) { return d.x; })
 	    .attr("cy", function(d) { return d.y; })
-	    .attr("r", function(d) {return d.children ? 6 : 10 + (d.size / 750); })
-	    .style("fill", function (d) {return color(d)})
+	    .attr("r", function(d) {return d.children ? 6 : 10 + (d.size / 1000); })
+	    .style("fill", function (d) {return getNodeColour(d)})
 	    .on("click", click)
 	    .call(force.drag);
 	
@@ -116,7 +119,7 @@ function tick() {
       .attr("cy", function(d) { return d.y; });
 }
 
-function color(d) {
+function getNodeColour(d) {
 	var colour;
 	if (typeof d.taxa !== 'undefined') {
 	 colour = $('#collapsibleTreeTaxonomy .' + d.taxa + 'BackColour').css('background-color');
@@ -130,8 +133,8 @@ function color(d) {
 // Toggle children on click.
 function click(d) {
 	if (d.name != 'root') {
-		clearTaxonomyTable();
-		populateTaxonomyTable(d);
+		clearSelectedTaxonomy();
+		setSelectedTaxonomy(d);
 		populateDetailBox(d.name);
 		
 		if (d.children) {
@@ -145,22 +148,30 @@ function click(d) {
 	}
 }
 
-function clearTaxonomyTable() {
+function clearSelectedTaxonomy() {
 	$("#collapsibleTreeTaxonomy .taxon").text("").attr("title", "");
+	d3.selectAll('.selectedBranch').classed('selectedBranch', false);
 }
 
-function populateTaxonomyTable(node) {
+function setSelectedTaxonomy(node) {
 	
 	if (node.name != "root") {
 		$("#collapsibleTreeTaxonomy ." + node.taxa + "Name").text(node.name).attr("title", node.name);
-		populateTaxonomyTable(getParentNode(node));
+		d3.selectAll('.node').filter(function(d){
+			  return d.id == node.id;
+		}).attr("class", "node selectedBranch");
+		setSelectedTaxonomy(getParentNode(node, true));
 	}
 }
 
-function getParentNode(childNode) {
+function getParentNode(childNode, highlightLink) {
 	  var linkToParent = d3.selectAll('.link').filter(function(node){
 		  return node.target.id == childNode.id;
 	  });
+	  
+	  if (highlightLink && linkToParent.attr("class").indexOf("root") < 0) {
+		  linkToParent.attr("class", "link selectedBranch");
+	  }
 	  
 	  var parentNode = linkToParent[0][0].__data__.source;
 	  return parentNode;
