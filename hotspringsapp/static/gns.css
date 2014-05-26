@@ -815,6 +815,11 @@ height: 100%;
   overflow: visible;
 }
 
+.vis-heading
+{
+  text-align: center;
+}
+
 
 /* Template */
 
