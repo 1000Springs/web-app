@@ -47,11 +47,27 @@
 }
 
 /* Microbial diversity view */
-#diversityToggleView {
+.diversityToggleView {
 	cursor: pointer;
 	color: #08c;	
 	text-decoration: none;
 	font-size: 15px;
+	width: 111px;
+}
+
+.diversityViewInstructions {
+	text-align: left;
+ 	text-decoration: none;
+	font-size: 15px;
+	color: #666666;
+}
+
+.diversityViewInstructions.sunburst {
+	margin-left: 240px
+}
+
+.diversityViewInstructions.radialTree {
+	margin-left: 300px;
 }
 
 /* Collapsible Tree */

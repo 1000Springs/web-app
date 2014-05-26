@@ -347,15 +347,22 @@ span.units
 			    <div id="collapseTwo" class="accordion-body collapse">
 				    <div class="accordion-inner">
 						{% if taxJson != None %}
-							<div id="diversityToggleView">Change view</div>
 							<div class="diversityView">
+								<div>
+									<span class="diversityToggleView">Change view</span>
+									<span class="diversityViewInstructions radialTree">Click circles to see more details</span>
+							    </div>
 								{% include "Vis/radialTree/collapsibleTree.html" %}
 							</div>								
 							<div class="diversityView" style="display: none;">
+								<div>
+									<span class="diversityToggleView">Change view</span>
+									<span class="diversityViewInstructions sunburst">Hold mouse over segments to see more details</span>
+							    </div>							
 								{% include "Vis/radialTree/sunburst.html" %}
 							</div>						
 							<script type="text/javascript">
-								$('#diversityToggleView').click(function(){
+								$('.diversityToggleView').click(function(){
 									$('.diversityView').toggle();
 								});
 							</script>
