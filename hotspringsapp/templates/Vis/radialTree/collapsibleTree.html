@@ -2,6 +2,7 @@
 	<div id="collapsibleTreeChart" style="width: 680px; float: left;"></div>
 	<div id="collapsibleTreeInfoPanel" style="float: left; padding: 10px; width: 300px;">
 	    <div id="collapsibleTreeDetailWrapper" style="width: 290px; height: 320px; margin-top: 15px">	
+	        <h3 id="collapsibleTreeTaxonDetailsName"></h3>
 	    	<div id="collapsibleTreeAjaxWaiting"><img src="{{ url_for('static', filename='img/ajax-waiting.gif') }}">Loading summary, please wait </div>
 			<div id="collapsibleTreeDetail"></div>
 		</div>		
@@ -192,6 +193,7 @@ function getParentNode(childNode, highlightLink) {
 
 function populateDetailBox(taxon) {
 	
+	$('#collapsibleTreeTaxonDetailsName').text(taxon);
 	var firstSlash = taxon.indexOf('/');
 	if (firstSlash >= 0) {
 		taxon = taxon.substring(0, firstSlash);
