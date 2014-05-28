@@ -346,7 +346,7 @@ span.units {
 					<div id="bubbleDesc">
 						<figure>
 							<p>
-								<strong>Instructions:</strong>Clicking on a bubble will zoom
+								<strong>Instructions: </strong>Clicking on a bubble will zoom
 								in to get a closer look. While zoomed in, to focus on an
 								adjacent bubble simply click it. Selecting the currently
 								zoomed bubble will zoom back out.
@@ -378,18 +378,14 @@ span.units {
 		<div id="diversityTab" class="tab-pane">
 			{% if taxJson != None %}
 			<div class="diversityView">
-				<div>
-					<span class="diversityToggleView">Change view</span> <span
-						class="diversityViewInstructions radialTree">Click
-						circles to see more details</span>
+				<div class="diversityControlLinks">
+					<span class="diversityToggleView">Change view</span><span id="diversityToggleCollapsibleTreeHelp">Hide instructions</span>
 				</div>
 				{% include "Vis/radialTree/collapsibleTree.html" %}
 			</div>
 			<div class="diversityView" style="display: none;">
 				<div>
-					<span class="diversityToggleView">Change view</span> <span
-						class="diversityViewInstructions sunburst">Hold mouse
-						over segments to see more details</span>
+					<span class="diversityToggleView">Change view</span>
 				</div>
 				{% include "Vis/radialTree/sunburst.html" %}
 			</div>

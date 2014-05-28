@@ -1,4 +1,4 @@
-.domainColour { color: #006699; }
+.domainColour { color: #666666; }
 .phylumColour { color: #C40202; }
 .classColour { color: #DE5900; }
 .orderColour { color: #0052CC; }
@@ -6,7 +6,7 @@
 .genusColour { color: #cc0099; }
 .speciesColour { color: #6600cc; }
 
-.domainBackColour { background-color: #1D81B3; }
+.domainBackColour { background-color: #999999; }
 .phylumBackColour { background-color: #ED2D2D; }
 .classBackColour { background-color: #FF7E29; }
 .orderBackColour { background-color: #2F80FA; }
@@ -47,27 +47,12 @@
 }
 
 /* Microbial diversity view */
-.diversityToggleView {
+.diversityControlLinks span {
+	margin-right: 30px;
 	cursor: pointer;
 	color: #08c;	
 	text-decoration: none;
 	font-size: 15px;
-	width: 111px;
-}
-
-.diversityViewInstructions {
-	text-align: left;
- 	text-decoration: none;
-	font-size: 15px;
-	color: #666666;
-}
-
-.diversityViewInstructions.sunburst {
-	margin-left: 240px
-}
-
-.diversityViewInstructions.radialTree {
-	margin-left: 300px;
 }
 
 /* Collapsible Tree */
@@ -107,7 +92,7 @@
 
 #collapsibleTreeTaxonomy .taxon {
 	text-overflow:ellipsis;
-	text-align: right;
+	text-align: left;
 	overflow:hidden;
 	width: 185px;
 	margin-right: 5px;
@@ -116,11 +101,11 @@
 #collapsibleTreeAjaxWaiting { display: none; color: #999999; }
 #collapsibleTreeAjaxWaiting>img { margin-right: 10px; }
 
-#collapsibleTreeInfoPanel .taxonDetailsHeader { height: 80px; }
+/*#collapsibleTreeInfoPanel .taxonDetailsHeader { height: 80px; } */
 #collapsibleTreeInfoPanel .taxonDetailsName { font-weight: bold; } 
-#collapsibleTreeInfoPanel .taxonDetailsHeaderText { float: left; }
+#collapsibleTreeInfoPanel .taxonDetailsHeaderText { display: inline-block; vertical-align: top; margin: 10px 0 10px 0;}
 #collapsibleTreeInfoPanel .taxonDetailsRankLabel { font-weight: bold; margin-right: 10px; }
-#collapsibleTreeInfoPanel .taxonDetailsImage { float: right; height: 70px; }
+#collapsibleTreeInfoPanel .taxonDetailsImage { height: 70px; ; margin: 10px 20px 10px 0;}
 #collapsibleTreeInfoPanel .taxonDetailsDescription { width: 300px; max-height: 140px; overflow: hidden; text-overflow:ellipsis; }
 
 /* Sunburst pie chart */

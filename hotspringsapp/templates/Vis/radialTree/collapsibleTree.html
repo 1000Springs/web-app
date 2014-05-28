@@ -1,29 +1,60 @@
 <div id ="collapsibleTreeWrapper" style="width: 1000px; height: 700px">
-	<div id="collapsibleTreeChart" style="width: 680px; float: left;"></div>
-	<div id="collapsibleTreeInfoPanel" style="float: left; padding: 10px; width: 300px;">
-	    <div id="collapsibleTreeDetailWrapper" style="width: 290px; height: 320px; margin-top: 15px">	
+	<div id="collapsibleTreeInfoPanel" style="float: left; padding: 10px 10px 10px 0; height: 850px; width: 300px;">
+	    <div id="collapsibleTreeHelpText">
+	    	<figure>
+				<p>
+					<strong>Instructions: </strong>Clicking on a circle will
+					display the taxonomic hierarchy names for that microorganism
+					in the coloured table below, and a summary will be displayed
+					for well known microorganisms.
+			    <p>
+			    <p>
+					Click the coloured boxes below to expand or contract
+					the taxonomic tree to the corresponding taxonomic level.
+				</p>
+				<p>This microbial diversity chart shows the taxonomy of microorganisms
+				   found in the latest sample from this location. The colours identify
+				   taxanomic rank, and the relative size of outer circles reflects the
+				   abundance of the microorganisms belonging to that taxonomic unit.
+				</p>
+			</figure>	    
+	    </div>
+	    <div id="collapsibleTreeDetailWrapper" style="width: 290px; max-height: 320px; margin-top: 15px; display: none;">	
 	        <h3 id="collapsibleTreeTaxonDetailsName"></h3>
 	    	<div id="collapsibleTreeAjaxWaiting"><img src="{{ url_for('static', filename='img/ajax-waiting.gif') }}">Loading summary, please wait </div>
-			<div id="collapsibleTreeDetail"></div>
+			<div id="collapsibleTreeDetail" style="display: none;"></div>
 		</div>		
-	    <div id="collapsibleTreeTaxonomy">
+	    <div id="collapsibleTreeTaxonomy" style="margin-top: 15px;">
 	    	<table style="width: 290px;">
 	    	    <tr><th></th><th style="width: 40px"></th><th style="width: 80px"></th></tr>
-	    		<tr><td><div class="domainColour domainName taxon"></div></td><td><div class="domainBackColour taxaSwatch"></div></td><td>Domain</td></tr>
-	    		<tr><td><div class="phylumColour phylumName taxon"></div></td><td><div class="phylumBackColour taxaSwatch"></div></td><td>Phylum</td></tr>
-	    		<tr><td><div class="classColour className taxon"></div></td><td><div class="classBackColour taxaSwatch"></div></td><td>Class</td></tr>
-	    		<tr><td><div class="orderColour orderName taxon"></div></td><td><div class="orderBackColour taxaSwatch"></div></td><td>Order</td></tr>
-	    		<tr><td><div class="familyColour familyName taxon"></div></td><td><div class="familyBackColour taxaSwatch"></div></td><td>Family</td></tr>
-	    		<tr><td><div class="genusColour genusName taxon"></div></td><td><div class="genusBackColour taxaSwatch"></div></td><td>Genus</td></tr>
-	    		<tr><td><div class="speciesColour speciesName taxon"></div></td><td><div class="speciesBackColour taxaSwatch"></div></td><td>Species</td></tr>
+	    		<tr><td>Domain</td><td><div class="domainBackColour taxaSwatch"></div></td><td><div class="domainColour domainName taxon"></div></td></tr>
+	    		<tr><td>Phylum</td><td><div class="phylumBackColour taxaSwatch"></div></td><td><div class="phylumColour phylumName taxon"></div></td></tr>
+	    		<tr><td>Class</td><td><div class="classBackColour taxaSwatch"></div></td><td><div class="classColour className taxon"></div></td></tr>
+	    		<tr><td>Order</td><td><div class="orderBackColour taxaSwatch"></div></td><td><div class="orderColour orderName taxon"></div></td></tr>
+	    		<tr><td>Family</td><td><div class="familyBackColour taxaSwatch"></div></td><td><div class="familyColour familyName taxon"></div></td></tr>
+	    		<tr><td>Genus</td><td><div class="genusBackColour taxaSwatch"></div></td><td><div class="genusColour genusName taxon"></div></td></tr>
+	    		<tr><td>Species</td><td><div class="speciesBackColour taxaSwatch"></div></td><td><div class="speciesColour speciesName taxon"></div></td></tr>
 	    	</table>
 	    </div>
 
 	</div>
+	<div id="collapsibleTreeChart" style="width: 680px; float: left;"></div>
 </div>
 
 <script type="text/javascript">
 $(document).ready(function(){
+	
+	$('#diversityToggleCollapsibleTreeHelp').click(function(){
+		if ($('#collapsibleTreeHelpText').is(":visible")) {
+			$('#collapsibleTreeHelpText').slideUp(function(){
+				$('#diversityToggleCollapsibleTreeHelp').text('Show instructions');
+			});
+		} else {
+			$('#collapsibleTreeHelpText').slideDown(function(){
+				$('#diversityToggleCollapsibleTreeHelp').text('Hide instructions');
+			});			
+		}	
+	});
 	var treeData = {{taxJson|safe}};
 	var w = 680,
 	    h = 680,
@@ -193,28 +224,34 @@ $(document).ready(function(){
 	
 	function populateDetailBox(taxon) {
 		
-		$('#collapsibleTreeTaxonDetailsName').text(taxon);
-		var firstSlash = taxon.indexOf('/');
-		if (firstSlash >= 0) {
-			taxon = taxon.substring(0, firstSlash);
+		if ($('#collapsibleTreeTaxonDetailsName').text() != taxon) {
+			$('#collapsibleTreeTaxonDetailsName').text(taxon);
+			var firstSlash = taxon.indexOf('/');
+			if (firstSlash >= 0) {
+				taxon = taxon.substring(0, firstSlash);
+			}
+			
+			$('#collapsibleTreeDetailWrapper').slideDown();
+			
+			$('#collapsibleTreeDetail').slideUp(function(){
+				$('#collapsibleTreeAjaxWaiting').fadeIn(function(){
+					$.get('/taxon/'+taxon)  
+					  .done(function(data){
+						$('#collapsibleTreeAjaxWaiting').fadeOut(function(){
+							$('#collapsibleTreeDetail').html(data);	
+							$('#collapsibleTreeDetail').slideDown();
+						});
+					  })
+					  .fail(function() {
+						$('#collapsibleTreeAjaxWaiting').fadeOut(function(){	
+							$('#collapsibleTreeDetail').html('<h4 class="taxonDetailsError">Unable to load summary</h4>');
+							$('#collapsibleTreeDetail').slideDown();
+	
+						});
+					  });
+				});		
+			});
 		}
-		$('#collapsibleTreeDetail').fadeOut(function(){
-			$('#collapsibleTreeAjaxWaiting').fadeIn(function(){
-				$.get('/taxon/'+taxon)  
-				  .done(function(data){
-					$('#collapsibleTreeAjaxWaiting').fadeOut(function(){
-						$('#collapsibleTreeDetail').html(data);		
-						$('#collapsibleTreeDetail').fadeIn();
-					});
-				  })
-				  .fail(function() {
-					$('#collapsibleTreeAjaxWaiting').fadeOut(function(){	
-						$('#collapsibleTreeDetail').html('<h4 class="taxonDetailsError">Unable to load summary</h4>');
-						$('#collapsibleTreeDetail').fadeIn();
-					});
-				  });			
-			});		
-		});
 	}
 	
 	
