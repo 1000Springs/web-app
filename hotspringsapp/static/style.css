@@ -122,3 +122,55 @@
 #collapsibleTreeInfoPanel .taxonDetailsRankLabel { font-weight: bold; margin-right: 10px; }
 #collapsibleTreeInfoPanel .taxonDetailsImage { float: right; height: 70px; }
 #collapsibleTreeInfoPanel .taxonDetailsDescription { width: 300px; max-height: 140px; overflow: hidden; text-overflow:ellipsis; }
+
+/* Sunburst pie chart */
+#sunburstWrapper {
+  font-family: 'Open Sans', sans-serif;
+  font-size: 12px;
+  font-weight: 400;
+  background-color: #fff;
+  width: 960px;
+  height: 700px;
+  margin-top: 10px;
+}
+
+#sunburstMain {
+  float: left;
+  width: 1024px;
+}
+
+#sunburstSequence {
+  width: 1024px;
+  height: 70px;
+}
+
+
+#sunburstSequence text {
+  fill: #fff;
+}
+
+#sunburstSequence text#endlabel {
+  font-weight: 600;
+}
+
+#sunburstChart {
+  position: relative;
+}
+
+#sunburstChart path {
+  stroke: #fff;
+}
+
+#sunburstExplanation {
+  position: absolute;
+  top: 240px;
+  left: 430px;
+  width: 165px;
+  text-align: center;
+  color: #666;
+  z-index: 1;
+}
+
+#sunburstPercentage {
+  font-size: 2.5em;
+}

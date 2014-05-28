@@ -134,9 +134,9 @@ function getNodeColour(d) {
 	var colour;
 	if (typeof d.taxa !== 'undefined') {
 		if (d.selectedBranch) {
-			colour = $('#collapsibleTreeTaxonomy .' + d.taxa + 'Colour').css('color');
+			colour = $('.' + d.taxa + 'Colour').css('color');
 		} else {
-			colour = $('#collapsibleTreeTaxonomy .' + d.taxa + 'BackColour').css('background-color');
+			colour = $('.' + d.taxa + 'BackColour').css('background-color');
 		}
 	} else {
 		colour = "#000000"
