@@ -45,15 +45,20 @@ root = treeData;
 root.fixed = true;
 root.x = w / 2;
 root.y = h / 2;
+window.maxCollapsibleTreeDepth = 8;
 
+update(true, window.maxCollapsibleTreeDepth);
 
-update(true);
+$('#collapsibleTreeTaxonomy .taxaSwatch').click(function(){
+	var row =  $(this).closest('tr').index();
+	window.maxCollapsibleTreeDepth = row + 1;
+	update(false, window.maxCollapsibleTreeDepth);
+});
 
-function update(positionNodes) {
+function update(positionNodes, maxDepth) {
 	
-
-	var nodes = flatten(root),
-	links = d3.layout.tree().links(nodes);
+	var nodes = flatten(root, maxDepth);
+	var links = d3.layout.tree().links(nodes);
 	
 	if (positionNodes) {
 		nodes.forEach(function(d, i) {
@@ -74,7 +79,7 @@ function update(positionNodes) {
 	
 	// Enter any new links.
 	link.enter().insert("svg:line", ".node")
-	    .attr("class", function(d) { return (d.source.depth == 1) ? "root link" : "link"})
+	    .attr("class", function(d) { return (d.source.depth == 1) ? "root link" : "link";})
 	    .attr("x1", function(d) { return d.source.x; })
 	    .attr("y1", function(d) { return d.source.y; })
 	    .attr("x2", function(d) { return d.target.x; })
@@ -93,14 +98,18 @@ function update(positionNodes) {
 	
 	
 	node.transition()
-	    .attr("r", function(d) {return d.children ? 6 : 10 + (d.size / 750);});
+	    .attr("r", function(d) {
+	    	return d.children ? 6 : 10 + (d.size / 750);
+	    });
 	
 	// Enter any new nodes.
 	node.enter().append("svg:circle")
-	    .attr("class", function(d) { return (d.depth == 1) ? "root node" : "node"})
+	 	.attr("class", function(d) { return (d.depth == 1) ? "root node" : "node";})
 	    .attr("cx", function(d) { return d.x; })
 	    .attr("cy", function(d) { return d.y; })
-	    .attr("r", function(d) {return d.children ? 6 : 10 + (d.size / 1000); })
+	    .attr("r", function(d) {
+	    	return d.children ? 6 : 10 + (d.size / 1000); 
+	    })
 	    .style("fill", function (d) {return getNodeColour(d)})
 	    .on("click", click)
 	    .call(force.drag);
@@ -120,11 +129,16 @@ function tick() {
 }
 
 function getNodeColour(d) {
+	
 	var colour;
 	if (typeof d.taxa !== 'undefined') {
-	 colour = $('#collapsibleTreeTaxonomy .' + d.taxa + 'BackColour').css('background-color');
+		if (d.selectedBranch) {
+			colour = $('#collapsibleTreeTaxonomy .' + d.taxa + 'Colour').css('color');
+		} else {
+			colour = $('#collapsibleTreeTaxonomy .' + d.taxa + 'BackColour').css('background-color');
+		}
 	} else {
-	 colour = "#000000"
+		colour = "#000000"
 	}
 	
 	return colour;
@@ -151,30 +165,29 @@ function click(d) {
 function clearSelectedTaxonomy() {
 	$("#collapsibleTreeTaxonomy .taxon").text("").attr("title", "");
 	d3.selectAll('.selectedBranch').classed('selectedBranch', false);
+	d3.selectAll('.node').each(function(node) { node.selectedBranch=false;});
 }
 
 function setSelectedTaxonomy(node) {
 	
 	if (node.name != "root") {
 		$("#collapsibleTreeTaxonomy ." + node.taxa + "Name").text(node.name).attr("title", node.name);
-		d3.selectAll('.node').filter(function(d){
-			  return d.id == node.id;
-		}).attr("class", "node selectedBranch");
+		node.selectedBranch = true;
 		setSelectedTaxonomy(getParentNode(node, true));
 	}
 }
 
 function getParentNode(childNode, highlightLink) {
-	  var linkToParent = d3.selectAll('.link').filter(function(node){
-		  return node.target.id == childNode.id;
-	  });
-	  
-	  if (highlightLink && linkToParent.attr("class").indexOf("root") < 0) {
-		  linkToParent.attr("class", "link selectedBranch");
-	  }
-	  
-	  var parentNode = linkToParent[0][0].__data__.source;
-	  return parentNode;
+	var linkToParent = d3.selectAll('.link').filter(function(node){
+		return node.target.id == childNode.id;
+	});
+	
+	if (highlightLink && linkToParent.attr("class").indexOf("root") < 0) {
+		linkToParent.attr("class", "link selectedBranch");
+	}
+	
+	var parentNode = linkToParent[0][0].__data__.source;
+	return parentNode;
 }
 
 function populateDetailBox(taxon) {
@@ -202,23 +215,46 @@ function populateDetailBox(taxon) {
 	});
 }
 
-// Returns a list of all nodes under the root.
-function flatten(root) {
+
+/*
+ * Returns a list of all nodes under the root, excluding nodes
+ * that have been collapsed by the user or are outside the
+ * maximum depth (taxonomy level) selected by the user.
+ */
+function flatten(root, maxDepth) {
 	var nodes = [], i = 0;
 	
 	function recurse(node, depth) {
+		var children = [];
+		if (node.children) {
+			children = node.children;
+		} else if (node._children) {
+			children = node._children;
+		}
+		
+		if (node._children && typeof maxDepth !== 'undefined') {
+			node.children = node._children;
+			node._children = null;
+		}
 		if (node.children) {
 			node.size = node.children.reduce(function(p, v) { return p + recurse(v, depth + 1); }, 0);
-		}
+		} 
 		if (!node.id) node.id = ++i;
-		node.depth = depth
-		nodes.push(node);
+		node.depth = depth;
+		if (typeof maxDepth !== 'undefined' && depth >= maxDepth) {
+			node._children = node.children;
+			node.children = null;	
+		} 
+
+		if (typeof maxDepth === 'undefined' || depth <= maxDepth) {
+			nodes.push(node);		
+		}
+	
 		return node.size;
 	}
 	
 	root.size = recurse(root, 1);
 	return nodes;
 }
-
 </script>
 

@@ -1,18 +1,18 @@
 .domainColour { color: #006699; }
-.phylumColour { color: #ff0000; }
-.classColour { color: #ff6600; }
-.orderColour { color: #0066ff; }
+.phylumColour { color: #C40202; }
+.classColour { color: #DE5900; }
+.orderColour { color: #0052CC; }
 .familyColour { color: #009900; }
 .genusColour { color: #cc0099; }
 .speciesColour { color: #6600cc; }
 
-.domainBackColour { background-color: #006699; }
-.phylumBackColour { background-color: #ff0000; }
-.classBackColour { background-color: #ff6600; }
-.orderBackColour { background-color: #0066ff; }
-.familyBackColour { background-color: #009900; }
-.genusBackColour { background-color: #cc0099; }
-.speciesBackColour { background-color: #6600cc; }
+.domainBackColour { background-color: #1D81B3; }
+.phylumBackColour { background-color: #ED2D2D; }
+.classBackColour { background-color: #FF7E29; }
+.orderBackColour { background-color: #2F80FA; }
+.familyBackColour { background-color: #2EC92E; }
+.genusBackColour { background-color: #FC2DC9; }
+.speciesBackColour { background-color: #9933FF; }
 
 /*Zoomable Bubble Chart*/
 
@@ -77,10 +77,6 @@
   stroke-width: .5px;
 }
 
-#collapsibleTreeChart circle.node.selectedBranch {
-  stroke-width: 2px;
-}
-
 #collapsibleTreeChart circle.root.node {
   display: none;
 }
@@ -106,6 +102,7 @@
 #collapsibleTreeTaxonomy .taxaSwatch {
 	width: 40px;
 	height: 20px;
+	cursor: pointer;
 }
 
 #collapsibleTreeTaxonomy .taxon {
