@@ -150,7 +150,7 @@ span.units {
 
 	</script>
 
-	<div class="tab-content">
+	<div id="sampleSiteTabContent" class="tab-content">
 		<div id="overviewTab" class="tab-pane active">
 			<div class="row-fluid">
 				<div class="span7">
@@ -339,7 +339,7 @@ span.units {
 		</div>
 	
 	
-		<div id="chemistryTab" class="tab-pane">
+		<div id="chemistryTab" class="tab-pane requiresSvg">
 			{% if chemJson != None %}
 			<div class="row-fluid">
 				<div class="span4">
@@ -375,7 +375,7 @@ span.units {
 			{% endif %}
 		</div>
 	
-		<div id="diversityTab" class="tab-pane">
+		<div id="diversityTab" class="tab-pane requiresSvg">
 			{% if taxJson != None %}
 			<div class="diversityView">
 				<div class="diversityControlLinks">
@@ -390,23 +390,25 @@ span.units {
 				{% include "Vis/radialTree/sunburst.html" %}
 			</div>
 			<script type="text/javascript">
-				$('.diversityToggleView').click(function(){
-					$('.diversityView').toggle();
+				$(document).ready(function(){
+					$('.diversityToggleView').click(function(){
+						$('.diversityView').toggle();
+					});
+					
+					$('.diversityToggleHelp').click(function() {
+						var toggleHelp = this;
+						var helpText = $(this).closest('.diversityView').find('.diversityHelpText').first();
+						if ($(helpText).is(":visible")) {
+							$(helpText).slideUp(function(){
+								$(toggleHelp).text('Show instructions');
+							});
+						} else {
+							$(helpText).slideDown(function(){
+								$(toggleHelp).text('Hide instructions');
+							});			
+						}	
+					});	
 				});
-				
-				$('.diversityToggleHelp').click(function() {
-					var toggleHelp = this;
-					var helpText = $(this).closest('.diversityView').find('.diversityHelpText').first();
-					if ($(helpText).is(":visible")) {
-						$(helpText).slideUp(function(){
-							$(toggleHelp).text('Show instructions');
-						});
-					} else {
-						$(helpText).slideDown(function(){
-							$(toggleHelp).text('Hide instructions');
-						});			
-					}	
-				});				
 			</script>
 			{% else %}
 			<h3>The Taxonomy data is coming soon</h3>
@@ -414,6 +416,17 @@ span.units {
 		</div>
 	</div>
 </div>
+<script type="text/javascript">
+	$(document).ready(function(){
+		// SVG test taken from Modernizr 2.0
+		if (!!document.createElementNS &&
+		    !!document.createElementNS('http://www.w3.org/2000/svg', 'svg').createSVGRect) {
+		    return;
+		}
+		// No SVG, do something about it.
+		$('.requiresSvg').html('<p>A modern browser (such as Chrome or Internet Explorer 9) with support for SVG is required to view this section.</p>');
+	});			
+</script>
 <!-- End tabbed content -->
 
 <div id="myModal" class="modal hide fade" tabindex="-1" role="dialog"
