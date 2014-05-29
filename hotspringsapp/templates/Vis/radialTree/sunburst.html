@@ -1,11 +1,28 @@
-<div id="sunburstWrapper">
-    <div id="sunburstMain">
-		<div id="sunburstSequence"></div>
-		<div id="sunburstChart">
-			<div id="sunburstExplanation" style="visibility: hidden;">
-				<span id="sunburstPercentage"></span><br /> of life in samples from this location belong to the
-				<span id="sunburstTaxa"></span> <span id="sunburstName" style="font-weight: bold;"></span>
-			</div>
+<div id="sunburstWrapper" style="width: 1000px; height: 700px">
+	<div id="sunburstInfoPanel"
+		style="float: left; padding: 10px 10px 10px 0; height: 850px; width: 280px; margin-right: 20px;">
+		<div class="diversityHelpText" style="width: 270px; margin-bottom: 30px">
+			<figure>
+				<p>
+					<strong>Instructions: </strong>Hold your mouse pointer
+					over a segment to display the taxonomic hierarchy 
+					for microorganisms represented by that segment, and
+					the relative abundance of those microorganisms.
+				<p>
+				<p>This microbial diversity chart shows the relative abundance of
+				   microorganisms found in the latest sample from this location. Each
+				   segment represents a taxonomic unit, and the segment size reflects
+				   the relative abundance of microorganisms belonging to that
+				   taxonomic unit.</p>
+			</figure>
+		</div>
+		<div id="sunburstSequence" style="margin-top: 10px"></div>
+	</div>
+	<div id="sunburstChart">
+		<div id="sunburstExplanation" style="visibility: hidden;">
+			<span id="sunburstPercentage"></span><br /> of life in samples from
+			this location belong to the <span id="sunburstTaxa"></span> <span
+				id="sunburstName" style="font-weight: bold;"></span>
 		</div>
 	</div>
 </div>
@@ -15,13 +32,13 @@
  * See http://www.apache.org/licenses/LICENSE-2.0.
  */
 $(document).ready(function(){
-    var width = 1024;
-    var height = 600;
+    var width = 680;
+    var height = 680;
     var radius = Math.min(width, height) / 2;
 
-    // Breadcrumb dimensions: width, height, spacing, width of tip/tail.
+    // Breadcrumb dimensions: width, height, spacing
     var b = {
-      w: 130, h: 30, s: 3, t: 10
+      w: 270, h: 30, s: 3
     };
 
     // Total size of all segments; we set this later, after loading the data.
@@ -148,13 +165,9 @@ $(document).ready(function(){
     function initializeBreadcrumbTrail() {
         // Add the svg area.
         var trail = d3.select("#sunburstSequence").append("svg:svg")
-          .attr("width", width)
-          .attr("height", 50)
+          .attr("width", 270)
+          .attr("height", 300)
           .attr("id", "sunburstTrail");
-        // Add the label at the end, for the percentage.
-        trail.append("svg:text")
-        .attr("id", "endlabel")
-        .style("fill", "#000");
     }
 
     // Generate a string that describes the points of a breadcrumb polygon.
@@ -162,12 +175,8 @@ $(document).ready(function(){
         var points = [];
         points.push("0,0");
         points.push(b.w + ",0");
-        points.push(b.w + b.t + "," + (b.h / 2));
         points.push(b.w + "," + b.h);
         points.push("0," + b.h);
-        if (i > 0) { // Leftmost breadcrumb; don't include 6th vertex.
-            points.push(b.t + "," + (b.h / 2));
-        }
 
         return points.join(" ");
     }
@@ -191,32 +200,36 @@ $(document).ready(function(){
            });
 
         entering.append("svg:text")
-          .attr("x", (b.w + b.t) / 2)
+          .attr("x", 10)
           .attr("y", b.h / 2)
           .attr("dy", "0.35em")
-          .attr("text-anchor", "middle")
-          .text(function(d) { return d.name; });
+          .attr("text-anchor", "left")
+          .text(function(d) { return capitaliseFirstLetter(d.taxa) + ":"; });
+        
+        entering.append("svg:text")
+         .attr("x", 70)
+         .attr("y", b.h / 2)
+         .attr("dy", "0.35em")
+         .attr("text-anchor", "left")
+         .text(function(d) { return d.name; });
 
         // Set position for entering and updating nodes.
         g.attr("transform", function(d, i) {
-        return "translate(" + i * (b.w + b.s) + ", 0)";
+        	return "translate(0, " + i * (b.h + b.s) + ")";
         });
 
         // Remove exiting nodes.
         g.exit().remove();
-
-        // Now move and update the percentage at the end.
-        d3.select("#sunburstTrail").select("#endlabel")
-          .attr("x", (nodeArray.length + 0.5) * (b.w + b.s))
-          .attr("y", b.h / 2)
-          .attr("dy", "0.35em")
-          .attr("text-anchor", "middle")
-          .text(percentageString);
 
         // Make the breadcrumb trail visible, if it's hidden.
         d3.select("#sunburstTrail")
           .style("visibility", "");
 
     }
+    
+    function capitaliseFirstLetter(string)
+    {
+        return string.charAt(0).toUpperCase() + string.slice(1);
+    }    
 });
 </script>

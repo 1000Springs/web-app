@@ -379,13 +379,13 @@ span.units {
 			{% if taxJson != None %}
 			<div class="diversityView">
 				<div class="diversityControlLinks">
-					<span class="diversityToggleView">Change view</span><span id="diversityToggleCollapsibleTreeHelp">Hide instructions</span>
+					<span class="diversityToggleView">Change view</span><span class="diversityToggleHelp">Hide instructions</span>
 				</div>
 				{% include "Vis/radialTree/collapsibleTree.html" %}
 			</div>
 			<div class="diversityView" style="display: none;">
-				<div>
-					<span class="diversityToggleView">Change view</span>
+				<div class="diversityControlLinks">
+					<span class="diversityToggleView">Change view</span><span class="diversityToggleHelp">Hide instructions</span>
 				</div>
 				{% include "Vis/radialTree/sunburst.html" %}
 			</div>
@@ -393,6 +393,20 @@ span.units {
 				$('.diversityToggleView').click(function(){
 					$('.diversityView').toggle();
 				});
+				
+				$('.diversityToggleHelp').click(function() {
+					var toggleHelp = this;
+					var helpText = $(this).closest('.diversityView').find('.diversityHelpText').first();
+					if ($(helpText).is(":visible")) {
+						$(helpText).slideUp(function(){
+							$(toggleHelp).text('Show instructions');
+						});
+					} else {
+						$(helpText).slideDown(function(){
+							$(toggleHelp).text('Hide instructions');
+						});			
+					}	
+				});				
 			</script>
 			{% else %}
 			<h3>The Taxonomy data is coming soon</h3>

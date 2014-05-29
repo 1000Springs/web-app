@@ -55,6 +55,10 @@
 	font-size: 15px;
 }
 
+.diversityHelpText {
+	font-size: 13px;
+}
+
 /* Collapsible Tree */
 #collapsibleTreeChart circle.node {
   cursor: pointer;
@@ -119,23 +123,9 @@
   margin-top: 10px;
 }
 
-#sunburstMain {
-  float: left;
-  width: 1024px;
-}
-
-#sunburstSequence {
-  width: 1024px;
-  height: 70px;
-}
-
-
 #sunburstSequence text {
   fill: #fff;
-}
-
-#sunburstSequence text#endlabel {
-  font-weight: 600;
+  font-size: 13px;
 }
 
 #sunburstChart {
@@ -148,8 +138,8 @@
 
 #sunburstExplanation {
   position: absolute;
-  top: 240px;
-  left: 430px;
+  top: 270px;
+  left: 570px;
   width: 165px;
   text-align: center;
   color: #666;

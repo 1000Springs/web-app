@@ -1,30 +1,30 @@
-<div id ="collapsibleTreeWrapper" style="width: 1000px; height: 700px">
-	<div id="collapsibleTreeInfoPanel" style="float: left; padding: 10px 10px 10px 0; height: 850px; width: 300px;">
-	    <div id="collapsibleTreeHelpText">
+<div id ="collapsibleTreeWrapper" style="width: 1000px; height: 875px">
+	<div id="collapsibleTreeInfoPanel" style="float: left; padding: 10px 10px 10px 0; height: 875px; width: 300px;">
+	    <div class="diversityHelpText" style="margin: 10px 0 30px 0;" >
 	    	<figure>
 				<p>
 					<strong>Instructions: </strong>Clicking on a circle will
-					display the taxonomic hierarchy names for that microorganism
-					in the coloured table below, and a summary will be displayed
-					for well known microorganisms.
+					display (in the coloured table below) the taxonomic hierarchy 
+					names for the microorganism it represents, and a summary will
+					be displayed for well known microorganisms.
 			    <p>
 			    <p>
 					Click the coloured boxes below to expand or contract
-					the taxonomic tree to the corresponding taxonomic level.
+					the taxonomic tree to the corresponding level.
 				</p>
-				<p>This microbial diversity chart shows the taxonomy of microorganisms
+				<p>This interactive chart shows the taxonomy of microorganisms
 				   found in the latest sample from this location. The colours identify
-				   taxanomic rank, and the relative size of outer circles reflects the
+				   taxanomic rank, and the size of outer circles reflects the
 				   abundance of the microorganisms belonging to that taxonomic unit.
 				</p>
 			</figure>	    
 	    </div>
-	    <div id="collapsibleTreeDetailWrapper" style="width: 290px; max-height: 320px; margin-top: 15px; display: none;">	
+	    <div id="collapsibleTreeDetailWrapper" style="width: 290px; min-height: 90px; max-height: 320px; margin: 10px 0 30px 0; display: none;">	
 	        <h3 id="collapsibleTreeTaxonDetailsName"></h3>
-	    	<div id="collapsibleTreeAjaxWaiting"><img src="{{ url_for('static', filename='img/ajax-waiting.gif') }}">Loading summary, please wait </div>
+	    	<div id="collapsibleTreeAjaxWaiting" ><img src="{{ url_for('static', filename='img/ajax-waiting.gif') }}">Loading summary, please wait </div>
 			<div id="collapsibleTreeDetail" style="display: none;"></div>
 		</div>		
-	    <div id="collapsibleTreeTaxonomy" style="margin-top: 15px;">
+	    <div id="collapsibleTreeTaxonomy" style="margin-top: 10px;">
 	    	<table style="width: 290px;">
 	    	    <tr><th></th><th style="width: 40px"></th><th style="width: 80px"></th></tr>
 	    		<tr><td>Domain</td><td><div class="domainBackColour taxaSwatch"></div></td><td><div class="domainColour domainName taxon"></div></td></tr>
@@ -43,7 +43,7 @@
 
 <script type="text/javascript">
 $(document).ready(function(){
-	
+	/*
 	$('#diversityToggleCollapsibleTreeHelp').click(function(){
 		if ($('#collapsibleTreeHelpText').is(":visible")) {
 			$('#collapsibleTreeHelpText').slideUp(function(){
@@ -55,6 +55,7 @@ $(document).ready(function(){
 			});			
 		}	
 	});
+	*/
 	var treeData = {{taxJson|safe}};
 	var w = 680,
 	    h = 680,
@@ -130,19 +131,15 @@ $(document).ready(function(){
 		
 		
 		node.transition()
-		    .attr("r", function(d) {
-		    	return d.children ? 6 : 10 + (d.size / 750);
-		    });
+		    .attr("r", function(d) { return getNodeSize(d); });
 		
 		// Enter any new nodes.
 		node.enter().append("svg:circle")
 		 	.attr("class", function(d) { return (d.depth == 1) ? "root node" : "node";})
 		    .attr("cx", function(d) { return d.x; })
 		    .attr("cy", function(d) { return d.y; })
-		    .attr("r", function(d) {
-		    	return d.children ? 6 : 10 + (d.size / 1000); 
-		    })
-		    .style("fill", function (d) {return getNodeColour(d)})
+		    .attr("r", function(d) { return getNodeSize(d); })
+		    .style("fill", function (d) { return getNodeColour(d); })
 		    .on("click", click)
 		    .call(force.drag);
 		
@@ -151,13 +148,24 @@ $(document).ready(function(){
 	}
 	
 	function tick() {
-	  link.attr("x1", function(d) { return d.source.x; })
-	      .attr("y1", function(d) { return d.source.y; })
-	      .attr("x2", function(d) { return d.target.x; })
-	      .attr("y2", function(d) { return d.target.y; });
+	    // Calculate max/min node locations to keep within chart boundaries
+        node.attr("cx", function(d) { 
+    	        var r = getNodeSize(d);
+    	  		return d.x = Math.max(r, Math.min(w - r, d.x)); })
+	        .attr("cy", function(d) { 
+	    	  	var r = getNodeSize(d); 
+	    	  	return d.y = Math.max(r, Math.min(h - r, d.y)); });
+      
+	    link.attr("x1", function(d) { return d.source.x; })
+	        .attr("y1", function(d) { return d.source.y; })
+	        .attr("x2", function(d) { return d.target.x; })
+	        .attr("y2", function(d) { return d.target.y; });
 	
-	  node.attr("cx", function(d) { return d.x; })
-	      .attr("cy", function(d) { return d.y; });
+
+	}
+	
+	function getNodeSize(d) {
+		return d.children ? 6 : 10 + (d.size / 1000);
 	}
 	
 	function getNodeColour(d) {
@@ -223,7 +231,9 @@ $(document).ready(function(){
 	}
 	
 	function populateDetailBox(taxon) {
-		
+		if (window.lastCollapsibleTreeAjaxRequest) {
+			window.lastCollapsibleTreeAjaxRequest.abort();
+		}
 		if ($('#collapsibleTreeTaxonDetailsName').text() != taxon) {
 			$('#collapsibleTreeTaxonDetailsName').text(taxon);
 			var firstSlash = taxon.indexOf('/');
@@ -235,19 +245,24 @@ $(document).ready(function(){
 			
 			$('#collapsibleTreeDetail').slideUp(function(){
 				$('#collapsibleTreeAjaxWaiting').fadeIn(function(){
-					$.get('/taxon/'+taxon)  
+					window.lastCollapsibleTreeAjaxRequest = $.get('/taxon/'+taxon)  
 					  .done(function(data){
 						$('#collapsibleTreeAjaxWaiting').fadeOut(function(){
 							$('#collapsibleTreeDetail').html(data);	
 							$('#collapsibleTreeDetail').slideDown();
 						});
 					  })
-					  .fail(function() {
+					  .fail(function(jqXHR, textStatus, errorThrown) {
 						$('#collapsibleTreeAjaxWaiting').fadeOut(function(){	
-							$('#collapsibleTreeDetail').html('<h4 class="taxonDetailsError">Unable to load summary</h4>');
-							$('#collapsibleTreeDetail').slideDown();
+							if (errorThrown != "abort") {
+								$('#collapsibleTreeDetail').html('<h4 class="taxonDetailsError">Unable to load summary</h4>');
+								$('#collapsibleTreeDetail').slideDown();
+							}
 	
 						});
+					  })
+					  .always(function(){
+						  window.lastCollapsibleTreeAjaxRequest = null;
 					  });
 				});		
 			});
