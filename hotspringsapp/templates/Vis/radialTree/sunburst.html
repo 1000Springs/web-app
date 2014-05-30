@@ -1,28 +1,33 @@
 <div id="sunburstWrapper" style="width: 1000px; height: 700px">
 	<div id="sunburstInfoPanel"
 		style="float: left; padding: 10px 10px 10px 0; height: 850px; width: 280px; margin-right: 20px;">
-		<div class="diversityHelpText" style="width: 270px; margin-bottom: 30px">
+		<div class="diversityHelpText" style="width: 270px; margin-bottom: 30px; display: none;">
 			<figure>
 				<p>
-					<strong>Instructions: </strong>Hold your mouse pointer
-					over a segment to display the taxonomic hierarchy 
-					for microorganisms represented by that segment, and
-					the relative abundance of those microorganisms.
+					<strong>Instructions: </strong>This pie chart visualises the relative abundance of 
+					all of the microbial groupings detected  in this sample according to their taxonomic ranking.
 				<p>
-				<p>This microbial diversity chart shows the relative abundance of
-				   microorganisms found in the latest sample from this location. Each
-				   segment represents a taxonomic unit, and the segment size reflects
-				   the relative abundance of microorganisms belonging to that
-				   taxonomic unit.</p>
+				<p>
+					Hold your mouse pointer over individual pie wedges to display the taxonomic hierarchy. 
+					The relative abundance (in percentage) of the associated taxonomic level is displayed in 
+					the centre of the pie along with the taxonomic name. The taxonomic rank is displayed below 
+					in the coloured table.
+				</p>
+				<p>
+					Where a wedges are presented, we have confidence (based on a statistical measure) of 
+					the taxonomic assignment. Where that confidence measure falls below a certain threshold, 
+					we make no further taxonomic assignments (see <a href="/ourscience">Our Science</a> for more details 
+					about our processes).
+				</p>
 			</figure>
 		</div>
 		<div id="sunburstSequence" style="margin-top: 10px"></div>
 	</div>
 	<div id="sunburstChart">
 		<div id="sunburstExplanation" style="visibility: hidden;">
-			<span id="sunburstPercentage"></span><br /> of life in samples from
-			this location belong to the <span id="sunburstTaxa"></span> <span
-				id="sunburstName" style="font-weight: bold;"></span>
+			<span id="sunburstPercentage"></span><br /> of the detected microorganisms in this sample belong to 
+			<span id="sunburstName" style="font-weight: bold;"></span> of the taxonomic division 
+			<span id="sunburstTaxa"></span> 
 		</div>
 	</div>
 </div>

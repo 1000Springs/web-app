@@ -228,7 +228,7 @@ function drawTaxonomyCollapsibleTree(treeData) {
 	}
 	
 	function getNodeSize(d) {
-		return d.children ? 6 : 10 + (d.size / 1000);
+		return d.children ? 6 : Math.min(6 + (d.size / 200), 30);
 	}
 	
 	function getNodeColour(d) {
