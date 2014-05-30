@@ -1,5 +1,7 @@
 from hotspringsapp import app,db
 from werkzeug.security import generate_password_hash, check_password_hash
+from sqlalchemy.sql import text
+from sqlalchemy.orm import sessionmaker
 
 
 
@@ -94,6 +96,18 @@ class Sample(db.Model):
 		self.phys_id = physID
 		self.chem_id = chemID
 		self.sample_number = sampleNum
+		
+	def getTaxonomy(self):
+		# Queries of views without primary keys don't fit very well in the
+		# SQLAlchemy ORM, so query the DB with raw SQL
+		column_names = ["read_count", "domain", "phylum", "class", "order", "family", "genus", "species"]
+		query = text(
+					'select `' + ('`,`'.join(column_names)) + '` from confident_taxonomy where sample_id = :sample_id' +
+					' order by `'+ ('`,`'.join(column_names[1:])) +'`'
+					)
+		rows = db.engine.execute(query, sample_id=self.id).fetchall()
+		return [dict(zip(column_names,row)) for row in rows]
+
 
 	def __repr__(self):
 		return '<Sample {0} {1} {2}>'.format(self.id,self.location_id,self.date_gathered)
@@ -235,5 +249,3 @@ class Chemical_data(db.Model):
 		compounds.append(["iron2",self.iron2])
 		compounds.append(["bicarbonate",self.bicarbonate])
 		return compounds
-
-

@@ -152,6 +152,53 @@ CREATE TABLE `sample_taxonomy` (
   UNIQUE KEY `uk_sample_id_taxonomy_id` (`sample_id`,`taxonomy_id`)
 );
 
+CREATE OR REPLACE VIEW confident_taxonomy AS (
+   select
+   `s`.`id` AS `sample_id`,
+   `s`.`sample_number` AS `sample_number`,
+   sum(`st`.`read_count`) AS `read_count`,
+   `t`.`domain` AS `domain`,
+   (case when (`t`.`phylum_confidence` >= 0.5) then `t`.`phylum` else NULL end) AS `phylum`,
+   (case when (`t`.`class_confidence` >= 0.5) then `t`.`class` else NULL end) AS `class`,
+   (case when (`t`.`order_confidence` >= 0.5) then `t`.`order` else NULL end) AS `order`,
+   (case when (`t`.`family_confidence` >= 0.5) then `t`.`family` else NULL end) AS `family`,
+   (case when (`t`.`genus_confidence` >= 0.5) then `t`.`genus` else NULL end) AS `genus`,
+   (
+      case when (`t`.`species_confidence` >= 0.5) then `t`.`species` else NULL end
+   )
+   AS `species`
+   from
+   (
+      (
+         `springsdb`.`sample` `s`
+         join `springsdb`.`sample_taxonomy` `st` on((`s`.`id` = `st`.`sample_id`))
+      )
+      join `springsdb`.`taxonomy` `t` on((`st`.`taxonomy_id` = `t`.`id`))
+   )
+   where (`t`.`domain_confidence` >= 0.5)
+   group by `s`.`id`,
+   `s`.`sample_number`,
+   `t`.`domain`,
+   (case when (`t`.`phylum_confidence` >= 0.5) then `t`.`phylum` else NULL end),
+   (case when (`t`.`class_confidence` >= 0.5) then `t`.`class` else NULL end),
+   (case when (`t`.`order_confidence` >= 0.5) then `t`.`order` else NULL end),
+   (case when (`t`.`family_confidence` >= 0.5) then `t`.`family` else NULL end),
+   (case when (`t`.`genus_confidence` >= 0.5) then `t`.`genus` else NULL end),
+   (
+      case when (`t`.`species_confidence` >= 0.5) then `t`.`species` else NULL end
+   )
+   order by `t`.`domain` desc,
+   (case when (`t`.`phylum_confidence` >= 0.5) then `t`.`phylum` else NULL end) desc,
+   (case when (`t`.`class_confidence` >= 0.5) then `t`.`class` else NULL end) desc,
+   (case when (`t`.`order_confidence` >= 0.5) then `t`.`order` else NULL end) desc,
+   (case when (`t`.`family_confidence` >= 0.5) then `t`.`family` else NULL end) desc,
+   (case when (`t`.`genus_confidence` >= 0.5) then `t`.`genus` else NULL end) desc,
+   (
+      case when (`t`.`species_confidence` >= 0.5) then `t`.`species` else NULL end
+   )
+   desc
+);
+
 CREATE TABLE `image` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `sample_id` int(11) NOT NULL,

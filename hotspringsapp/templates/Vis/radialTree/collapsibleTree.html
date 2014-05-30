@@ -1,0 +1,48 @@
+<div id ="collapsibleTreeWrapper" style="width: 1000px; height: 700px">
+    <div class="diversityHelpText" style="margin: 10px 0 20px 0;" >
+    	<figure>
+			<p>
+				<strong>Instructions: </strong>This interactive bubble chart can be used to visualise 
+				the taxonomic groupings of microorganisms detected in this sample. Clicking on a bubble 
+				will display (in the coloured table below) the taxonomy of the group selected. 
+				The "branches" connecting bubbles link related divisions from the highest ranking (domain) 
+				through to the lowest ranking (species). Where available, a text summary detailing 
+				the selected taxonomic group will be displayed below.
+		    <p>
+		    <p>
+				The bubble colour reflects the taxonomic rank (grey; domain, red; phylum, and so on). 
+				The size of outermost selected bubble is scaled to reflect an approximation of the 
+				relative abundance of the taxonomic assignment in the sample. 
+			</p>
+			<p>Where a bubble or node is presented, we have confidence (based on a statistical measure) 
+			   of the taxonomic assignment. Where that confidence measure falls below a certain threshold, 
+			   we make no further taxonomic assignments (see <a href="/ourscience">Our Science</a> for more 
+			   details about our processes).
+			</p>
+			<p>
+				Click the coloured boxes below to expand or contract the bubble chart to the desired taxonomic rank.
+			</p>
+		</figure>	    
+    </div>
+	<div id="collapsibleTreeInfoPanel" style="float: left; padding: 10px 10px 10px 0; height: 875px; width: 300px;">
+	    <div id="collapsibleTreeDetailWrapper" style="width: 290px; min-height: 90px; max-height: 320px; margin: 10px 0 30px 0; display: none;">	
+	        <h3 id="collapsibleTreeTaxonDetailsName"></h3>
+	    	<div id="collapsibleTreeAjaxWaiting" ><img src="{{ url_for('static', filename='img/ajax-waiting.gif') }}">Loading summary, please wait</div>
+			<div id="collapsibleTreeDetail" style="display: none;"></div>
+		</div>		
+	    <div id="collapsibleTreeTaxonomy" style="margin-top: 10px;">
+	    	<table style="width: 290px;">
+	    	    <tr><th></th><th style="width: 40px"></th><th style="width: 80px"></th></tr>
+	    		<tr><td>Domain</td><td><div class="domainBackColour taxaSwatch"></div></td><td><div class="domainColour domainName taxon"></div></td></tr>
+	    		<tr><td>Phylum</td><td><div class="phylumBackColour taxaSwatch"></div></td><td><div class="phylumColour phylumName taxon"></div></td></tr>
+	    		<tr><td>Class</td><td><div class="classBackColour taxaSwatch"></div></td><td><div class="classColour className taxon"></div></td></tr>
+	    		<tr><td>Order</td><td><div class="orderBackColour taxaSwatch"></div></td><td><div class="orderColour orderName taxon"></div></td></tr>
+	    		<tr><td>Family</td><td><div class="familyBackColour taxaSwatch"></div></td><td><div class="familyColour familyName taxon"></div></td></tr>
+	    		<tr><td>Genus</td><td><div class="genusBackColour taxaSwatch"></div></td><td><div class="genusColour genusName taxon"></div></td></tr>
+	    		<tr><td>Species</td><td><div class="speciesBackColour taxaSwatch"></div></td><td><div class="speciesColour speciesName taxon"></div></td></tr>
+	    	</table>
+	    </div>
+
+	</div>
+	<div id="collapsibleTreeChart" style="width: 680px; float: left;"></div>
+</div>

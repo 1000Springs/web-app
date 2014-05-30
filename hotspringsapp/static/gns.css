@@ -641,6 +641,25 @@ label
   text-decoration: none;
 }
 
+.tab-heading
+{
+  background-color: rgb(29,155,171);
+}
+
+.tab-heading a
+{
+  color: white;
+  text-decoration: none;
+}
+
+.nav-tabs.otsTabs > li > a:hover {
+	background-color: rgb(29,155,171);
+}
+
+.nav-tabs.otsTabs > li.active > a:hover {
+	background-color: white;
+}
+
 /* Index */
 
 .title #index
@@ -668,6 +687,22 @@ label
 .chosen-container
 {
   display: block;
+  color: black;
+}
+
+.district-tier .chosen-container
+{
+
+}
+
+.system-tier .chosen-container
+{
+  padding-left: 25px;
+}
+
+.location-tier .chosen-container
+{
+  padding-left: 50px;
 }
 
 .tiers
@@ -727,7 +762,7 @@ padding: 0px 11px;
 
 height: 100%;
 }
-}
+
 
 
 
@@ -797,6 +832,11 @@ height: 100%;
 #status
 {
   overflow: visible;
+}
+
+.vis-heading
+{
+  text-align: center;
 }
 
 
