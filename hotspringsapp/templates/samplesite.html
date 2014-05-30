@@ -3,6 +3,7 @@ head %}
 <link rel="stylesheet"
 	href="{{ url_for('static', filename='js/snapSVG/style.css')}}"
 	type="text/css" />
+<link type="text/css" rel="stylesheet" href="{{ url_for('static', filename='style.css') }}"/>
 
 {{ super() }}
 
@@ -20,6 +21,8 @@ head %}
 	src="{{ url_for('static', filename='js/views/status.js') }}"></script>
 <script type="text/javascript"
 	src="{{ url_for('static', filename='js/snapSVG/snap.svg-min.js') }}"></script>
+<script type="text/javascript"
+	src="{{ url_for('static', filename='js/snapSVG/snap.svg-min.js') }}"></script>	
 <script type="text/javascript"
 	src="https://maps.googleapis.com/maps/api/js?sensor=true"></script>
 
@@ -191,7 +194,7 @@ span.units {
 								<h5 style="margin-top: 0px;">Sample Number:</h5>
 							</td>
 							<td style="text-align: left;">
-								<p>{{sample_site.sample_number}}</p>
+								<p id="sampleNumber">{{sample_site.sample_number}}</p>
 							</td>
 						</tr>
 	
@@ -340,79 +343,57 @@ span.units {
 	
 	
 		<div id="chemistryTab" class="tab-pane requiresSvg">
-			{% if chemJson != None %}
-			<div class="row-fluid">
-				<div class="span4">
-					<div id="bubbleDesc">
-						<figure>
-							<p>
-								<strong>Instructions: </strong>Clicking on a bubble will zoom
-								in to get a closer look. While zoomed in, to focus on an
-								adjacent bubble simply click it. Selecting the currently
-								zoomed bubble will zoom back out.
-							</p>
-							<br>
-							<p>The chemical bubble chart represents the measured
-								chemical composition of this particular geothermal sample.
-								The relative size of each bubble reflects the concentration
-								of the named species (the larger the bubble, the higher the
-								concentration and vice versa). The concentration of the
-								chemical species in parts per million (ppm) which is
-								equivalent to mg per litre can be visualised by holding the
-								cursor in each bubble.</p>
-						</figure>
+	        <div id="chemistryViewLoading">
+		    	<img src="{{ url_for('static', filename='img/ajax-waiting-large.gif') }}" style="margin: 200px auto 200px auto; display: block;">
+		    </div>
+			<div id="chemistryViewWrapper" style="display: none;">
+				<div class="row-fluid">
+					<div class="span4">
+						<div id="bubbleDesc">
+							<figure>
+								<p>
+									<strong>Instructions: </strong>Clicking on a bubble will zoom
+									in to get a closer look. While zoomed in, to focus on an
+									adjacent bubble simply click it. Selecting the currently
+									zoomed bubble will zoom back out.
+								</p>
+								<br>
+								<p>The chemical bubble chart represents the measured
+									chemical composition of this particular geothermal sample.
+									The relative size of each bubble reflects the concentration
+									of the named species (the larger the bubble, the higher the
+									concentration and vice versa). The concentration of the
+									chemical species in parts per million (ppm) which is
+									equivalent to mg per litre can be visualised by holding the
+									cursor in each bubble.</p>
+							</figure>
+						</div>
+					</div>
+					<div class="span8">
+						<div id="bubbles"></div>
 					</div>
 				</div>
-				<div class="span8">
-					<div id="bubbles">{% include
-						"Vis/bubblechart/zoomable.html" %}</div>
-				</div>
 			</div>
-			{% else %}
-	
-			<h3>The chemistry data is coming soon</h3>
-	
-			{% endif %}
 		</div>
 	
 		<div id="diversityTab" class="tab-pane requiresSvg">
-			{% if taxJson != None %}
-			<div class="diversityView">
-				<div class="diversityControlLinks">
-					<span class="diversityToggleView">Change view</span><span class="diversityToggleHelp">Hide instructions</span>
+		    <div id="diversityViewLoading">
+		    	<img src="{{ url_for('static', filename='img/ajax-waiting-large.gif') }}" style="margin: 100px auto 100px auto; display: block;">
+		    </div>
+			<div id="diversityViewWrapper" style="display: none;">
+				<div class="diversityView">
+					<div class="diversityControlLinks">
+						<span class="diversityToggleView">Change view</span><span class="diversityToggleHelp">Hide instructions</span>
+					</div>
+					{% include "Vis/radialTree/collapsibleTree.html" %}
 				</div>
-				{% include "Vis/radialTree/collapsibleTree.html" %}
-			</div>
-			<div class="diversityView" style="display: none;">
-				<div class="diversityControlLinks">
-					<span class="diversityToggleView">Change view</span><span class="diversityToggleHelp">Hide instructions</span>
+				<div class="diversityView" style="display: none;">
+					<div class="diversityControlLinks">
+						<span class="diversityToggleView">Change view</span><span class="diversityToggleHelp">Hide instructions</span>
+					</div>
+					{% include "Vis/radialTree/sunburst.html" %}
 				</div>
-				{% include "Vis/radialTree/sunburst.html" %}
 			</div>
-			<script type="text/javascript">
-				$(document).ready(function(){
-					$('.diversityToggleView').click(function(){
-						$('.diversityView').toggle();
-					});
-					
-					$('.diversityToggleHelp').click(function() {
-						var toggleHelp = this;
-						var helpText = $(this).closest('.diversityView').find('.diversityHelpText').first();
-						if ($(helpText).is(":visible")) {
-							$(helpText).slideUp(function(){
-								$(toggleHelp).text('Show instructions');
-							});
-						} else {
-							$(helpText).slideDown(function(){
-								$(toggleHelp).text('Hide instructions');
-							});			
-						}	
-					});	
-				});
-			</script>
-			{% else %}
-			<h3>The Taxonomy data is coming soon</h3>
-			{% endif %}
 		</div>
 	</div>
 </div>
