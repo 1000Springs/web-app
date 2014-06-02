@@ -11,7 +11,7 @@ from werkzeug.datastructures import Headers
 import json
 import urllib2
 
-from flask import Flask, url_for, render_template, request, g, session, flash, redirect, Response, abort, jsonify
+from flask import Flask, url_for, render_template, request, g, session, flash, redirect, Response, abort, jsonify, make_response
 from models import *
 from forms import *
 
@@ -353,32 +353,43 @@ def samplesite(site_id):
 
     latestSample = locationSamples.first().latestSample()
 
-
-    chemJson = {"name":"", "children":[{"name":"", "children":[]}]};
-
+    if latestSample.chem is not None:
+        gatheredInfoCount+= 1
 
     if latestSample.phys is not None:
         gatheredInfoCount+= 1
 
-    if latestSample.chem is not None:
-        gatheredInfoCount+= 1
-        for e in latestSample.chem.returnElements():
+    if len(latestSample.getTaxonomy()) > 0:
+        gatheredInfoCount+= 1 
+            
+    gatheredInfoCount -= 1
+
+    return render_template('samplesite.html',sample_site=latestSample,
+                                             statusPos = gatheredInfoCount)
+    
+def __getChemistryData(sample):
+    chemJson = {"name":"", "children":[{"name":"", "children":[]}]};
+    if sample.chem is not None:
+        for e in sample.chem.returnElements():
             if e[1] != None and e[1] > 0:
                 chemJson["children"][0]["children"].append({"name":e[0],"size":e[1]})
 
-        for e in latestSample.chem.returnGases():
+        for e in sample.chem.returnGases():
             if e[1] != None and e[1] > 0:
                 chemJson["children"][0]["children"].append({"name":e[0],"size":e[1]})
 
-        for e in latestSample.chem.returnCompounds():
+        for e in sample.chem.returnCompounds():
             if e[1] != None and e[1] > 0:
                 chemJson["children"][0]["children"].append({"name":e[0],"size":e[1]})
     else:
         chemJson = None
+                
+    return chemJson
     
-    taxonomy = latestSample.getTaxonomy()
+def __getTaxonomyData(sample):
+    taxonomy = sample.getTaxonomy()
+    taxJson = None
     if len(taxonomy) > 0:
-        gatheredInfoCount+= 1
         taxaNames = ['domain', 'phylum', 'class', 'order', 'family', 'genus', 'species']
         currentTaxa = {}
         for taxaName in taxaNames:
@@ -407,19 +418,9 @@ def samplesite(site_id):
                 currentTaxa['species']["size"] = int(sampleTaxonomy['read_count'])               
                 
         taxJson = data
-        
-    else:
-        taxJson = None
-                
-            
-        
-    gatheredInfoCount -= 1
 
-
-    return render_template('samplesite.html',sample_site=latestSample,
-                                             chemJson=chemJson,
-                                             statusPos = gatheredInfoCount,
-                                             taxJson=taxJson)
+    return taxJson
+           
 
 @app.route('/download/<int:site_id>')
 def download(site_id):
@@ -555,6 +556,25 @@ def GetSOTD():
 
     return index
 
+@app.route('/chemistryJson/<sampleNumber>')
+def getChemistryJson(sampleNumber):
+    sample = Sample.query.filter(Sample.sample_number == sampleNumber).first()
+    chemJson = __getChemistryData(sample)
+    if chemJson is None:
+        return "No chemistry data for "+sampleNumber, 404
+    
+    return __cacheableResponse(jsonify(chemJson), 7)
+
+@app.route('/taxonomyJson/<sampleNumber>')
+def getTaxonomyJson(sampleNumber):
+    sample = Sample.query.filter(Sample.sample_number == sampleNumber).first()
+    taxJson = __getTaxonomyData(sample)
+    if taxJson is None:
+        return "No taxonomy data for "+sampleNumber, 404
+    
+    return __cacheableResponse(jsonify(taxJson), 7)
+    
+
 @app.route('/taxon/<name>')
 def getTaxonDetails(name):
     try:
@@ -573,17 +593,20 @@ def getTaxonDetails(name):
             wikiUrl = data['property']['/common/topic/description']['values'][0]['citation']['uri'];
         except KeyError: 
             wikiUrl=None
-            
-        return render_template('taxonDetails.html', taxon=name, rank=rank, description=description, imageUrl=imageUrl, wikiUrl=wikiUrl)
+        
+        response = render_template('taxonDetails.html', taxon=name, rank=rank, description=description, imageUrl=imageUrl, wikiUrl=wikiUrl)
+        return __cacheableResponse(response, 7)
             
     except:
         return render_template('taxonDetails.html', error=True)
     
      
-
-     
-    
-
+def __cacheableResponse(response, expiryDays):
+    expiry_time = datetime.datetime.utcnow() + datetime.timedelta(days=expiryDays)
+    response = make_response(response)    
+    response.headers["Expires"] = expiry_time.strftime("%a, %d %b %Y %H:%M:%S GMT")
+    response.headers['Cache-Control'] = 'max-age='+str(expiryDays*24*60*60)
+    return response
 
 def d(o):
     app.logger.debug(o)

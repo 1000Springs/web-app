@@ -1,18 +1,18 @@
-.domainColour { color: #006699; }
-.phylumColour { color: #ff0000; }
-.classColour { color: #ff6600; }
-.orderColour { color: #0066ff; }
+.domainColour { color: #666666; }
+.phylumColour { color: #C40202; }
+.classColour { color: #DE5900; }
+.orderColour { color: #0052CC; }
 .familyColour { color: #009900; }
 .genusColour { color: #cc0099; }
 .speciesColour { color: #6600cc; }
 
-.domainBackColour { background-color: #006699; }
-.phylumBackColour { background-color: #ff0000; }
-.classBackColour { background-color: #ff6600; }
-.orderBackColour { background-color: #0066ff; }
-.familyBackColour { background-color: #009900; }
-.genusBackColour { background-color: #cc0099; }
-.speciesBackColour { background-color: #6600cc; }
+.domainBackColour { background-color: #999999; }
+.phylumBackColour { background-color: #ED2D2D; }
+.classBackColour { background-color: #FF7E29; }
+.orderBackColour { background-color: #2F80FA; }
+.familyBackColour { background-color: #2EC92E; }
+.genusBackColour { background-color: #FC2DC9; }
+.speciesBackColour { background-color: #9933FF; }
 
 /*Zoomable Bubble Chart*/
 
@@ -46,6 +46,19 @@
   pointer-events: none;
 }
 
+/* Microbial diversity view */
+.diversityControlLinks span {
+	margin-right: 30px;
+	cursor: pointer;
+	color: #08c;	
+	text-decoration: none;
+	font-size: 15px;
+}
+
+.diversityHelpText {
+	font-size: 13px;
+}
+
 /* Collapsible Tree */
 #collapsibleTreeChart circle.node {
   cursor: pointer;
@@ -53,10 +66,22 @@
   stroke-width: .5px;
 }
 
+#collapsibleTreeChart circle.root.node {
+  display: none;
+}
+
 #collapsibleTreeChart line.link {
   fill: none;
   stroke: #9ecae1;
   stroke-width: 1.5px;
+}
+
+#collapsibleTreeChart line.link.selectedBranch {
+    stroke: #006699;
+}
+
+#collapsibleTreeChart line.root.link {
+  display: none;
 }
 
 #collapsibleTreeTaxonomy table td:nth-child(3) {
@@ -66,11 +91,12 @@
 #collapsibleTreeTaxonomy .taxaSwatch {
 	width: 40px;
 	height: 20px;
+	cursor: pointer;
 }
 
 #collapsibleTreeTaxonomy .taxon {
 	text-overflow:ellipsis;
-	text-align: right;
+	text-align: left;
 	overflow:hidden;
 	width: 185px;
 	margin-right: 5px;
@@ -79,9 +105,47 @@
 #collapsibleTreeAjaxWaiting { display: none; color: #999999; }
 #collapsibleTreeAjaxWaiting>img { margin-right: 10px; }
 
-#collapsibleTreeInfoPanel .taxonDetailsHeader { height: 80px; }
+/*#collapsibleTreeInfoPanel .taxonDetailsHeader { height: 80px; } */
 #collapsibleTreeInfoPanel .taxonDetailsName { font-weight: bold; } 
-#collapsibleTreeInfoPanel .taxonDetailsHeaderText { float: left; }
+#collapsibleTreeInfoPanel .taxonDetailsHeaderText { display: inline-block; vertical-align: top; margin: 10px 0 10px 0;}
 #collapsibleTreeInfoPanel .taxonDetailsRankLabel { font-weight: bold; margin-right: 10px; }
-#collapsibleTreeInfoPanel .taxonDetailsImage { float: right; height: 70px; }
+#collapsibleTreeInfoPanel .taxonDetailsImage { height: 70px; ; margin: 10px 20px 10px 0;}
 #collapsibleTreeInfoPanel .taxonDetailsDescription { width: 300px; max-height: 140px; overflow: hidden; text-overflow:ellipsis; }
+
+/* Sunburst pie chart */
+#sunburstWrapper {
+  font-family: 'Open Sans', sans-serif;
+  font-size: 12px;
+  font-weight: 400;
+  background-color: #fff;
+  width: 960px;
+  height: 700px;
+  margin-top: 10px;
+}
+
+#sunburstSequence text {
+  fill: #fff;
+  font-size: 13px;
+}
+
+#sunburstChart {
+  position: relative;
+}
+
+#sunburstChart path {
+  stroke: #fff;
+}
+
+#sunburstExplanation {
+  position: absolute;
+  top: 270px;
+  left: 570px;
+  width: 165px;
+  text-align: center;
+  color: #666;
+  z-index: 1;
+}
+
+#sunburstPercentage {
+  font-size: 2.5em;
+}
