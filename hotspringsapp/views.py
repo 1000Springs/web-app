@@ -128,6 +128,62 @@ def getLocationTier():
 
     return jsonify({'results':results,'tier':tier})
 
+@app.route('/datasummary')
+def datasum():
+    
+    maxAndMin = [] 
+
+
+    # maxAndMin.append({"name":"Temperature","values":[
+    #                                                 {"name":"Min","value":db.session.query(func.min(Physical_data.initialTemp)).first()[0]},
+    #                                                 {"name":"Max","value":db.session.query(func.max(Physical_data.initialTemp)).first()[0]}
+    #                                                 ]})
+
+
+
+    # maxAndMin.append({"name":"pH","values":[
+    #                                                 {"name":"Min","value":db.session.query(func.min(Physical_data.pH)).first()[0]},
+    #                                                 {"name":"Max","value":db.session.query(func.max(Physical_data.pH)).first()[0]}
+    #                                                 ]})
+
+    # maxAndMin.append({"name":"Oxidation Reduction Potential","values":[
+    #                                                 {"name":"Min","value":db.session.query(func.min(Physical_data.redox)).first()[0]},
+    #                                                 {"name":"Max","value":db.session.query(func.max(Physical_data.redox)).first()[0]}
+    #                                                 ]})
+
+    # maxAndMin.append({"name":"Dissolved Oxygen","values":[
+    #                                                 {"name":"Min","value":db.session.query(func.min(Physical_data.dO)).first()[0]},
+    #                                                 {"name":"Max","value":db.session.query(func.max(Physical_data.dO)).first()[0]}
+    #                                                 ]})
+
+    # maxAndMin.append({"name":"Conductivity","values":[
+    #                                                 {"name":"Min","value":db.session.query(func.min(Physical_data.conductivity)).first()[0]},
+    #                                                 {"name":"Max","value":db.session.query(func.max(Physical_data.conductivity)).first()[0]}
+    #                                                 ]})
+
+    maxAndMin.append(findMinAndMax("Temperature",Physical_data.initialTemp))
+    maxAndMin.append(findMinAndMax("pH",Physical_data.pH))
+    maxAndMin.append(findMinAndMax("Oxidation Reduction Potential",Physical_data.redox))
+    maxAndMin.append(findMinAndMax("Dissolved Oxygen",Physical_data.dO))
+    maxAndMin.append(findMinAndMax("Conductivity",Physical_data.conductivity))
+
+    scatterData = Physical_data.query.with_entities(Physical_data.initialTemp,Physical_data.pH).filter(Sample.phys_id == Physical_data.id,Sample.location_id== Location.id).all()
+
+    formattedScatterData = [list(x) for x in scatterData]
+    formattedScatterData = [["",""]] + formattedScatterData
+
+    return render_template('datasum.html',values=maxAndMin,scatterData=formattedScatterData)
+
+
+def findMinAndMax(name,field):
+  
+    min = {"name":"Min","value":db.session.query(func.min(field)).first()[0]}
+    max = {"name":"Max","value":db.session.query(func.max(field)).first()[0]}
+
+    array = {"name":name,"values":[min,max]}
+    return array
+
+
 # @app.route('/results')
 # def results():
 

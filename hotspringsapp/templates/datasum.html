@@ -1,0 +1,65 @@
+{% extends "layout.html" %}
+{% block title %}Data Summary{% endblock %}
+{% block head %}
+  {{ super() }}	
+
+  <script type="text/javascript" src="https://www.google.com/jsapi"></script>
+    <script type="text/javascript">
+      google.load("visualization", "1", {packages:["corechart"]});
+      google.setOnLoadCallback(drawChart);
+      function drawChart() {
+
+      	var scatterData = {{scatterData|safe}}
+
+        var data = google.visualization.arrayToDataTable(scatterData);
+
+        var options = {
+          title: 'pH vs. Temp comparison',
+          hAxis: {title: 'Temp', minValue: 0, maxValue: 100},
+          vAxis: {title: 'pH', minValue: 0, maxValue: 10},
+          legend: 'none'
+        };
+
+        var chart = new google.visualization.ScatterChart(document.getElementById('chart_div'));
+        chart.draw(data, options);
+      }
+    </script>
+
+{% endblock %}
+{% block content %}
+
+<div class="title">
+		<h2> our science </h2>
+	</div>
+
+	<div class="background">
+		<div class="row-fluid">
+			<div class="span4">
+
+				<div class="data_point">
+				{% for name_val in values %}
+					<h4 class="heading"> {{name_val['name']}} </h4>
+					<div class="values clearfix">
+					{% for values in name_val['values'] %}
+					
+					<p class='{{values["name"]}}'> {{values["value"]}}</p>
+					
+					{% endfor %}
+
+					
+				   	</div>
+				{% endfor %}
+			
+			</div>
+
+			
+
+		</div>
+		<div class="span8">
+				<div id="chart_div" style="width: 670px; height: 500px;"></div>
+			</div>
+
+	</div>
+</div>
+
+{% endblock %}
