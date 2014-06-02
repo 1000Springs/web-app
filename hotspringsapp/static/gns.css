@@ -852,6 +852,12 @@ height: 100%;
   background-color:rgba(29,155,171,0.75);
 }
 
+.background
+{
+  position: relative;
+  background-color: white;
+}
+
 .opaque 
 {
   background-color:#1D9BAB; 
@@ -959,3 +965,4 @@ figcaption a
    color:white;
    
 }
+
