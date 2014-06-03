@@ -19,6 +19,7 @@ class Location(db.Model):
 	description = db.Column(db.String(200))
 	private = db.Column(db.Boolean)	
 	access = db.Column(db.String(15))
+	feature_type = db.Column(db.String(50))
 
 	def latestSample(self):
 		return Sample.query.filter(Location.id == self.id, Sample.location_id == Location.id ).order_by(Sample.location_id,Sample.date_gathered.desc()).first()
