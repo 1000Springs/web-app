@@ -504,13 +504,18 @@ def download(site_id):
     startCol = 0;
     sheet1.write_merge(0,0,startCol,startCol+1,'Location',headingStyle)
 
+    latLng = ""
+    if latestSample.location.access == "PRIVATE":
+        latLng = "Private Property"
+    else:
+        latLng = str(latestSample.location.lat) + "," + str(latestSample.location.lng)
 
     locationTuples = [('Feature Name',latestSample.location.feature_name),
                       ('District',latestSample.location.district),
                       ('Feature System',latestSample.location.feature_system),
                       ('Feature Location',latestSample.location.location),
                       ('Description',latestSample.location.description),
-                      ('Lat/Lng',str(latestSample.location.lat) + "," + str(latestSample.location.lng)),
+                      ('Lat/Lng',latLng),
                       ('Access',str(latestSample.location.access))]
     i=1
     for d in locationTuples:
