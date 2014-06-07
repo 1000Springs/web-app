@@ -31,6 +31,10 @@ def page_not_found(e):
     errorMessage = "Something's gone wrong, sorry about that, but we are working as hard as we can to fix it."
     return render_template('error.html',title=title,message=errorMessage), 500
 
+@app.route('/robots.txt')
+def static_from_root():
+    return send_from_directory(app.static_folder, request.path[1:])
+
 
 def get_user_name():
     """ Fetch the logged in User"""
