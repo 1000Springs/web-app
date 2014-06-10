@@ -143,7 +143,7 @@ span.units {
 	style="position: relative; background-color: white;">
 	<ul id="tabBar" class="nav nav-tabs tab-heading otsTabs" data-tabs="tabs">
 		<li class="active"><a href="#overviewTab" data-toggle="tab">Overview</a></li>
-		<li><a href="#chemistryTab" data-toggle="tab">Chemical Composition of Sample</a></li>
+		<li><a href="#chemistryTab" data-toggle="tab">Chemical Composition</a></li>
 		<li><a href="#diversityTab" data-toggle="tab">Microbial Diversity</a></li>
 	</ul>
 	<script type="text/javascript">
@@ -206,12 +206,14 @@ span.units {
 								<p class="muted">{{sample_site.date_gathered.strftime('%d-%m-%Y')}}</p>
 							</td>
 						</tr>
-						<td>
-							<h5 style="margin-top: 0px;">Feature Type:</h5>
-						</td>
-						<td style="text-align: left;">
-							<p>{{sample_site.location.feature_type}}</p>
-						</td>
+						<tr>
+							<td>
+								<h5 style="margin-top: 0px;">Feature Type:</h5>
+							</td>
+							<td style="text-align: left;">
+								<p>{{sample_site.location.feature_type}}</p>
+							</td>
+						</tr>
 						<tr>
 							<td>
 								<h5 style="margin-top: 0px;">Temperature:</h5>
@@ -295,11 +297,11 @@ span.units {
 							</td>
 						</tr>
 						<tr>
-							<!-- <th colspan=2><strong> Would you like all this data? </strong> </th> -->
+							<th colspan="2"><strong> Would you like all this data? </strong> </th>
 						</tr>
 						<tr>
-							<td>
-								<!-- <a href="{{url_for('download', site_id= sample_site.location_id)}}"> Download data</a> -->
+							<td colspan="2" style="text-align:center">
+								<a href="{{url_for('download', site_id= sample_site.location_id)}}"> Download data</a>
 							</td>
 						</tr>
 	

@@ -12,7 +12,8 @@ $(document).ready(function() {
 	
 	$.get('/taxonomyJson/'+$('#sampleNumber').text())  
 	  .done(function(data){
-		  drawTaxonomyCollapsibleTree(data);
+		  var dataCopy = jQuery.extend(true, {},data);
+		  drawTaxonomyCollapsibleTree(dataCopy);
 		  drawTaxonomicSunburst(data);
 		  initTaxonomyViewToggle();
 		  $('#diversityViewLoading').hide();
@@ -381,6 +382,10 @@ function drawTaxonomyCollapsibleTree(treeData) {
  * See http://www.apache.org/licenses/LICENSE-2.0.
  */
 function drawTaxonomicSunburst(treeData) {
+	
+    recalculateSizes(treeData);
+    var totalSize = treeData.size;
+    
     var width = 680;
     var height = 680;
     var radius = Math.min(width, height) / 2;
@@ -389,9 +394,6 @@ function drawTaxonomicSunburst(treeData) {
     var b = {
       w: 270, h: 30, s: 3
     };
-
-    // Total size of all segments; we set this later, after loading the data.
-    var totalSize = 0; 
 
     var vis = d3.select("#sunburstChart").append("svg:svg")
         .attr("width", width)
@@ -411,6 +413,26 @@ function drawTaxonomicSunburst(treeData) {
         .outerRadius(function(d) { return Math.sqrt(d.y + d.dy); });
 
     createVisualization(treeData);
+    
+    function recalculateSizes(node) {
+    	var totalChildrenSize = 0;
+    	if (node.children) {
+    		for (var i = 0; i < node.children.length; i++) {
+    			totalChildrenSize += recalculateSizes(node.children[i]);
+			}
+    	}
+    	var initialSize = (node.size) ? node.size : 0;
+		if (initialSize > 0) {
+			node.children = (node.children) ? node.children : []
+			node.children.push({
+				'name': 'unknown',
+				'size': initialSize
+			});	
+		}
+		
+		node.size = totalChildrenSize + initialSize;
+		return node.size
+    }
 
     // Main function to draw and set up the visualization, once we have the data.
     function createVisualization(json) {
@@ -427,7 +449,7 @@ function drawTaxonomicSunburst(treeData) {
         // For efficiency, filter nodes to keep only those large enough to see.
         var nodes = partition.nodes(json)
           .filter(function(d) {
-          return (d.dx > 0.005); // 0.005 radians = 0.29 degrees
+          return (d.dx > 0.005 && d.name != 'unknown'); // 0.005 radians = 0.29 degrees
           });
 
         var colours = d3.scale.category20();
@@ -444,15 +466,12 @@ function drawTaxonomicSunburst(treeData) {
 
         // Add the mouseleave handler to the bounding circle.
         d3.select("#sunburstContainer").on("mouseleave", mouseleave);
-
-        // Get total size of the tree = value of root node from partition.
-        totalSize = path.node().__data__.value;
     }
 
     // Fade all but the current sequence, and show it in the breadcrumb trail.
     function mouseover(d) {
 
-        var percentage = (100 * d.value / totalSize).toPrecision(3);
+        var percentage = (100 * d.size / totalSize).toPrecision(3);
         var percentageString = percentage + "%";
         if (percentage < 0.1) {
             percentageString = "< 0.1%";
