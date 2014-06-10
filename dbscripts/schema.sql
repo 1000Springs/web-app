@@ -176,7 +176,7 @@ CREATE OR REPLACE VIEW confident_taxonomy AS (
       join `springsdb`.`taxonomy` `t` on((`st`.`taxonomy_id` = `t`.`id`))
    )
    where (`t`.`domain_confidence` >= 0.5)
-   and (`st`.`read_count` > 5) 
+   and (`st`.`read_count` >= 5) 
    group by `s`.`id`,
    `s`.`sample_number`,
    `t`.`domain`,
