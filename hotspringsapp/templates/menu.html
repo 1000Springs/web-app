@@ -88,15 +88,29 @@ $(function(){
 	</div>		
 </div>
 
-<div id="ourScience" class="menuItem" rel="tooltip" data-original-title="Outreach and Publications">		
-	<a style="text-decoration:none;"href="{{url_for('ourscience')}}">
+<div id="publications" class="menuItem" rel="tooltip" data-original-title="Outreach and Publications">
+	<div class="dropdown">			
+		<a href="#" class="dropdown-toggle" data-toggle="dropdown">	
 
-		<div style="position:relative;height:34px;">
-			<img style="height:34px;width:34px;position:absolute;margin-left:-17px;left:50%"src="{{ url_for('static', filename='img/icons/ourscience.png') }}">
-		</div>
-		<p style="color:#1D9BAB;"> Our Science </p>
+			<div style="position:relative;height:34px;">
+				<img style="height:34px;width:34px;position:absolute;margin-left:-17px;left:50%"src="{{ url_for('static', filename='img/icons/ourscience.png') }}">
+			</div>
+			<p style="color:#1D9BAB;"> Our Science <b class="caret" style=""></b> </p>
 
-	</a>
+		</a>
+
+		<ul class="dropdown-menu">
+			<li> 
+				<a href="{{url_for('publications')}}">Publications</a>
+			</li>
+			<li>
+				<a href="{{url_for('methodologies')}}">Methodologies</a>
+			</li>		
+			<li>
+				<a href="{{url_for('dataoverview')}}">Data Overview</a>
+			</li>						
+		</ul>
+	</div>
 </div>
 
 	

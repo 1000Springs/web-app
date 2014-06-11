@@ -12,8 +12,24 @@
 {% block content %}
 
 	<div class="title">
-		<h2> our science </h2>
+		<h2> publications </h2>
 	</div>
+
+
+
+<div id="mainContent" style="position: relative; background-color: white;">
+	<ul id="tabBar" class="nav nav-tabs tab-heading otsTabs" data-tabs="tabs">
+		<li class="active"><a href="#pub-outreachTab" data-toggle="tab">Publications and Outreach</a></li>	
+	</ul>
+	<script type="text/javascript">
+		$(document).ready(function(){
+			$('#tabBar').tab();		
+		});
+
+	</script>
+
+	<div id="publications" class="tab-content">
+		<div id="pub-outreachTab" class="tab-pane active">
 
 	<div style="position:relative; background-color:white;padding:30px 0 30px 20px;" class="textBlock">	
 		<div class="row-fluid">
@@ -81,6 +97,9 @@
 		</div>
 		<div class="divider"></div>
 	</div>
+</div>
+</div>
+</div>
 
 <div id="demoLightbox" class="lightbox hide fade"  tabindex="-1" role="dialog" aria-hidden="true">
 						<div class='lightbox-content'>
@@ -98,10 +117,7 @@
 <script type="text/javascript" src="{{ url_for('static', filename='js/smoothzoom/smoothzoom.min.js') }}"></script>
  <script type="text/javascript">
 	
-  	$(function () 
-	{		
-		MenuSelect("#ourScience","{{ url_for('static', filename='img/icons/ourscience_Selected.png') }}");
-	});
+  	
 
 
   	$(document).ready(function(){

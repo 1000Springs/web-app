@@ -986,7 +986,7 @@ figcaption a
 }
 
 
-/* datasum */
+/* dataoverview */
 
 .data_point .heading
 {
@@ -1006,7 +1006,7 @@ figcaption a
 .data_point .values p
 {
   
- 
+  text-align:  center;
   border: 1px solid black;
  
   

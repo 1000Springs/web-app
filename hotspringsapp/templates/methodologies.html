@@ -1,0 +1,102 @@
+{% extends "layout.html" %}
+{% block title %}Our Science{% endblock %}
+{% block head %}
+
+	
+
+  {{ super() }}
+
+  <link rel="stylesheet" type="text/css" href="{{url_for('static',filename='css/smoothzoom/smoothzoom.css')}}">
+
+{% endblock %}
+{% block content %}
+
+	<div class="title">
+		<h2> methodologies </h2>
+	</div>
+
+
+
+<div id="mainContent" style="position: relative; background-color: white;">
+	<ul id="tabBar" class="nav nav-tabs tab-heading otsTabs" data-tabs="tabs">
+		<li class="active"><a href="#methTab" data-toggle="tab">Methodologies</a></li>
+		<li><a href="#feature-sampTab" data-toggle="tab">Feature Sampling</a></li>
+		<li><a href="#field-labTab" data-toggle="tab">Field &amp; Laboratory Processing</a></li>
+		<li><a href="#geochemTab" data-toggle="tab">Geochemical Analysis</a></li>
+		<li><a href="#gasTab" data-toggle="tab">Gas Sampling &amp; Analysis</a></li>
+		<li><a href="#seqTab" data-toggle="tab">Sequencing</a></li>
+		<li><a href="#safetyTab" data-toggle="tab">Health and Safety</a></li>
+	</ul>
+	<script type="text/javascript">
+		$(document).ready(function(){
+			$('#tabBar').tab();		
+		});
+
+	</script>
+
+	<div id="methogologies" class="tab-content">
+		<div id="methTab" class="tab-pane active">
+
+			<div style="position:relative; background-color:white;padding:30px 0 30px 20px;" class="textBlock">	
+				<div class="row-fluid">
+
+				</div>
+			</div>
+		</div>
+		<div id="feature-sampTab" class="tab-pane active">
+
+			<div style="position:relative; background-color:white;padding:30px 0 30px 20px;" class="textBlock">	
+				<div class="row-fluid">
+					
+				</div>
+			</div>
+		</div>
+		<div id="field-labTab" class="tab-pane active">
+
+			<div style="position:relative; background-color:white;padding:30px 0 30px 20px;" class="textBlock">	
+				<div class="row-fluid">
+					
+				</div>
+			</div>
+		</div>
+		<div id="geochemTab" class="tab-pane active">
+
+			<div style="position:relative; background-color:white;padding:30px 0 30px 20px;" class="textBlock">	
+				<div class="row-fluid">
+					
+				</div>
+			</div>
+		</div>
+		<div id="gasTab" class="tab-pane active">
+
+			<div style="position:relative; background-color:white;padding:30px 0 30px 20px;" class="textBlock">	
+				<div class="row-fluid">
+					
+				</div>
+			</div>
+		</div>
+		<div id="seqTab" class="tab-pane active">
+
+			<div style="position:relative; background-color:white;padding:30px 0 30px 20px;" class="textBlock">	
+				<div class="row-fluid">
+					
+				</div>
+			</div>
+		</div>
+		<div id="heath-safetyTab" class="tab-pane active">
+
+			<div style="position:relative; background-color:white;padding:30px 0 30px 20px;" class="textBlock">	
+				<div class="row-fluid">
+					
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+
+
+
+{% endblock %}
+
+

@@ -1,0 +1,90 @@
+{% extends "layout.html" %}
+{% block title %}Data Summary{% endblock %}
+{% block head %}
+  {{ super() }}	
+<script src="http://d3js.org/d3.v3.min.js"></script>
+  <script src="{{url_for('static',filename='js/d3-tip/d3-tip.js')}}"></script>  
+  
+<link rel="stylesheet" href="//rawgithub.com/Caged/d3-tip/master/examples/example-styles.css">
+
+    <script type="text/javascript">
+     
+
+       csvPath = "{{url_for('static',filename='ph_temp_sulfate.csv')}}";
+    </script>
+
+   <script src="{{url_for('static',filename='js/views/dataoverview.js')}}"></script>  
+
+{% endblock %}
+{% block content %}
+
+<div class="title">
+	<h2> our science </h2>
+</div>
+
+<div id="mainContent" style="position: relative; background-color: white;">
+  <ul id="tabBar" class="nav nav-tabs tab-heading otsTabs" data-tabs="tabs">
+    <li class="active"><a href="#dataTab" data-toggle="tab">Data Overview</a></li>
+    <li><a href="#phyTab" data-toggle="tab">Physiochemical Diversity</a></li>
+    <li><a href="#uniqTab" data-toggle="tab">Uniqueness Metric</a></li>
+  </ul>
+  <script type="text/javascript">
+  $(document).ready(function(){
+  $('#tabBar').tab();   
+  });
+
+  </script>
+
+  <div id="methogologies" class="tab-content">
+    <div id="dataTab" class="tab-pane active">
+
+      <div style="position:relative; background-color:white;"> 
+
+       
+
+          <div class="row-fluid">
+            <div class="span4">
+
+              <div class="data_point">
+              {% for name_val in values %}
+              <h4 class="heading"> {{name_val['name']}} </h4>
+                <div class="values clearfix">
+                  {% for values in name_val['values'] %}
+                    <p class='{{values["name"]}}'> {{values["value"]}}</p>
+                  {% endfor %}
+                </div>
+                {% endfor %}
+              </div>
+            </div>
+            
+            <div id="newGraph"></div>
+          
+          </div> 
+          
+        
+      </div>
+    </div>
+
+    <div id="phyTab" class="tab-pane active">
+
+      <div style="position:relative; background-color:white;" > 
+        <div class="row-fluid">
+          
+        </div>
+      </div>
+    </div>
+
+    <div id="uniqTab" class="tab-pane active">
+
+      <div style="position:relative; background-color:white;" > 
+        <div class="row-fluid">
+          
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+
+{% endblock %}
