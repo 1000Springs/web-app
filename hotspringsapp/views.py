@@ -105,33 +105,17 @@ def simplesearch():
 
     return render_template('simplesearch.html',form=form, tempRanges=tempRanges,locations=locations)
 
-@app.route('/getLocationTier', methods =['POST'])
-def getLocationTier():
-    location = request.form['location']
-    tier = int(request.form['tier'])
-
-
-
+@app.route('/getLocationTier/<location>/<int:tier>', methods =['GET'])
+def getLocationTier(location, tier):
 
     if tier == 1:
         results = Location.query.with_entities(Location.feature_system).filter_by(district = location).group_by(Location.feature_system)
 
-
     if tier == 2:
         results = Location.query.with_entities(Location.location).filter_by(feature_system = location).group_by(Location.location)
 
-
-
-    app.logger.debug(results.all())
-
     results = [i[0] for i in results if i[0] != None]
-
-
-
-
-
     return jsonify({'results':results,'tier':tier})
-
 
 
 
