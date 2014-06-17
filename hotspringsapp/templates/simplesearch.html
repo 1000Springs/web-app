@@ -85,14 +85,8 @@
 
  function getLocationTier(t,selected,tselector) {  
    
-
-
-    $.post('/getLocationTier', {
-        location: selected,
-        tier: t
-
-    }).done(function(location) {   
-   
+    $.get('/getLocationTier/'+selected+'/'+t)
+   	.done(function(location) {   
       $(tselector).append('<option value="">All</option>');
 
       location.results.forEach(function(entry) 
