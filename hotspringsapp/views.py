@@ -640,7 +640,7 @@ def getChemistryJson(sampleNumber):
     if chemJson is None:
         return "No chemistry data for "+sampleNumber, 404
     
-    return __cacheableResponse(jsonify(chemJson), 7)
+    return __cacheableResponse(jsonify(chemJson), 1)
 
 @app.route('/taxonomyJson/<sampleNumber>')
 def getTaxonomyJson(sampleNumber):
@@ -649,7 +649,7 @@ def getTaxonomyJson(sampleNumber):
     if taxJson is None:
         return "No taxonomy data for "+sampleNumber, 404
     
-    return __cacheableResponse(jsonify(taxJson), 7)
+    return __cacheableResponse(jsonify(taxJson), 1)
     
 
 @app.route('/taxon/<name>')
