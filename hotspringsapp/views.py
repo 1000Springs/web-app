@@ -386,9 +386,16 @@ def samplesite(site_id):
         gatheredInfoCount+= 1 
             
     gatheredInfoCount -= 1
+    
+    largeImage = None
+    bestPhotoImage = None
+    for image in latestSample.image:
+        if image.image_type == 'BESTPHOTO':
+            bestPhotoImage = image
+        elif image.image_type == 'LARGE':
+            largeImage = image
 
-    return render_template('samplesite.html',sample_site=latestSample,
-                                             statusPos = gatheredInfoCount)
+    return render_template('samplesite.html',sample_site=latestSample, statusPos = gatheredInfoCount,largeImage=largeImage, bestPhotoImage=bestPhotoImage)
     
 def __getChemistryData(sample):
     chemJson = {"name":"", "children":[{"name":"", "children":[]}]};
