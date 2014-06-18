@@ -331,12 +331,15 @@ span.units {
 	
 					<div class="divider"></div>
 					<div style="margin-bottom: 10px; margin-left: -1px;">
-	
-						{% for image in sample_site.image %} {% if image.image_type ==
-						"BESTPHOTO" %} <img id="sampleSiteImg" src="{{image.image_path}}" />
-	
-						{% endif %} {% endfor %}
-	
+						{% if largeImage != None %} 
+							<a href="{{largeImage.image_path}}">
+						{% endif %} 						
+						{% if bestPhotoImage != None %} 
+							<img id="sampleSiteImg" src="{{bestPhotoImage.image_path}}" />
+						{% endif %}
+						{% if largeImage != None %} 
+							</a>
+						{% endif %} 
 					</div>
 				</div>
 	
