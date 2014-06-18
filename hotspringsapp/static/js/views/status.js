@@ -7,7 +7,7 @@ function statusGraph(element,pos)
 			
 				/* Circle Parameters */
 				var strokeWidth = 2;
-				var distanceApart = 150;
+				var distanceApart = 140;
 				var radius = 15;			
 				var startX = (radius/2)-5;
 				var startY = (radius*2) + pointerHeight;
