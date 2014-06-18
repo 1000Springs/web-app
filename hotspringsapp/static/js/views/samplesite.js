@@ -75,12 +75,12 @@ function drawChemistryBubbleChart(bubbleData) {
 	      .enter()
 	       .append("svg:circle")
 	      .attr("class", function(d) { return d.children ? "bubbleVis parent" : "bubble bubbleVis"; })
-	      .attr("title", function (d) {var d = this.__data__; return !(d.children) ? (d.name + ": " + d.value +  "ppm"):null })  
 	      .attr("id", function(d){return d.name})  
 	      .attr("cx", function(d) { return d.x; })
 	      .attr("cy", function(d) { return d.y; })
 	      .attr("r", function(d) { return d.r; })
-	      .on("click", function(d) { return zoom(node == d ? root : d); });
+	      .on("click", function(d) { return zoom(node == d ? root : d); })
+	      .append("svg:title").text(function (d) {var d = this.__data__; return !(d.children) ? (d.name + ": " + getDisplayNumber(d.value) +  "ppm"):null });
 	      
 	  vis.selectAll("text")
 	      .data(nodes)
@@ -117,6 +117,16 @@ function drawChemistryBubbleChart(bubbleData) {
 	  node = d;
 	  d3.event.stopPropagation();
 	}		
+}
+
+function getDisplayNumber(float) {
+	if (float >= 20) {
+		return Math.round(float); // round to 0 d.p
+	} else if (float >= 1) {
+		return (Math.round(float * 10)/10); // round to 1 d.p
+	} else {
+		return (Math.round(float * 1000)/1000); // round to 3 d.p
+	}
 }
 
 function drawTaxonomyCollapsibleTree(treeData) {
