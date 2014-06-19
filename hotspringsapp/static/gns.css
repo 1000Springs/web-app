@@ -523,7 +523,7 @@ th
 /*Slider Customisation */
 #tempSlider .ui-rangeSlider-container {
 background-color:#ffffff;
-filter:progid:DXImageTransform.Microsoft.gradient(GradientType=1,startColorstr=#ffffff, endColorstr=#ffff00);
+filter:progid:DXImageTransform.Microsoft.gradient(GradientType=1,startColorstr=#ffffff, endColorstr=#ff0000);
 background-image:-moz-linear-gradient(left, #ffffff 0%, #ffff00 50%,#ff0000 100%);
 background-image:linear-gradient(left, #ffffff 0%, #ffff00 50%,#ff0000 100%);
 background-image:-webkit-linear-gradient(left, #ffffff 0%, #ffff00 50%,#ff0000 100%);
