@@ -690,17 +690,17 @@ label
   color: black;
 }
 
-.district-tier .chosen-container
+.district-tier
 {
 
 }
 
-.system-tier .chosen-container
+.system-tier
 {
   padding-left: 25px;
 }
 
-.location-tier .chosen-container
+.location-tier
 {
   padding-left: 50px;
 }
