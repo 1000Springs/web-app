@@ -1,28 +1,38 @@
 $(document).ready(function() {
 	
-	$.get('/chemistryJson/'+$('#sampleNumber').text())  
-	  .done(function(data){
-		  drawChemistryBubbleChart(data);
-		  $('#chemistryViewLoading').hide();
-		  $('#chemistryViewWrapper').show();
-	  })
-	  .fail(function(jqXHR, textStatus, errorThrown) {
-		  $('#chemistryTab').html('<h3 style="height: 250px;">The chemistry data is coming soon</h3>');
-	  });	
-	
-	$.get('/taxonomyJson/'+$('#sampleNumber').text())  
-	  .done(function(data){
-		  var dataCopy = jQuery.extend(true, {},data);
-		  drawTaxonomyCollapsibleTree(dataCopy);
-		  drawTaxonomicSunburst(data);
-		  initTaxonomyViewToggle();
-		  $('#diversityViewLoading').hide();
-		  $('#diversityViewWrapper').show();
-	  })
-	  .fail(function(jqXHR, textStatus, errorThrown) {
-		  $('#diversityTab').html('<h3 style="height: 250px;">The taxonomy data is coming soon</h3>');
-	  });	
+	if (browserSupportsSvg()) {
+		$.get('/chemistryJson/'+$('#sampleNumber').text())  
+		  .done(function(data){
+			  drawChemistryBubbleChart(data);
+			  $('#chemistryViewLoading').hide();
+			  $('#chemistryViewWrapper').show();
+		  })
+		  .fail(function(jqXHR, textStatus, errorThrown) {
+			  $('#chemistryTab').html('<h4 style="height: 250px;">The chemistry data is coming soon</h4>');
+		  });	
+		
+		$.get('/taxonomyJson/'+$('#sampleNumber').text())  
+		  .done(function(data){
+			  var dataCopy = jQuery.extend(true, {},data);
+			  drawTaxonomyCollapsibleTree(dataCopy);
+			  drawTaxonomicSunburst(data);
+			  initTaxonomyViewToggle();
+			  $('#diversityViewLoading').hide();
+			  $('#diversityViewWrapper').show();
+		  })
+		  .fail(function(jqXHR, textStatus, errorThrown) {
+			  $('#diversityTab').html('<h3 style="height: 250px;">The taxonomy data is coming soon</h3>');
+		  });	
+	} else {
+		$('#diversityTab,#chemistryTab').html('<h4>Viewing this section requires a modern browser such as Chrome, Firefox or Internet Explorer 9</h4>');
+	}
 });
+
+
+
+function browserSupportsSvg() {
+	return document.implementation.hasFeature("http://www.w3.org/TR/SVG11/feature#BasicStructure", "1.1")
+}
 
 function initTaxonomyViewToggle() {
 	$('.diversityToggleView').click(function(){
@@ -119,13 +129,13 @@ function drawChemistryBubbleChart(bubbleData) {
 	}		
 }
 
-function getDisplayNumber(float) {
-	if (float >= 20) {
-		return Math.round(float); // round to 0 d.p
-	} else if (float >= 1) {
-		return (Math.round(float * 10)/10); // round to 1 d.p
+function getDisplayNumber(floatNum) {
+	if (floatNum >= 20) {
+		return Math.round(floatNum); // round to 0 d.p
+	} else if (floatNum >= 1) {
+		return (Math.round(floatNum * 10)/10); // round to 1 d.p
 	} else {
-		return (Math.round(float * 1000)/1000); // round to 3 d.p
+		return (Math.round(floatNum * 1000)/1000); // round to 3 d.p
 	}
 }
 
