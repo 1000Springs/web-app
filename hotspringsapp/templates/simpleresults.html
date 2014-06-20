@@ -6,6 +6,7 @@
     <script type="text/javascript" src="{{ url_for('static', filename='js/views/simpleresults.js') }}"></script>
     <script type="text/javascript" src="{{ url_for('static', filename='js/maps.js') }}"></script>
 	<script type="text/javascript" src="https://www.google.com/jsapi"></script>
+	<script type="text/javascript" src="{{ url_for('static', filename='js/chosen_v1.0.0/chosen.jquery.min.js') }}"></script>
 
 
 	<script src="{{ url_for('static', filename='js/ionRangeSlider/ion.rangeSlider.min.js')}}"></script>
@@ -14,12 +15,9 @@
   	<link rel="stylesheet" href="{{ url_for('static', filename='js/ionRangeSlider/ion.rangeSlider.skinFlat.css')}}" />
     <link rel="stylesheet" href="{{ url_for('static', filename='js/ionRangeSlider/ion.rangeSlider.css')}}" />
     <link rel="stylesheet" href="{{ url_for('static', filename='js/ionRangeSlider/normalize.min.css')}}" />
+    <link rel="stylesheet" href="{{url_for('static', filename='js/chosen_v1.0.0/chosen.css')}}" />
 
 
-
-
-
-	
 	<script type="text/javascript">
 	
 	var max = 100;
@@ -180,11 +178,18 @@ input[type=checkbox]
 	
 	<form id="resultsForm" action="{{url_for('simpleresults')}}">
 		<table>
+		<tr>	
+			<th style="text-align:left;padding:15px 0"> Location </th>
+		</tr>		
 		<tr>
-			<th style="text-align:left;padding:10px 0"> Location </th>
-		</tr>
-		<tr>
-			<td>{{form.city}}</td>
+			<td>
+				<select name="dist" data-placeholder="Choose a District..."   class="chosen-select" id="districtList">
+				        <option value="" selected="selected">All</option>
+        			{% for sites in locations %}
+						<option value="{{sites}}">{{sites}}</option>
+        			{% endfor %}				
+				</select>
+			</td>
 		</tr>
 		<tr>	
 			<th style="text-align:left;padding:15px 0"> Filters </th>
@@ -229,7 +234,7 @@ input[type=checkbox]
 		<input type="hidden" name="minTurb" value="0"/>
 		<input type="hidden" name="maxTurb" value="1000"/>	
 		<input type="hidden" name="minCond" value="0"/>
-		<input type="hidden" name="maxCond" value="12000"/>				
+		<input type="hidden" name="maxCond" value="2000000"/>				
 		<input type="submit" value="Search" class="btn btn-small colourClick" style="margin:35px 0 0 30%;  width: 75px;height: 75px;  border-radius: 38px;">
 		</form>
 	</div>
@@ -366,6 +371,8 @@ input[type=checkbox]
 
 <script>
     $(document).ready(function(){
+    	
+        $(".chosen-select").chosen({width: "200px",disable_search_threshold: 10});
 
         $("#range_1").ionRangeSlider({
             min: 1,

@@ -298,12 +298,16 @@ def simpleresults(page = 1, showAll = None):
             count["76-100"] +=1
 
     pieChart = [dict(range=k,count=v) for k,v in zip(count.keys(),count.values())]
+    
+    locations = Location.query.with_entities(Location.district).group_by(Location.district)
+    locations = [i[0] for i in locations if i[0] != None]
 
     return render_template('simpleresults.html',entries=paginatedSamples,
                                                 form=form,
                                                 minTemp=minTemp,
                                                 maxTemp=maxTemp,
-                                                pieChart=pieChart
+                                                pieChart=pieChart,
+                                                locations=locations
                                                 )
 
 
