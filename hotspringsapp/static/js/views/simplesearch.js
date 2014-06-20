@@ -3,7 +3,7 @@ var minTemp = 0;
 var maxTemp = 100;
 
 var minCond = 0;
-var maxCond = 12000;
+var maxCond = 2000000;
 
 var minTurb = 0;
 var maxTurb = 1000;
