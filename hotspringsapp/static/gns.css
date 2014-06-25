@@ -1103,7 +1103,63 @@ border-radius: 10px;
     border-bottom-right-radius: 5px;
 }
 
+.tourismPartner
+{
+margin: 10px 0;
+padding: 5px 0;
+border-bottom: 1px solid black;
+}
+
+.tourismPartner .org
+{
+  font-weight: bold;
+}
+
+
+
+img.tourismLogo
+{
+  float:right; 
+  margin-right:4px;
+  height:80px;
+}
 
 
 
 
+/* Field and Lab Processing */
+
+table#field_lab_table
+{
+  margin: 10px 0;
+}
+
+table#field_lab_table td {
+border: 1px solid black;
+padding: 0 10px 0 10px;
+}
+
+td.field_lab_heading {
+background-color: rgb(29,155,171);
+color: white;
+}
+
+
+/* our team */
+
+.memberPhoto
+{
+  height: 180px;
+  margin: 5px 0;
+}
+
+div.memberInfo
+{
+  height: 180px;
+  margin: 10px 0;
+}
+
+#fieldNotesList
+{
+  list-style-type: none;
+}
