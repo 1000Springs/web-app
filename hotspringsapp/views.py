@@ -105,33 +105,17 @@ def simplesearch():
 
     return render_template('simplesearch.html',form=form, tempRanges=tempRanges,locations=locations)
 
-@app.route('/getLocationTier', methods =['POST'])
-def getLocationTier():
-    location = request.form['location']
-    tier = int(request.form['tier'])
-
-
-
+@app.route('/getLocationTier/<location>/<int:tier>', methods =['GET'])
+def getLocationTier(location, tier):
 
     if tier == 1:
         results = Location.query.with_entities(Location.feature_system).filter_by(district = location).group_by(Location.feature_system)
 
-
     if tier == 2:
         results = Location.query.with_entities(Location.location).filter_by(feature_system = location).group_by(Location.location)
 
-
-
-    app.logger.debug(results.all())
-
     results = [i[0] for i in results if i[0] != None]
-
-
-
-
-
     return jsonify({'results':results,'tier':tier})
-
 
 
 
@@ -325,12 +309,16 @@ def simpleresults(page = 1, showAll = None):
             count["76-100"] +=1
 
     pieChart = [dict(range=k,count=v) for k,v in zip(count.keys(),count.values())]
+    
+    locations = Location.query.with_entities(Location.district).group_by(Location.district)
+    locations = [i[0] for i in locations if i[0] != None]
 
     return render_template('simpleresults.html',entries=paginatedSamples,
                                                 form=form,
                                                 minTemp=minTemp,
                                                 maxTemp=maxTemp,
-                                                pieChart=pieChart
+                                                pieChart=pieChart,
+                                                locations=locations
                                                 )
 
 
@@ -402,9 +390,16 @@ def samplesite(site_id):
         gatheredInfoCount+= 1 
             
     gatheredInfoCount -= 1
+    
+    largeImage = None
+    bestPhotoImage = None
+    for image in latestSample.image:
+        if image.image_type == 'BESTPHOTO':
+            bestPhotoImage = image
+        elif image.image_type == 'LARGE':
+            largeImage = image
 
-    return render_template('samplesite.html',sample_site=latestSample,
-                                             statusPos = gatheredInfoCount)
+    return render_template('samplesite.html',sample_site=latestSample, statusPos = gatheredInfoCount,largeImage=largeImage, bestPhotoImage=bestPhotoImage)
     
 def __getChemistryData(sample):
     chemJson = {"name":"", "children":[{"name":"", "children":[]}]};

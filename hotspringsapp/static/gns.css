@@ -486,7 +486,7 @@ height: 100%;*/
   width:60px;
   opacity: 0.6;
   float:left;
-  margin: 0 5px;
+  margin: 0 3px;
 }
 
 .selected img
@@ -523,7 +523,7 @@ th
 /*Slider Customisation */
 #tempSlider .ui-rangeSlider-container {
 background-color:#ffffff;
-filter:progid:DXImageTransform.Microsoft.gradient(GradientType=1,startColorstr=#ffffff, endColorstr=#ffff00);
+filter:progid:DXImageTransform.Microsoft.gradient(GradientType=1,startColorstr=#ffffff, endColorstr=#ff0000);
 background-image:-moz-linear-gradient(left, #ffffff 0%, #ffff00 50%,#ff0000 100%);
 background-image:linear-gradient(left, #ffffff 0%, #ffff00 50%,#ff0000 100%);
 background-image:-webkit-linear-gradient(left, #ffffff 0%, #ffff00 50%,#ff0000 100%);

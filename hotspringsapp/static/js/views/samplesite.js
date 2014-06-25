@@ -1,28 +1,38 @@
 $(document).ready(function() {
 	
-	$.get('/chemistryJson/'+$('#sampleNumber').text())  
-	  .done(function(data){
-		  drawChemistryBubbleChart(data);
-		  $('#chemistryViewLoading').hide();
-		  $('#chemistryViewWrapper').show();
-	  })
-	  .fail(function(jqXHR, textStatus, errorThrown) {
-		  $('#chemistryTab').html('<h3 style="height: 250px;">The chemistry data is coming soon</h3>');
-	  });	
-	
-	$.get('/taxonomyJson/'+$('#sampleNumber').text())  
-	  .done(function(data){
-		  var dataCopy = jQuery.extend(true, {},data);
-		  drawTaxonomyCollapsibleTree(dataCopy);
-		  drawTaxonomicSunburst(data);
-		  initTaxonomyViewToggle();
-		  $('#diversityViewLoading').hide();
-		  $('#diversityViewWrapper').show();
-	  })
-	  .fail(function(jqXHR, textStatus, errorThrown) {
-		  $('#diversityTab').html('<h3 style="height: 250px;">The taxonomy data is coming soon</h3>');
-	  });	
+	if (browserSupportsSvg()) {
+		$.get('/chemistryJson/'+$('#sampleNumber').text())  
+		  .done(function(data){
+			  drawChemistryBubbleChart(data);
+			  $('#chemistryViewLoading').hide();
+			  $('#chemistryViewWrapper').show();
+		  })
+		  .fail(function(jqXHR, textStatus, errorThrown) {
+			  $('#chemistryTab').html('<h4 style="height: 250px;">The chemistry data is coming soon</h4>');
+		  });	
+		
+		$.get('/taxonomyJson/'+$('#sampleNumber').text())  
+		  .done(function(data){
+			  var dataCopy = jQuery.extend(true, {},data);
+			  drawTaxonomyCollapsibleTree(dataCopy);
+			  drawTaxonomicSunburst(data);
+			  initTaxonomyViewToggle();
+			  $('#diversityViewLoading').hide();
+			  $('#diversityViewWrapper').show();
+		  })
+		  .fail(function(jqXHR, textStatus, errorThrown) {
+			  $('#diversityTab').html('<h3 style="height: 250px;">The taxonomy data is coming soon</h3>');
+		  });	
+	} else {
+		$('#diversityTab,#chemistryTab').html('<h4>Viewing this section requires a modern browser such as Chrome, Firefox or Internet Explorer 9</h4>');
+	}
 });
+
+
+
+function browserSupportsSvg() {
+	return document.implementation.hasFeature("http://www.w3.org/TR/SVG11/feature#BasicStructure", "1.1")
+}
 
 function initTaxonomyViewToggle() {
 	$('.diversityToggleView').click(function(){
@@ -75,12 +85,12 @@ function drawChemistryBubbleChart(bubbleData) {
 	      .enter()
 	       .append("svg:circle")
 	      .attr("class", function(d) { return d.children ? "bubbleVis parent" : "bubble bubbleVis"; })
-	      .attr("title", function (d) {var d = this.__data__; return !(d.children) ? (d.name + ": " + d.value +  "ppm"):null })  
 	      .attr("id", function(d){return d.name})  
 	      .attr("cx", function(d) { return d.x; })
 	      .attr("cy", function(d) { return d.y; })
 	      .attr("r", function(d) { return d.r; })
-	      .on("click", function(d) { return zoom(node == d ? root : d); });
+	      .on("click", function(d) { return zoom(node == d ? root : d); })
+	      .append("svg:title").text(function (d) {var d = this.__data__; return !(d.children) ? (getChemDisplayName(d.name) + ": " + getDisplayNumber(d.value) +  "ppm"):null });
 	      
 	  vis.selectAll("text")
 	      .data(nodes)
@@ -91,7 +101,7 @@ function drawChemistryBubbleChart(bubbleData) {
 	      .attr("dy", ".35em")
 	      .attr("text-anchor", "middle")
 	      .style("opacity", function(d) { return d.r > 20 ? 1 : 0; })
-	      .text(function(d) { return d.name; });
+	      .text(function(d) { return getChemDisplayName(d.name); });
 	
 	  d3.select(window).on("click", function() { zoom(root); });
 	
@@ -117,6 +127,65 @@ function drawChemistryBubbleChart(bubbleData) {
 	  node = d;
 	  d3.event.stopPropagation();
 	}		
+}
+
+function getDisplayNumber(floatNum) {
+	if (floatNum >= 20) {
+		return Math.round(floatNum); // round to 0 d.p
+	} else if (floatNum >= 1) {
+		return (Math.round(floatNum * 10)/10); // round to 1 d.p
+	} else {
+		return (Math.round(floatNum * 1000)/1000); // round to 3 d.p
+	}
+}
+
+function getChemDisplayName(chemicalElement) {
+	var nameMap = {
+			'Ag': 'silver',
+			'Al': 'aluminium',
+			'As': 'arsenic',
+			'B': 'boron',
+			'Ba': 'barium',
+			'Bi': 'bismuth',
+			'Br': 'bromine',
+			'C': 'carbon',
+			'Ca': 'calcium',
+			'Cd': 'cadmium',
+			'CH4': 'methane',
+			'Cl': 'chlorine',
+			'CO': 'carbon monoxide',
+			'Cr': 'chromium',
+			'Cs': 'caesium',
+			'Cu': 'copper',
+			'Fe': 'iron',
+			'H2': 'hydrogen',
+			'H2S': 'hydrogen sulfide',
+			'Hg': 'mercury',
+			'In': 'indium',
+			'K': 'potassium',
+			'La': 'lanthanum',
+			'Li': 'lithium',
+			'Mg': 'magnesium',
+			'Mn': 'manganese',
+			'Mo': 'molybdenum',
+			'N': 'nitrogen',
+			'Na': 'sodium',
+			'Ni': 'nickel',
+			'P': 'phosphorus',
+			'Pb': 'lead',
+			'Rb': 'rubidium',
+			'S': 'sulphur',
+			'Se': 'selenium',
+			'Si': 'silicon',
+			'Sr': 'strontium',
+			'Ti': 'titanium',
+			'U': 'uranium',
+			'V': 'vanadium',
+			'Zn': 'zinc'
+	}
+	
+	var name = (chemicalElement in nameMap) ? nameMap[chemicalElement] : chemicalElement;
+	return name;
 }
 
 function drawTaxonomyCollapsibleTree(treeData) {
