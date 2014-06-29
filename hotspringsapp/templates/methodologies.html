@@ -8,6 +8,18 @@
 
   <link rel="stylesheet" type="text/css" href="{{url_for('static',filename='css/smoothzoom/smoothzoom.css')}}">
 
+
+    <script type="text/javascript">
+        
+          $(function () 
+           {
+              MenuSelect("#ourscience","{{ url_for('static', filename='img/icons/ourscience_Selected.png') }}");
+                $("#ourscience .caret").css("border-top","4px solid white");
+           }); 
+
+       
+    </script>
+
 {% endblock %}
 {% block content %}
 
@@ -458,7 +470,7 @@
 				
 				<div class="row-fluid">
 					<div class="textBlock">
-					
+
 					<h2>Health and Safety</h2> 
 					<img class="floaterR" src="{{url_for('static' , filename='img/Methodologies/health_safety/h&s_tiny.jpg')}}" alt="Ion torrent chips">
 					<p><strong>Health, Safety and Environment:</strong> Please note here that sampling springs in geothermal environments is dangerous and should not be attempted. Ground surrounding hotsprings can be hot, unstable and undercut.  Springs also often emit high concentrations of toxic and/or asphyxiating gases. If visiting a geothermal environment, do not leave formed tracks and do not approach springs or steaming soils. All people involved in this project have extensive experience in moving through and sampling geothermal ecosystems. In all cases, we attempted to minimise any impact of sampling on the surrounding environment.</p>

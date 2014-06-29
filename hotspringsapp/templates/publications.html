@@ -6,6 +6,18 @@
 
   {{ super() }}
 
+
+
+    <script type="text/javascript">
+        
+          $(function () 
+           {
+              MenuSelect("#ourscience","{{ url_for('static', filename='img/icons/ourscience_Selected.png') }}");
+              $("#ourscience .caret").css("border-top","4px solid white");
+           }); 
+
+      
+    </script>
   <link rel="stylesheet" type="text/css" href="{{url_for('static',filename='css/smoothzoom/smoothzoom.css')}}">
 
 {% endblock %}

@@ -8,7 +8,12 @@
 <link rel="stylesheet" href="//rawgithub.com/Caged/d3-tip/master/examples/example-styles.css">
 
     <script type="text/javascript">
-     
+        
+          $(function () 
+           {
+              MenuSelect("#ourscience","{{ url_for('static', filename='img/icons/ourscience_Selected.png') }}");
+                $("#ourscience .caret").css("border-top","4px solid white");
+           }); 
 
        csvPath = "{{url_for('static',filename='ph_temp_sulfate.csv')}}";
     </script>
