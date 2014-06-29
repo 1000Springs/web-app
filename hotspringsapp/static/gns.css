@@ -1164,3 +1164,10 @@ div.memberInfo
 {
   list-style-type: none;
 }
+
+#hukaLogo
+{
+width: 200px;
+margin-top: -17px;
+height: 100px;
+}
