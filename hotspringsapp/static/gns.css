@@ -1028,18 +1028,9 @@ border-radius: 10px;
   margin-bottom: 20px;
 }
 
-.textBlock img.floaterL
-{
-  float:left;
-  margin: 10px 35px 10px 0px;
-  -webkit-border-radius: 10px;
--moz-border-radius: 10px;
-border-radius: 10px;
 
 
-}
-
-.textBlock img.floaterR
+.floaterR , .floaterL
 {
     float:right;
   margin: 10px 0px 10px 35px;
@@ -1124,8 +1115,19 @@ img.tourismLogo
   height:80px;
 }
 
+.floaterR.uniq , .floaterL.uniq
+{
+  width: 500px;
+  margin: 6px;
+}
 
-
+#data_overview
+{
+ 
+   -webkit-border-radius: 0;
+-moz-border-radius: 0;
+border-radius: 0;
+}
 
 /* Field and Lab Processing */
 
