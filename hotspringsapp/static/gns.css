@@ -1027,10 +1027,18 @@ border-radius: 10px;
 {
   margin-bottom: 20px;
 }
+.floaterL
+{
+
+ float:left;
+  margin: 10px 35px 10px 0px;
+  -webkit-border-radius: 10px;
+-moz-border-radius: 10px;
+border-radius: 10px;
+}
 
 
-
-.floaterR , .floaterL
+.floaterR  
 {
     float:right;
   margin: 10px 0px 10px 35px;
@@ -1131,10 +1139,21 @@ border-radius: 0;
 
 /* Field and Lab Processing */
 
+#field_vials
+{
+  width: 280px;
+  margin-bottom: 0px; 
+}
 
 table#field_lab_table
 {
   margin: 10px 0;
+}
+
+table#field_lab_table p
+{
+  margin:5px 0px;
+
 }
 
 table#field_lab_table td {

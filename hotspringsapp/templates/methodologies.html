@@ -78,6 +78,7 @@
 				
 				<div class="row-fluid">
 
+
 				</div>
 			
 		</div>
@@ -91,7 +92,7 @@
 					<img class="floaterL" src="{{url_for('static' , filename='img/Methodologies/sampling/field_sampling_tiny.jpg')}}" >
 					<p><strong>Sample site selection:</strong> We are aiming to sample as broad a cross section of physicochemical conditions presented by geothermally-influenced springs within the Taupō Volcanic Zone as possible. In this research, we sample only the water columns of springs and not the sediments, biofilms, mudpots or heated-soils. We are aiming to collect 1000 samples which in the majority of cases are from individual features. However, in some cases, we have repeated sampling of the same feature where physicochemical conditions are known to vary, are being targeted for a longer term temporal study or for quality control reasons.</p>
 
-					<p><strong>Sampling:</strong> We collect water from individual springs using the same technique for every sample. Spring water is collected across the full depth of the water column to ensure that a homogenous and representative sample. Water is collected using a telescopic sampling pole equipped with either a sterile 500 mL PP container or a custom-built sampler. We use the custom-built sampler to collect water where springs are deep enough. The sampler collects water without mixing the water column. Sampled water is then transferred to various containers for downstream microbiological and physicochemical analysis; 2150 mL of water is collected in a sterile 2 L PP container for diversity and some chemistry analysis; ~ 330 mL of water is collected in a rubber-necked bottle for hydrogen sulphide (H<sub>2</sub>S), bicarbonate (HCO<sub>3</sub>) and chloride (Cl) analysis; 500 mL of water is collected in a  sterile 500 mL PP bottle for physical attributes such as conductivity and dissolved oxygen (dO) measurement; and ~60 mL of water is collected for dissolved gas content. Explanations of these analyses are given below. In addition, an additional sediment sample (~10 g) is taken where possible for future research.</p>  <br>
+					<p><strong>Sampling:</strong> We collect water from individual springs using the same technique for every sample. Spring water is collected across the full depth of the water column to ensure that a homogenous and representative sample. Water is collected using a telescopic sampling pole equipped with either a sterile 500 mL PP container or a custom-built sampler. We use the custom-built sampler to collect water where springs are deep enough. The sampler collects water without mixing the water column. Sampled water is then transferred to various containers for downstream microbiological and physicochemical analysis; 2150 mL of water is collected in a sterile 2 L PP container for diversity and some chemistry analysis; ~ 330 mL of water is collected in a rubber-necked bottle for hydrogen sulphide (H<sub>2</sub>S), bicarbonate (HCO<sub>3</sub>) and chloride (Cl) analysis; 500 mL of water is collected in a  sterile 500 mL PP bottle for physical attributes such as conductivity and dissolved oxygen (dO) measurement; and ~60 mL of water is collected for dissolved gas content. Explanations of these analyses are given below. In addition, an additional sediment sample (~10 g) is taken where possible for future research.</p>  
 
 					<p>As part of this project we have developed a field tablet (see image) and a custom-built app to allow us to record physical, chemical and other metadata in the field. This avoids having to double-handle notes scribbled in the field and reduces the number of transcribing errors. If you’d like to know more about the field tablet and associated software, please contact us [insert link: to about page]). The physical and chemical data we generate in the field are described elsewhere <a href="#field-labTab">link</a>. The metadata we record are the feature type (spring, stream etc.), area description, sampling date and sampling staff, feature location, GPS location, spring size, ebullition (bubbling/water up flow), and spring colour. We also take images and draw a ‘bird’s-eye-view’ of the spring to facilitate resampling in the future using the tablet.</p>
 					<img src="{{url_for('static' , filename='img/Methodologies/sampling/field sampling_2_small.jpg')}}" >
@@ -111,9 +112,13 @@
 					<img class="floaterR" id="field-lab-img-1" src="{{url_for('static' , filename='img/Methodologies/field_lab/field_and_lab_tiny.jpg')}}" >
 					<p>We aim to process samples as soon as possible to minimise any effects due to temperature or dissolved oxygen changes, or microbial activity. Samples to our 4WD field van which has been set up as a mobile laboratory. 
 					A field multiparameter meter (Hanna) is calibrated and used to measure pH, oxidation-reduction potential (ORP or redox), conductivity (a proxy for salinity), total dissolved solids, turbidity and dissolved oxygen from the (tightly-sealed) PP 500 mL bottle. Ferrous iron is immediately measured using a field spectrophotometer (Wilson, 1960). </p>
+
 					<p>Microorganisms are collected via filtration. A battery operated peristaltic pump pushes up to 2 L of sample through a 0.2 &#xB5;m Sterivex column filter (Millipore). After a lot of field testing we found that Sterivex filters had a higher filtration volume capacity compared to all other filter types we tested. Filtrate water was collected in 15 mL and 50 mL tubes for other chemistry analyses, detailed below. All filtrate water samples, filters and soil samples are cooled to 4 &deg;C and transported immediately back to the laboratory in Wairakei where they are then stored as listed below until sent for analysis. </p>
+
 					<p>All chemistry analyses are performed at either the New Zealand Geothermal Analytical Laboratory (NZGAL) or the Extremophile Research Group (both at GNS Science), or the University of Waikato’s School of Science. Also all the metadata recorded on the tablet by the field table is uploaded to the database, where it instantly appears on the website. </p>
+					<img class="floaterL" id="field_vials"  src="{{url_for('static' , filename='img/Methodologies/field_lab/field_and_lab_2_tiny.jpg')}}" >
 					<p>Sometimes weather conditions, location of the hot spring or the nature of the sample can result in processing being performed in the laboratory. Many of the hot springs are geographically situated within a 20 km radius of GNS Science. Some of the samples are high in particulate matter and need time to settle before filtering.</p>
+					
 
 
 
@@ -379,7 +384,7 @@
 						<p>
 							NA: not applicable, RT: room temperature
 						</p>
-						<img class="floaterR"  src="{{url_for('static' , filename='img/Methodologies/field_lab/field_and_lab_2_tiny.jpg')}}" >
+						
 						<h4>Notes:</h4>
 						
 						<ul id="fieldNotesList">
@@ -472,10 +477,11 @@
 					<div class="textBlock">
 
 					<h2>Health and Safety</h2> 
-					<img class="floaterR" src="{{url_for('static' , filename='img/Methodologies/health_safety/h&s_tiny.jpg')}}" alt="Ion torrent chips">
+					<img class="floaterR" src="{{url_for('static' , filename='img/Methodologies/health_safety/h&s_2_tiny.jpg')}}" alt="Ion torrent chips">
 					<p><strong>Health, Safety and Environment:</strong> Please note here that sampling springs in geothermal environments is dangerous and should not be attempted. Ground surrounding hotsprings can be hot, unstable and undercut.  Springs also often emit high concentrations of toxic and/or asphyxiating gases. If visiting a geothermal environment, do not leave formed tracks and do not approach springs or steaming soils. All people involved in this project have extensive experience in moving through and sampling geothermal ecosystems. In all cases, we attempted to minimise any impact of sampling on the surrounding environment.</p>
 
 					<p><strong>Health and Safety Personal Protective Equipment (PPE):</strong> For those interested, we have listed here the PPE and H&S measures we employ during sampling. We carry a H&S emergency bag which includes a satellite phone, locator beacon and laminated information sheets including emergency contacts, locations, recommended PPE, and hazards applicable to each site. We also have a comprehensive burns kit with a full body gel blanket, a 1st aid kit, collapsible bucket, water bladder, modified throwbag, gas monitor and GPS. We prefer to wear leather boots topped with neoprene putty’s (like gaters) over using gumboots. We also wear locally-made Cactus SuperTrousers to protect against vegetation and slow the infiltration of water/mud if an accident occurs.  </p>    
+					<img src="{{url_for('static' , filename='img/Methodologies/health_safety/h&s_small.jpg')}}" alt="Ion torrent chips">
 				</div>
 				</div>
 			
