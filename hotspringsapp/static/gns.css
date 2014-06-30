@@ -867,11 +867,11 @@ height: 100%;
 }
 
 
-.element-background
+.video_background
 {
-    background-color:rgb(29,155,171);
+  background-color:rgb(29,155,171);
   padding:10px;
-  border-radius:10px
+  border-radius:10px;
 }
 
 .row-fluid
