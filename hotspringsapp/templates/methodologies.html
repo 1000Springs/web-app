@@ -27,86 +27,72 @@
 		<h2> methodologies </h2>
 	</div>
 
-
+<div class="divider"></div>
 
 <div id="mainContent" style="position: relative; background-color: white;">
 	<ul class="nav nav-tabs tab-heading otsTabs" id="tabBar">
 		<li  class="active"><a href="#methTab" data-toggle="tab">Methodologies</a></li>
-		<li><a href="#feature-sampTab"  data-toggle="tab">Feature Sampling</a></li>
-		<li><a href="#field-labTab" id="field-lab" data-toggle="tab">Field &amp; Laboratory Processing</a></li>
+		<li><a href="#featureSampTab"  data-toggle="tab">Feature Sampling</a></li>
+		<li><a href="#fieldLabTab" id="field-lab" data-toggle="tab">Field &amp; Laboratory Processing</a></li>
 		<li><a href="#gasTab" data-toggle="tab">Gas Sampling &amp; Analysis</a></li>
 		<li><a href="#seqTab" data-toggle="tab">Sequencing</a></li>
-		<li><a href="#health-safetyTab" data-toggle="tab">Health and Safety</a></li>
+		<li><a href="#healthSafetyTab" data-toggle="tab">Health and Safety</a></li>
 	</ul>
 	<script type="text/javascript">
 		$(document).ready(function(){
 			$('#tabBar').tab();	
-			 
-
-			 var hash = document.location.hash;
+/**
+			TODO: for some reason the tabs and title bar disappear
+			      for when #methTab or #gasTab is included in the URL.
+			var hash = document.location.hash;
 			var prefix = "tab_";
 			if (hash) {
 			    $('.nav-tabs a[href='+hash.replace(prefix,"")+']').tab('show');
-			    console.log(('.nav-tabs a[href='+hash.replace(prefix,"")+']'));
 			} 
 			
-		
-
-			
-  // add a hash to the URL when the user clicks on a tab
-  $('a[data-toggle="tab"]').on('click', function(e) {
-    history.pushState(null, null, $(this).attr('href'));
-  });
-  // navigate to a tab when the history changes
-  window.addEventListener("popstate", function(e) {
-    var activeTab = $('[href=' + location.hash + ']');
-   
-      activeTab.tab('show');
-   
-  });
-
-
-																							 
-
+			// add a hash to the URL when the user clicks on a tab
+			$('a[data-toggle="tab"]').on('click', function(e) {
+				try {
+					// TODO: this doesn't work in IE < 10
+					history.pushState(null, null, $(this).attr('href'));
+				} catch (err) {}
+			});
+			// navigate to a tab when the history changes
+			window.addEventListener("popstate", function(e) {
+			  var activeTab = $('[href=' + location.hash + ']');
+			  activeTab.tab('show');
+			});	
+			*/
 		});
+
 
 	</script>
 
-	<div id="methogologies" class="tab-content">
-		<div id="methTab" class="tab-pane active">
-
-				
-				<div class="row-fluid">
-					<div class="textBlock">
-						<h2> Coming Soon!</h2>
-					</div>
-
+	<div id="methodologies" class="tab-content">
+		<div id="methTab" class="tab-pane active">		
+			<div class="row-fluid">
+				<div class="textBlock">
+					<h2> Coming Soon!</h2>
 				</div>
-			
+			</div>	
 		</div>
-		<div id="feature-sampTab" class="tab-pane">
-
-				
-				<div class="row-fluid">	
-					<div class="textBlock">
+		<div id="featureSampTab" class="tab-pane">
+			<div class="row-fluid">	
+				<div class="textBlock">
 					<h2>Sampling</h2> 
-
-					<img class="floaterL" src="{{url_for('static' , filename='img/Methodologies/sampling/field_sampling_tiny.jpg')}}" >
+	
+					<img class="floaterL" src="{{url_for('static' , filename='img/Methodologies/sampling/field_sampling_tiny.JPG')}}" >
 					<p><strong>Sample site selection:</strong> We are aiming to sample as broad a cross section of physicochemical conditions presented by geothermally-influenced springs within the Taupō Volcanic Zone as possible. In this research, we sample only the water columns of springs and not the sediments, biofilms, mudpots or heated-soils. We are aiming to collect 1000 samples which in the majority of cases are from individual features. However, in some cases, we have repeated sampling of the same feature where physicochemical conditions are known to vary, are being targeted for a longer term temporal study or for quality control reasons.</p>
-
+	
 					<p><strong>Sampling:</strong> We collect water from individual springs using the same technique for every sample. Spring water is collected across the full depth of the water column to ensure that a homogenous and representative sample. Water is collected using a telescopic sampling pole equipped with either a sterile 500 mL PP container or a custom-built sampler. We use the custom-built sampler to collect water where springs are deep enough. The sampler collects water without mixing the water column. Sampled water is then transferred to various containers for downstream microbiological and physicochemical analysis; 2150 mL of water is collected in a sterile 2 L PP container for diversity and some chemistry analysis; ~ 330 mL of water is collected in a rubber-necked bottle for hydrogen sulphide (H<sub>2</sub>S), bicarbonate (HCO<sub>3</sub>) and chloride (Cl) analysis; 500 mL of water is collected in a  sterile 500 mL PP bottle for physical attributes such as conductivity and dissolved oxygen (dO) measurement; and ~60 mL of water is collected for dissolved gas content. Explanations of these analyses are given below. In addition, an additional sediment sample (~10 g) is taken where possible for future research.</p>  
-
+	
 					<p>As part of this project we have developed a field tablet (see image) and a custom-built app to allow us to record physical, chemical and other metadata in the field. This avoids having to double-handle notes scribbled in the field and reduces the number of transcribing errors. If you’d like to know more about the field tablet and associated software, please <a href="{{url_for('about',_anchor='contact-details')}}">contact us</a>. The physical and chemical data we generate in the field are described elsewhere <a href="#field-labTab">link</a>. The metadata we record are the feature type (spring, stream etc.), area description, sampling date and sampling staff, feature location, GPS location, spring size, ebullition (bubbling/water up flow), and spring colour. We also take images and draw a ‘bird’s-eye-view’ of the spring to facilitate resampling in the future using the tablet.</p>
 					<img src="{{url_for('static' , filename='img/Methodologies/sampling/field sampling_2_small.jpg')}}" >
-					</div>
-
-
 				</div>
-			
+			</div>			
 		</div>
-		<div id="field-labTab" class="tab-pane">
-
-				
+		
+		<div id="fieldLabTab" class="tab-pane">		
 				<div class="row-fluid">
 					<div class="textBlock">
 
@@ -395,13 +381,9 @@
 							<li><sup>3</sup> Elements measured using ICP-MS are boron, lithium, sodium, magnesium, aluminium, silicon, sulphur, potassium, calcium, vanadium, chromium, manganese, iron, cobalt, nickel, copper, zinc, arsenic, selenium, bromine, rubidium, selenium, molybdenum, silver, cadmium, caesium, barium, mercury, thallium, lead and uranium.</li>
 						</ul>
 					</div>
-					<h4>References<h4>
+					<h4>References</h4>
 					<p>Wilson, A.D. 1960. The micro-determination of ferrous iron in silicate minerals by a volumetric and a colorimetric method. Analyst, 85, 823-827.</p>
 					
-
-				
-
-						
 					</div>
 				</div>
 			
@@ -417,62 +399,79 @@
 			
 		</div>
 		<div id="seqTab" class="tab-pane">
+			<div class="row-fluid">
+				<div class="textBlock">
+					<h2>Sequencing</h2>
+					<h4 class="subHeading">Microbial Diversity Assessment</h4>
+					<p>
+						The number of microorganisms in soil and in freshwater can be upward of one billion cells 
+						and ten million cells respectively (Whitman et al., 1998). It is therefore difficult to count 
+						and impossible to determine the identities of all the bacteria and archaea in a geothermal hotspring 
+						sample. To determine the diversity of the microorganisms inhabiting a spring, we extract the total 
+						microbial DNA content filtered from the sample. We then read and compare the DNA sequence of gene 
+						universal to all life. The order of the nucleotides in this gene can be used to catagorise the 
+						microorganism it was retrieved from into a taxonomic category. We use Next-Generation Sequencing 
+						(<a href="http://en.wikipedia.org/wiki/Next-generation_sequencing#Next-generation_methods">NGS</a>) 
+						technology (Ion Torrent) to sequence large numbers of sequences from multiple samples in parallel
+					</p>
+					<img src="{{url_for('static' , filename='img/Methodologies/sequencing/ion_torrent_small.jpg')}}" alt="Ion Torrent">
 
-				
-				<div class="row-fluid">
-					<div class="textBlock">
-						<h2>Sequencing</h2>
-						<h4 class="subHeading">Microbial Diversity Assessment</h4>
-						<p>The number of microorganisms in soil and in freshwater can be upward of one billion cells and ten million cells respectively (Whitman et al., 1998). It is therefore difficult to count and impossible to determine the identities of all the bacteria and archaea in a geothermal hotspring sample. To determine the diversity of the microorganisms inhabiting a spring, we extract the total microbial DNA content filtered from the sample. We then read and compare the DNA sequence of gene universal to all life. The order of the nucleotides in this gene can be used to catagorise the microorganism it was retrieved from into a taxonomic category. We use Next-Generation Sequencing (<a href="http://en.wikipedia.org/wiki/Next-generation_sequencing#Next-generation_methods">NGS</a>) technology (Ion Torrent) to sequence large numbers of sequences from multiple samples in parallel. </p>
-						<img src="{{url_for('static' , filename='img/Methodologies/sequencing/ion_torrent_small.jpg')}}" alt="Ion Torrent">
-
-						<h4 class="subHeading">DNA extraction</h4>						
-						<p><strong>Summary:</strong> DNA can be extracted, purified and concentrated from microorganisms using a combination of chemical and physical techniques. Prior to cell disruption, we block possible binding sites on any solids/sediments captured in the filtration process with sterile skim milk.  We then disrupt the captured cells in the Sterivex filter using cetyl trimethylammonium bromide (CTAB), and then chemically remove the proteins, lipids and ribonucleic acids (RNA) using a phenol-chloroform-isoamyl alcohol and chloroform-isoamyl alcohol. The DNA is then concentrated via a magnetic bead-adsorption protocol.</p>
-						<p><strong>Technical details:</strong>
-							<ol>
-								<li>	<strong>Cell disruption.</strong> The Sterivex filters are thawed on ice. 1.0 mL 0.8 % w/v skim milk powder solution is added first to the filters and incubated for 30 min at 65 &deg;C. 0.4 mL of CTAB, and 0.2 mL PBS, and 0.1 mL SDS are then added and vortexed for 1 min.   The filter is then placed in a 50 mL sterile capped plastic tube and incubated at 150 rpm 65 &deg;C for 30 mins.  The filter is then cooled on ice for a few minutes. The aqueous component is then pushed through the syringe and collected in a 2 mL tubes.</li>
-								<li>	<strong>DNA purification.</strong> Add equal volume (1:1) of chloroform: isoamyl alcohol (24:1) to each tube, vortex for 10 s, centrifuge at 12 400 rpm for 10 mins and transfer aqueous phase (usually top) to a new tube, avoid bottom layer. Add 300 &#xB5;L chloroform: isoamyl (24:1) to the aqueous phase, mix tubes on Hula mixer for 20 mins. Centrifuge for 10 mins at 12 400 rpm and then collect aqueous phase into new tubes, avoiding the bottom layers.</li>
-								<li>	<strong>DNA concentration.</strong> Add equal volume of 100 % ethanol and 40 &#xB5;L MoBio beads to the aqueous phase.  Agitate every 30 s to 1-5 mins.  Place samples on magnetic stand for 2 mins. Remove supernatant and wash beads with 500 &#xB5;L of 100% ethanol, clean walls of tubes.  Place tubes back on magnetic rack, remove all ethanol. Resuspend beads in 30 &#xB5;L Tris (pH 8.0) by gentle pipetting and brief vortexing. </li>
-							</ol>
-						</p>
-
-						<div class="subheading"><h4 class="subHeading">DNA amplification and preparation for Next Generation Sequencing</h4></div>
-						<img class="floaterL" src="{{url_for('static' , filename='img/Methodologies/sequencing/loading_chip_tiny.jpg')}}" alt="loading a chip carefully">
-
-
-						<p><strong>Summary:</strong> We determine the microbial diversity of each sample by sequencing (reading) the DNA code of a short gene that is possessed by all life called the small subunit of the ribosomal RNA (<a href="http://en.wikipedia.org/wiki/Ribosomal_RNA">SSU rRNA</a>). In bacteria and archaea, this is called the 16S rRNA gene and is approximately 1540 nucleotides long (in eukaryotes including humans it is called the 18S rRNA gene and is ~ 1870 nt). The total DNA content is extracted and the 16S rRNA genes of all resident bacteria and archaea is amplified using the Polymerase Chain Reaction (<a href="http://en.wikipedia.org/wiki/PCR">PCR</a>) modified to facilitate NGS using the <a href="http://en.wikipedia.org/wiki/Ion_semiconductor_sequencing">Ion Torrent</a> . On average approximately 70,000 sequences (~270 bp in length) were read per sample.</p>
-
-						<p><strong>Technical details:</strong>
-							<ol>
-								<li>	<strong>DNA amplification.</strong> We used the PCR to amplify the microbial community 16S rRNA genes using a universal bacterial/archaeal primer set F515 (5’-GTGCCAGCMGCCGCGGTAA-3’) and R806 (5’-GGACTACVSGGGTATCTAAT-3’) (Earth Microbiome Project [link: http://www.earthmicrobiome.org/emp-standard-protocols/16s/]). The forward primer contained an A-adaptor sequence, a barcode sequence 10-12 nt unique to each sample, a ‘GAT’ barcode adaptor sequence and the F515 sequencing primer.  The reverse primer included a P1 sequence and R806 sequencing primer.</li>
-								<li>	<strong>PCR reactions </strong> were performed in 25 &#xB5;L reactions, each containing 0.5 &#xB5;L (10 &#xB5;M concentration) of forward and reverse primers, 1.0 &#xB5;L BSA (10 mg mL<sup>-1</sup>), 3.0 &#xB5;L dNTPs (8 mM), 3.0 &#xB5;L 10X PCR buffer, 3.0 &#xB5;L MgCl<sub>2</sub> (50 mM), and 2 &#xB5;L soil community DNA at 0.5 ng/&#xB5;L as a template. Prior to the addition of primers, Taq and template, the PCR master mix was treated with 18.6 &#xB5;L ethidium monoazide bromide (1/200 dilution from 1mg mL<sup>-1</sup> stock) per reaction, with a 1 min incubation in darkness on ice and 1 min of photoactivation using a lamp to remove trace DNA contaminants (Rueckert & Morgan, 2007). The PCR reagents were supplied by Invitrogen (Invitrogen, Carlsbad, CA) and the ethidium monoazide bromide was supplied by Norrie Biotech (Auckland, NZ).  PCR was conducted using the following thermocycling parameters after the initial 3 min of 94 &deg;C denaturation: 30 cycles (94 &deg;C, 45 sec; 50 &deg;C, 1 min; 72 &deg;C, 1.5 min), followed by a final 10 min incubation at 72 &deg;C.</li>
-								<li>	<img class="floaterR" src="{{url_for('static' , filename='img/Methodologies/sequencing/ion_torrent_chips_tiny.jpg')}}" alt="Ion torrent chips"><strong>NGS preparation.</strong> The amplicons from triplicated PCR product pooling were purified using SPRIselect (Beckman Coulter Inc.) to remove small nucleotide fragments (left-hand selection), quality and concentration of the amplicons were verified and adjusted to 26 pM via HS Qubit 2.0 (Life Technologies) and 9100 BioAnalyser (Agilent Technologies) prior to pooling amplicons from all samples together for emulsion PCR. DNA sequencing was conducted at the Waikato DNA Sequencing Facility (University of Waikato, New Zealand) using Ion Torrent PGM (Life Technologies) with Ion 318v2 chip, using 400 bps chemistry.  </li>
-							</ol>
-						</p>
-
-						<h4 class="subHeading">Post-Sequencing processing</h4>
-							<p><strong>Summary:</strong> The raw sequences (on average 70,000 reads per sample) are too many to curate by hand and are instead handled by customised bioinformatic pipelines. Firstly, the raw sequences are curated to remove erroneous reads (too long or too short) and any tagging DNA sequences that were added as part of the sequencing process removed. The sequences are then screened for known errors and trimmed to 250 bp in length. Similar sequences are then grouped (groups have a sequence similarity of 97 %) into groups called Operational Taxonomic Units (<a href="http://en.wikipedia.org/wiki/Operational_taxonomic_unit">OTUs</a>) which can, for simplicity, be considered synonymous with a taxonomic species classification, although this is not technically correct. The OTUs are then taxonomically ranked by comparing the OTU sequences with microbial taxonomic databases. The OTU taxonomies and abundances within a sample can be represented in a number of ways.  It should be noted that for the purposes of this website OTUs with abundances of &gt;5 reads per sample have not been presented graphically for cl</p>
-
-							<p><strong>Technical Details:</strong>The raw reads in FASTQ format were processed using a custom pipeline based on Mothur (Schloss et al, 2009) and USEARCH (Edgar, 2013). Reads with lengths outside the 275-345 bp range were removed, as were reads with any error in the barcode and forward PCR primer sequences. The barcode and forward primer sequences were removed from the remaining reads, which were subjected to Q-score-based filtering to remove those with ≥3 expected errors. The reads were globally trimmed to 250 bp. After de-replication, unique reads were sorted based on their associated abundance. USEARCH was used to generate OTUs using centroid-based clustering (97% similarity threshold) and remove chimeras. OTUs were taxonomically assigned from their representative reads using the RDP Classifier in conjunction with RDP Release 11.2 (Wang et al, 2007).</p>
-
-
-
-							<h4 class="subHeading">References<h4>
-							<p>Edgar, R.C. 2013. UPARSE: Highly accurate OTU sequences from microbial amplicon reads. Nature Methods 10, 996-998.</p>
-
-							<p>Rueckert, A. and Morgan, H.W. 2007. Removal of contaminating DNA from polymerase chain reaction using ethidium monoazide. J Microbiol Meth, 68(3), 596-600.</p>
-
-							<p>Schloss, P.D., Westcott, S.L., Ryabin, T., Hall, J.R., Hartmann, M., Hollister, E.B., Lesniewski, R.A., Oakley, B.B., Parks, D.H., Robinson, C.J., Sahl, J.W., Stres, B., Thallinger, G.G., Van Horn, D.J., and Weber, C.F. 2009. Introducing mothur: open-source, platform-independent, community-supported software for describing and comparing microbial communities. Appl Environ Microbiol, 75(23), 7537-7541.</p>
-
-							<p>Wang  Q., Garrity, G.M., Tiedje, J.M. and Cole, J.R. 2007. Naive Bayesian classifier for rapid assignment of rRNA sequences into the new bacterial taxonomy. Appl Environ Microbiol, 73(16), 5261-5267.</p>
-
-							<p>Whitman, W.B., Colem and, D.C. and Wiebe, W.J. 1998. Prokaryotes, the unseen majority. Proc Natl Acad Sci USA, 95(12), 6578-6583.</p>
-
+					<h4 class="subHeading">DNA extraction</h4>						
+					<p>
+						<strong>Summary:</strong> DNA can be extracted, purified and concentrated from microorganisms using a combination 
+						of chemical and physical techniques. Prior to cell disruption, we block possible binding sites on any solids/sediments
+						captured in the filtration process with sterile skim milk.  We then disrupt the captured cells in the Sterivex filter 
+						using cetyl trimethylammonium bromide (CTAB), and then chemically remove the proteins, lipids and ribonucleic acids (RNA) 
+						using a phenol-chloroform-isoamyl alcohol and chloroform-isoamyl alcohol. The DNA is then concentrated via a magnetic 
+						bead-adsorption protocol.
+					</p>
+					<div>
+	    				<strong>Technical details:</strong>
+						<ol>
+							<li><strong>Cell disruption.</strong> The Sterivex filters are thawed on ice. 1.0 mL 0.8 % w/v skim milk powder solution is added first to the filters and incubated for 30 min at 65 &deg;C. 0.4 mL of CTAB, and 0.2 mL PBS, and 0.1 mL SDS are then added and vortexed for 1 min.   The filter is then placed in a 50 mL sterile capped plastic tube and incubated at 150 rpm 65 &deg;C for 30 mins.  The filter is then cooled on ice for a few minutes. The aqueous component is then pushed through the syringe and collected in a 2 mL tubes.</li>
+							<li><strong>DNA purification.</strong> Add equal volume (1:1) of chloroform: isoamyl alcohol (24:1) to each tube, vortex for 10 s, centrifuge at 12 400 rpm for 10 mins and transfer aqueous phase (usually top) to a new tube, avoid bottom layer. Add 300 &#xB5;L chloroform: isoamyl (24:1) to the aqueous phase, mix tubes on Hula mixer for 20 mins. Centrifuge for 10 mins at 12 400 rpm and then collect aqueous phase into new tubes, avoiding the bottom layers.</li>
+							<li><strong>DNA concentration.</strong> Add equal volume of 100 % ethanol and 40 &#xB5;L MoBio beads to the aqueous phase.  Agitate every 30 s to 1-5 mins.  Place samples on magnetic stand for 2 mins. Remove supernatant and wash beads with 500 &#xB5;L of 100% ethanol, clean walls of tubes.  Place tubes back on magnetic rack, remove all ethanol. Resuspend beads in 30 &#xB5;L Tris (pH 8.0) by gentle pipetting and brief vortexing. </li>
+						</ol>
 					</div>
+
+
+					<div class="subheading" style="margin-top: 15px;"><h4 class="subHeading">DNA amplification and preparation for Next Generation Sequencing</h4></div>
+					<img class="floaterL" src="{{url_for('static' , filename='img/Methodologies/sequencing/loading_chip_tiny.jpg')}}" alt="loading a chip carefully">
+
+
+					<p><strong>Summary:</strong> We determine the microbial diversity of each sample by sequencing (reading) the DNA code of a short gene that is possessed by all life called the small subunit of the ribosomal RNA (<a href="http://en.wikipedia.org/wiki/Ribosomal_RNA">SSU rRNA</a>). In bacteria and archaea, this is called the 16S rRNA gene and is approximately 1540 nucleotides long (in eukaryotes including humans it is called the 18S rRNA gene and is ~ 1870 nt). The total DNA content is extracted and the 16S rRNA genes of all resident bacteria and archaea is amplified using the Polymerase Chain Reaction (<a href="http://en.wikipedia.org/wiki/PCR">PCR</a>) modified to facilitate NGS using the <a href="http://en.wikipedia.org/wiki/Ion_semiconductor_sequencing">Ion Torrent</a> . On average approximately 70,000 sequences (~270 bp in length) were read per sample.</p>
+
+					<div><strong>Technical details:</strong>
+						<ol>
+							<li>	<strong>DNA amplification.</strong> We used the PCR to amplify the microbial community 16S rRNA genes using a universal bacterial/archaeal primer set F515 (5’-GTGCCAGCMGCCGCGGTAA-3’) and R806 (5’-GGACTACVSGGGTATCTAAT-3’) (Earth Microbiome Project [link: http://www.earthmicrobiome.org/emp-standard-protocols/16s/]). The forward primer contained an A-adaptor sequence, a barcode sequence 10-12 nt unique to each sample, a ‘GAT’ barcode adaptor sequence and the F515 sequencing primer.  The reverse primer included a P1 sequence and R806 sequencing primer.</li>
+							<li>	<strong>PCR reactions </strong> were performed in 25 &#xB5;L reactions, each containing 0.5 &#xB5;L (10 &#xB5;M concentration) of forward and reverse primers, 1.0 &#xB5;L BSA (10 mg mL<sup>-1</sup>), 3.0 &#xB5;L dNTPs (8 mM), 3.0 &#xB5;L 10X PCR buffer, 3.0 &#xB5;L MgCl<sub>2</sub> (50 mM), and 2 &#xB5;L soil community DNA at 0.5 ng/&#xB5;L as a template. Prior to the addition of primers, Taq and template, the PCR master mix was treated with 18.6 &#xB5;L ethidium monoazide bromide (1/200 dilution from 1mg mL<sup>-1</sup> stock) per reaction, with a 1 min incubation in darkness on ice and 1 min of photoactivation using a lamp to remove trace DNA contaminants (Rueckert & Morgan, 2007). The PCR reagents were supplied by Invitrogen (Invitrogen, Carlsbad, CA) and the ethidium monoazide bromide was supplied by Norrie Biotech (Auckland, NZ).  PCR was conducted using the following thermocycling parameters after the initial 3 min of 94 &deg;C denaturation: 30 cycles (94 &deg;C, 45 sec; 50 &deg;C, 1 min; 72 &deg;C, 1.5 min), followed by a final 10 min incubation at 72 &deg;C.</li>
+							<li>	<img class="floaterR" src="{{url_for('static' , filename='img/Methodologies/sequencing/ion_torrent_chips_tiny.jpg')}}" alt="Ion torrent chips"><strong>NGS preparation.</strong> The amplicons from triplicated PCR product pooling were purified using SPRIselect (Beckman Coulter Inc.) to remove small nucleotide fragments (left-hand selection), quality and concentration of the amplicons were verified and adjusted to 26 pM via HS Qubit 2.0 (Life Technologies) and 9100 BioAnalyser (Agilent Technologies) prior to pooling amplicons from all samples together for emulsion PCR. DNA sequencing was conducted at the Waikato DNA Sequencing Facility (University of Waikato, New Zealand) using Ion Torrent PGM (Life Technologies) with Ion 318v2 chip, using 400 bps chemistry.  </li>
+						</ol>
+					</div>
+
+					<div class="subheading" style="margin-top: 15px;"><h4 class="subHeading">Post-Sequencing processing</h4></div>
+						<p><strong>Summary:</strong> The raw sequences (on average 70,000 reads per sample) are too many to curate by hand and are instead handled by customised bioinformatic pipelines. Firstly, the raw sequences are curated to remove erroneous reads (too long or too short) and any tagging DNA sequences that were added as part of the sequencing process removed. The sequences are then screened for known errors and trimmed to 250 bp in length. Similar sequences are then grouped (groups have a sequence similarity of 97 %) into groups called Operational Taxonomic Units (<a href="http://en.wikipedia.org/wiki/Operational_taxonomic_unit">OTUs</a>) which can, for simplicity, be considered synonymous with a taxonomic species classification, although this is not technically correct. The OTUs are then taxonomically ranked by comparing the OTU sequences with microbial taxonomic databases. The OTU taxonomies and abundances within a sample can be represented in a number of ways.  It should be noted that for the purposes of this website OTUs with abundances of &gt;5 reads per sample have not been presented graphically for cl</p>
+
+						<p><strong>Technical Details:</strong>The raw reads in FASTQ format were processed using a custom pipeline based on Mothur (Schloss et al, 2009) and USEARCH (Edgar, 2013). Reads with lengths outside the 275-345 bp range were removed, as were reads with any error in the barcode and forward PCR primer sequences. The barcode and forward primer sequences were removed from the remaining reads, which were subjected to Q-score-based filtering to remove those with ≥3 expected errors. The reads were globally trimmed to 250 bp. After de-replication, unique reads were sorted based on their associated abundance. USEARCH was used to generate OTUs using centroid-based clustering (97% similarity threshold) and remove chimeras. OTUs were taxonomically assigned from their representative reads using the RDP Classifier in conjunction with RDP Release 11.2 (Wang et al, 2007).</p>
+
+
+
+						<h4 class="subHeading">References</h4>
+						<p>Edgar, R.C. 2013. UPARSE: Highly accurate OTU sequences from microbial amplicon reads. Nature Methods 10, 996-998.</p>
+
+						<p>Rueckert, A. and Morgan, H.W. 2007. Removal of contaminating DNA from polymerase chain reaction using ethidium monoazide. J Microbiol Meth, 68(3), 596-600.</p>
+
+						<p>Schloss, P.D., Westcott, S.L., Ryabin, T., Hall, J.R., Hartmann, M., Hollister, E.B., Lesniewski, R.A., Oakley, B.B., Parks, D.H., Robinson, C.J., Sahl, J.W., Stres, B., Thallinger, G.G., Van Horn, D.J., and Weber, C.F. 2009. Introducing mothur: open-source, platform-independent, community-supported software for describing and comparing microbial communities. Appl Environ Microbiol, 75(23), 7537-7541.</p>
+
+						<p>Wang  Q., Garrity, G.M., Tiedje, J.M. and Cole, J.R. 2007. Naive Bayesian classifier for rapid assignment of rRNA sequences into the new bacterial taxonomy. Appl Environ Microbiol, 73(16), 5261-5267.</p>
+
+						<p>Whitman, W.B., Colem and, D.C. and Wiebe, W.J. 1998. Prokaryotes, the unseen majority. Proc Natl Acad Sci USA, 95(12), 6578-6583.</p>
+
 				</div>
+			</div>
 			
 		</div>
-		<div id="health-safetyTab" class="tab-pane">
+		<div id="healthSafetyTab" class="tab-pane">
 
 				
 				<div class="row-fluid">
@@ -490,11 +489,6 @@
 		</div>
 	</div>
 </div>
-<script>
-  
-</script>
-
-
 
 {% endblock %}
 

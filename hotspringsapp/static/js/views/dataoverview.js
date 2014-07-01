@@ -48,7 +48,7 @@ d3.csv(csvPath, function(error, data) {
   x.domain(d3.extent(data, function(d) { return d.pH; })).nice();
   y.domain(d3.extent(data, function(d) { return d.temperature; })).nice();
   var max = d3.max(data, function(d) { return +d.sulfate;} );
-  tip = d3.tip().attr('class', 'd3-tip').html(function(d) { return "pH:" + d.pH + " " + "Temp:" + d.temperature + " " + "Sulfate:"+d.sulfate + " " + "Colour:" + d.log});
+  tip = d3.tip().attr('class', 'd3-tip').html(function(d) { return "pH:" + d.pH + " " + "Temp:" + d.temperature + " " + "Sulfate:"+d.sulfate});
   svg.call(tip)
   tip.offset([-10, 0])
   

@@ -9,7 +9,6 @@ function addCondition()
 	if (selectedAtt.length > 0)
 	{
    	attribute = selectedAtt.val();
-   	console.log(attribute);
    }
    else
    {
@@ -23,7 +22,6 @@ function addCondition()
    if (selectedCond.length > 0)
 	{
    	condition = selectedCond.val();
-   	console.log(condition);
    }
    else
    {
@@ -41,14 +39,12 @@ function addCondition()
       return;   
    }
 
-   console.log(constraint);
 
     var selectedLogical = $("input[name=logic]:checked");
 
    if (selectedLogical.length > 0)
    {
       logical = selectedLogical.val();
-      console.log(logical);
    }
    else
    {
