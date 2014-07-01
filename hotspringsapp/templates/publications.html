@@ -6,14 +6,42 @@
 
   {{ super() }}
 
+
+
+    <script type="text/javascript">
+        
+          $(function () 
+           {
+              MenuSelect("#ourscience","{{ url_for('static', filename='img/icons/ourscience_Selected.png') }}");
+              $("#ourscience .caret").css("border-top","4px solid white");
+           }); 
+
+      
+    </script>
   <link rel="stylesheet" type="text/css" href="{{url_for('static',filename='css/smoothzoom/smoothzoom.css')}}">
 
 {% endblock %}
 {% block content %}
 
 	<div class="title">
-		<h2> our science </h2>
+		<h2> publications </h2>
 	</div>
+
+<div class="divider"></div>
+
+<div id="mainContent" style="position: relative; background-color: white;">
+	<ul id="tabBar" class="nav nav-tabs tab-heading otsTabs" data-tabs="tabs">
+		<li class="active"><a href="#pub-outreachTab" data-toggle="tab">Publications and Outreach</a></li>	
+	</ul>
+	<script type="text/javascript">
+		$(document).ready(function(){
+			$('#tabBar').tab();		
+		});
+
+	</script>
+
+	<div id="publications" class="tab-content">
+		<div id="pub-outreachTab" class="tab-pane active">
 
 	<div style="position:relative; background-color:white;padding:30px 0 30px 20px;" class="textBlock">	
 		<div class="row-fluid">
@@ -25,13 +53,9 @@
 						Extremophiles are microorganisms that thrive in harsh environmental conditions - where temperatures can be as high as 120˚C, the pH can range from highly acidic to strongly alkaline, and there are elevated concentrations of salts and/or heavy metals. 
 						In this <a href="{{url_for('about')}}">research project</a>, we are collecting and analysing samples from New Zealand hotsprings to learn more about the microbial diversity and ecology of these extreme environments. 
 					</p>
-
+				
 					<p>
-						Sampling geothermal hotsprings – coming soon.
-					</p>
-
-					<p>
-						Next generation sequencing analysis – coming soon. 
+						For further information on our sampling and processing methodologies, please go to our <a href="{{url_for('methodologies')}}">Methodologies page</a> 
 					</p>
 				
 				</div>
@@ -46,6 +70,13 @@
 							<h4 style="text-align:center"> Micro-organisms: Out of this world</h4>
 							<a href="{{url_for('static',filename='img/articles/listener_article.pdf')}}" ><img src="{{url_for('static' ,filename='img/articles/listener_logo.jpg')}}">
 							<figcaption>Listener - 14 March, 2013</figcaption>
+							</a>
+						</figure>
+						<figure>
+							<h4 style="text-align:center"> Microscopic beings could prove colossal to science</h4>
+							<a href="http://www.nzherald.co.nz/nz/news/article.cfm?c_id=1&objectid=11282196" ><img src="{{url_for('static' ,filename='img/articles/nz-herald-logo.png')}}">
+								<object id="flashObj" width="470" height="398" classid="clsid:D27CDB6E-AE6D-11cf-96B8-444553540000" codebase="http://download.macromedia.com/pub/shockwave/cabs/flash/swflash.cab#version=9,0,47,0"><param name="movie" value="http://c.brightcove.com/services/viewer/federated_f9?isVid=1" /><param name="bgcolor" value="#FFFFFF" /><param name="flashVars" value="videoId=3631930520001&playerID=2176472546001&playerKey=AQ~~,AAABMJhsZrk~,Rpmqih9k2v3w7a5_pZ1YUxRlh2hqgZSa&domain=embed&dynamicStreaming=true" /><param name="base" value="http://admin.brightcove.com" /><param name="seamlesstabbing" value="false" /><param name="allowFullScreen" value="true" /><param name="swLiveConnect" value="true" /><param name="allowScriptAccess" value="always" /><embed src="http://c.brightcove.com/services/viewer/federated_f9?isVid=1" bgcolor="#FFFFFF" flashVars="videoId=3631930520001&playerID=2176472546001&playerKey=AQ~~,AAABMJhsZrk~,Rpmqih9k2v3w7a5_pZ1YUxRlh2hqgZSa&domain=embed&dynamicStreaming=true" base="http://admin.brightcove.com" name="flashObj" width="470" height="398" seamlesstabbing="false" type="application/x-shockwave-flash" allowFullScreen="true" swLiveConnect="true" allowScriptAccess="always" pluginspage="http://www.macromedia.com/shockwave/download/index.cgi?P1_Prod_Version=ShockwaveFlash"></embed></object>
+							<figcaption>New Zealand Hearld - 26 June, 2014</figcaption>
 							</a>
 						</figure>						
 				</div>
@@ -69,18 +100,22 @@
 				</div>
 
 			</div>
-			<div class="span6 element-background">
+			<div class="span6 video_background">
 				<p class="contrast">
 					<strong>Watch our videos to learn more:</strong>
 				</p>
 
 				<iframe style="margin:0 0 20px 0;width:100%" wmode="Opaque" height="315" src="//www.youtube.com/embed/VU-A6Sx7k-U" frameborder="0" allowfullscreen></iframe>
 				
+					
 			</div>
 			
 		</div>
 		<div class="divider"></div>
 	</div>
+</div>
+</div>
+</div>
 
 <div id="demoLightbox" class="lightbox hide fade"  tabindex="-1" role="dialog" aria-hidden="true">
 						<div class='lightbox-content'>
@@ -98,10 +133,7 @@
 <script type="text/javascript" src="{{ url_for('static', filename='js/smoothzoom/smoothzoom.min.js') }}"></script>
  <script type="text/javascript">
 	
-  	$(function () 
-	{		
-		MenuSelect("#ourScience","{{ url_for('static', filename='img/icons/ourscience_Selected.png') }}");
-	});
+  	
 
 
   	$(document).ready(function(){

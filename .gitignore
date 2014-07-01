@@ -15,4 +15,10 @@ db_repository/
 alembic/
 alembic.*
 *.lnk
+
+hotspringsapp/hotsprings.cfg
+
+test/
+sotd.cfg
+
 *.cfg

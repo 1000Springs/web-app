@@ -690,17 +690,17 @@ label
   color: black;
 }
 
-.district-tier
+.district-tier 
 {
 
 }
 
-.system-tier
+.system-tier 
 {
   padding-left: 25px;
 }
 
-.location-tier
+.location-tier 
 {
   padding-left: 50px;
 }
@@ -842,6 +842,19 @@ height: 100%;
 
 /* Template */
 
+.textBlock
+{
+ margin:0 0 20px 0;
+  font-family: 'questrialregular';
+  font-size: 16px;
+}
+
+.textBlock p
+{
+  margin: 20px 0;
+}
+
+
 .article h4:first-child
 {
   background-color:rgb(29,155,171);
@@ -854,11 +867,11 @@ height: 100%;
 }
 
 
-.element-background
+.video_background
 {
-    background-color:rgb(29,155,171);
+  background-color:rgb(29,155,171);
   padding:10px;
-  border-radius:10px
+  border-radius:10px;
 }
 
 .row-fluid
@@ -985,3 +998,197 @@ figcaption a
    
 }
 
+
+
+/* our science */
+
+.textBlock h4
+{
+  font-weight: 800;
+}
+
+div.subHeading
+{
+  marging:20px 0;
+}
+
+h4.subHeading
+{
+  display: inline;
+background-color: #1D9BAB;
+color: white;
+padding: 5px;
+-webkit-border-radius: 10px;
+-moz-border-radius: 10px;
+border-radius: 10px;
+}
+
+.textBlock img
+{
+  margin-bottom: 20px;
+}
+.floaterL
+{
+
+ float:left;
+  margin: 10px 35px 10px 0px;
+  -webkit-border-radius: 10px;
+-moz-border-radius: 10px;
+border-radius: 10px;
+}
+
+
+.floaterR  
+{
+    float:right;
+  margin: 10px 0px 10px 35px;
+  -webkit-border-radius: 10px;
+-moz-border-radius: 10px;
+border-radius: 10px;
+}
+
+.textBlock li
+{
+  padding: 5px;
+}
+
+/* dataoverview */
+
+.data_point .heading
+{
+  background-color: rgb(29,155,171);
+  color: white;
+  -webkit-border-top-left-radius: 5px;
+  -webkit-border-top-right-radius: 5px;
+  -moz-border-radius-topleft: 5px;
+  -moz-border-radius-topright: 5px;
+  border-top-left-radius: 5px;
+  border-top-right-radius: 5px;
+  padding:5px;
+  text-align: center;
+  margin-bottom: 0
+}
+
+.data_point .values p
+{
+  
+  text-align:  center;
+  border: 1px solid black;
+ 
+  
+}
+
+.data_point .Min
+{
+    box-sizing: border-box;
+    -moz-box-sizing:border-box;
+    display: block;
+    float: left;
+    width: 50%;
+    -webkit-border-bottom-left-radius: 5px;  
+    -moz-border-radius-bottomleft: 5px; 
+    border-bottom-left-radius: 5px;
+}
+
+.data_point .Max
+{
+   box-sizing: border-box;
+   -moz-box-sizing:border-box;
+    display: block;
+    float: right;
+    width: 50%;
+    -webkit-border-bottom-right-radius: 5px;
+    -moz-border-radius-bottomright: 5px;
+    border-bottom-right-radius: 5px;
+}
+
+.tourismPartner
+{
+margin: 10px 0;
+padding: 5px 0;
+border-bottom: 1px solid black;
+}
+
+.tourismPartner .org
+{
+  font-weight: bold;
+}
+
+
+
+img.tourismLogo
+{
+  float:right; 
+  margin-right:4px;
+  height:80px;
+}
+
+.floaterR.uniq , .floaterL.uniq
+{
+  width: 500px;
+  margin: 6px;
+}
+
+#data_overview
+{
+ 
+   -webkit-border-radius: 0;
+-moz-border-radius: 0;
+border-radius: 0;
+}
+
+/* Field and Lab Processing */
+
+#field_vials
+{
+  width: 280px;
+  margin-bottom: 0px; 
+}
+
+table#field_lab_table
+{
+  margin: 10px 0;
+}
+
+table#field_lab_table p
+{
+  margin:5px 0px;
+
+}
+
+table#field_lab_table td {
+border: 1px solid black;
+padding: 0 10px 0 10px;
+}
+
+td.field_lab_heading {
+background-color: rgb(29,155,171);
+color: white;
+}
+
+
+/* our team */
+
+.memberPhoto
+{
+  height: 180px;
+  margin: 5px 0;
+}
+
+div.memberInfo
+{
+  height: 180px;
+  margin: 10px 0;
+}
+
+#fieldNotesList
+{
+  list-style-type: none;
+}
+
+#hukaLogo
+{
+width: 200px;
+margin-top: -17px;
+height: 100px;
+}
