@@ -15,9 +15,7 @@
            {
               MenuSelect("#ourscience","{{ url_for('static', filename='img/icons/ourscience_Selected.png') }}");
                 $("#ourscience .caret").css("border-top","4px solid white");
-           }); 
-
-       
+           });   
     </script>
 
 {% endblock %}
@@ -33,39 +31,23 @@
 	<ul class="nav nav-tabs tab-heading otsTabs" id="tabBar">
 		<li  class="active"><a href="#methTab" data-toggle="tab">Methodologies</a></li>
 		<li><a href="#featureSampTab"  data-toggle="tab">Feature Sampling</a></li>
-		<li><a href="#fieldLabTab" id="field-lab" data-toggle="tab">Field &amp; Laboratory Processing</a></li>
+		<li><a href="#fieldLabTab" data-toggle="tab">Field &amp; Laboratory Processing</a></li>
 		<li><a href="#gasTab" data-toggle="tab">Gas Sampling &amp; Analysis</a></li>
 		<li><a href="#seqTab" data-toggle="tab">Sequencing</a></li>
 		<li><a href="#healthSafetyTab" data-toggle="tab">Health and Safety</a></li>
 	</ul>
 	<script type="text/javascript">
 		$(document).ready(function(){
-			$('#tabBar').tab();	
-/**
-			TODO: for some reason the tabs and title bar disappear
-			      for when #methTab or #gasTab is included in the URL.
-			var hash = document.location.hash;
-			var prefix = "tab_";
-			if (hash) {
-			    $('.nav-tabs a[href='+hash.replace(prefix,"")+']').tab('show');
-			} 
-			
-			// add a hash to the URL when the user clicks on a tab
-			$('a[data-toggle="tab"]').on('click', function(e) {
-				try {
-					// TODO: this doesn't work in IE < 10
-					history.pushState(null, null, $(this).attr('href'));
-				} catch (err) {}
-			});
-			// navigate to a tab when the history changes
-			window.addEventListener("popstate", function(e) {
-			  var activeTab = $('[href=' + location.hash + ']');
-			  activeTab.tab('show');
-			});	
-			*/
+			$('#tabBar').tab();
 		});
-
-
+		function showTab(tab) {
+			if (tab) {
+				$('.nav-tabs a[href='+tab+']').tab('show');
+				$('html, body').animate({
+			        scrollTop: $("#mainContent").offset().top
+			    }, 1000);
+			}
+		}
 	</script>
 
 	<div id="methodologies" class="tab-content">
@@ -85,11 +67,31 @@
 					<h2>Sampling</h2> 
 	
 					<img class="floaterL" src="{{url_for('static' , filename='img/Methodologies/sampling/field_sampling_tiny.jpg')}}" >
-					<p><strong>Sample site selection:</strong> We are aiming to sample as broad a cross section of physicochemical conditions presented by geothermally-influenced springs within the Taupō Volcanic Zone as possible. In this research, we sample only the water columns of springs and not the sediments, biofilms, mudpots or heated-soils. We are aiming to collect 1000 samples which in the majority of cases are from individual features. However, in some cases, we have repeated sampling of the same feature where physicochemical conditions are known to vary, are being targeted for a longer term temporal study or for quality control reasons.</p>
+					<h4 class="subHeading">Sample site selection</h4> 
+					<p>
+					We are aiming to sample as broad a cross section of physicochemical conditions presented by geothermally-influenced 
+					springs within the Taupō Volcanic Zone as possible. In this research, we sample only the water columns of springs and 
+					not the sediments, biofilms, mudpots or heated-soils. We are aiming to collect 1000 samples which in the majority of 
+					cases are from individual features. However, in some cases, we have repeated sampling of the same feature where 
+					physicochemical conditions are known to vary, are being targeted for a longer term temporal study or for quality control reasons.</p>
+					
+					<h4 class="subHeading">Sampling</h4>
+					<p> We collect water from individual springs using the same technique for every sample. Spring water is collected across the full
+					 depth of the water column to ensure that a homogenous and representative sample. Water is collected using a telescopic sampling 
+					 pole equipped with either a sterile 500 mL PP container or a custom-built sampler. We use the custom-built sampler to collect water 
+					 where springs are deep enough. The sampler collects water without mixing the water column. Sampled water is then transferred to various 
+					 containers for downstream microbiological and physicochemical analysis; 2150 mL of water is collected in a sterile 2 L PP container for 
+					 diversity and some chemistry analysis; ~ 330 mL of water is collected in a rubber-necked bottle for hydrogen sulphide (H<sub>2</sub>S), 
+					 bicarbonate (HCO<sub>3</sub>) and chloride (Cl) analysis; 500 mL of water is collected in a  sterile 500 mL PP bottle for physical attributes 
+					 such as conductivity and dissolved oxygen (dO) measurement; and ~60 mL of water is collected for dissolved gas content.
+					  Explanations of these analyses are given below. In addition, an additional sediment sample (~10 g) is taken where possible for future research.</p>  
 	
-					<p><strong>Sampling:</strong> We collect water from individual springs using the same technique for every sample. Spring water is collected across the full depth of the water column to ensure that a homogenous and representative sample. Water is collected using a telescopic sampling pole equipped with either a sterile 500 mL PP container or a custom-built sampler. We use the custom-built sampler to collect water where springs are deep enough. The sampler collects water without mixing the water column. Sampled water is then transferred to various containers for downstream microbiological and physicochemical analysis; 2150 mL of water is collected in a sterile 2 L PP container for diversity and some chemistry analysis; ~ 330 mL of water is collected in a rubber-necked bottle for hydrogen sulphide (H<sub>2</sub>S), bicarbonate (HCO<sub>3</sub>) and chloride (Cl) analysis; 500 mL of water is collected in a  sterile 500 mL PP bottle for physical attributes such as conductivity and dissolved oxygen (dO) measurement; and ~60 mL of water is collected for dissolved gas content. Explanations of these analyses are given below. In addition, an additional sediment sample (~10 g) is taken where possible for future research.</p>  
-	
-					<p>As part of this project we have developed a field tablet (see image) and a custom-built app to allow us to record physical, chemical and other metadata in the field. This avoids having to double-handle notes scribbled in the field and reduces the number of transcribing errors. If you’d like to know more about the field tablet and associated software, please <a href="{{url_for('about',_anchor='contact-details')}}">contact us</a>. The physical and chemical data we generate in the field are described elsewhere <a href="#field-labTab">link</a>. The metadata we record are the feature type (spring, stream etc.), area description, sampling date and sampling staff, feature location, GPS location, spring size, ebullition (bubbling/water up flow), and spring colour. We also take images and draw a ‘bird’s-eye-view’ of the spring to facilitate resampling in the future using the tablet.</p>
+					<p>As part of this project we have developed a field tablet (see image) and a custom-built app to allow us to record physical, chemical and other 
+					metadata in the field. This avoids having to double-handle notes scribbled in the field and reduces the number of transcribing errors. 
+					If you’d like to know more about the field tablet and associated software, please <a href="{{url_for('about',_anchor='contact-details')}}">contact us</a>. 
+					The physical and chemical data we generate in the field are described elsewhere <a href="#field-labTab">link</a>. The metadata we record are the feature 
+					type (spring, stream etc.), area description, sampling date and sampling staff, feature location, GPS location, spring size, ebullition (bubbling/water up flow), 
+					and spring colour. We also take images and draw a ‘bird’s-eye-view’ of the spring to facilitate resampling in the future using the tablet.</p>
 					<img src="{{url_for('static' , filename='img/Methodologies/sampling/field sampling_2_small.jpg')}}" >
 				</div>
 			</div>			
@@ -139,7 +141,7 @@
 								<p>Microbial diversity</p>
 				            </td>
 				            <td>
-								<p>DNA extraction &amp; sequencing [link to sequencing tab]</p>
+								<p>DNA extraction &amp; <a href="javascript:showTab('#seqTab')">sequencing</a></p>
 				            </td>
 				            <td>
 								<p>UWaikato</p>
@@ -391,16 +393,14 @@
 				</div>
 			
 		</div>		
-		<div id="gasTab" class="tab-pane">
-
-				
+		<div id="gasTab" class="tab-pane" style="min-height: 900px;">
 				<div class="row-fluid">
 					<div class="textBlock">
-						<h2> Coming Soon!</h2>
+						<h2> Coming soon!</h2>
 					</div>
-				</div>
-			
+				</div>		
 		</div>
+		
 		<div id="seqTab" class="tab-pane">
 			<div class="row-fluid">
 				<div class="textBlock">
@@ -481,10 +481,21 @@
 					<div class="textBlock">
 
 					<h2>Health and Safety</h2> 
-					<img class="floaterR" src="{{url_for('static' , filename='img/Methodologies/health_safety/h&s_2_tiny.jpg')}}" alt="Ion torrent chips">
-					<p><strong>Health, Safety and Environment:</strong> Please note here that sampling springs in geothermal environments is dangerous and should not be attempted. Ground surrounding hotsprings can be hot, unstable and undercut.  Springs also often emit high concentrations of toxic and/or asphyxiating gases. If visiting a geothermal environment, do not leave formed tracks and do not approach springs or steaming soils. All people involved in this project have extensive experience in moving through and sampling geothermal ecosystems. In all cases, we attempted to minimise any impact of sampling on the surrounding environment.</p>
+					<img class="floaterR" width="480px" src="{{url_for('static' , filename='img/Methodologies/health_safety/h&s_2_tiny.jpg')}}" alt="Ion torrent chips">
+					<h4 class="subHeading">Health, Safety and Environment</h4>
+					<p>Please note here that sampling springs in geothermal environments is dangerous and should not be attempted. Ground surrounding 
+					hotsprings can be hot, unstable and undercut.  Springs also often emit high concentrations of toxic and/or asphyxiating gases. 
+					If visiting a geothermal environment, do not leave formed tracks and do not approach springs or steaming soils. All people 
+					involved in this project have extensive experience in moving through and sampling geothermal ecosystems. In all cases, we attempted 
+					to minimise any impact of sampling on the surrounding environment.</p>
 
-					<p><strong>Health and Safety Personal Protective Equipment (PPE):</strong> For those interested, we have listed here the PPE and H&S measures we employ during sampling. We carry a H&S emergency bag which includes a satellite phone, locator beacon and laminated information sheets including emergency contacts, locations, recommended PPE, and hazards applicable to each site. We also have a comprehensive burns kit with a full body gel blanket, a 1st aid kit, collapsible bucket, water bladder, modified throwbag, gas monitor and GPS. We prefer to wear leather boots topped with neoprene putty’s (like gaters) over using gumboots. We also wear locally-made Cactus SuperTrousers to protect against vegetation and slow the infiltration of water/mud if an accident occurs.  </p>    
+					<h4 class="subHeading">Health and Safety Personal Protective Equipment (PPE)</h4>
+					<p>For those interested, we have listed here the PPE and H&S measures we employ during sampling. We carry a H&S emergency bag which
+					 includes a satellite phone, locator beacon and laminated information sheets including emergency contacts, locations, recommended PPE, 
+					 and hazards applicable to each site. We also have a comprehensive burns kit with a full body gel blanket, a 1st aid kit, collapsible 
+					 bucket, water bladder, modified throwbag, gas monitor and GPS. We prefer to wear leather boots topped with neoprene putty’s (like gaters) 
+					 over using gumboots. We also wear locally-made Cactus SuperTrousers to protect against vegetation and slow the infiltration of water/mud
+					  if an accident occurs.  </p>    
 					<img src="{{url_for('static' , filename='img/Methodologies/health_safety/h&s_small.jpg')}}" alt="Ion torrent chips">
 				</div>
 				</div>

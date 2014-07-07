@@ -8,7 +8,7 @@ $(document).ready(function() {
 			  $('#chemistryViewWrapper').show();
 		  })
 		  .fail(function(jqXHR, textStatus, errorThrown) {
-			  $('#chemistryTab').html('<h4 style="height: 250px;">The chemistry data is coming soon</h4>');
+			  $('#chemistryTab').html('<h4 style="height: 250px;">The chemistry data for this site is coming soon</h4>');
 		  });	
 		
 		$.get('/taxonomyJson/'+$('#sampleNumber').text())  
@@ -21,7 +21,7 @@ $(document).ready(function() {
 			  $('#diversityViewWrapper').show();
 		  })
 		  .fail(function(jqXHR, textStatus, errorThrown) {
-			  $('#diversityTab').html('<h3 style="height: 250px;">The taxonomy data is coming soon</h3>');
+			  $('#diversityTab').html('<h3 style="height: 250px;">The taxonomy data for this site is coming soon</h3>');
 		  });	
 	} else {
 		$('#diversityTab,#chemistryTab').html('<h4>Viewing this section requires a modern browser such as Chrome, Firefox or Internet Explorer 9</h4>');
