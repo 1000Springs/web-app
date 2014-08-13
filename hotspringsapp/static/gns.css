@@ -1192,3 +1192,10 @@ width: 200px;
 margin-top: -17px;
 height: 100px;
 }
+
+.dlLink
+{
+  margin: auto;
+  display: block;
+  text-align: center;
+}
