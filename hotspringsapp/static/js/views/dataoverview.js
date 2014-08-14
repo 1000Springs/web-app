@@ -82,9 +82,9 @@ d3.csv(csvPath, function(error, data) {
       .attr("r", 5)
       .attr("cx", function(d) { return x(d.pH); })
       .attr("cy", function(d) { return y(d.temperature); })
-    .attr("title", function(d) { return "Test"})
+    .attr("title", function(d) { return d.id})
     .attr("stroke","black")
-      .style("fill", function(d) { return "rgb(255,"+d.log+",0)" }) 
+      .style("fill", function(d) { return "rgb(255,"+d.elevate+",0)" }) 
     .on("mouseover", function(d) {
        d3.select(this).attr("r", 10)
        .attr("stroke-width",cBorderHover);
@@ -99,26 +99,70 @@ d3.csv(csvPath, function(error, data) {
        
     });
     
+    var legend = svg.append("g")
+    .attr("class", "legend")
+    .attr("height", 0)
+    .attr("width", 0)
+    .attr('transform', 'translate(5,50)');
+
+    legend.append("text")
+    .attr("x", width - 18)
+    .attr("y", -5)
+    .text( 0);
+
+    legend.append("text")
+    .attr("x", width - 18)
+    .attr("y", 105)
+    .text( max);
+
+
+    legend.append("rect")
+      .attr("x", width - 18)
+      .attr("width", 15)
+      .attr("height", 90)
+      .style("fill", "url(#gradient)")
+      .style("stroke","black"); 
+
+      var gradient = svg.append("svg:defs")
+  .append("svg:linearGradient")
+    .attr("id", "gradient")
+    .attr("x1", "50%")
+    .attr("y1", "0%")
+    .attr("x2", "50%")
+    .attr("y2", "100%")
+    .attr("spreadMethod", "pad");
+ 
+gradient.append("svg:stop")
+    .attr("offset", "0%")
+    .attr("stop-color", "rgb(255,255,0)")
+    .attr("stop-opacity", 1);
+ 
+gradient.append("svg:stop")
+    .attr("offset", "100%")
+    .attr("stop-color", "rgb(255,0,0)")
+    .attr("stop-opacity", 1);
+ 
+
     
 
-  var legend = svg.selectAll(".legend")
-      .data(color.domain())
-    .enter().append("g")
-      .attr("class", "legend")
-      .attr("transform", function(d, i) { return "translate(0," + i * 20 + ")"; });
+  // var legend = svg.selectAll(".legend")
+  //     .data(color.domain())
+  //   .enter().append("g")
+  //     .attr("class", "legend")
+  //     .attr("transform", function(d, i) { return "translate(0," + i * 20 + ")"; });
 
-  legend.append("rect")
-      .attr("x", width - 18)
-      .attr("width", 18)
-      .attr("height", 18)
-      .style("fill", color);
+  // legend.append("rect")
+  //     .attr("x", width - 18)
+  //     .attr("width", 18)
+  //     .attr("height", 18)
+  //     .style("fill", color);
 
-  legend.append("text")
-      .attr("x", width - 24)
-      .attr("y", 9)
-      .attr("dy", ".35em")
-      .style("text-anchor", "end")
-      .text(function(d) { return d; });
+  // legend.append("text")
+  //     .attr("x", width - 24)
+  //     .attr("y", 9)
+  //     .attr("dy", ".35em")
+  //     .style("text-anchor", "end")
+  //     .text(function(d) { return d; });
 
 });
 });
