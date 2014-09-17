@@ -361,12 +361,15 @@ def dataoverview():
     maxAndMin.append(findMinAndMax("Dissolved Oxygen",Physical_data.dO))
     maxAndMin.append(findMinAndMax("Conductivity",Physical_data.conductivity))
 
-    scatterData = Physical_data.query.with_entities(Physical_data.initialTemp,Physical_data.pH).filter(Sample.phys_id == Physical_data.id,Sample.location_id== Location.id).all()
+    scatterData = Physical_data.query.with_entities(Physical_data.initialTemp,Physical_data.pH).filter(Sample.phys_id == Physical_data.id,Sample.location_id== Location.id)
 
-    formattedScatterData = [list(x) for x in scatterData]
+    formattedScatterData = [list(x) for x in scatterData.all()]
     formattedScatterData = [["",""]] + formattedScatterData
+    
+    #"Chemical_data.<elementname>" -> "<elementname>"| we don't want to show ID
+    columnNames = [str(x).split('.')[1] for x in Chemical_data.__table__.columns if str(x).split('.')[1] != 'id']   
 
-    return render_template('dataoverview.html',values=maxAndMin,scatterData=formattedScatterData)
+    return render_template('dataoverview.html',values=maxAndMin,scatterData=formattedScatterData,columns=columnNames)
 
 @app.route('/samplesite/<int:site_id>')
 def samplesite(site_id):
@@ -417,7 +420,7 @@ def __getChemistryData(sample):
                 chemJson["children"][0]["children"].append({"name":e[0],"size":e[1]})
     else:
         chemJson = None
-                
+    app.logger.debug(chemJson)
     return chemJson
     
 def __getTaxonomyData(sample):
@@ -624,7 +627,19 @@ def getTaxonomyJson(sampleNumber):
         return "No taxonomy data for "+sampleNumber, 404
     
     return __cacheableResponse(jsonify(taxJson), 1)
-    
+
+@app.route('/overviewGraphJson/<element>')
+def getOverviewGraphJson(element):
+    sample = Sample.query.with_entities(Physical_data.initialTemp,Physical_data.pH,Sample.id,getattr(Chemical_data,element)).filter(Sample.phys_id == Physical_data.id,Chemical_data.id == Sample.chem_id)
+    app.logger.debug(sample)
+    data = {"plots":[]}
+    for x in sample.all():        
+        data["plots"].append({'temperature':x[0],'pH':x[1],'id':x[2],'sulfate':x[3]})
+
+
+
+    return jsonify(data)
+
 
 @app.route('/taxon/<name>')
 def getTaxonDetails(name):

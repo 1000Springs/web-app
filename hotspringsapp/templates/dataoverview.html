@@ -2,7 +2,14 @@
 {% block title %}Data Summary{% endblock %}
 {% block head %}
   {{ super() }}	
-<script src="http://d3js.org/d3.v3.min.js"></script>
+
+
+
+
+<script type="text/javascript" src="http://d3js.org/d3.v3.min.js"></script>
+
+
+
   <script src="{{url_for('static',filename='js/d3-tip/d3-tip.js')}}"></script>  
   
 <link rel="stylesheet" href="//rawgithub.com/Caged/d3-tip/master/examples/example-styles.css">
@@ -70,6 +77,15 @@
 
 
           </div>
+          <select data-placeholder="Pick a chemical" class="chosen-select" id="chemList">
+              
+              
+          {% for c in columns %}
+
+         <option value="{{c}}">{{c}}</option>
+
+         {% endfor %}
+         </select>
            <div id="newGraph"></div>
            
           
