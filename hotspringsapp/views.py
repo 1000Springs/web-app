@@ -630,12 +630,24 @@ def getTaxonomyJson(sampleNumber):
 
 @app.route('/overviewGraphJson/<element>')
 def getOverviewGraphJson(element):
-    sample = Sample.query.with_entities(Physical_data.initialTemp,Physical_data.pH,Sample.id,getattr(Chemical_data,element)).filter(Sample.phys_id == Physical_data.id,Chemical_data.id == Sample.chem_id)
+
+    listOfAllLocations = Location.query.filter(Sample.location_id == Location.id).order_by(Location.id).all()
+    latestSampleIds = []
+
+
+
+    for l in listOfAllLocations:
+        latestSampleIds.append(l.latestSample().id)
+
+
+    sample = Sample.query.with_entities(Physical_data.initialTemp,Physical_data.pH,Sample.id,getattr(Chemical_data,element),Location.id).filter(Sample.phys_id == Physical_data.id,Chemical_data.id == Sample.chem_id,Sample.id.in_(latestSampleIds),Sample.location_id == Location.id).order_by(getattr(Chemical_data,element))
     app.logger.debug(sample)
     data = {"plots":[]}
-    for x in sample.all():        
-        data["plots"].append({'temperature':x[0],'pH':x[1],'id':x[2],'sulfate':x[3]})
-
+    graphResults = sample.all()
+    counter = 0
+    for x in graphResults:    
+        data["plots"].append({'temperature':x[0],'pH':x[1],'id':x[4],'sulfate':x[3],'index':counter})
+        counter += 1
 
 
     return jsonify(data)

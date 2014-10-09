@@ -12,12 +12,12 @@ function loadData(columnName)
 {
 $.get('/overviewGraphJson/'+ columnName)  
       .done(function(data){
-        console.log(data);
+        
         makeChart(data,columnName);
       })
       .fail(function(jqXHR, textStatus, errorThrown) {
-        // $('#chemistryTab').html('<h4 style="height: 250px;">The chemistry data for this site is coming soon</h4>');
-        console.log("Not working");
+         $('#dataTab').html('<h4 style="height: 250px;">The chemistry data for this site is coming soon</h4>');
+       
       });
 
 }
@@ -42,11 +42,12 @@ $('#chemList').on('change', function(evt, params) {
 function makeChart(plots,colName)
 {
 
-var data = plots["plots"].slice();
+data = plots["plots"].slice();
+var percentage = 0.95;
 var margin = {top: 20, right: 20, bottom: 30, left: 40},
     width = 960 - margin.left - margin.right,
     height = 500 - margin.top - margin.bottom;
-
+var removeFromEachEnd = Math.ceil(data.length * (1-percentage))/2;
 var cRadius = 5;
 var cRadiusHover = 10;
 var cBorder = 1;
@@ -67,23 +68,47 @@ var xAxis = d3.svg.axis()
 var yAxis = d3.svg.axis()
     .scale(y)
     .orient("left");
-var max = d3.max(data, function(d) { return +d.sulfate;} );  
-var min = d3.min(data, function(d) { if(d.sulfate<0)return 0; 
-                                     else return  +d.sulfate;});
-console.log(min);
-console.log(max);
+var max = d3.max(data, function(d) { return d.sulfate;} );  
+var min = d3.min(data, function(d) { if(d.sulfate>0) return d.sulfate;});
 
+var localMax = d3.max(data, function(d) { if(d.index<(data.length-removeFromEachEnd)) return d.sulfate;});  
+var localMin = d3.min(data, function(d) { if(d.sulfate>0 && d.index>removeFromEachEnd) return d.sulfate;});
+console.log("Min: " + min);
+console.log("Max: " + max);
+console.log("Local Min: " + localMin);
+console.log("Local Max: " + localMax);
+
+var counter = 0
 var plotColours = function(d){ 
+   var normFirst = false;
+  var sulfate = d.sulfate/localMax;
+   var colour = 0;
 
-  var normFirst = false;
-  var sulfate = d.sulfate/max;
+  if(d.sulfate === null || d.sulfate < 0)
+  {
+      colour = null;
+     
+  }// Gets a percentage of the values starting at the median i.e 95% of the values would mean we'd exclude the first and last 2.5% of the data plots
+  else if(counter >= removeFromEachEnd || counter <=(data.length-removeFromEachEnd))
+  {
+    //This will return a number between 1 and 254, as 0 and 255 are taken up by values outside of the percentage threshold
+    colour =  1+(253-(Math.floor((((d.sulfate) - (localMin))/((localMax)-(localMin)))*253)));
+  }
+  else if(counter <= removeFromEachEnd )
+  {
+    colour = 255;
+  }
+  else if ( counter >=(data.length-removeFromEachEnd))
+  {
+    colour = 0;
+  }
 
-  var colour = 0;
 
-  if(!normFirst)
-  colour = 255-(Math.floor(((log10(d.sulfate) - log10(min))/(log10(max)-log10(min)))*255));
-  else
-  colour =  Math.floor(Math.abs(log10(sulfate) - log10(min))/(log10(max)-log10(min))*255);
+
+  // if(!normFirst)
+  // colour = 255-(Math.floor(((log10(d.sulfate) - log10(min))/(log10(max)-log10(min)))*255));
+  // else
+  // colour =  Math.floor(Math.abs(log10(sulfate) - log10(min))/(log10(max)-log10(min))*255);
 
   // console.log("sulfate " + d.sulfate);
   // console.log("log10 sulfate " + log10(d.sulfate));
@@ -95,7 +120,7 @@ var plotColours = function(d){
   //   console.log("Top: " + (log10(d.sulfate) - log10(min)));
   //   console.log("Bottom: " + (log10(max)-log10(min)));
   //   console.log(colour)
-
+  counter++;
   return colour;
 };
 
@@ -104,26 +129,12 @@ var svg = d3.select("#newGraph").append("svg")
     .attr("height", height + margin.top + margin.bottom)
   .append("g")
     .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
-
-  
-
-  data.forEach(function(d) {
-    d.temperature = +d.temperature;
-    d.pH = +d.pH;    
-    // console.log("sulfate: " + log10(d.sulfate));
-    // console.log("min: " + log10(min));
-    // console.log("max: " + log10(max)); 
-
-    // console.log("sulfate: " + d.sulfate);
-    // console.log("min: " + min);
-    // console.log("max: " + max);
-  });
-
+ 
 
   x.domain(d3.extent(data, function(d) { return d.pH; })).nice();
   y.domain(d3.extent(data, function(d) { return d.temperature; })).nice();
   
-  tip = d3.tip().attr('class', 'd3-tip').html(function(d) { return "pH:" + d.pH + " " + "Temp:" + d.temperature + " " + colName+":"+d.sulfate});
+  tip = d3.tip().attr('class', 'd3-tip').html(function(d) { return "pH: " + d.pH + " " + "Temp: " + d.temperature + " " + colName+": "+(d.sulfate!==null?d.sulfate:"N/A")});
   svg.call(tip)
   tip.offset([-10, 0])
   
@@ -171,7 +182,7 @@ var svg = d3.select("#newGraph").append("svg")
       tip.hide(d);
     })
     .on("click", function(d){
-       
+       window.location = "/samplesite/"+d.id;
     });
     
     var legend = svg.append("g")
@@ -183,7 +194,7 @@ var svg = d3.select("#newGraph").append("svg")
     legend.append("text")
     .attr("x", width - 18)
     .attr("y", -5)
-    .text( 0);
+    .text( min);
 
     legend.append("text")
     .attr("x", width - 18)
