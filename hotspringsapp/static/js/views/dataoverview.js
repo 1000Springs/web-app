@@ -174,7 +174,9 @@ var svg = d3.select("#newGraph").append("svg")
       .attr("x", width)
       .attr("y", -6)
       .style("text-anchor", "end")
+      .attr("class","graph-text")
       .text("pH");
+
 
   svg.append("g")
       .attr("class", "y axis")
@@ -185,6 +187,7 @@ var svg = d3.select("#newGraph").append("svg")
       .attr("y", 6)
       .attr("dy", ".71em")
       .style("text-anchor", "end")
+      .attr("class","graph-text")
       .text("Temperature")
 
   svg.selectAll(".dot")

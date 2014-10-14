@@ -1228,3 +1228,8 @@ height: 100px;
   top: 100%;
   left: 0;
 }
+
+.graph-text
+{
+  font-size: 15px;
+}
