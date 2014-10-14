@@ -130,7 +130,7 @@ var plotColours = function(d){
 };
 
 var svg = d3.select("#newGraph").append("svg")
-    .attr("width", width + margin.left + margin.right +50)
+    .attr("width", width + margin.left + margin.right +64)
     .attr("height", height + margin.top + margin.bottom)
   .append("g")
     .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
@@ -239,12 +239,12 @@ var svg = d3.select("#newGraph").append("svg")
     .attr('transform', 'translate(5,50)');
 
     legend.append("text")
-    .attr("x", width - 18)
+    .attr("x", width - 25)
     .attr("y", -5)
     .text( min);
 
     legend.append("text")
-    .attr("x", width - 18)
+    .attr("x", width - 25)
     .attr("y", 105)
     .text( max);
 
