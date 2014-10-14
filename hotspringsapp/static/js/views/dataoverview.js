@@ -84,11 +84,16 @@ var plotColours = function(d){
   var sulfate = d.sulfate/localMax;
    var colour = 0;
 
-  if(d.sulfate === null || d.sulfate < 0)
+  if(d.sulfate === null)
   {
       colour = null;
      
-  }// Gets a percentage of the values starting at the median i.e 95% of the values would mean we'd exclude the first and last 2.5% of the data plots
+  }
+  else if(d.sulfate < 0)
+  {//values that were below the threshold will appear as yellow with a value of zero
+      colour = 255;
+  }
+  // Gets a percentage of the values starting at the median i.e 95% of the values would mean we'd exclude the first and last 2.5% of the data plots
   else if(counter >= removeFromEachEnd || counter <=(data.length-removeFromEachEnd))
   {
     //This will return a number between 1 and 254, as 0 and 255 are taken up by values outside of the percentage threshold
@@ -125,7 +130,7 @@ var plotColours = function(d){
 };
 
 var svg = d3.select("#newGraph").append("svg")
-    .attr("width", width + margin.left + margin.right)
+    .attr("width", width + margin.left + margin.right +50)
     .attr("height", height + margin.top + margin.bottom)
   .append("g")
     .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
@@ -134,7 +139,28 @@ var svg = d3.select("#newGraph").append("svg")
   x.domain(d3.extent(data, function(d) { return d.pH; })).nice();
   y.domain(d3.extent(data, function(d) { return d.temperature; })).nice();
   
-  tip = d3.tip().attr('class', 'd3-tip').html(function(d) { return "pH: " + d.pH + " " + "Temp: " + d.temperature + " " + colName+": "+(d.sulfate!==null?d.sulfate:"N/A")});
+  tip = d3.tip().attr('class', 'd3-tip').html(function(d) { 
+    columnName = 0
+    if(d.sulfate!==null)
+    {
+      if(d.sulfate < 0)
+      {
+        columnName = 0;
+      }
+      else
+      {
+      columnName = d.sulfate;
+      }
+    }
+    else
+    {
+      columnName = "N/A";
+    }
+
+    var tooltip = "pH: " + d.pH + " " + "Temp: " + d.temperature + " " + colName+": "+columnName;
+    return tooltip;
+
+  });
   svg.call(tip)
   tip.offset([-10, 0])
   
@@ -185,6 +211,24 @@ var svg = d3.select("#newGraph").append("svg")
        window.location = "/samplesite/"+d.id;
     });
     
+
+     var key = svg.append("g")
+    .attr("class", "key")
+    .attr("height", 0)
+    .attr("width", 0)
+    .attr('transform', 'translate(5,200)');
+
+    var keyValue = key.append("text")
+    .attr("x", width - 18)
+    .attr("y", -5);
+    
+    keyValue.append("tspan").text("N/A - ").attr("dy","0");
+    keyValue.append("tspan").text("Data not").attr("dy","15").attr("dx","-32");
+    keyValue.append("tspan").text("Currently").attr("dy","15").attr("dx","-50");
+    keyValue.append("tspan").text("Available").attr("dy","15").attr("dx","-51");
+
+    
+
     var legend = svg.append("g")
     .attr("class", "legend")
     .attr("height", 0)
