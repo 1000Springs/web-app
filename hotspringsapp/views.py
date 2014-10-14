@@ -650,7 +650,7 @@ def getOverviewGraphJson(element):
         counter += 1
 
 
-    return jsonify(data)
+    return __cacheableResponse(jsonify(data), 1)
 
 
 @app.route('/taxon/<name>')

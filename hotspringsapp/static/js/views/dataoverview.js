@@ -10,10 +10,14 @@ function log10(val)
 
 function loadData(columnName)
 {
+
 $.get('/overviewGraphJson/'+ columnName)  
       .done(function(data){
         
+       $(".loading").hide();
         makeChart(data,columnName);
+         
+        
       })
       .fail(function(jqXHR, textStatus, errorThrown) {
          $('#dataTab').html('<h4 style="height: 250px;">The chemistry data for this site is coming soon</h4>');
@@ -32,8 +36,9 @@ $('#chemList').val("sulfate").trigger("chosen:updated");
 
 $('#chemList').on('change', function(evt, params) {
    d3.select("#newGraph").select("svg").remove();
+    $(".loading").show();
    loadData($(this).val());
-
+  
   });
 
 
