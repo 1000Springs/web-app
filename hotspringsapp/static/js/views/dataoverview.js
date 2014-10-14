@@ -10,7 +10,7 @@ function log10(val)
 
 function loadData(columnName)
 {
-
+ $(".loading").show();
 $.get('/overviewGraphJson/'+ columnName)  
       .done(function(data){
         
@@ -31,12 +31,12 @@ $.get('/overviewGraphJson/'+ columnName)
 
 $(document).ready(function() {
 
+
 loadData("sulfate");
 $('#chemList').val("sulfate").trigger("chosen:updated");
 
 $('#chemList').on('change', function(evt, params) {
    d3.select("#newGraph").select("svg").remove();
-    $(".loading").show();
    loadData($(this).val());
   
   });
