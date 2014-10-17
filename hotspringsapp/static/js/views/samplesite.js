@@ -211,7 +211,7 @@ function drawTaxonomyCollapsibleTree(treeData) {
 	root.fixed = true;
 	root.x = w / 2;
 	root.y = h / 2;
-	window.maxCollapsibleTreeDepth = 8;
+	window.maxCollapsibleTreeDepth = 5;
 	
 	update(true, window.maxCollapsibleTreeDepth);
 	
@@ -219,7 +219,31 @@ function drawTaxonomyCollapsibleTree(treeData) {
 		var row =  $(this).closest('tr').index();
 		window.maxCollapsibleTreeDepth = row + 1;
 		update(false, window.maxCollapsibleTreeDepth);
+
+		changeButtonAlpha();
+
+
 	});
+
+	changeButtonAlpha();
+
+	function changeButtonAlpha()
+	{
+				$('#collapsibleTreeTaxonomy .taxaSwatch').each(function(index,entry) {
+		if(index+2 > window.maxCollapsibleTreeDepth)
+		{
+			$(this).css("opacity",0.5);
+		}
+		else
+		{
+			$(this).css("opacity",1);
+		}
+   	});
+	}
+	
+
+
+
 	
 	function update(positionNodes, maxDepth) {
 		
@@ -515,6 +539,34 @@ function drawTaxonomicSunburst(treeData) {
           .attr("r", radius)
           .style("opacity", 0);
 
+          	var defs = vis.append("defs");
+
+  var filter = defs.append("filter")
+      .attr("id", "dropshadow")
+
+  filter.append("feGaussianBlur")
+      .attr("in", "SourceAlpha")
+      .attr("stdDeviation", 4)
+      .attr("result", "blur");
+  filter.append("feOffset")
+      .attr("in", "blur")
+      .attr("dx", 2)
+      .attr("dy", 2)
+      .attr("result", "offsetBlur");
+
+  var feMerge = filter.append("feMerge");
+
+  feMerge.append("feMergeNode")
+      .attr("in", "offsetBlur")
+  feMerge.append("feMergeNode")
+      .attr("in", "SourceGraphic");
+
+
+   
+
+ 
+
+
         // For efficiency, filter nodes to keep only those large enough to see.
         var nodes = partition.nodes(json)
           .filter(function(d) {
@@ -531,6 +583,7 @@ function drawTaxonomicSunburst(treeData) {
           .attr("fill-rule", "evenodd")
           .style("fill", function(d, i) { return colours(i); })
           .style("opacity", 1)
+            .attr("filter", "url(#dropshadow)")
           .on("mouseover", mouseover);
 
         // Add the mouseleave handler to the bounding circle.

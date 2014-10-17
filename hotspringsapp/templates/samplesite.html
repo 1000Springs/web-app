@@ -304,12 +304,7 @@ span.units {
 										data-original-title="Formazin Nephelometric Units">FNU</span>
 								</p>
 							</td>
-						</tr>
-						<tr>
-							<td colspan="2" style="text-align:center">
-								<a style="font-size: 16px;" href="{{url_for('download', site_id= sample_site.location_id)}}"> Download data</a>
-							</td>
-						</tr>
+						</tr>					
 	
 						<tr>
 							<td id="statusHeadingTableData"colspan="2">
@@ -347,6 +342,12 @@ span.units {
 							</a>
 						{% endif %} 
 					</div>
+
+
+								
+								<a class="dlLink" style="font-size: 16px;" href="{{url_for('download', site_id= sample_site.location_id)}}"> Download data</a>
+								
+						
 				</div>
 	
 			</div>
