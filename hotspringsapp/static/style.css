@@ -152,10 +152,6 @@
   position: relative;
 }
 
-#sunburstChart path {
-  stroke: #fff;
-}
-
 #sunburstExplanation {
   position: absolute;
   top: 270px;
