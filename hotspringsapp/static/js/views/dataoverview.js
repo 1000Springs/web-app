@@ -32,7 +32,7 @@ $.get(endPoint + params)
 $(document).ready(function() {
 
 
-loadData('/overviewTaxonGraphJson/domain/',"Bacteria");
+
 $('#chemList').val("sulfate").trigger("chosen:updated");
 
 $('#chemList').on('change', function(evt, params) {
