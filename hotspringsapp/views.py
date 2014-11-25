@@ -18,13 +18,6 @@ from flask import Flask, url_for, render_template, request, g, session, flash, r
 from models import *
 from forms import *
 
-@app.after_request
-def after_request(response):
-    for query in get_debug_queries():
-        if query.duration >= app.config['FLASKY_SLOW_DB_QUERY_TIME']:
-            app.logger.warning('Slow query: %s\nParameters: %s\nDuration: %fs\nContext: %s\n' % (query.statement, query.parameters, query.duration,query.context))
-    return response
-
 @app.errorhandler(404)
 def page_not_found(e):
 
