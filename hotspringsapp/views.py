@@ -7,15 +7,23 @@ import StringIO
 import mimetypes
 from hotspringsapp import app
 from sqlalchemy.sql import func
+from sqlalchemy.orm import joinedload
+from flask.ext.sqlalchemy import get_debug_queries
 from werkzeug.datastructures import Headers
 import json
 import urllib2
+
 
 from flask import Flask, url_for, render_template, request, g, session, flash, redirect, Response, abort, jsonify, make_response, send_from_directory
 from models import *
 from forms import *
 
-
+@app.after_request
+def after_request(response):
+    for query in get_debug_queries():
+        if query.duration >= app.config['FLASKY_SLOW_DB_QUERY_TIME']:
+            app.logger.warning('Slow query: %s\nParameters: %s\nDuration: %fs\nContext: %s\n' % (query.statement, query.parameters, query.duration,query.context))
+    return response
 
 @app.errorhandler(404)
 def page_not_found(e):
@@ -120,7 +128,7 @@ def getLocationTier(location, tier):
 
 
 def findMinAndMax(name,field):
-  
+
     min = {"name":"Min","value":db.session.query(func.min(field)).first()[0]}
     max = {"name":"Max","value":db.session.query(func.max(field)).first()[0]}
 
@@ -267,17 +275,17 @@ def simpleresults(page = 1, showAll = None):
                                                 Sample.id.in_(latestSampleIds)
                                                 )
 
-    
-    
-   
 
-    if district != "" and district != None:        
+
+
+
+    if district != "" and district != None:
         latestFilteredSamples = latestFilteredSamples.filter(Location.district == district)
 
-    if feature_system != "" and feature_system != None:        
+    if feature_system != "" and feature_system != None:
         latestFilteredSamples = latestFilteredSamples.filter(Location.feature_system == feature_system)
 
-    if location != "" and location != None:        
+    if location != "" and location != None:
         latestFilteredSamples = latestFilteredSamples.filter(Location.location == location)
 
 
@@ -309,7 +317,7 @@ def simpleresults(page = 1, showAll = None):
             count["76-100"] +=1
 
     pieChart = [dict(range=k,count=v) for k,v in zip(count.keys(),count.values())]
-    
+
     locations = Location.query.with_entities(Location.district).group_by(Location.district)
     locations = [i[0] for i in locations if i[0] != None]
 
@@ -352,24 +360,15 @@ def methodologies():
 
 @app.route('/dataoverview')
 def dataoverview():
-    
-    maxAndMin = [] 
 
-    maxAndMin.append(findMinAndMax("Temperature",Physical_data.initialTemp))
-    maxAndMin.append(findMinAndMax("pH",Physical_data.pH))
-    maxAndMin.append(findMinAndMax("Oxidation Reduction Potential",Physical_data.redox))
-    maxAndMin.append(findMinAndMax("Dissolved Oxygen",Physical_data.dO))
-    maxAndMin.append(findMinAndMax("Conductivity",Physical_data.conductivity))
-
-    scatterData = Physical_data.query.with_entities(Physical_data.initialTemp,Physical_data.pH).filter(Sample.phys_id == Physical_data.id,Sample.location_id== Location.id)
-
-    formattedScatterData = [list(x) for x in scatterData.all()]
-    formattedScatterData = [["",""]] + formattedScatterData
-    
     #"Chemical_data.<elementname>" -> "<elementname>"| we don't want to show ID
-    columnNames = [str(x).split('.')[1] for x in Chemical_data.__table__.columns if str(x).split('.')[1] != 'id']   
+    chemNames = [str(x).split('.')[1] for x in Chemical_data.__table__.columns if str(x).split('.')[1] != 'id']
+    taxLvls = ["domain","phylum"]
+    query = db.session.query(Taxonomy.domain.distinct().label("domain"))
 
-    return render_template('dataoverview.html',values=maxAndMin,scatterData=formattedScatterData,columns=columnNames)
+    taxNames = [row.domain for row in query.all()]
+
+    return render_template('dataoverview.html',chemColumns=chemNames,taxColumns=taxNames,taxLevels=taxLvls)
 
 @app.route('/samplesite/<int:site_id>')
 def samplesite(site_id):
@@ -390,10 +389,10 @@ def samplesite(site_id):
         gatheredInfoCount+= 1
 
     if len(latestSample.getTaxonomy()) > 0:
-        gatheredInfoCount+= 1 
-            
+        gatheredInfoCount+= 1
+
     gatheredInfoCount -= 1
-    
+
     largeImage = None
     bestPhotoImage = None
     for image in latestSample.image:
@@ -403,7 +402,7 @@ def samplesite(site_id):
             largeImage = image
 
     return render_template('samplesite.html',sample_site=latestSample, statusPos = gatheredInfoCount,largeImage=largeImage, bestPhotoImage=bestPhotoImage)
-    
+
 def __getChemistryData(sample):
     chemJson = {"name":"", "children":[{"name":"", "children":[]}]};
     if sample.chem is not None:
@@ -422,7 +421,7 @@ def __getChemistryData(sample):
         chemJson = None
     app.logger.debug(chemJson)
     return chemJson
-    
+
 def __getTaxonomyData(sample):
     taxonomy = sample.getTaxonomy()
     taxJson = None
@@ -430,7 +429,7 @@ def __getTaxonomyData(sample):
         taxaNames = ['domain', 'phylum', 'class', 'order', 'family', 'genus', 'species']
         currentTaxa = {}
         for taxaName in taxaNames:
-            currentTaxa[taxaName] = None 
+            currentTaxa[taxaName] = None
         data = {"name": "root", "children": []}
         for sampleTaxonomy in taxonomy:
             fullClassification = True
@@ -450,14 +449,14 @@ def __getTaxonomyData(sample):
                     currentTaxa[taxaNames[i - 1]]["size"] = int(sampleTaxonomy['read_count'])
                     fullClassification = False
                     break
-                
+
             if fullClassification:
-                currentTaxa['species']["size"] = int(sampleTaxonomy['read_count'])               
-                
+                currentTaxa['species']["size"] = int(sampleTaxonomy['read_count'])
+
         taxJson = data
 
     return taxJson
-           
+
 
 @app.route('/download/<int:site_id>')
 def download(site_id):
@@ -473,7 +472,7 @@ def download(site_id):
     sheet1 = book.add_sheet('Sheet 1')
 
     headingStyle = easyxf('align: vertical center, horizontal center;font: height 250;')
-    
+
 
     subHeadingStyle = easyxf('font: bold True;')
     dataStyle = easyxf('align: vertical center, horizontal right;')
@@ -502,28 +501,28 @@ def download(site_id):
 
     startCol+=2
 
-    sheet1.write_merge(0,0,startCol,startCol+1,'Physical Measurements',headingStyle)     
+    sheet1.write_merge(0,0,startCol,startCol+1,'Physical Measurements',headingStyle)
 
     physDataTuples = [('Initial Temp',latestSample.phys.initialTemp),
               ('Sample Temp',latestSample.phys.sampleTemp),
               ('pH',latestSample.phys.pH),
               ('Redox',latestSample.phys.redox),
               ('Dissolved Oxygen',latestSample.phys.dO),
-              ('Conductivity', latestSample.phys.conductivity), 
+              ('Conductivity', latestSample.phys.conductivity),
               ('Size',latestSample.phys.size),
               ('Colour',"#"+latestSample.phys.colour),
-              ('Ebullition', latestSample.phys.ebullition), 
+              ('Ebullition', latestSample.phys.ebullition),
               ('Turbidity', latestSample.phys.turbidity),
-              ('DNA Volume', latestSample.phys.dnaVolume), 
+              ('DNA Volume', latestSample.phys.dnaVolume),
               ('Ferrous Iron',latestSample.phys.ferrousIronAbs)]
 
     i=1
     for d in physDataTuples:
         sheet1.row(i).write(startCol,d[0],subHeadingStyle)
         sheet1.row(i).write(startCol+1,d[1],dataStyle)
-        i+=1   
+        i+=1
 
-    startCol+=2 
+    startCol+=2
 
     sheet1.write_merge(0,0,startCol,startCol+1,'Image',headingStyle)
 
@@ -533,7 +532,7 @@ def download(site_id):
     for d in imageTuples:
         sheet1.row(i).write(startCol,d[0],subHeadingStyle)
         sheet1.row(i).write(startCol+1,d[1],dataStyle)
-        i+=1 
+        i+=1
 
 
     sheet1.col(0).width = 5000
@@ -543,7 +542,7 @@ def download(site_id):
 
 
 
-    
+
 
     output = StringIO.StringIO()
     book.save(output)
@@ -577,7 +576,7 @@ def download(site_id):
     ################################
     # Return the response
     #################################
- 
+
     return response
 
 @app.route("/sotd")
@@ -616,7 +615,7 @@ def getChemistryJson(sampleNumber):
     chemJson = __getChemistryData(sample)
     if chemJson is None:
         return "No chemistry data for "+sampleNumber, 404
-    
+
     return __cacheableResponse(jsonify(chemJson), 1)
 
 @app.route('/taxonomyJson/<sampleNumber>')
@@ -625,7 +624,7 @@ def getTaxonomyJson(sampleNumber):
     taxJson = __getTaxonomyData(sample)
     if taxJson is None:
         return "No taxonomy data for "+sampleNumber, 404
-    
+
     return __cacheableResponse(jsonify(taxJson), 1)
 
 @app.route('/overviewGraphJson/<element>')
@@ -645,12 +644,87 @@ def getOverviewGraphJson(element):
     data = {"plots":[]}
     graphResults = sample.all()
     counter = 0
-    for x in graphResults:    
+    for x in graphResults:
         data["plots"].append({'temperature':x[0],'pH':x[1],'id':x[4],'sulfate':x[3],'index':counter})
         counter += 1
 
 
     return __cacheableResponse(jsonify(data), 1)
+
+@app.route('/overviewTaxonTypes/<taxonLvl>')
+def getOverviewTaxonLvl(taxonLvl):
+
+    query = db.session.query(getattr(Taxonomy,taxonLvl).distinct().label(taxonLvl)).all()
+    data = [x[0] for x in query]
+    app.logger.debug(data)
+
+    data = {"types":data}
+
+    return __cacheableResponse(jsonify(data), 1)
+
+
+@app.route('/overviewTaxonGraphJson/<buglevel>/<bugtype>')
+def getOverviewGraphTaxonJson(buglevel, bugtype):
+
+    listOfAllLocations = Location.query.filter(Sample.location_id == Location.id).order_by(Location.id).all()
+    latestSampleIds = []
+
+
+
+    for l in listOfAllLocations:
+        latestSampleIds.append(l.latestSample().id)
+
+    # awesome = db.session.query(Sample).join(sample_taxonomy,Taxonomy).filter().all()
+    #
+    # # graphResults = Sample.query.options(joinedload('phys')).filter(Sample.phys_id == Physical_data.id,Chemical_data.id == Sample.chem_id,Sample.id.in_(latestSampleIds),Sample.location_id == Location.id).order_by(getattr(Chemical_data,element)).all()
+    # # awesome = Sample.query.filter(Sample.id.in_(latestSampleIds)).all()
+    # # # app.logger.debug(awesome)
+    # # app.logger.debug(awesome[0].taxon)
+
+    awesome = Sample.query.filter(Sample.id==Sample_Taxonomy.sample_id,Sample_Taxonomy.taxonomy_id==Taxonomy.id).order_by(Sample_Taxonomy.sample_id).all()
+
+    # for a in awesome:
+    #     app.logger.debug(a.read_count)
+    #     app.logger.debug(a.taxon)
+
+    # app.logger.debug(dir(awesome[0].taxon[0].sample))
+
+
+    # print awesome[0]
+    graphResults = awesome
+    data = {"plots":[]}
+
+    # app.logger.debug(graphResults.all())
+    # app.logger.debug((graphResults[0].taxon))
+
+    counter = 0
+    for result in graphResults:
+
+
+        taxData = result.taxon
+        readCount = 0.0
+        totalReads = 0.0
+
+        if not taxData:
+            percent = 0.0
+        else:
+            for r in result.Sample_Taxonomy:
+                if r.taxon[buglevel] == bugtype:
+                     readCount += r.read_count
+
+                totalReads += r.read_count
+
+            # app.logger.debug(str(readCount) + " " + str(totalReads) + ":" + str(result.id))
+            percent = readCount/totalReads
+            # app.logger.debug(readCount/totalReads)
+
+
+        data["plots"].append({'temperature':result.phys.initialTemp,'pH':result.phys.pH,'id':result.id,'sulfate':int(percent*100),'index':counter})
+
+        counter += 1
+
+
+    return jsonify(data)
 
 
 @app.route('/taxon/<name>')
@@ -666,22 +740,22 @@ def getTaxonDetails(name):
             imageId =  data['property']['/common/topic/image']['values'][0]['id']
             imageUrl = 'https://usercontent.googleapis.com/freebase/v1/image' + imageId
         except KeyError:
-            imageUrl=None     
+            imageUrl=None
         try:
             wikiUrl = data['property']['/common/topic/description']['values'][0]['citation']['uri'];
-        except KeyError: 
+        except KeyError:
             wikiUrl=None
-        
+
         response = render_template('taxonDetails.html', taxon=name, rank=rank, description=description, imageUrl=imageUrl, wikiUrl=wikiUrl)
         return __cacheableResponse(response, 7)
-            
+
     except:
         return render_template('taxonDetails.html', error=True)
-    
-     
+
+
 def __cacheableResponse(response, expiryDays):
     expiry_time = datetime.datetime.utcnow() + datetime.timedelta(days=expiryDays)
-    response = make_response(response)    
+    response = make_response(response)
     response.headers["Expires"] = expiry_time.strftime("%a, %d %b %Y %H:%M:%S GMT")
     response.headers['Cache-Control'] = 'max-age='+str(expiryDays*24*60*60)
     return response

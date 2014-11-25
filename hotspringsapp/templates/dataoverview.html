@@ -1,7 +1,7 @@
 {% extends "layout.html" %}
 {% block title %}Data Summary{% endblock %}
 {% block head %}
-  {{ super() }}	
+  {{ super() }}
 
 
 
@@ -10,22 +10,22 @@
 
 
 
-  <script src="{{url_for('static',filename='js/d3-tip/d3-tip.js')}}"></script>  
-  
+  <script src="{{url_for('static',filename='js/d3-tip/d3-tip.js')}}"></script>
+
 
 
     <script type="text/javascript">
-        
-          $(function () 
+
+          $(function ()
            {
               MenuSelect("#ourscience","{{ url_for('static', filename='img/icons/ourscience_Selected.png') }}");
                 $("#ourscience .caret").css("border-top","4px solid white");
-           }); 
+           });
 
        csvPath = "{{url_for('static',filename='ph_temp_sulfate.csv')}}";
     </script>
 
-   <script src="{{url_for('static',filename='js/views/dataoverview.js')}}"></script>  
+   <script src="{{url_for('static',filename='js/views/dataoverview.js')}}"></script>
 
 {% endblock %}
 {% block content %}
@@ -44,7 +44,7 @@
   </ul>
   <script type="text/javascript">
   $(document).ready(function(){
-  $('#tabBar').tab();   
+  $('#tabBar').tab();
   });
 
   </script>
@@ -52,53 +52,83 @@
   <div id="methogologies" class="tab-content">
     <div id="dataTab" class="tab-pane active">
 
-      <div style="position:relative; background-color:white;"> 
+      <div style="position:relative; background-color:white;">
 
-       
+
 
           <div class="row-fluid">
-            
+
             <h2 class="heading">
             Data Overview
           </h2>
 
           <div class="textBlock">
 
-            <p>Presented here is a scatter plot showing temperature versus pH for all hotsprings sampled. 
-            Each dot is colour-coded according to the sulphate concentration (yellow - high 
-            concentration or elevated through to red - low concentration or reduced). The pH and 
-            temperature data for each dot can be ascertained by holding the cursor on the dot.</p> 
- 
-            <p>In the near future, we hope to be able to include a similar search function for all chemical 
+            <p>Presented here is a scatter plot showing temperature versus pH for all hotsprings sampled.
+            Each dot is colour-coded according to the sulphate concentration (yellow - high
+            concentration or elevated through to red - low concentration or reduced). The pH and
+            temperature data for each dot can be ascertained by holding the cursor on the dot.</p>
+
+            <p>In the near future, we hope to be able to include a similar search function for all chemical
             species and for the high-level taxonomic rankings such as domain, phylum and class.</p>
 
-             
- 
+
+
 
 
           </div>
-          <select data-placeholder="Pick a chemical" class="chosen-select" id="chemList">
-              
-              
-          {% for c in columns %}
 
-         <option value="{{c}}">{{c}}</option>
+          <div id="plot-controls" class="row-fluid">
+            <div id="chemSelectors"class="span6">
+              <h3>Chemical Comparison</h3>
+          <select data-placeholder="Pick a chemical" class="chosen-select" id="chemList">
+
+
+          {% for c in chemColumns %}
+
+         <option value="{{c}}">{{c|capitalize}}</option>
 
          {% endfor %}
          </select>
+
+       </div>
+
+         <div id="taxSelectors" class="span6">
+           <h3>Taxonomy Comparison</h3>
+         <select data-placeholder="Pick a Taxonomy Level" class="chosen-select" id="taxLvlList">
+
+         {% for c in taxLevels %}
+
+
+        <option value="{{c}}">{{c|capitalize}}</option>
+
+        {% endfor %}
+        </select>
+         <select data-placeholder="Pick a Taxonomy Level" class="chosen-select" id="taxNameList">
+
+         {% for c in taxColumns %}
+
+
+        <option value="{{c}}">{{c|capitalize}}</option>
+
+        {% endfor %}
+        </select>
+
+      </div>
+    </div>
           <div class="loading"> <img src="{{ url_for('static', filename='img/ajax-waiting.gif') }}" style="margin: 200px auto 200px auto; display: block;"></div>
            <div id="newGraph"></div>
-           
-          
-          </div> 
-          
-        
+
+
+          </div>
+
+
       </div>
     </div>
 
     <div id="phyTab" class="tab-pane">
 
-      <div style="position:relative; background-color:white;" > 
+      <div style="position:relative; background-color:white;" >
         <div class="row-fluid">
 
           <div class="span4">
@@ -117,7 +147,7 @@
                 {% endfor %}
               </div> -->
             </div>
-          
+
 
         </div>
       </div>
@@ -125,70 +155,70 @@
 
     <div id="uniqTab" class="tab-pane">
 
-      <div style="position:relative; background-color:white;" > 
+      <div style="position:relative; background-color:white;" >
         <div class="row-fluid">
 
           <div class="textBlock">
 
             <h2 class="heading">“Uniqueness Metric” Development</h2>
             <p>
-	            One of the outputs of this research programme is to investigate a way of determining the 
-	            resident microbial community “uniqueness”. To the best of our knowledge there are no 
-	            defined methodologies to categorise whether the microbial community within an ecosystem 
-	            is novel - macroecologists have been grappling over these ideas when it comes to flora and 
-	            fauna for years. For example, is a microbial ecosystem unique because it has a single (or 
-	            multiple) globally or nationally rare microbial species? Is it unique because its total microbial 
+	            One of the outputs of this research programme is to investigate a way of determining the
+	            resident microbial community “uniqueness”. To the best of our knowledge there are no
+	            defined methodologies to categorise whether the microbial community within an ecosystem
+	            is novel - macroecologists have been grappling over these ideas when it comes to flora and
+	            fauna for years. For example, is a microbial ecosystem unique because it has a single (or
+	            multiple) globally or nationally rare microbial species? Is it unique because its total microbial
 	            <img class="floaterR" id="data_overview" src="{{url_for('static' , filename='img/dataOverview/overview_tiny.png')}}">
-	            community make-up is rare? Or is it is rare because of the microbial community - 
-	            physicochemical environment interactions? In this project, we are exploring ways to 
-	            characterise the physicochemical and microbial diversity data generated by developing a 
-	            ‘uniqueness metric’. 
+	            community make-up is rare? Or is it is rare because of the microbial community -
+	            physicochemical environment interactions? In this project, we are exploring ways to
+	            characterise the physicochemical and microbial diversity data generated by developing a
+	            ‘uniqueness metric’.
             </p>
-            <p> 
-	            Our initial thoughts about developing a uniqueness metric is to consider the microbial 
-	            community structures independent of the associated physicochemical conditions (not 
-	            necessarily correct - but a reasonable first strategy). Things we are considering: 
+            <p>
+	            Our initial thoughts about developing a uniqueness metric is to consider the microbial
+	            community structures independent of the associated physicochemical conditions (not
+	            necessarily correct - but a reasonable first strategy). Things we are considering:
 	            <ul>
 	            <li>Diversity measures
 	              <ul>
-	            <li> The <a href="http://en.wikipedia.org/wiki/Alpha_diversity">alpha-diversity</a> of each 
+	            <li> The <a href="http://en.wikipedia.org/wiki/Alpha_diversity">alpha-diversity</a> of each
 	            sample - what are the dominant OTUs, what are the rare OTUs? </li>
-	            <li> The <a href="http://en.wikipedia.org/wiki/Beta_diversity">beta-diversity</a> of each 
-	            community - compare the community compositional dissimilarity within a 
+	            <li> The <a href="http://en.wikipedia.org/wiki/Beta_diversity">beta-diversity</a> of each
+	            community - compare the community compositional dissimilarity within a
 	            geothermal system </li>
 	            </ul>
 	            </li>
-	            <li>The relative importance of richness versus abundance - what is more valuable, a 
-	            large number of evenly distributed OTUs or community made up of a small number of 
+	            <li>The relative importance of richness versus abundance - what is more valuable, a
+	            large number of evenly distributed OTUs or community made up of a small number of
 	            OTUs? </li>
-	            <li>Are these communities or microbial OTUs nationally and/or globally rare? And what 
-	            is rarity? Is it a measure of phylogenetic dissimilarity from other 
-	            species/communities? Or does it extend further and also include the relative 
-	            abundance of these communities or OTUs in ecosystems?</li> 
+	            <li>Are these communities or microbial OTUs nationally and/or globally rare? And what
+	            is rarity? Is it a measure of phylogenetic dissimilarity from other
+	            species/communities? Or does it extend further and also include the relative
+	            abundance of these communities or OTUs in ecosystems?</li>
 	            </ul>
             </p>
             <p>
-	            None of these considerations takes into account the physicochemical conditions 
-	            encountered by the microbial communities. Indeed some would even argue that the 
-	            microbial community composition is dictated by the environmental conditions although this 
-	            doesn’t take into consideration biogeography and microbial distribution between geothermal 
-	            systems. 
+	            None of these considerations takes into account the physicochemical conditions
+	            encountered by the microbial communities. Indeed some would even argue that the
+	            microbial community composition is dictated by the environmental conditions although this
+	            doesn’t take into consideration biogeography and microbial distribution between geothermal
+	            systems.
              </p>
              <p>
-            As a first pass at developing a uniqueness metric we processed all the OTUs generated 
-            from 162 sample sites across all sites through the microbial ecology software package <a href="http://qiime.org/">Qiime</a> 
-             using default settings. Weighted and un-weighted Unifrac indices for 
-            each sample site were generated and visualised on a hierarchical clustering UPGMA tree, 
-            along with nodal interactions networks and a Principle Coordinate analysis (PCoA) of the 
-            data overlayed with environmental data. The some of these visualisations are presented 
-            below (Caporaso et al. 2010). 
+            As a first pass at developing a uniqueness metric we processed all the OTUs generated
+            from 162 sample sites across all sites through the microbial ecology software package <a href="http://qiime.org/">Qiime</a>
+             using default settings. Weighted and un-weighted Unifrac indices for
+            each sample site were generated and visualised on a hierarchical clustering UPGMA tree,
+            along with nodal interactions networks and a Principle Coordinate analysis (PCoA) of the
+            data overlayed with environmental data. The some of these visualisations are presented
+            below (Caporaso et al. 2010).
              </p>
 
              <img class="floaterL uniq" src="{{url_for('static' , filename='img/dataOverview/PCoA_unweighted_tiny.png')}}">
              <img class="floaterR uniq" src="{{url_for('static' , filename='img/dataOverview/PCoA_weighted_tiny.png')}}">
              <p>
 			 <strong>
-              We will update this component of the Uniqueness Metric as our ideas develop. Please 
+              We will update this component of the Uniqueness Metric as our ideas develop. Please
               <a href="{{url_for('about', _anchor='contact-details')}}">contact us</a> if you have ideas you’d like to share with us.
               </strong>
              </p>
