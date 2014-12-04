@@ -51,7 +51,7 @@ $('#taxLvlList').on('change', function(evt, params) {
           for(var i = 0; i < names.length; i++) {
               var opt = document.createElement('option');
               opt.innerHTML = names[i];
-              opt.value = names[i];
+              opt.value = encodeURIComponent(names[i]);
               sel.append(opt);
           }
          })
@@ -66,10 +66,10 @@ $('#taxLvlList').on('change', function(evt, params) {
 
          });
   });
-$('#taxNameList').on('change', function(evt, params) {
+$('#taxonSearch').on('click', function(evt, params) {
 
           d3.select("#newGraph").select("svg").remove();
-          loadData('/overviewTaxonGraphJson/'+$('#taxLvlList').val()+"/",$(this).val());
+          loadData('/overviewTaxonGraphJson/'+$('#taxLvlList').val()+"/",$("#taxNameList").val());
   });
 
 
