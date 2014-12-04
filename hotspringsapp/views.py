@@ -355,90 +355,6 @@ def methodologies():
 def dataoverview():
 
 
-    buglevel = "domain"
-    bugtype = "Bacteria"
-    listOfAllLocations = Sample.query.filter(Sample.location_id == Location.id).order_by(Sample.location_id,Sample.date_gathered.desc()).all()
-    latestSampleIds = []
-
-
-
-    # for l in listOfAllLocations:
-    #     latestSampleIds.append(l.latestSample().id)
-    #     print l.latestSample().id
-
-    latestSamples = []
-
-    if len(listOfAllLocations) != 0:
-
-        prev = listOfAllLocations[0].location_id
-        tempSamples = []
-        for s in listOfAllLocations:
-
-            if(s.location_id != prev):
-                latestSamples.append(tempSamples[0].id)
-
-                tempSamples = []
-
-            tempSamples.append(s)
-            prev = s.location_id
-
-        latestSamples.append(tempSamples[0].id)
-
-
-
-
-
-    # awesome = db.session.query(Sample).join(sample_taxonomy,Taxonomy).filter().all()
-    #
-    # # graphResults = Sample.query.options(joinedload('phys')).filter(Sample.phys_id == Physical_data.id,Chemical_data.id == Sample.chem_id,Sample.id.in_(latestSampleIds),Sample.location_id == Location.id).order_by(getattr(Chemical_data,element)).all()
-    # # awesome = Sample.query.filter(Sample.id.in_(latestSampleIds)).all()
-    # # # app.logger.debug(awesome)
-    # # app.logger.debug(awesome[0].taxon)
-
-    graphResults = Sample.query.filter(Sample.id==Sample_Taxonomy.sample_id,Sample_Taxonomy.taxonomy_id==Taxonomy.id,Sample.id.in_(latestSamples)).order_by(Sample_Taxonomy.sample_id).all()
-
-    # for a in awesome:
-    #     app.logger.debug(a.read_count)
-    #     app.logger.debug(a.taxon)
-
-    # app.logger.debug(dir(awesome[0].taxon[0].sample))
-
-
-    # print awesome[0]
-
-    data = {"plots":[]}
-
-    # app.logger.debug(graphResults.all())
-    # app.logger.debug((graphResults[0].taxon))
-
-    counter = 0
-    for result in graphResults:
-
-
-
-
-        readCount = 0.0
-        totalReads = 0.0
-
-
-
-
-
-
-        for r in result.samp_taxon:
-            if r.taxon[buglevel] == bugtype:
-                 readCount += r.read_count
-
-            totalReads += r.read_count
-
-        # app.logger.debug(str(readCount) + " " + str(totalReads) + ":" + str(result.id))
-        percent = readCount/totalReads
-        # app.logger.debug(readCount/totalReads)
-
-
-        data["plots"].append({'temperature':result.phys.initialTemp,'pH':result.phys.pH,'id':result.location.id,'sulfate':int(percent*100),'index':counter})
-
-        counter += 1
 
 
 
@@ -721,7 +637,7 @@ def getOverviewGraphJson(element):
 
 
     sample = Sample.query.with_entities(Physical_data.initialTemp,Physical_data.pH,Sample.id,getattr(Chemical_data,element),Location.id).filter(Sample.phys_id == Physical_data.id,Chemical_data.id == Sample.chem_id,Sample.id.in_(latestSampleIds),Sample.location_id == Location.id).order_by(getattr(Chemical_data,element))
-    
+
     data = {"plots":[]}
     graphResults = sample.all()
     counter = 0
@@ -737,7 +653,6 @@ def getOverviewTaxonLvl(taxonLvl):
 
     query = db.session.query(getattr(Taxonomy,taxonLvl).distinct().label(taxonLvl)).all()
     data = [x[0] for x in query]
-    app.logger.debug(data)
 
     data = {"types":data}
 
@@ -748,92 +663,45 @@ def getOverviewTaxonLvl(taxonLvl):
 def getOverviewGraphTaxonJson(buglevel, bugtype):
 
 
-    buglevel = urllib.unquote_plus(buglevel)
-    bugtype= urllib.unquote_plus(bugtype)
-    app.logger.debug(bugtype)
 
-    listOfAllLocations = Sample.query.filter(Sample.location_id == Location.id).order_by(Sample.location_id,Sample.date_gathered.desc()).all()
-    latestSampleIds = []
+    results = db.engine.execute("""select s.id, s.location_id, p.pH, p.initialTemp, st.read_count, t.domain,t.phylum
+from sample s, sample_taxonomy st, taxonomy t, physical_data p
+where s.id = st.sample_id and
+t.id = st.taxonomy_id and
+s.phys_id = p.id
+order by s.id""").fetchall()
 
-
-
-    # for l in listOfAllLocations:
-    #     latestSampleIds.append(l.latestSample().id)
-    #     print l.latestSample().id
-
-    latestSamples = []
-
-    if len(listOfAllLocations) != 0:
-
-        prev = listOfAllLocations[0].location_id
-        tempSamples = []
-        for s in listOfAllLocations:
-
-            if(s.location_id != prev):
-                latestSamples.append(tempSamples[0].id)
-
-                tempSamples = []
-
-            tempSamples.append(s)
-            prev = s.location_id
-
-        latestSamples.append(tempSamples[0].id)
-
-
-
-
-
-    # awesome = db.session.query(Sample).join(sample_taxonomy,Taxonomy).filter().all()
-    #
-    # # graphResults = Sample.query.options(joinedload('phys')).filter(Sample.phys_id == Physical_data.id,Chemical_data.id == Sample.chem_id,Sample.id.in_(latestSampleIds),Sample.location_id == Location.id).order_by(getattr(Chemical_data,element)).all()
-    # # awesome = Sample.query.filter(Sample.id.in_(latestSampleIds)).all()
-    # # # app.logger.debug(awesome)
-    # # app.logger.debug(awesome[0].taxon)
-
-    graphResults = Sample.query.filter(Sample.id==Sample_Taxonomy.sample_id,Sample_Taxonomy.taxonomy_id==Taxonomy.id,Sample.id.in_(latestSamples)).order_by(Sample_Taxonomy.sample_id).all()
-
-    # for a in awesome:
-    #     app.logger.debug(a.read_count)
-    #     app.logger.debug(a.taxon)
-
-    # app.logger.debug(dir(awesome[0].taxon[0].sample))
-
-
-    # print awesome[0]
-
+    mapping = ["id","location_id","pH","temp","read_count","domain","phylum"]
     data = {"plots":[]}
+    last_id = dict(zip(mapping,results[0]))
 
-    # app.logger.debug(graphResults.all())
-    # app.logger.debug((graphResults[0].taxon))
-
+    total_count = 0.0
+    total_match = 0.0
     counter = 0
-    for result in graphResults:
+    for index, r in enumerate(results):
+
+        formattedR = dict(zip(mapping,r))
+
+        if formattedR["id"] == last_id["id"]:
+            if formattedR[buglevel] == bugtype:
+                total_match += formattedR["read_count"]
+            total_count += formattedR["read_count"]
+        else:
+
+            percent = total_match/total_count
 
 
 
+            last = dict(zip(mapping,results[index-1]))
 
-        readCount = 0.0
-        totalReads = 0.0
+            data["plots"].append({'temperature':last["temp"],'pH':last["pH"],'id':last["location_id"],'sulfate':int(percent*100),'index':counter})
 
-
-
-
-
-
-        for r in result.samp_taxon:
-            if r.taxon[urllib.unquote_plus(buglevel)] == urllib.unquote_plus(bugtype):
-                 readCount += r.read_count
-
-            totalReads += r.read_count
-
-        # app.logger.debug(str(readCount) + " " + str(totalReads) + ":" + str(result.id))
-        percent = readCount/totalReads
-        # app.logger.debug(readCount/totalReads)
-
-
-        data["plots"].append({'temperature':result.phys.initialTemp,'pH':result.phys.pH,'id':result.location.id,'sulfate':int(percent*100),'index':counter})
-
-        counter += 1
+            counter += 1
+            total_count = 0.0
+            total_match = 0.0
+        last_id = formattedR
+    percent = total_match/total_count
+    data["plots"].append({'temperature':last_id["temp"],'pH':last_id["pH"],'id':last_id["location_id"],'sulfate':int(percent*100),'index':counter})
 
 
     return jsonify(data)
