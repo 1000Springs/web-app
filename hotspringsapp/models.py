@@ -137,7 +137,14 @@ class Sample(db.Model):
                     )
         rows = db.engine.execute(query, sample_id=self.id).fetchall()
         return [dict(zip(column_names,row)) for row in rows]
-
+    
+    def hasTaxonomy(self):
+        query = text(
+                    'select * from sample_taxonomy where sample_id = :sample_id limit 1'
+                    )
+        rows = db.engine.execute(query, sample_id=self.id).fetchall()
+        return len(rows) > 0
+        
     def __repr__(self):
         return '<Sample {0} {1} {2}>'.format(self.id,self.location_id,self.date_gathered)
 

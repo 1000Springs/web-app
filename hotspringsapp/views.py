@@ -385,7 +385,7 @@ def samplesite(site_id):
     if latestSample.phys is not None:
         gatheredInfoCount+= 1
 
-    if len(latestSample.getTaxonomy()) > 0:
+    if latestSample.hasTaxonomy():
         gatheredInfoCount+= 1
 
     gatheredInfoCount -= 1
