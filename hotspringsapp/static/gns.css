@@ -38,18 +38,18 @@ body    {
 }
 
 #container  {
-    border: medium none; 
-    margin: 0px auto; 
-    padding: 0px; 
-    width: 1024px; 
+    border: medium none;
+    margin: 0px auto;
+    padding: 0px;
+    width: 1024px;
     height: 100%;
 }
 
 #innerContainer {
-    width:1024px; 
-    margin: 0 auto; 
-    padding: 0; 
-    overflow: auto; 
+    width:1024px;
+    margin: 0 auto;
+    padding: 0;
+    overflow: auto;
     background-color: #FFFFFF;
 }
 
@@ -91,7 +91,7 @@ body    {
     border: 2px solid #DDDDFF;
 }
 
-.activeMenuItem a:link span, 
+.activeMenuItem a:link span,
 .selectedMenuItem a:link span,
 .inactiveMenuItem a:link span   {
     height: 24px;
@@ -113,7 +113,7 @@ body    {
 }
 
 .activeMenuItem a:visited span,
-.selectedMenuItem a:visited span, 
+.selectedMenuItem a:visited span,
 .inactiveMenuItem a:visited span {
      color: #fffaff;
 }
@@ -148,20 +148,20 @@ body    {
 #content {
     position: relative;
     /*margin-left: 200px;*/
-    overflow: hidden; 
-    /*padding: 0px 0 20px 0; 
+    overflow: hidden;
+    /*padding: 0px 0 20px 0;
 */    /*background-color: #FFFFFF;*/
 }
 
 #footer {
    /* height: 28px; */
-  
-  
-    overflow: hidden; 
-    padding-left: 10px; 
+
+
+    overflow: hidden;
+    padding-left: 10px;
     padding-top: 40px;
     background-color: #ffffff;
-  
+
 }
 
 #footer a {
@@ -181,17 +181,17 @@ body    {
 }
 
 .footerPanel {
-   overflow: hidden; 
-   height: 25px; 
+   overflow: hidden;
+   height: 25px;
    width: 1024px;
 }
 
 .footerMenuItem    {
-   height: 28px; 
-   width: 236px; 
-   overflow: hidden; 
-   float: left; 
-   padding-left: 0px; 
+   height: 28px;
+   width: 236px;
+   overflow: hidden;
+   float: left;
+   padding-left: 0px;
    padding-top: 5px;
 }
 
@@ -231,7 +231,7 @@ body    {
 
 
 #bounds {
-    margin:4px;	
+    margin:4px;
     overflow:auto;
    float: left;
    padding:0px 5px 10px 5px;
@@ -239,7 +239,7 @@ body    {
 }
 
 #bounds label {
-    
+
   -webkit-appearance: button;
 	padding:0px 5px;
 	float: left;
@@ -249,7 +249,7 @@ body    {
     /*text-align:center;*/
     padding:3px 0px;
     display:block;
-	
+
 }
 
 #bounds label input {
@@ -257,11 +257,11 @@ body    {
     top:-20px;
 }
 
-#bounds input:checked + span 
+#bounds input:checked + span
 {
     background-color:#404040;
     color:#F7F7F7;
-}   
+}
 
 #constraint
 {
@@ -280,12 +280,12 @@ margin:4px;
 padding:0px 5px;
 }
 
-.bodytype            
-{ 
+.bodytype
+{
 
 background-color:rgba(29,155,171,0.5);
 margin: 0px 0px;
-padding: 0px 15px; 
+padding: 0px 15px;
 
 
 height: 100%;
@@ -296,26 +296,26 @@ height: 100%;
 
 
 .springDesc
-{ 
+{
 background-color:rgba(29,155,171,0.5);
 
 }
-    
+
 
 .bodytype.span3
 {
-padding: 7px 12px; 
+padding: 7px 12px;
 
 }
 
 
 .infoWindow h5
 {
-  margin-bottom: 0; 
+  margin-bottom: 0;
 }
 
 #map_canvas
-{ 
+{
     /*height: 200px;*/
     background-color: #CCC;
 }
@@ -365,7 +365,7 @@ padding: 20px;
         box-shadow: 0 1px 2px rgba(0,0,0,.15);
 }
 
-.container 
+.container
 {
 width:480px;
 }
@@ -446,7 +446,7 @@ height: 100%;*/
   -webkit-border-radius: 0;
      -moz-border-radius: 0;
           border-radius: 0;
- 
+
 }
 
 .nav
@@ -532,7 +532,7 @@ background-image:-ms-linear-gradient(left, #ffffff 0%, #ffff00 50%,#ff0000 100%)
 background-image:-webkit-gradient(linear, left bottom, right bottom, color-stop(0%,#ffffff), color-stop(50%,#ffff00),color-stop(100%,#ff0000));}
 
 #tempSlider .ui-rangeSlider-bar
-{  
+{
   background: rgba(125,125,125,0.8);
 }
 
@@ -621,7 +621,7 @@ label
   margin:0 0 20px 0;
   font-family: 'questrialregular';
   font-size: 16px;
-  
+
 }
 
 #aboutText p
@@ -690,17 +690,17 @@ label
   color: black;
 }
 
-.district-tier 
+.district-tier
 {
 
 }
 
-.system-tier 
+.system-tier
 {
   padding-left: 25px;
 }
 
-.location-tier 
+.location-tier
 {
   padding-left: 50px;
 }
@@ -727,7 +727,7 @@ label
   color:white;
 }
 
-#browseby 
+#browseby
 {
   position:relative;
   background-color:white;
@@ -757,7 +757,7 @@ label
 
   background-color:rgba(29,155,171,0.5);
 margin: 0px 0px;
-padding: 0px 11px; 
+padding: 0px 11px;
 
 
 height: 100%;
@@ -890,17 +890,17 @@ height: 100%;
   background-color: white;
 }
 
-.opaque 
+.opaque
 {
-  background-color:#1D9BAB; 
+  background-color:#1D9BAB;
   background-color:rgba(29,155,171,0.5);
   position: relative;
 }
 
-.contrast 
+.contrast
 {
   color: #ffffff;
-  text-decoration: none;   
+  text-decoration: none;
 }
 
 .title
@@ -934,23 +934,23 @@ height: 100%;
 
 .smallIcons img
 {
-  float:right; 
-  margin:0 2px; 
+  float:right;
+  margin:0 2px;
   width:14px;
   height:14px;
 }
 
 .mediumIcons img
 {
-  float:right; 
-  margin:0 2px; 
+  float:right;
+  margin:0 2px;
   width:42px;
   height:42px;
 }
 
 input[type=radio]
 {
-  
+
 display: none;
 
 }
@@ -995,7 +995,7 @@ figcaption
 figcaption a
 {
    color:white;
-   
+
 }
 
 
@@ -1038,7 +1038,7 @@ border-radius: 10px;
 }
 
 
-.floaterR  
+.floaterR
 {
     float:right;
   margin: 10px 0px 10px 35px;
@@ -1071,11 +1071,11 @@ border-radius: 10px;
 
 .data_point .values p
 {
-  
+
   text-align:  center;
   border: 1px solid black;
- 
-  
+
+
 }
 
 .data_point .Min
@@ -1085,8 +1085,8 @@ border-radius: 10px;
     display: block;
     float: left;
     width: 50%;
-    -webkit-border-bottom-left-radius: 5px;  
-    -moz-border-radius-bottomleft: 5px; 
+    -webkit-border-bottom-left-radius: 5px;
+    -moz-border-radius-bottomleft: 5px;
     border-bottom-left-radius: 5px;
 }
 
@@ -1118,7 +1118,7 @@ border-bottom: 1px solid black;
 
 img.tourismLogo
 {
-  float:right; 
+  float:right;
   margin-right:4px;
   height:80px;
 }
@@ -1131,7 +1131,7 @@ img.tourismLogo
 
 #data_overview
 {
- 
+
    -webkit-border-radius: 0;
 -moz-border-radius: 0;
 border-radius: 0;
@@ -1142,7 +1142,7 @@ border-radius: 0;
 #field_vials
 {
   width: 280px;
-  margin-bottom: 0px; 
+  margin-bottom: 0px;
 }
 
 table#field_lab_table
@@ -1236,8 +1236,38 @@ height: 100px;
 
 .loading
 {
-  
- 
+
+
   display: none;
-  
+
+}
+
+#plot-controls .span6
+{
+  border-radius: 5px;
+  padding:10px;
+}
+
+#plot-controls select
+{
+  margin-bottom: 0px;
+}
+
+#plot-controls h3
+{
+  margin-top: 0px;
+  color:white;
+  font-weight:  normal;
+}
+
+#taxSelectors
+{
+
+  background: #135f69;
+}
+
+#chemSelectors
+{
+
+  background: #20afc1;
 }
