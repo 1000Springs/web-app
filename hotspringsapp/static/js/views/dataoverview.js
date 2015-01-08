@@ -8,14 +8,14 @@ function log10(val)
   return Math.log(val) / Math.LN10;
 }
 
-function loadData(endPoint,params)
+function loadData(endPoint,params, legendLabel)
 {
  $(".loading").show();
 $.get(endPoint + params)
       .done(function(data){
 
        $(".loading").hide();
-        makeChart(data,params);
+        makeChart(data,params, legendLabel);
 
 
       })
@@ -32,12 +32,12 @@ $.get(endPoint + params)
 $(document).ready(function() {
 
 
-loadData('/overviewGraphJson/',"sulfate");
+loadData('/overviewGraphJson/',"sulfate", "ppm");
 $('#chemList').val("sulfate").trigger("chosen:updated");
 
 $('#chemList').on('change', function(evt, params) {
    d3.select("#newGraph").select("svg").remove();
-   loadData("overviewGraphJson/",$(this).val());
+   loadData("overviewGraphJson/",$(this).val(), "ppm");
 
   });
 
@@ -69,7 +69,7 @@ $('#taxLvlList').on('change', function(evt, params) {
 $('#taxonSearch').on('click', function(evt, params) {
 
           d3.select("#newGraph").select("svg").remove();
-          loadData('/overviewTaxonGraphJson/'+$('#taxLvlList').val()+"/",$("#taxNameList").val());
+          loadData('/overviewTaxonGraphJson/'+$('#taxLvlList').val()+"/",$("#taxNameList").val(), "%");
   });
 
 
@@ -77,7 +77,7 @@ $('#taxonSearch').on('click', function(evt, params) {
 
 });
 
-function makeChart(plots,colName)
+function makeChart(plots,colName, legendLabel)
 {
 
 data = plots["plots"].slice();
@@ -111,10 +111,6 @@ var min = d3.min(data, function(d) { if(d.sulfate>0) return d.sulfate;});
 
 var localMax = d3.max(data, function(d) { if(d.index<(data.length-removeFromEachEnd)) return d.sulfate;});
 var localMin = d3.min(data, function(d) { if(d.sulfate>0 && d.index>removeFromEachEnd) return d.sulfate;});
-console.log("Min: " + min);
-console.log("Max: " + max);
-console.log("Local Min: " + localMin);
-console.log("Local Max: " + localMax);
 
 var counter = 0
 var plotColours = function(d){
@@ -146,23 +142,6 @@ var plotColours = function(d){
     colour = 0;
   }
 
-
-
-  // if(!normFirst)
-  // colour = 255-(Math.floor(((log10(d.sulfate) - log10(min))/(log10(max)-log10(min)))*255));
-  // else
-  // colour =  Math.floor(Math.abs(log10(sulfate) - log10(min))/(log10(max)-log10(min))*255);
-
-  // console.log("sulfate " + d.sulfate);
-  // console.log("log10 sulfate " + log10(d.sulfate));
-
-  //   console.log("min: " + min);
-  //   console.log("max: " + max);
-  //   console.log("log10 min: " + log10(min));
-  //   console.log("log10 max: " + log10(max));
-  //   console.log("Top: " + (log10(d.sulfate) - log10(min)));
-  //   console.log("Bottom: " + (log10(max)-log10(min)));
-  //   console.log(colour)
   counter++;
   return colour;
 };
@@ -263,13 +242,6 @@ var svg = d3.select("#newGraph").append("svg")
     .attr("x", width - 18)
     .attr("y", -5);
 
-    keyValue.append("tspan").text("N/A - ").attr("dy","0");
-    keyValue.append("tspan").text("Data not").attr("dy","15").attr("dx","-32");
-    keyValue.append("tspan").text("Currently").attr("dy","15").attr("dx","-50");
-    keyValue.append("tspan").text("Available").attr("dy","15").attr("dx","-51");
-
-
-
     var legend = svg.append("g")
     .attr("class", "legend")
     .attr("height", 0)
@@ -285,6 +257,11 @@ var svg = d3.select("#newGraph").append("svg")
     .attr("x", width - 25)
     .attr("y", 105)
     .text( max);
+    
+    legend.append("text")
+    .attr("x", width)
+    .attr("y", 50)
+    .text(legendLabel);    
 
 
     legend.append("rect")

@@ -24,6 +24,16 @@ class Location(db.Model):
 
     def latestSample(self):
         return Sample.query.filter(Location.id == self.id, Sample.location_id == Location.id ).order_by(Sample.location_id,Sample.date_gathered.desc()).first()
+    
+    @staticmethod
+    def latestSampleIdsAllLocations():
+        query = text('select id from sample s where s.date_gathered = (select max(date_gathered) from sample where location_id  = s.location_id limit 1 )')
+        rows = db.engine.execute(query).fetchall()  
+        sample_ids = []
+        for row in rows:
+            sample_ids.append(row[0])
+        
+        return sample_ids
 
     def __init__(self,location_id,fName,latPos,lngPos,fSystem,dist,loc,desc,private,access):
         self.id = location_id

@@ -627,14 +627,7 @@ def getTaxonomyJson(sampleNumber):
 @app.route('/overviewGraphJson/<element>')
 def getOverviewGraphJson(element):
 
-    listOfAllLocations = Location.query.filter(Sample.location_id == Location.id).order_by(Location.id).all()
-    latestSampleIds = []
-
-
-
-    for l in listOfAllLocations:
-        latestSampleIds.append(l.latestSample().id)
-
+    latestSampleIds = Location.latestSampleIdsAllLocations()
 
     sample = Sample.query.with_entities(Physical_data.initialTemp,Physical_data.pH,Sample.id,getattr(Chemical_data,element),Location.id).filter(Sample.phys_id == Physical_data.id,Chemical_data.id == Sample.chem_id,Sample.id.in_(latestSampleIds),Sample.location_id == Location.id).order_by(getattr(Chemical_data,element))
 
@@ -662,49 +655,33 @@ def getOverviewTaxonLvl(taxonLvl):
 @app.route('/overviewTaxonGraphJson/<buglevel>/<bugtype>')
 def getOverviewGraphTaxonJson(buglevel, bugtype):
 
+    # prevent SQL injection
+    if not (buglevel == 'domain' or buglevel =='phylum'):
+        raise Exception("Invalid taxonomy level("+buglevel+"), must be domain or phylum")
 
+    query = text(
+        """select s.id, s.location_id, p.pH, p.initialTemp,
+            sum(st.read_count) as total_count,
+            sum( if(t."""+buglevel+""" = :bugtype, st.read_count, 0)) as subset_count
+        from sample s
+        join physical_data p on s.phys_id = p.id
+        join sample_taxonomy st on s.id=st.sample_id
+        join taxonomy t on st.taxonomy_id = t.id 
+        group by s.id, s.location_id, p.pH, p.initialTemp
+        order by s.id"""
+    )
+    
+    results = db.engine.execute(query, bugtype=bugtype).fetchall()
 
-    results = db.engine.execute("""select s.id, s.location_id, p.pH, p.initialTemp, st.read_count, t.domain,t.phylum
-from sample s, sample_taxonomy st, taxonomy t, physical_data p
-where s.id = st.sample_id and
-t.id = st.taxonomy_id and
-s.phys_id = p.id
-order by s.id""").fetchall()
-
-    mapping = ["id","location_id","pH","temp","read_count","domain","phylum"]
+    mapping = ["id","location_id","pH","temp","total_count","subset_count"]
     data = {"plots":[]}
-    last_id = dict(zip(mapping,results[0]))
 
-    total_count = 0.0
-    total_match = 0.0
-    counter = 0
     for index, r in enumerate(results):
+        row = dict(zip(mapping,r))
+        percent = row['subset_count']/row['total_count']
+        data["plots"].append({'temperature':row["temp"],'pH':row["pH"],'id':row["location_id"],'sulfate':int(percent*100),'index':index})
 
-        formattedR = dict(zip(mapping,r))
-
-        if formattedR["id"] == last_id["id"]:
-            if formattedR[buglevel] == bugtype:
-                total_match += formattedR["read_count"]
-            total_count += formattedR["read_count"]
-        else:
-
-            percent = total_match/total_count
-
-
-
-            last = dict(zip(mapping,results[index-1]))
-
-            data["plots"].append({'temperature':last["temp"],'pH':last["pH"],'id':last["location_id"],'sulfate':int(percent*100),'index':counter})
-
-            counter += 1
-            total_count = 0.0
-            total_match = 0.0
-        last_id = formattedR
-    percent = total_match/total_count
-    data["plots"].append({'temperature':last_id["temp"],'pH':last_id["pH"],'id':last_id["location_id"],'sulfate':int(percent*100),'index':counter})
-
-
-    return jsonify(data)
+    return __cacheableResponse(jsonify(data), 1)
 
 
 @app.route('/taxon/<name>')
