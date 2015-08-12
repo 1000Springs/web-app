@@ -88,8 +88,8 @@ class Physical_data(db.Model):
 class Sample_Taxonomy(db.Model):
     __tablename__ = 'public_sample_taxonomy'
     id = db.Column(db.Integer, primary_key=True)
-    sample_id = db.Column( db.Integer, db.ForeignKey('sample.id'))
-    taxonomy_id = db.Column(db.Integer, db.ForeignKey('taxonomy.id'))
+    sample_id = db.Column( db.Integer, db.ForeignKey('public_sample.id'))
+    taxonomy_id = db.Column(db.Integer, db.ForeignKey('public_taxonomy.id'))
     read_count = db.Column(db.Integer)
     sample = db.relationship("Sample",backref="Sample_Taxonomy", lazy="select")
     taxon = db.relationship("Taxonomy",backref="Sample_Taxonomy", lazy="joined")
@@ -115,9 +115,9 @@ class Sample(db.Model):
     date_gathered = db.Column(db.DateTime, nullable=False)
     sampler = db.Column(db.String(50), nullable=False)
     sample_number = db.Column(db.String(50), nullable=False)
-    location_id = db.Column(db.Integer, db.ForeignKey("location.id"))
-    phys_id = db.Column(db.Integer, db.ForeignKey("physical_data.id"))
-    chem_id = db.Column(db.Integer, db.ForeignKey("chemical_data.id"))
+    location_id = db.Column(db.Integer, db.ForeignKey("public_location.id"))
+    phys_id = db.Column(db.Integer, db.ForeignKey("public_physical_data.id"))
+    chem_id = db.Column(db.Integer, db.ForeignKey("public_chemical_data.id"))
 
     location = db.relationship("Location",backref="Sample",lazy="select")
     phys = db.relationship("Physical_data",backref="Sample",lazy="select")
@@ -164,7 +164,7 @@ class Image(db.Model):
 
     __tablename__ = 'public_image'
     id = db.Column(db.Integer, primary_key=True)
-    sample_id = db.Column(db.Integer, db.ForeignKey("sample.id"), nullable=False)
+    sample_id = db.Column(db.Integer, db.ForeignKey("public_sample.id"), nullable=False)
     image_path = db.Column(db.String (150), nullable = False)
     image_type = db.Column(db.String (150))
 
