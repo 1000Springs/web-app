@@ -592,9 +592,9 @@ def getOverviewGraphTaxonJson(buglevel, bugtype):
             sum(st.read_count) as total_count,
             sum( if(t."""+buglevel+""" = :bugtype, st.read_count, 0)) as subset_count
         from public_sample s
-        join public_physical_data p on s.phys_id = p.id
-        join public_sample_taxonomy st on s.id=st.sample_id
-        join public_taxonomy t on st.taxonomy_id = t.id 
+        join physical_data p on s.phys_id = p.id
+        join sample_taxonomy st on s.id=st.sample_id
+        join taxonomy t on st.taxonomy_id = t.id 
         group by s.id, s.location_id, p.pH, p.initialTemp
         order by s.id"""
     )

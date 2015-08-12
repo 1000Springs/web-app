@@ -28,9 +28,13 @@ create or replace view public_sample_taxonomy as (
     join public_sample ps on st.sample_id = ps.id
 );
 
+create or replace view public_taxonomy_id as (
+    select distinct taxonomy_id from public_sample_taxonomy
+);
+
 create or replace view public_taxonomy as (
     select t.* from taxonomy t
-    join public_sample_taxonomy pst on pst.taxonomy_id = t.id
+    join public_taxonomy_id pti on pti.taxonomy_id = t.id
 );
 
 create or replace view public_confident_taxonomy as (
