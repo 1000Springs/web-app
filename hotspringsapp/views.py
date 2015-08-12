@@ -129,85 +129,16 @@ def findMinAndMax(name,field):
     return array
 
 
-# @app.route('/results')
-# def results():
-
-
-
-#     cur = g.db.cursor()
-
-#     #e.g. [u'temperature,=,50', u'redox,=,60', u'dissolved_oxygen,=,90']
-#     conditions = request.args.getlist("conditions")
-
-#     #e.g. [[u'temperature', u'=', u'50'], [u'redox', u'=', u'60'], [u'dissolved_oxygen', u'=', u'90']]
-#     conditions = [x.split(',') for x in conditions]
-
-#     #e.g. [u'temperature = 50', u'redox = 60', u'dissolved_oxygen = 90']
-#     conditions = [" ".join(x) for x in conditions]
-
-#     query = "Select * FROM physical_data where "
-
-#     #adds conditions onto end of query e.g. "temperature = 50 and"
-#     for cond in conditions[:-1]:
-#         query += (cond + " and ")
-
-#     #for the last item so that another "and" does not get added
-#     query += conditions[-1]
-
-#     cur.execute(query);
-
-#     entries = [dict(sample_id=row[0], phys_id=row[1], temperature=row[2], ph_level=row[3], redox=row[4], dissolved_oxygen=row[5], conductivity=row[6] ) for row in cur.fetchall()]
-
-#     cur.close()
-
-#     return render_template('results.html', entries=entries)
-
 @app.route('/mapresults')
 def mapResults():
-
-#     cur = g.db.cursor()
-
-#     sampleSites = request.args.getlist('sampleSite');
-
-#     sampleSites = "(" + ','.join(["'"+x+"'" for x in sampleSites]) + ")"
-
-#     query = """Select p.sample_id,p.phys_id,p.initialTemp,p.ph_level,p.redox,p.dissolved_oxygen,p.conductivity
-#                from physical_data p, location l, sample s
-#                where s.sample_id = p.sample_id
-#                and s.location_feature_nc = l.feature_nc
-#                and l.feature_nc in {selectedSites}""".format(selectedSites=sampleSites)
-
-#     cur.execute(query)
-
-#     entries = [dict(sample_id=row[0], phys_id=row[1], temperature=row[2], ph_level=row[3], redox=row[4], dissolved_oxygen=row[5], conductivity=row[6] ) for row in cur.fetchall()]
-
-#     cur.close();
 
     return "Not working yet"
 
 @app.route('/mapsearch')
 def mapsearch():
 
-#     cur = g.db.cursor()
-
-#     cur.execute("""select s.location_feature_nc,l.common_feature_name,l.feature_system,l.description,p.initialTemp, l.lat,l.lng
-#                 from sample s, physical_data p, location l
-#                 where l.FEATURE_NC = s.location_feature_nc
-#                 and p.sample_id = s.sample_id
-#                 and s.sample_id in
-#                     (select sample_id
-#                     from sample group
-#                     by location_feature_nc
-#                     having max(date_gathered))""")
-
-    # positions = [dict(lat=float(row[5]),lng=row[6],city=row[2],  desc=row[3], feature_name=row[1],id=row[0]) for row in cur.fetchall()]
-
     locations = Location.query.filter(Sample.location_id == Location.id)
-
-#     cur.close()
-
     return render_template('mapsearch.html',positions=locations)
-    # return "Coming Soon"
 
 
 def url_for_other_page(page = 1,showAll=None):
@@ -354,18 +285,15 @@ def methodologies():
 @app.route('/dataoverview')
 def dataoverview():
 
-
-
-
-
-    #"Chemical_data.<elementname>" -> "<elementname>"| we don't want to show ID
-    chemNames = [str(x).split('.')[1] for x in Chemical_data.__table__.columns if str(x).split('.')[1] != 'id']
+    #"Chemical_data.<elementname>" -> "<elementname>"| we don't want to show ID or elements not actually tested for
+    skippedCols = ['id', 'N', 'P', 'Cl', 'C', 'In', 'Ti', 'Bi']
+    chemNames = [str(x).split('.')[1] for x in Chemical_data.__table__.columns if str(x).split('.')[1] not in skippedCols]
     taxLvls = ["domain","phylum"]
     query = db.session.query(Taxonomy.domain.distinct().label("domain"))
 
     taxNames = [row.domain for row in query.all()]
 
-    return render_template('dataoverview.html',chemColumns=chemNames,taxColumns=taxNames,taxLevels=taxLvls)
+    return render_template('dataoverview.html',chemColumns=sorted(chemNames),taxColumns=taxNames,taxLevels=sorted(taxLvls))
 
 @app.route('/samplesite/<int:site_id>')
 def samplesite(site_id):
@@ -647,7 +575,7 @@ def getOverviewTaxonLvl(taxonLvl):
     query = db.session.query(getattr(Taxonomy,taxonLvl).distinct().label(taxonLvl)).all()
     data = [x[0] for x in query]
 
-    data = {"types":data}
+    data = {"types": sorted(data)}
 
     return __cacheableResponse(jsonify(data), 1)
 
@@ -663,7 +591,7 @@ def getOverviewGraphTaxonJson(buglevel, bugtype):
         """select s.id, s.location_id, p.pH, p.initialTemp,
             sum(st.read_count) as total_count,
             sum( if(t."""+buglevel+""" = :bugtype, st.read_count, 0)) as subset_count
-        from sample s
+        from public_sample s
         join physical_data p on s.phys_id = p.id
         join sample_taxonomy st on s.id=st.sample_id
         join taxonomy t on st.taxonomy_id = t.id 
