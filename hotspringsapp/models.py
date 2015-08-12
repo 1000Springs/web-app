@@ -9,7 +9,7 @@ from sqlalchemy.orm import sessionmaker
 
 
 class Location(db.Model):
-
+    __tablename__ = 'public_location'
     id = db.Column(db.Integer, primary_key=True)
     feature_name = db.Column(db.String(50))
     feature_system = db.Column(db.String(50))
@@ -27,7 +27,7 @@ class Location(db.Model):
     
     @staticmethod
     def latestSampleIdsAllLocations():
-        query = text('select id from sample s where s.date_gathered = (select max(date_gathered) from sample where location_id  = s.location_id limit 1 )')
+        query = text('select id from public_sample s where s.date_gathered = (select max(date_gathered) from public_sample where location_id  = s.location_id limit 1 )')
         rows = db.engine.execute(query).fetchall()  
         sample_ids = []
         for row in rows:
@@ -54,7 +54,7 @@ class Location(db.Model):
 
 
 class Physical_data(db.Model):
-
+    __tablename__ = 'public_physical_data'
     id = db.Column(db.Integer, primary_key=True)
     initialTemp = db.Column(db.Float)
     sampleTemp = db.Column(db.Float)
@@ -86,7 +86,7 @@ class Physical_data(db.Model):
         self.sampleTemp       = sTemp
 
 class Sample_Taxonomy(db.Model):
-    __tablename__ = 'sample_taxonomy'
+    __tablename__ = 'public_sample_taxonomy'
     id = db.Column(db.Integer, primary_key=True)
     sample_id = db.Column( db.Integer, db.ForeignKey('sample.id'))
     taxonomy_id = db.Column(db.Integer, db.ForeignKey('taxonomy.id'))
@@ -96,6 +96,7 @@ class Sample_Taxonomy(db.Model):
 
 
 class Taxonomy(db.Model):
+    __tablename__ = 'public_taxonomy'
     id = db.Column(db.Integer, primary_key=True)
 
     domain = db.Column(db.String(100), nullable=True)
@@ -109,7 +110,7 @@ class Taxonomy(db.Model):
         return getattr(self,index)
 
 class Sample(db.Model):
-
+    __tablename__ = 'public_sample'
     id = db.Column(db.Integer, primary_key=True)
     date_gathered = db.Column(db.DateTime, nullable=False)
     sampler = db.Column(db.String(50), nullable=False)
@@ -142,7 +143,7 @@ class Sample(db.Model):
         # SQLAlchemy ORM, so query the DB with raw SQL
         column_names = ["read_count", "domain", "phylum", "class", "order", "family", "genus", "species"]
         query = text(
-                    'select `' + ('`,`'.join(column_names)) + '` from confident_taxonomy where sample_id = :sample_id' +
+                    'select `' + ('`,`'.join(column_names)) + '` from public_confident_taxonomy where sample_id = :sample_id' +
                     ' order by `'+ ('`,`'.join(column_names[1:])) +'`'
                     )
         rows = db.engine.execute(query, sample_id=self.id).fetchall()
@@ -150,7 +151,7 @@ class Sample(db.Model):
     
     def hasTaxonomy(self):
         query = text(
-                    'select * from sample_taxonomy where sample_id = :sample_id limit 1'
+                    'select * from public_sample_taxonomy where sample_id = :sample_id limit 1'
                     )
         rows = db.engine.execute(query, sample_id=self.id).fetchall()
         return len(rows) > 0
@@ -161,6 +162,7 @@ class Sample(db.Model):
 
 class Image(db.Model):
 
+    __tablename__ = 'public_image'
     id = db.Column(db.Integer, primary_key=True)
     sample_id = db.Column(db.Integer, db.ForeignKey("sample.id"), nullable=False)
     image_path = db.Column(db.String (150), nullable = False)
@@ -176,7 +178,6 @@ class Image(db.Model):
 
 
 class User(db.Model):
-
     username = db.Column(db.String(100), primary_key=True)
     password = db.Column(db.String(100))
 
@@ -194,7 +195,7 @@ class User(db.Model):
 
 
 class Chemical_data(db.Model):
-
+    __tablename__ = 'public_chemical_data'
     id = db.Column(db.Integer, primary_key=True)
     Li    = db.Column(db.Float)
     B     = db.Column(db.Float)
