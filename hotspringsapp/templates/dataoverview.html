@@ -91,18 +91,16 @@
           <select data-placeholder="Pick a chemical" class="chosen-select" id="chemList">
 
 
-          {% for c in chemColumns %}
-
-         <option value="{{c}}">{{c|capitalize}}</option>
-
-         {% endfor %}
-         </select>
+          {% for chem in chemColumns %}	  
+         	 <option value="{{chem}}">{{chemColumns[chem]}}</option>
+          {% endfor %}
+          </select>
 
        </div>
 
          <div id="taxSelectors" class="span6">
            <h3>Taxonomy Comparison</h3>
-         <select data-placeholder="Pick a Taxonomy Level" class="chosen-select" id="taxLvlList">
+         <select data-placeholder="Pick a Taxonomy Level" class="chosen-select" id="taxLvlList" style="width: 210px;">
 
          {% for c in taxLevels %}
 
@@ -111,7 +109,7 @@
 
         {% endfor %}
         </select>
-         <select data-placeholder="Pick a Taxonomy Level" class="chosen-select" id="taxNameList">
+         <select data-placeholder="Pick a Taxonomy Level" class="chosen-select" id="taxNameList" style="width: 210px;">
 
          {% for c in taxColumns %}
 

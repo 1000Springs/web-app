@@ -12,6 +12,8 @@ from flask.ext.sqlalchemy import get_debug_queries
 from werkzeug.datastructures import Headers
 import json
 import urllib2,urllib
+from collections import OrderedDict
+import re
 
 
 from flask import Flask, url_for, render_template, request, g, session, flash, redirect, Response, abort, jsonify, make_response, send_from_directory
@@ -287,13 +289,24 @@ def dataoverview():
 
     #"Chemical_data.<elementname>" -> "<elementname>"| we don't want to show ID or elements not actually tested for
     skippedCols = ['id', 'N', 'P', 'Cl', 'C', 'In', 'Ti', 'Bi']
-    chemNames = [str(x).split('.')[1] for x in Chemical_data.__table__.columns if str(x).split('.')[1] not in skippedCols]
+    digitRegex = re.compile('[0-9]{1}')
+    mappedCols = {'Cobolt': 'Co'}
+    for x in Chemical_data.__table__.columns:
+        chem = str(x).split('.')[1]
+        if chem not in skippedCols and chem not in mappedCols:
+            chemName = chem.capitalize() if len(chem) > 3 else chem
+            mappedCols[chem] = digitRegex.sub(subscriptDigit, chemName)
+            
+    chemNames = OrderedDict(sorted(mappedCols.items()))
     taxLvls = ["domain","phylum"]
     query = db.session.query(Taxonomy.domain.distinct().label("domain"))
 
     taxNames = [row.domain for row in query.all()]
 
-    return render_template('dataoverview.html',chemColumns=sorted(chemNames),taxColumns=taxNames,taxLevels=sorted(taxLvls))
+    return render_template('dataoverview.html',chemColumns=chemNames,taxColumns=taxNames,taxLevels=sorted(taxLvls))
+
+def subscriptDigit(match):
+    return unichr(8320 + int(match.group()))
 
 @app.route('/samplesite/<int:site_id>')
 def samplesite(site_id):
