@@ -106,44 +106,44 @@ var xAxis = d3.svg.axis()
 var yAxis = d3.svg.axis()
     .scale(y)
     .orient("left");
-var max = d3.max(data, function(d) { return d.sulfate;} );
-var min = d3.min(data, function(d) { if(d.sulfate>0) return d.sulfate;});
+var max = d3.max(data, function(d) { return d.value;} );
+var min = d3.min(data, function(d) { if(d.value>0) return d.value;});
 
-var localMax = d3.max(data, function(d) { if(d.index<(data.length-removeFromEachEnd)) return d.sulfate;});
-var localMin = d3.min(data, function(d) { if(d.sulfate>0 && d.index>removeFromEachEnd) return d.sulfate;});
+var localMax = d3.max(data, function(d) { if(d.index<(data.length-removeFromEachEnd)) return d.value;});
+var localMin = d3.min(data, function(d) { if(d.value>0 && d.index>removeFromEachEnd) return d.value;});
 
 var counter = 0
-var plotColours = function(d){
-   var normFirst = false;
-  var sulfate = d.sulfate/localMax;
-   var colour = 0;
 
-  if(d.sulfate === null)
-  {
-      colour = null;
+var plotColours = function(d) {
+    var normFirst = false;
+    var value = d.value/localMax;
+    var colour = 0;
 
-  }
-  else if(d.sulfate < 0)
-  {//values that were below the threshold will appear as yellow with a value of zero
-      colour = 255;
-  }
-  // Gets a percentage of the values starting at the median i.e 95% of the values would mean we'd exclude the first and last 2.5% of the data plots
-  else if(counter >= removeFromEachEnd || counter <=(data.length-removeFromEachEnd))
-  {
-    //This will return a number between 1 and 254, as 0 and 255 are taken up by values outside of the percentage threshold
-    colour =  1+(253-(Math.floor((((d.sulfate) - (localMin))/((localMax)-(localMin)))*253)));
-  }
-  else if(counter <= removeFromEachEnd )
-  {
-    colour = 255;
-  }
-  else if ( counter >=(data.length-removeFromEachEnd))
-  {
-    colour = 0;
-  }
+    if(d.value === null || d.value === 0) {
+    	colour = null;
+    } else if(d.value < 0) {
+    	//values that were below the threshold will appear as yellow with a value of zero
+    	colour = 255;
+    	
+    } else if(counter >= removeFromEachEnd || counter <=(data.length-removeFromEachEnd)) {
+	    // Gets a percentage of the values starting at the median i.e 95% of the values would mean we'd exclude the first and last 2.5% of the data plots
+	    //This will return a number between 1 and 254, as 0 and 255 are taken up by values outside of the percentage threshold
+	    colour =  1+(253-(Math.floor((((d.value) - (localMin))/((localMax)-(localMin)))*253)));
+	    
+    } else if(counter <= removeFromEachEnd ) {
+    	colour = 255;
+    	
+    } else if ( counter >=(data.length-removeFromEachEnd)) {
+    	colour = 0;
+    }
 
-  counter++;
-  return colour;
+    counter++;
+    
+    if (colour === null) {
+    	return "rgb(255,255,255)";
+    } else {
+    	return "rgb(255,"+colour+",0)";
+    }
 };
 
 var svg = d3.select("#newGraph").append("svg")
@@ -158,15 +158,15 @@ var svg = d3.select("#newGraph").append("svg")
 
   tip = d3.tip().attr('class', 'd3-tip').html(function(d) {
     columnName = 0
-    if(d.sulfate!==null)
+    if(d.value!==null)
     {
-      if(d.sulfate < 0)
+      if(d.value < 0)
       {
         columnName = 0;
       }
       else
       {
-      columnName = d.sulfate;
+      columnName = d.value;
       }
     }
     else
@@ -216,7 +216,7 @@ var svg = d3.select("#newGraph").append("svg")
       .attr("cy", function(d) { return y(d.temperature); })
     .attr("title", function(d) { return d.id})
     .attr("stroke","black")
-      .style("fill", function(d) { return "rgb(255,"+plotColours(d)+",0)" })
+      .style("fill", function(d) { return plotColours(d) })
     .on("mouseover", function(d) {
        d3.select(this).attr("r", 10)
        .attr("stroke-width",cBorderHover);

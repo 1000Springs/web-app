@@ -288,22 +288,26 @@ def methodologies():
 def dataoverview():
 
     #"Chemical_data.<elementname>" -> "<elementname>"| we don't want to show ID or elements not actually tested for
-    skippedCols = ['id', 'N', 'P', 'Cl', 'C', 'In', 'Ti', 'Bi']
+    # Remove 'cobolt' and replace it with 'Co'
+    skippedCols = ['id', 'N', 'P', 'Cl', 'C', 'In', 'Ti', 'Bi', 'cobalt']
     digitRegex = re.compile('[0-9]{1}')
-    mappedCols = {'Cobolt': 'Co'}
+    mappedCols = {'cobalt': 'Co'}
     for x in Chemical_data.__table__.columns:
         chem = str(x).split('.')[1]
         if chem not in skippedCols and chem not in mappedCols:
             chemName = chem.capitalize() if len(chem) > 3 else chem
             mappedCols[chem] = digitRegex.sub(subscriptDigit, chemName)
             
-    chemNames = OrderedDict(sorted(mappedCols.items()))
+    chemNames = OrderedDict(sorted(mappedCols.items(), key=lambda item: item[0].lower()))
     taxLvls = ["domain","phylum"]
     query = db.session.query(Taxonomy.domain.distinct().label("domain"))
 
     taxNames = [row.domain for row in query.all()]
 
-    return render_template('dataoverview.html',chemColumns=chemNames,taxColumns=taxNames,taxLevels=sorted(taxLvls))
+    return render_template('dataoverview.html',
+                           chemColumns=chemNames,
+                           taxColumns=sorted(taxNames, key=lambda s: s.lower()),
+                           taxLevels=sorted(taxLvls, key=lambda s: s.lower()))
 
 def subscriptDigit(match):
     return unichr(8320 + int(match.group()))
@@ -576,7 +580,7 @@ def getOverviewGraphJson(element):
     graphResults = sample.all()
     counter = 0
     for x in graphResults:
-        data["plots"].append({'temperature':x[0],'pH':x[1],'id':x[4],'sulfate':x[3],'index':counter})
+        data["plots"].append({'temperature':x[0],'pH':x[1],'id':x[4],'value':x[3],'index':counter})
         counter += 1
 
 
@@ -588,7 +592,7 @@ def getOverviewTaxonLvl(taxonLvl):
     query = db.session.query(getattr(Taxonomy,taxonLvl).distinct().label(taxonLvl)).all()
     data = [x[0] for x in query]
 
-    data = {"types": sorted(data)}
+    data = {"types": sorted(data, key=lambda s: s.lower())}
 
     return __cacheableResponse(jsonify(data), 1)
 
@@ -620,7 +624,7 @@ def getOverviewGraphTaxonJson(buglevel, bugtype):
     for index, r in enumerate(results):
         row = dict(zip(mapping,r))
         percent = row['subset_count']/row['total_count']
-        data["plots"].append({'temperature':row["temp"],'pH':row["pH"],'id':row["location_id"],'sulfate':int(percent*100),'index':index})
+        data["plots"].append({'temperature':row["temp"],'pH':row["pH"],'id':row["location_id"],'value':int(percent*100),'index':index})
 
     return __cacheableResponse(jsonify(data), 1)
 
