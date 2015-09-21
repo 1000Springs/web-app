@@ -8,20 +8,17 @@ function log10(val)
   return Math.log(val) / Math.LN10;
 }
 
-function loadData(endPoint,params, legendLabel)
+function loadData(endPoint, params, label, scaleLabel)
 {
  $(".loading").show();
 $.get(endPoint + params)
       .done(function(data){
 
-       $(".loading").hide();
-        makeChart(data,params, legendLabel);
-
-
+      $(".loading").hide();
+        makeChart(data, label, scaleLabel);
       })
       .fail(function(jqXHR, textStatus, errorThrown) {
-         $('#dataTab').html('<h4 style="height: 250px;">The chemistry data for this site is coming soon</h4>');
-
+         $('#dataTab').html('<h4 style="height: 250px;">An error occurred downloading data</h4>');
       });
 
 }
@@ -32,12 +29,12 @@ $.get(endPoint + params)
 $(document).ready(function() {
 
 
-loadData('/overviewGraphJson/',"sulfate", "ppm");
+loadData('/overviewGraphJson/',"sulfate", "Sulfate", "ppm");
 $('#chemList').val("sulfate").trigger("chosen:updated");
 
 $('#chemList').on('change', function(evt, params) {
    d3.select("#newGraph").select("svg").remove();
-   loadData("overviewGraphJson/",$(this).val(), "ppm");
+   loadData("overviewGraphJson/", $(this).val(), $('#chemList option:selected').text(), "ppm");
 
   });
 
@@ -69,7 +66,8 @@ $('#taxLvlList').on('change', function(evt, params) {
 $('#taxonSearch').on('click', function(evt, params) {
 
           d3.select("#newGraph").select("svg").remove();
-          loadData('/overviewTaxonGraphJson/'+$('#taxLvlList').val()+"/",$("#taxNameList").val(), "%");
+          var domainPhylum = $("#taxNameList").val();
+          loadData('/overviewTaxonGraphJson/'+$('#taxLvlList').val()+"/",domainPhylum, domainPhylum, "%");
   });
 
 
@@ -77,7 +75,7 @@ $('#taxonSearch').on('click', function(evt, params) {
 
 });
 
-function makeChart(plots,colName, legendLabel)
+function makeChart(plots,colName, scaleLabel)
 {
 
 data = plots["plots"].slice();
@@ -119,11 +117,10 @@ var plotColours = function(d) {
     var value = d.value/localMax;
     var colour = 0;
 
-    if(d.value === null || d.value === 0) {
+    if(d.value === null || d.value <= 0) {
+    	// values that were below the detection limit will appear as white dots,
+    	// and won't be counted in the colour scale calculation
     	colour = null;
-    } else if(d.value < 0) {
-    	//values that were below the threshold will appear as yellow with a value of zero
-    	colour = 255;
     	
     } else if(counter >= removeFromEachEnd || counter <=(data.length-removeFromEachEnd)) {
 	    // Gets a percentage of the values starting at the median i.e 95% of the values would mean we'd exclude the first and last 2.5% of the data plots
@@ -136,12 +133,11 @@ var plotColours = function(d) {
     } else if ( counter >=(data.length-removeFromEachEnd)) {
     	colour = 0;
     }
-
-    counter++;
     
     if (colour === null) {
     	return "rgb(255,255,255)";
     } else {
+    	counter++;
     	return "rgb(255,"+colour+",0)";
     }
 };
@@ -162,7 +158,8 @@ var svg = d3.select("#newGraph").append("svg")
     {
       if(d.value < 0)
       {
-        columnName = 0;
+    	// below detection limit
+        columnName = '< '+Math.abs(d.value);
       }
       else
       {
@@ -261,7 +258,7 @@ var svg = d3.select("#newGraph").append("svg")
     legend.append("text")
     .attr("x", width)
     .attr("y", 50)
-    .text(legendLabel);    
+    .text(scaleLabel);    
 
 
     legend.append("rect")

@@ -289,16 +289,20 @@ def dataoverview():
 
     #"Chemical_data.<elementname>" -> "<elementname>"| we don't want to show ID or elements not actually tested for
     # Remove 'cobolt' and replace it with 'Co'
-    skippedCols = ['id', 'N', 'P', 'Cl', 'C', 'In', 'Ti', 'Bi', 'cobalt']
+    skippedCols = ['id', 'N', 'P', 'Cl', 'C', 'In', 'Ti', 'Bi', 'La']
     digitRegex = re.compile('[0-9]{1}')
-    mappedCols = {'cobalt': 'Co'}
+    chemMap = getChemMap()
+    chemCols = {}
     for x in Chemical_data.__table__.columns:
         chem = str(x).split('.')[1]
-        if chem not in skippedCols and chem not in mappedCols:
-            chemName = chem.capitalize() if len(chem) > 3 else chem
-            mappedCols[chem] = digitRegex.sub(subscriptDigit, chemName)
+        if chem not in skippedCols:
+            if chem in chemMap:
+                chemCols[chem] = chemMap[chem]
+            else:
+                chemName = chem.capitalize() if len(chem) > 3 else chem
+                chemCols[chem] = digitRegex.sub(subscriptDigit, chemName)
             
-    chemNames = OrderedDict(sorted(mappedCols.items(), key=lambda item: item[0].lower()))
+    chemNames = OrderedDict(sorted(chemCols.items(), key=lambda item: item[1].lower()))
     taxLvls = ["domain","phylum"]
     query = db.session.query(Taxonomy.domain.distinct().label("domain"))
 
@@ -312,6 +316,54 @@ def dataoverview():
 def subscriptDigit(match):
     return unichr(8320 + int(match.group()))
 
+def getChemMap():
+    chemMap = {
+            'Al': 'Aluminium',
+            'NH4': 'Ammonium',
+            'As': 'Arsenic',
+            'Ba': 'Barium',
+            'HCO3': 'Bicarbonate',
+            'B': 'Boron',
+            'Br': 'Bromine',
+            'Cd': 'Cadmium',
+            'Cs': 'Caesium',
+            'Ca': 'Calcium',
+            'CO': 'Carbon Monoxide',
+            'Cl': 'Chloride',
+            'Cr': 'Chromium',
+            'Co': 'Cobalt',
+            'Cu': 'Copper',
+            'iron2': 'Ferrous Iron',
+            'H2': 'Hydrogen',
+            'H2S': 'Hydrogen Sulphide',
+            'Fe': 'Iron',
+            'Pb': 'Lead',
+            'Li': 'Lithium',
+            'Mg': 'Magnesium',
+            'Mn': 'Manganese',
+            'Hg': 'Mercury',
+            'CH4': 'Methane',
+            'Mo': 'Molybdenum',
+            'Ni': 'Nickel',
+            'NO3': 'Nitrate',
+            'NO2': 'Nitrite',
+            'PO4': 'Phosphate',
+            'K': 'Potassium',
+            'Rb': 'Rudibium',
+            'Se': 'Selenium',
+            'Si': 'Silicon',
+            'Ag': 'Silver',
+            'Na': 'Sodium',
+            'Sr': 'Strontium',
+            'SO4': 'Sulphate',
+            'S': 'Sulpur',
+            'Tl': 'Thallium',
+            'U': 'Uranium',
+            'V': 'Vanadium',
+            'Zn': 'Zinc'  
+        }
+    return chemMap
+    
 @app.route('/samplesite/<int:site_id>')
 def samplesite(site_id):
 

@@ -243,6 +243,7 @@ class Chemical_data(db.Model):
     phosphate = db.Column(db.Float)
     iron2  = db.Column(db.Float)
     bicarbonate = db.Column(db.Float)
+    thallium = db.Column(db.Float)
 
     def returnElements(self):
         elements = []
