@@ -12,6 +12,8 @@ from flask.ext.sqlalchemy import get_debug_queries
 from werkzeug.datastructures import Headers
 import json
 import urllib2,urllib
+from collections import OrderedDict
+import re
 
 
 from flask import Flask, url_for, render_template, request, g, session, flash, redirect, Response, abort, jsonify, make_response, send_from_directory
@@ -286,15 +288,82 @@ def methodologies():
 def dataoverview():
 
     #"Chemical_data.<elementname>" -> "<elementname>"| we don't want to show ID or elements not actually tested for
-    skippedCols = ['id', 'N', 'P', 'Cl', 'C', 'In', 'Ti', 'Bi']
-    chemNames = [str(x).split('.')[1] for x in Chemical_data.__table__.columns if str(x).split('.')[1] not in skippedCols]
+    # Remove 'cobolt' and replace it with 'Co'
+    skippedCols = ['id', 'N', 'P', 'Cl', 'C', 'In', 'Ti', 'Bi', 'La']
+    digitRegex = re.compile('[0-9]{1}')
+    chemMap = getChemMap()
+    chemCols = {}
+    for x in Chemical_data.__table__.columns:
+        chem = str(x).split('.')[1]
+        if chem not in skippedCols:
+            if chem in chemMap:
+                chemCols[chem] = chemMap[chem]
+            else:
+                chemName = chem.capitalize() if len(chem) > 3 else chem
+                chemCols[chem] = digitRegex.sub(subscriptDigit, chemName)
+            
+    chemNames = OrderedDict(sorted(chemCols.items(), key=lambda item: item[1].lower()))
     taxLvls = ["domain","phylum"]
     query = db.session.query(Taxonomy.domain.distinct().label("domain"))
 
     taxNames = [row.domain for row in query.all()]
 
-    return render_template('dataoverview.html',chemColumns=sorted(chemNames),taxColumns=taxNames,taxLevels=sorted(taxLvls))
+    return render_template('dataoverview.html',
+                           chemColumns=chemNames,
+                           taxColumns=sorted(taxNames, key=lambda s: s.lower()),
+                           taxLevels=sorted(taxLvls, key=lambda s: s.lower()))
 
+def subscriptDigit(match):
+    return unichr(8320 + int(match.group()))
+
+def getChemMap():
+    chemMap = {
+            'Al': 'Aluminium',
+            'NH4': 'Ammonium',
+            'As': 'Arsenic',
+            'Ba': 'Barium',
+            'HCO3': 'Bicarbonate',
+            'B': 'Boron',
+            'Br': 'Bromine',
+            'Cd': 'Cadmium',
+            'Cs': 'Caesium',
+            'Ca': 'Calcium',
+            'CO': 'Carbon Monoxide',
+            'Cl': 'Chloride',
+            'Cr': 'Chromium',
+            'Co': 'Cobalt',
+            'Cu': 'Copper',
+            'iron2': 'Ferrous Iron',
+            'H2': 'Hydrogen',
+            'H2S': 'Hydrogen Sulphide',
+            'Fe': 'Iron',
+            'Pb': 'Lead',
+            'Li': 'Lithium',
+            'Mg': 'Magnesium',
+            'Mn': 'Manganese',
+            'Hg': 'Mercury',
+            'CH4': 'Methane',
+            'Mo': 'Molybdenum',
+            'Ni': 'Nickel',
+            'NO3': 'Nitrate',
+            'NO2': 'Nitrite',
+            'PO4': 'Phosphate',
+            'K': 'Potassium',
+            'Rb': 'Rudibium',
+            'Se': 'Selenium',
+            'Si': 'Silicon',
+            'Ag': 'Silver',
+            'Na': 'Sodium',
+            'Sr': 'Strontium',
+            'SO4': 'Sulphate',
+            'S': 'Sulpur',
+            'Tl': 'Thallium',
+            'U': 'Uranium',
+            'V': 'Vanadium',
+            'Zn': 'Zinc'  
+        }
+    return chemMap
+    
 @app.route('/samplesite/<int:site_id>')
 def samplesite(site_id):
 
@@ -563,7 +632,7 @@ def getOverviewGraphJson(element):
     graphResults = sample.all()
     counter = 0
     for x in graphResults:
-        data["plots"].append({'temperature':x[0],'pH':x[1],'id':x[4],'sulfate':x[3],'index':counter})
+        data["plots"].append({'temperature':x[0],'pH':x[1],'id':x[4],'value':x[3],'index':counter})
         counter += 1
 
 
@@ -575,7 +644,7 @@ def getOverviewTaxonLvl(taxonLvl):
     query = db.session.query(getattr(Taxonomy,taxonLvl).distinct().label(taxonLvl)).all()
     data = [x[0] for x in query]
 
-    data = {"types": sorted(data)}
+    data = {"types": sorted(data, key=lambda s: s.lower())}
 
     return __cacheableResponse(jsonify(data), 1)
 
@@ -607,7 +676,7 @@ def getOverviewGraphTaxonJson(buglevel, bugtype):
     for index, r in enumerate(results):
         row = dict(zip(mapping,r))
         percent = row['subset_count']/row['total_count']
-        data["plots"].append({'temperature':row["temp"],'pH':row["pH"],'id':row["location_id"],'sulfate':int(percent*100),'index':index})
+        data["plots"].append({'temperature':row["temp"],'pH':row["pH"],'id':row["location_id"],'value':int(percent*100),'index':index})
 
     return __cacheableResponse(jsonify(data), 1)
 
