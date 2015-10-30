@@ -21,6 +21,7 @@ from models import *
 from forms import *
 
 from werkzeug.contrib.cache import SimpleCache
+initTaxonomyCacheRunning = False
 taxonomyCache = SimpleCache(60 * 60 * 24 * 365 * 5) # cache items for 5 years by default
 
 @app.errorhandler(404)
@@ -596,12 +597,15 @@ def initializeTaxonomyCache():
     # sample site/microbial diversity page. Needs to be kicked off after each
     # taxonomy data upload. Total cache size required for 1100 samples
     # estimated to be around 30Mb
-    app.logger.debug('initializeTaxonomyCache start')
-    samples = Sample.query.all()
-    for sample in samples:
-        __getCachedTaxononyJson(sample)
-        time.sleep(10) # sleep for 10 seconds to allow poor little DB to take a breath
-    app.logger.debug('initializeTaxonomyCache finished')
+    if not initTaxonomyCacheRunning:
+        initTaxonomyCacheRunning = True
+        app.logger.debug('initializeTaxonomyCache start')
+        samples = Sample.query.all()
+        for sample in samples:
+            __getCachedTaxononyJson(sample)
+            time.sleep(10) # sleep for 10 seconds to allow poor little DB to take a breath
+        app.logger.debug('initializeTaxonomyCache finished')
+        initTaxonomyCacheRunning = False
         
 def __getCachedTaxononyJson(sample):
     taxJson = taxonomyCache.get(sample.sample_number)
