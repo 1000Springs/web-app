@@ -650,6 +650,7 @@ def getOverviewGraphTaxonJson(buglevel, bugtype):
 @app.route('/taxon/<name>')
 def getTaxonDetails(name):
     googleUrl='https://www.google.co.nz/search?ie=UTF-8&q='+name;
+    wikiUrl=None
     try:
         data = json.load(urllib2.urlopen('https://www.googleapis.com/freebase/v1/topic/en/'+name.lower()))
         description = data['property']['/common/topic/description']['values'][0]['value']
@@ -670,12 +671,14 @@ def getTaxonDetails(name):
                     if values['value'].startswith('http://en.wikipedia.org'):
                         wikiUrl = values['value']
             except KeyError:    
-                wikiUrl=None
+                pass
 
         response = render_template('taxonDetails.html', taxon=name, rank=rank, description=description, imageUrl=imageUrl, wikiUrl=wikiUrl, googleUrl=googleUrl)
         return __cacheableResponse(response, 7)
 
-    except:      
+    except:  
+        import traceback
+        traceback.print_exc()            
         return render_template('taxonDetails.html', error=True, googleUrl=googleUrl)
 
 
