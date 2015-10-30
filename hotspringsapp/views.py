@@ -20,6 +20,9 @@ from flask import Flask, url_for, render_template, request, g, session, flash, r
 from models import *
 from forms import *
 
+from werkzeug.contrib.cache import SimpleCache
+taxonomyCache = SimpleCache()
+
 @app.errorhandler(404)
 def page_not_found(e):
 
@@ -581,11 +584,33 @@ def getChemistryJson(sampleNumber):
 @app.route('/taxonomyJson/<sampleNumber>')
 def getTaxonomyJson(sampleNumber):
     sample = Sample.query.filter(Sample.sample_number == sampleNumber).first()
-    taxJson = __getTaxonomyData(sample)
+    taxJson = __getCachedTaxononyJson(sample)  
     if taxJson is None:
         return "No taxonomy data for "+sampleNumber, 404
 
     return __cacheableResponse(jsonify(taxJson), 1)
+
+@app.route('/initTaxonomyCache')
+def initializeTaxonomyCache():
+    # Initializes a cache of taxonomy summary data to improve performance of the 
+    # sample site/microbial diversity page. Needs to be kicked off after each
+    # taxonomy data upload. Total cache size required for 1100 samples
+    # estimated to be around 30Mb
+    app.logger.debug('initializeTaxonomyCache start')
+    samples = Sample.query.all()
+    for sample in samples:
+        app.logger.debug('initializeTaxonomyCache caching '+sample.sample_number)
+        __getCachedTaxononyJson(sample)
+        time.sleep(10) # sleep for 10 seconds to allow poor little DB to take a breath
+    app.logger.debug('initializeTaxonomyCache finished')
+        
+def __getCachedTaxononyJson(sample):
+    taxJson = taxonomyCache.get(sample.sample_number)
+    if (taxJson is None):
+        taxJson = __getTaxonomyData(sample)  
+        taxonomyCache.set(sample.sample_number, taxJson) # cache indefinitely
+    return taxJson  
+    
 
 @app.route('/overviewGraphJson/<element>')
 def getOverviewGraphJson(element):
