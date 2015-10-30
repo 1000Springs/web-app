@@ -21,7 +21,7 @@ from models import *
 from forms import *
 
 from werkzeug.contrib.cache import SimpleCache
-taxonomyCache = SimpleCache()
+taxonomyCache = SimpleCache(60 * 60 * 24 * 365 * 5) # cache items for 5 years by default
 
 @app.errorhandler(404)
 def page_not_found(e):
@@ -599,7 +599,6 @@ def initializeTaxonomyCache():
     app.logger.debug('initializeTaxonomyCache start')
     samples = Sample.query.all()
     for sample in samples:
-        app.logger.debug('initializeTaxonomyCache caching '+sample.sample_number)
         __getCachedTaxononyJson(sample)
         time.sleep(10) # sleep for 10 seconds to allow poor little DB to take a breath
     app.logger.debug('initializeTaxonomyCache finished')
@@ -607,8 +606,12 @@ def initializeTaxonomyCache():
 def __getCachedTaxononyJson(sample):
     taxJson = taxonomyCache.get(sample.sample_number)
     if (taxJson is None):
+        app.logger.debug('Taxonomy cache miss: '+sample.sample_number)
         taxJson = __getTaxonomyData(sample)  
         taxonomyCache.set(sample.sample_number, taxJson) # cache indefinitely
+    else:
+        app.logger.debug('Taxonomy cache hit: '+sample.sample_number)
+        
     return taxJson  
     
 
