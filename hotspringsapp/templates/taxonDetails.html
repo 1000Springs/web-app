@@ -1,5 +1,6 @@
 {% if error %}	
 	<h4 class="taxonDetailsError">Summary unavailable</h4>
+	<a class="taxonDetailsWikiLink" target="_blank" href="{{googleUrl}}">Google search</a>
 {% else %}
 	<div class="taxonDetailsSummary">
 		{% if rank is not none or imageUrl is not none %}
@@ -11,6 +12,7 @@
 		</div>
 		{% endif %}
 		<p class="taxonDetailsDescription">{{description}}</p>
-		{% if wikiUrl is not none %}<a class="taxonDetailsWikiLink" href="{{wikiUrl}}">Wikipedia</a>{% endif %}	
+		{% if wikiUrl is not none %}<a class="taxonDetailsWikiLink" target="_blank" href="{{wikiUrl}}">Wikipedia</a>{% endif %}	
+		<a class="taxonDetailsWikiLink" target="_blank" href="{{googleUrl}}">Google search</a>
 	</div>
 {% endif %}

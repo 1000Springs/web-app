@@ -34,8 +34,8 @@ $('#chemList').val("sulfate").trigger("chosen:updated");
 
 $('#chemList').on('change', function(evt, params) {
    d3.select("#newGraph").select("svg").remove();
-   loadData("overviewGraphJson/", $(this).val(), $('#chemList option:selected').text(), "ppm");
-
+   var label = $('#chemList option:selected').text();
+   loadData("overviewGraphJson/", $(this).val(), label, getChemUnits(label));
   });
 
 $('#taxLvlList').on('change', function(evt, params) {

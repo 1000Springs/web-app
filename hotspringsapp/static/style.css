@@ -131,6 +131,7 @@
 #collapsibleTreeInfoPanel .taxonDetailsRankLabel { font-weight: bold; margin-right: 10px; }
 #collapsibleTreeInfoPanel .taxonDetailsImage { height: 70px; ; margin: 10px 20px 10px 0;}
 #collapsibleTreeInfoPanel .taxonDetailsDescription { width: 300px; max-height: 140px; overflow: hidden; text-overflow:ellipsis; }
+#collapsibleTreeInfoPanel .taxonDetailsWikiLink { margin-right: 15px; }
 
 /* Sunburst pie chart */
 #sunburstWrapper {

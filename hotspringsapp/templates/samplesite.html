@@ -96,7 +96,8 @@ span.units {
 
 	$(function()
 	{
-		var sampleSiteMap = setupMap("show_map");		
+		var sampleSiteMap = setupMap("show_map");	
+		sampleSiteMap.zoom = 14;
 		{% if sample_site.location.access != "PRIVATE" %}
 
 		addInfoWindowMarker("{{sample_site.location.feature_system}}",
@@ -372,7 +373,8 @@ span.units {
 									concentration and vice versa). The concentration of the
 									chemical species in parts per million (ppm) which is
 									equivalent to mg per litre can be visualised by holding the
-									cursor in each bubble.</p>
+									cursor in each bubble. Please note, carbon monoxide, hydrogen
+									and methane concentrations are in &#956;M or microMolar, not ppm.</p>
 							</figure>
 						</div>
 					</div>

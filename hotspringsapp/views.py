@@ -65,8 +65,6 @@ def login():
 
 @app.route('/logout', methods=['POST','GET'])
 def logout():
-
-    app.logger.debug(request.url_rule)
     session.pop('logged_in',None)
     return redirect(url_for('index'))
 
@@ -157,10 +155,7 @@ app.jinja_env.globals['url_for_other_page'] = url_for_other_page
 
 def simpleresults(page = 1, showAll = None):
 
-
-
     args = request.args.copy()
-
 
     minTemp = args.get('minTemp')
     maxTemp = args.get('maxTemp')
@@ -174,19 +169,7 @@ def simpleresults(page = 1, showAll = None):
     minCond = args.get('minCond')
     maxCond = args.get('maxCond')
 
-
-
-
-
-
-
-    listOfAllLocations = Location.query.filter(Sample.location_id == Location.id).order_by(Location.id).all()
-    latestSampleIds = []
-
-
-
-    for l in listOfAllLocations:
-        latestSampleIds.append(l.latestSample().id)
+    latestSampleIds = Location.latestSampleIdsAllLocations()
 
     latestFilteredSamples = Sample.query.filter(Physical_data.id == Sample.phys_id,
                                                 Physical_data.initialTemp>= minTemp,
@@ -200,10 +183,6 @@ def simpleresults(page = 1, showAll = None):
                                                 Sample.location_id == Location.id,
                                                 Sample.id.in_(latestSampleIds)
                                                 )
-
-
-
-
 
     if district != "" and district != None:
         latestFilteredSamples = latestFilteredSamples.filter(Location.district == district)
@@ -221,17 +200,11 @@ def simpleresults(page = 1, showAll = None):
         resultsPerPage = app.config["RESULTS_PER_PAGE"]
 
 
-
     paginatedSamples = latestFilteredSamples.paginate(page,resultsPerPage,False)
-
-
 
     form = SearchForm()
 
-    phys_data = Physical_data.query.order_by(Physical_data.initialTemp).all()
-
     count = {'1-25':0,'26-50':0,'51-75':0,'76-100':0}
-    pieChart = []
     for s in latestFilteredSamples:
         if s.phys.initialTemp >= 1 and s.phys.initialTemp <= 25:
             count["1-25"] +=1
@@ -400,20 +373,16 @@ def samplesite(site_id):
 def __getChemistryData(sample):
     chemJson = {"name":"", "children":[{"name":"", "children":[]}]};
     if sample.chem is not None:
-        for e in sample.chem.returnElements():
+        chemMap = getChemMap()
+        allSpecies = sample.chem.returnElements() + sample.chem.returnGases() + sample.chem.returnCompounds()
+        for e in allSpecies:
             if e[1] != None and e[1] > 0:
-                chemJson["children"][0]["children"].append({"name":e[0],"size":e[1]})
+                name = chemMap[e[0]] if e[0] in chemMap else e[0]
+                chemJson["children"][0]["children"].append({"name":name.lower(),"size":e[1]})
 
-        for e in sample.chem.returnGases():
-            if e[1] != None and e[1] > 0:
-                chemJson["children"][0]["children"].append({"name":e[0],"size":e[1]})
-
-        for e in sample.chem.returnCompounds():
-            if e[1] != None and e[1] > 0:
-                chemJson["children"][0]["children"].append({"name":e[0],"size":e[1]})
     else:
         chemJson = None
-    app.logger.debug(chemJson)
+
     return chemJson
 
 def __getTaxonomyData(sample):
@@ -584,9 +553,6 @@ def sotd():
     #modulo is to make sure it doesn't index out of bounds
     springOfTheDay = springOfTheDay[GetSOTD() % springOfTheDay.count()]
 
-
-    app.logger.debug(springOfTheDay.image_path)
-
     return render_template('sotd.html',location = springOfTheDay)
 
 @app.route("/searchbycategory")
@@ -683,6 +649,7 @@ def getOverviewGraphTaxonJson(buglevel, bugtype):
 
 @app.route('/taxon/<name>')
 def getTaxonDetails(name):
+    googleUrl='https://www.google.co.nz/search?ie=UTF-8&q='+name;
     try:
         data = json.load(urllib2.urlopen('https://www.googleapis.com/freebase/v1/topic/en/'+name.lower()))
         description = data['property']['/common/topic/description']['values'][0]['value']
@@ -696,15 +663,20 @@ def getTaxonDetails(name):
         except KeyError:
             imageUrl=None
         try:
-            wikiUrl = data['property']['/common/topic/description']['values'][0]['citation']['uri'];
+            wikiUrl = data['property']['/common/topic/description']['values'][0]['citation']['uri']
         except KeyError:
-            wikiUrl=None
+            try:
+                for values in data['property']['/common/topic/topic_equivalent_webpage']['values']:
+                    if values['value'].startswith('http://en.wikipedia.org'):
+                        wikiUrl = values['value']
+            except KeyError:    
+                wikiUrl=None
 
-        response = render_template('taxonDetails.html', taxon=name, rank=rank, description=description, imageUrl=imageUrl, wikiUrl=wikiUrl)
+        response = render_template('taxonDetails.html', taxon=name, rank=rank, description=description, imageUrl=imageUrl, wikiUrl=wikiUrl, googleUrl=googleUrl)
         return __cacheableResponse(response, 7)
 
-    except:
-        return render_template('taxonDetails.html', error=True)
+    except:      
+        return render_template('taxonDetails.html', error=True, googleUrl=googleUrl)
 
 
 def __cacheableResponse(response, expiryDays):
