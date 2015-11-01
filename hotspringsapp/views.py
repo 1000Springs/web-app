@@ -20,10 +20,6 @@ from flask import Flask, url_for, render_template, request, g, session, flash, r
 from models import *
 from forms import *
 
-from werkzeug.contrib.cache import SimpleCache
-initTaxonomyCacheRunning = False
-taxonomyCache = SimpleCache(60 * 60 * 24 * 365 * 5) # cache items for 5 years by default
-
 @app.errorhandler(404)
 def page_not_found(e):
 
@@ -597,22 +593,25 @@ def initializeTaxonomyCache():
     # sample site/microbial diversity page. Needs to be kicked off after each
     # taxonomy data upload. Total cache size required for 1100 samples
     # estimated to be around 30Mb
-    if not initTaxonomyCacheRunning:
-        initTaxonomyCacheRunning = True
-        app.logger.debug('initializeTaxonomyCache start')
-        samples = Sample.query.all()
-        for sample in samples:
-            __getCachedTaxononyJson(sample)
-            time.sleep(10) # sleep for 10 seconds to allow poor little DB to take a breath
-        app.logger.debug('initializeTaxonomyCache finished')
-        initTaxonomyCacheRunning = False
+    if app.initTaxonomyCacheThreads <= 0:
+        try:
+            app.initTaxonomyCacheThreads += 1
+            app.logger.debug('initializeTaxonomyCache start')
+            samples = Sample.query.all()
+            for sample in samples:
+                __getCachedTaxononyJson(sample)
+                time.sleep(10) # sleep for 10 seconds to allow poor little DB to take a breath
+        finally:
+            app.initTaxonomyCacheThreads -= 1
+            app.logger.debug('initializeTaxonomyCache finished')
         
 def __getCachedTaxononyJson(sample):
-    taxJson = taxonomyCache.get(sample.sample_number)
+    cacheKey = 'taxonomy_' + sample.sample_number
+    taxJson = app.cache.get(cacheKey)
     if (taxJson is None):
         app.logger.debug('Taxonomy cache miss: '+sample.sample_number)
         taxJson = __getTaxonomyData(sample)  
-        taxonomyCache.set(sample.sample_number, taxJson) # cache indefinitely
+        app.cache.set(cacheKey, taxJson) # cache indefinitely
     else:
         app.logger.debug('Taxonomy cache hit: '+sample.sample_number)
         
