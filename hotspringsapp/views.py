@@ -593,16 +593,18 @@ def initializeTaxonomyCache():
     # sample site/microbial diversity page. Needs to be kicked off after each
     # taxonomy data upload. Total cache size required for 1100 samples
     # estimated to be around 30Mb
-    if app.initTaxonomyCacheThreads <= 0:
+    cacheKey = 'initTaxonomyRunning'
+    cacheValue = {'initTaxonomyStart': datetime.datetime.now().strftime("%I:%M%p on %B %d, %Y")}
+    if app.cache.get(cacheKey) is None:
         try:
-            app.initTaxonomyCacheThreads += 1
+            app.cache.set(cacheKey, cacheValue)
             app.logger.debug('initializeTaxonomyCache start')
             samples = Sample.query.all()
             for sample in samples:
                 __getCachedTaxononyJson(sample)
                 time.sleep(10) # sleep for 10 seconds to allow poor little DB to take a breath
         finally:
-            app.initTaxonomyCacheThreads -= 1
+            app.cache.delete(cacheKey)
             app.logger.debug('initializeTaxonomyCache finished')
         
 def __getCachedTaxononyJson(sample):
