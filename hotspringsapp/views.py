@@ -14,11 +14,14 @@ import json
 import urllib2,urllib
 from collections import OrderedDict
 import re
-
+import threading
+import traceback
 
 from flask import Flask, url_for, render_template, request, g, session, flash, redirect, Response, abort, jsonify, make_response, send_from_directory
 from models import *
 from forms import *
+
+
 
 @app.errorhandler(404)
 def page_not_found(e):
@@ -588,32 +591,42 @@ def getTaxonomyJson(sampleNumber):
     return __cacheableResponse(jsonify(taxJson), 1)
 
 @app.route('/initTaxonomyCache')
-def initializeTaxonomyCache():
+def initTaxonomyCache():
+    thread = threading.Thread(target=__initializeTaxonomyCache)
+    thread.daemon = True
+    thread.start()
+    return "Taxonomy cache initialization started at "+datetime.datetime.now().strftime("%I:%M%p on %B %d, %Y")
+    
+def __initializeTaxonomyCache():
     # Initializes a cache of taxonomy summary data to improve performance of the 
     # sample site/microbial diversity page. Needs to be kicked off after each
     # taxonomy data upload. Total cache size required for 1100 samples
     # estimated to be around 30Mb
+    startTimeString = datetime.datetime.now().strftime("%I:%M%p on %B %d, %Y")
     cacheKey = 'initTaxonomyRunning'
-    cacheValue = {'initTaxonomyStart': datetime.datetime.now().strftime("%I:%M%p on %B %d, %Y")}
-    if app.cache.get(cacheKey) is None:
+    cacheValue = {'initTaxonomyStart': startTimeString}
+    if app.taxonSummaryCache.get(cacheKey) is None:
         try:
-            app.cache.set(cacheKey, cacheValue)
-            app.logger.debug('initializeTaxonomyCache start')
+            app.taxonSummaryCache.set(cacheKey, cacheValue)
+            app.logger.debug('initializeTaxonomyCache started at '+startTimeString)
             samples = Sample.query.all()
             for sample in samples:
                 __getCachedTaxononyJson(sample)
                 time.sleep(10) # sleep for 10 seconds to allow poor little DB to take a breath
+        except:  
+            traceback.print_exc()       
+                        
         finally:
-            app.cache.delete(cacheKey)
-            app.logger.debug('initializeTaxonomyCache finished')
+            app.taxonSummaryCache.delete(cacheKey)
+            app.logger.debug('initializeTaxonomyCache (' +startTimeString+ ') finished')
         
 def __getCachedTaxononyJson(sample):
     cacheKey = 'taxonomy_' + sample.sample_number
-    taxJson = app.cache.get(cacheKey)
+    taxJson = app.taxonSummaryCache.get(cacheKey)
     if (taxJson is None):
         app.logger.debug('Taxonomy cache miss: '+sample.sample_number)
         taxJson = __getTaxonomyData(sample)  
-        app.cache.set(cacheKey, taxJson) # cache indefinitely
+        app.taxonSummaryCache.set(cacheKey, taxJson) # cache indefinitely
     else:
         app.logger.debug('Taxonomy cache hit: '+sample.sample_number)
         
@@ -639,21 +652,72 @@ def getOverviewGraphJson(element):
 
 @app.route('/overviewTaxonTypes/<taxonLvl>')
 def getOverviewTaxonLvl(taxonLvl):
+    return __cacheableResponse(jsonify(__getOverviewTaxonLvl(taxonLvl)), 1)
 
+
+def __getOverviewTaxonLvl(taxonLvl):
     query = db.session.query(getattr(Taxonomy,taxonLvl).distinct().label(taxonLvl)).all()
     data = [x[0] for x in query]
-
-    data = {"types": sorted(data, key=lambda s: s.lower())}
-
-    return __cacheableResponse(jsonify(data), 1)
+    return {"types": sorted(data, key=lambda s: s.lower())}    
 
 
 @app.route('/overviewTaxonGraphJson/<buglevel>/<bugtype>')
 def getOverviewGraphTaxonJson(buglevel, bugtype):
-
     # prevent SQL injection
     if not (buglevel == 'domain' or buglevel =='phylum'):
         raise Exception("Invalid taxonomy level("+buglevel+"), must be domain or phylum")
+    taxJson = __getCachedOverviewGraphTaxonJson(buglevel, bugtype)
+    return __cacheableResponse(jsonify(taxJson), 1)
+
+
+@app.route('/initTaxonomyOverviewCache')
+def initTaxonomyOverviewCache():
+    thread = threading.Thread(target=__initializeTaxonomyOverviewCache)
+    thread.daemon = True
+    thread.start()
+    return "Taxonomy overview cache initialization started at "+datetime.datetime.now().strftime("%I:%M%p on %B %d, %Y")
+    
+    
+def __initializeTaxonomyOverviewCache():
+    # Initializes a cache of taxonomy overview data to improve performance of the 
+    # sample data overview page. Needs to be kicked off after each
+    # taxonomy data upload. Total cache size required for 1100 samples
+    # estimated to be around 30Mb
+    startTimeString = datetime.datetime.now().strftime("%I:%M%p on %B %d, %Y")
+    cacheKey = 'initTaxonomyOverviewRunning'
+    cacheValue = {'initTaxonomyOverviewStart': startTimeString}
+    if app.taxonOverviewCache.get(cacheKey) is None:
+        try:
+            app.taxonOverviewCache.set(cacheKey, cacheValue)
+            app.logger.debug('initializeTaxonomyOverviewCache started at '+startTimeString)
+            taxonLvls = ['domain', 'phylum']
+            for taxonLvl in taxonLvls:
+                data = __getOverviewTaxonLvl(taxonLvl)
+                for bugtype in data["types"]:
+                    __getCachedOverviewGraphTaxonJson(taxonLvl, bugtype)
+                    time.sleep(2) # sleep for 2 seconds to allow poor little DB to take a breath
+        except:  
+            traceback.print_exc()       
+                        
+        finally:
+            app.taxonOverviewCache.delete(cacheKey)
+            app.logger.debug('initializeTaxonomyOverviewCache (' +startTimeString+ ') finished')
+        
+        
+def __getCachedOverviewGraphTaxonJson(buglevel, bugtype):
+    cacheKey = 'taxonomyOverview_' + buglevel + '_' + bugtype
+    taxJson = app.taxonOverviewCache.get(cacheKey)
+    if (taxJson is None):
+        app.logger.debug('Taxonomy overview cache miss: '+buglevel+', '+bugtype)
+        taxJson = __getOverviewGraphTaxonJson(buglevel, bugtype)  
+        app.taxonOverviewCache.set(cacheKey, taxJson)
+    else:
+        app.logger.debug('Taxonomy overview cache hit: '+buglevel+', '+bugtype)
+        
+    return taxJson 
+
+    
+def __getOverviewGraphTaxonJson(buglevel, bugtype):    
 
     query = text(
         """select s.id, s.location_id, p.pH, p.initialTemp,
@@ -677,7 +741,7 @@ def getOverviewGraphTaxonJson(buglevel, bugtype):
         percent = row['subset_count']/row['total_count']
         data["plots"].append({'temperature':row["temp"],'pH':row["pH"],'id':row["location_id"],'value':int(percent*100),'index':index})
 
-    return __cacheableResponse(jsonify(data), 1)
+    return data
 
 
 @app.route('/taxon/<name>')
