@@ -14,8 +14,8 @@ import json
 import urllib2,urllib
 from collections import OrderedDict
 import re
-import threading
 import traceback
+import httplib
 
 from flask import Flask, url_for, render_template, request, g, session, flash, redirect, Response, abort, jsonify, make_response, send_from_directory
 from models import *
@@ -506,10 +506,6 @@ def download(site_id):
     sheet1.col(2).width = 5000
     sheet1.col(3).width = 5000
 
-
-
-
-
     output = StringIO.StringIO()
     book.save(output)
     response.data = output.getvalue()
@@ -590,35 +586,9 @@ def getTaxonomyJson(sampleNumber):
 
     return __cacheableResponse(jsonify(taxJson), 1)
 
-@app.route('/initTaxonomyCache')
-def initTaxonomyCache():
-    thread = threading.Thread(target=__initializeTaxonomyCache)
-    thread.daemon = True
-    thread.start()
-    return "Taxonomy cache initialization started at "+datetime.datetime.now().strftime("%I:%M%p on %B %d, %Y")
-    
-def __initializeTaxonomyCache():
-    # Initializes a cache of taxonomy summary data to improve performance of the 
-    # sample site/microbial diversity page. Needs to be kicked off after each
-    # taxonomy data upload. Total cache size required for 1100 samples
-    # estimated to be around 30Mb
-    startTimeString = datetime.datetime.now().strftime("%I:%M%p on %B %d, %Y")
-    cacheKey = 'initTaxonomyRunning'
-    cacheValue = {'initTaxonomyStart': startTimeString}
-    if app.taxonSummaryCache.get(cacheKey) is None:
-        try:
-            app.taxonSummaryCache.set(cacheKey, cacheValue)
-            app.logger.debug('initializeTaxonomyCache started at '+startTimeString)
-            samples = Sample.query.all()
-            for sample in samples:
-                __getCachedTaxononyJson(sample)
-                time.sleep(10) # sleep for 10 seconds to allow poor little DB to take a breath
-        except:  
-            traceback.print_exc()       
-                        
-        finally:
-            app.taxonSummaryCache.delete(cacheKey)
-            app.logger.debug('initializeTaxonomyCache (' +startTimeString+ ') finished')
+@app.route('/clearTaxonomyCache')
+def clearTaxonomyCache():
+    return "Taxonomy cache cleared"
         
 def __getCachedTaxononyJson(sample):
     cacheKey = 'taxonomy_' + sample.sample_number
@@ -670,39 +640,11 @@ def getOverviewGraphTaxonJson(buglevel, bugtype):
     return __cacheableResponse(jsonify(taxJson), 1)
 
 
-@app.route('/initTaxonomyOverviewCache')
-def initTaxonomyOverviewCache():
-    thread = threading.Thread(target=__initializeTaxonomyOverviewCache)
-    thread.daemon = True
-    thread.start()
-    return "Taxonomy overview cache initialization started at "+datetime.datetime.now().strftime("%I:%M%p on %B %d, %Y")
-    
-    
-def __initializeTaxonomyOverviewCache():
-    # Initializes a cache of taxonomy overview data to improve performance of the 
-    # sample data overview page. Needs to be kicked off after each
-    # taxonomy data upload. Total cache size required for 1100 samples
-    # estimated to be around 30Mb
-    startTimeString = datetime.datetime.now().strftime("%I:%M%p on %B %d, %Y")
-    cacheKey = 'initTaxonomyOverviewRunning'
-    cacheValue = {'initTaxonomyOverviewStart': startTimeString}
-    if app.taxonOverviewCache.get(cacheKey) is None:
-        try:
-            app.taxonOverviewCache.set(cacheKey, cacheValue)
-            app.logger.debug('initializeTaxonomyOverviewCache started at '+startTimeString)
-            taxonLvls = ['domain', 'phylum']
-            for taxonLvl in taxonLvls:
-                data = __getOverviewTaxonLvl(taxonLvl)
-                for bugtype in data["types"]:
-                    __getCachedOverviewGraphTaxonJson(taxonLvl, bugtype)
-                    time.sleep(2) # sleep for 2 seconds to allow poor little DB to take a breath
-        except:  
-            traceback.print_exc()       
-                        
-        finally:
-            app.taxonOverviewCache.delete(cacheKey)
-            app.logger.debug('initializeTaxonomyOverviewCache (' +startTimeString+ ') finished')
-        
+@app.route('/clearTaxonomyOverviewCache')
+def clearTaxonomyOverviewCache():
+    app.taxonOverviewCache.clear()
+    return "Taxonomy cache cleared"
+           
         
 def __getCachedOverviewGraphTaxonJson(buglevel, bugtype):
     cacheKey = 'taxonomyOverview_' + buglevel + '_' + bugtype
@@ -749,6 +691,15 @@ def getTaxonDetails(name):
     googleUrl='https://www.google.co.nz/search?ie=UTF-8&q='+name;
     wikiUrl=None
     try:
+        try:
+            conn = httplib.HTTPSConnection("en.wikipedia.org")
+            conn.request("HEAD", "/wiki/"+name)
+            wikiResponse = conn.getresponse()
+            if (wikiResponse.status == 200):
+                wikiUrl='https://en.wikipedia.org/wiki/'+name
+        except:
+            traceback.print_exc()
+                      
         data = json.load(urllib2.urlopen('https://www.googleapis.com/freebase/v1/topic/en/'+name.lower()))
         description = data['property']['/common/topic/description']['values'][0]['value']
         try:
@@ -760,23 +711,23 @@ def getTaxonDetails(name):
             imageUrl = 'https://usercontent.googleapis.com/freebase/v1/image' + imageId
         except KeyError:
             imageUrl=None
-        try:
-            wikiUrl = data['property']['/common/topic/description']['values'][0]['citation']['uri']
-        except KeyError:
+            
+        if wikiUrl is None:    
             try:
-                for values in data['property']['/common/topic/topic_equivalent_webpage']['values']:
-                    if values['value'].startswith('http://en.wikipedia.org'):
-                        wikiUrl = values['value']
-            except KeyError:    
-                pass
+                wikiUrl = data['property']['/common/topic/description']['values'][0]['citation']['uri']
+            except KeyError:
+                try:
+                    for values in data['property']['/common/topic/topic_equivalent_webpage']['values']:
+                        if values['value'].startswith('http://en.wikipedia.org'):
+                            wikiUrl = values['value']
+                except KeyError:    
+                    wikiUrl=None
 
         response = render_template('taxonDetails.html', taxon=name, rank=rank, description=description, imageUrl=imageUrl, wikiUrl=wikiUrl, googleUrl=googleUrl)
         return __cacheableResponse(response, 7)
 
-    except:  
-        import traceback
-        traceback.print_exc()            
-        return render_template('taxonDetails.html', error=True, googleUrl=googleUrl)
+    except:        
+        return render_template('taxonDetails.html', error=True, wikiUrl=wikiUrl, googleUrl=googleUrl)
 
 
 def __cacheableResponse(response, expiryDays):
