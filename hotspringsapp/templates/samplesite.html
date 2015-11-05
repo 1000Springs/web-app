@@ -169,13 +169,12 @@ span.units {
 				<div class="span7">
 	
 					<div>
-						{% if sample_site.location.access == "PUBLIC_PAID" %}
 						<p>
 							<strong> Hot springs can cause serious injury and death.
 								Follow the safety instructions. Never climb over barriers and
 								step off paths. </strong>
 						</p>
-						{% endif %} {%if sample_site.location.access == "PRIVATE"%} <img
+						{%if sample_site.location.access == "PRIVATE"%} <img
 							rel="tooltip" style="width: 10%; float: right"
 							data-original-title="Private"
 							src="{{ url_for('static', filename='img/icons/private.png') }}">
