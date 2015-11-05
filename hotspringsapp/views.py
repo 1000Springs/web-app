@@ -389,7 +389,11 @@ def __getChemistryData(sample):
     return chemJson
 
 def __getTaxonomyData(sample):
-    taxonomy = sample.getTaxonomy()
+    # The sample.getTaxonomy() query is very slow even if there is no
+    # taxonomy data (since it queries a view), so we do the fast
+    # hasTaxonomy() query first to avoid a slow response for
+    # samples that don't have any taxonomy data.
+    taxonomy = sample.getTaxonomy() if sample.hasTaxonomy() else []
     taxJson = None
     if len(taxonomy) > 0:
         taxaNames = ['domain', 'phylum', 'class', 'order', 'family', 'genus', 'species']
