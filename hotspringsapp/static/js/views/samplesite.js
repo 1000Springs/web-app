@@ -90,7 +90,7 @@ function drawChemistryBubbleChart(bubbleData) {
 	      .attr("cy", function(d) { return d.y; })
 	      .attr("r", function(d) { return d.r; })
 	      .on("click", function(d) { return zoom(node == d ? root : d); })
-	      .append("svg:title").text(function (d) {var d = this.__data__; return !(d.children) ? (getChemDisplayName(d.name) + ": " + getDisplayNumber(d.value) +  "ppm"):null });
+	      .append("svg:title").text(function (d) {var d = this.__data__; return !(d.children) ? d.name + ": " + getDisplayNumber(d.value) +  getChemUnits(d.name):null });
 	      
 	  vis.selectAll("text")
 	      .data(nodes)
@@ -101,7 +101,7 @@ function drawChemistryBubbleChart(bubbleData) {
 	      .attr("dy", ".35em")
 	      .attr("text-anchor", "middle")
 	      .style("opacity", function(d) { return d.r > 20 ? 1 : 0; })
-	      .text(function(d) { return getChemDisplayName(d.name); });
+	      .text(function(d) { return d.name; });
 	
 	  d3.select(window).on("click", function() { zoom(root); });
 	
@@ -137,55 +137,6 @@ function getDisplayNumber(floatNum) {
 	} else {
 		return (Math.round(floatNum * 1000)/1000); // round to 3 d.p
 	}
-}
-
-function getChemDisplayName(chemicalElement) {
-	var nameMap = {
-			'Ag': 'silver',
-			'Al': 'aluminium',
-			'As': 'arsenic',
-			'B': 'boron',
-			'Ba': 'barium',
-			'Bi': 'bismuth',
-			'Br': 'bromine',
-			'C': 'carbon',
-			'Ca': 'calcium',
-			'Cd': 'cadmium',
-			'CH4': 'methane',
-			'Cl': 'chlorine',
-			'CO': 'carbon monoxide',
-			'Cr': 'chromium',
-			'Cs': 'caesium',
-			'Cu': 'copper',
-			'Fe': 'iron',
-			'H2': 'hydrogen',
-			'H2S': 'hydrogen sulfide',
-			'Hg': 'mercury',
-			'In': 'indium',
-			'K': 'potassium',
-			'La': 'lanthanum',
-			'Li': 'lithium',
-			'Mg': 'magnesium',
-			'Mn': 'manganese',
-			'Mo': 'molybdenum',
-			'N': 'nitrogen',
-			'Na': 'sodium',
-			'Ni': 'nickel',
-			'P': 'phosphorus',
-			'Pb': 'lead',
-			'Rb': 'rubidium',
-			'S': 'sulphur',
-			'Se': 'selenium',
-			'Si': 'silicon',
-			'Sr': 'strontium',
-			'Ti': 'titanium',
-			'U': 'uranium',
-			'V': 'vanadium',
-			'Zn': 'zinc'
-	}
-	
-	var name = (chemicalElement in nameMap) ? nameMap[chemicalElement] : chemicalElement;
-	return name;
 }
 
 function drawTaxonomyCollapsibleTree(treeData) {

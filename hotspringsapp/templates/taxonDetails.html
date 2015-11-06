@@ -11,6 +11,7 @@
 		</div>
 		{% endif %}
 		<p class="taxonDetailsDescription">{{description}}</p>
-		{% if wikiUrl is not none %}<a class="taxonDetailsWikiLink" href="{{wikiUrl}}">Wikipedia</a>{% endif %}	
 	</div>
 {% endif %}
+{% if wikiUrl is not none %}<a class="taxonDetailsWikiLink" target="_blank" href="{{wikiUrl}}">Wikipedia</a>{% endif %}	
+<a class="taxonDetailsWikiLink" target="_blank" href="{{googleUrl}}">Google search</a>

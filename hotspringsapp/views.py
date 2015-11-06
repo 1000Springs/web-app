@@ -14,11 +14,14 @@ import json
 import urllib2,urllib
 from collections import OrderedDict
 import re
-
+import traceback
+import httplib
 
 from flask import Flask, url_for, render_template, request, g, session, flash, redirect, Response, abort, jsonify, make_response, send_from_directory
 from models import *
 from forms import *
+
+
 
 @app.errorhandler(404)
 def page_not_found(e):
@@ -65,8 +68,6 @@ def login():
 
 @app.route('/logout', methods=['POST','GET'])
 def logout():
-
-    app.logger.debug(request.url_rule)
     session.pop('logged_in',None)
     return redirect(url_for('index'))
 
@@ -157,10 +158,7 @@ app.jinja_env.globals['url_for_other_page'] = url_for_other_page
 
 def simpleresults(page = 1, showAll = None):
 
-
-
     args = request.args.copy()
-
 
     minTemp = args.get('minTemp')
     maxTemp = args.get('maxTemp')
@@ -174,19 +172,7 @@ def simpleresults(page = 1, showAll = None):
     minCond = args.get('minCond')
     maxCond = args.get('maxCond')
 
-
-
-
-
-
-
-    listOfAllLocations = Location.query.filter(Sample.location_id == Location.id).order_by(Location.id).all()
-    latestSampleIds = []
-
-
-
-    for l in listOfAllLocations:
-        latestSampleIds.append(l.latestSample().id)
+    latestSampleIds = Location.latestSampleIdsAllLocations()
 
     latestFilteredSamples = Sample.query.filter(Physical_data.id == Sample.phys_id,
                                                 Physical_data.initialTemp>= minTemp,
@@ -200,10 +186,6 @@ def simpleresults(page = 1, showAll = None):
                                                 Sample.location_id == Location.id,
                                                 Sample.id.in_(latestSampleIds)
                                                 )
-
-
-
-
 
     if district != "" and district != None:
         latestFilteredSamples = latestFilteredSamples.filter(Location.district == district)
@@ -221,17 +203,11 @@ def simpleresults(page = 1, showAll = None):
         resultsPerPage = app.config["RESULTS_PER_PAGE"]
 
 
-
     paginatedSamples = latestFilteredSamples.paginate(page,resultsPerPage,False)
-
-
 
     form = SearchForm()
 
-    phys_data = Physical_data.query.order_by(Physical_data.initialTemp).all()
-
     count = {'1-25':0,'26-50':0,'51-75':0,'76-100':0}
-    pieChart = []
     for s in latestFilteredSamples:
         if s.phys.initialTemp >= 1 and s.phys.initialTemp <= 25:
             count["1-25"] +=1
@@ -400,24 +376,24 @@ def samplesite(site_id):
 def __getChemistryData(sample):
     chemJson = {"name":"", "children":[{"name":"", "children":[]}]};
     if sample.chem is not None:
-        for e in sample.chem.returnElements():
+        chemMap = getChemMap()
+        allSpecies = sample.chem.returnElements() + sample.chem.returnGases() + sample.chem.returnCompounds()
+        for e in allSpecies:
             if e[1] != None and e[1] > 0:
-                chemJson["children"][0]["children"].append({"name":e[0],"size":e[1]})
+                name = chemMap[e[0]] if e[0] in chemMap else e[0]
+                chemJson["children"][0]["children"].append({"name":name.lower(),"size":e[1]})
 
-        for e in sample.chem.returnGases():
-            if e[1] != None and e[1] > 0:
-                chemJson["children"][0]["children"].append({"name":e[0],"size":e[1]})
-
-        for e in sample.chem.returnCompounds():
-            if e[1] != None and e[1] > 0:
-                chemJson["children"][0]["children"].append({"name":e[0],"size":e[1]})
     else:
         chemJson = None
-    app.logger.debug(chemJson)
+
     return chemJson
 
 def __getTaxonomyData(sample):
-    taxonomy = sample.getTaxonomy()
+    # The sample.getTaxonomy() query is very slow even if there is no
+    # taxonomy data (since it queries a view), so we do the fast
+    # hasTaxonomy() query first to avoid a slow response for
+    # samples that don't have any taxonomy data.
+    taxonomy = sample.getTaxonomy() if sample.hasTaxonomy() else []
     taxJson = None
     if len(taxonomy) > 0:
         taxaNames = ['domain', 'phylum', 'class', 'order', 'family', 'genus', 'species']
@@ -534,10 +510,6 @@ def download(site_id):
     sheet1.col(2).width = 5000
     sheet1.col(3).width = 5000
 
-
-
-
-
     output = StringIO.StringIO()
     book.save(output)
     response.data = output.getvalue()
@@ -584,9 +556,6 @@ def sotd():
     #modulo is to make sure it doesn't index out of bounds
     springOfTheDay = springOfTheDay[GetSOTD() % springOfTheDay.count()]
 
-
-    app.logger.debug(springOfTheDay.image_path)
-
     return render_template('sotd.html',location = springOfTheDay)
 
 @app.route("/searchbycategory")
@@ -615,11 +584,28 @@ def getChemistryJson(sampleNumber):
 @app.route('/taxonomyJson/<sampleNumber>')
 def getTaxonomyJson(sampleNumber):
     sample = Sample.query.filter(Sample.sample_number == sampleNumber).first()
-    taxJson = __getTaxonomyData(sample)
+    taxJson = __getCachedTaxononyJson(sample)  
     if taxJson is None:
         return "No taxonomy data for "+sampleNumber, 404
 
     return __cacheableResponse(jsonify(taxJson), 1)
+
+@app.route('/clearTaxonomyCache')
+def clearTaxonomyCache():
+    return "Taxonomy cache cleared"
+        
+def __getCachedTaxononyJson(sample):
+    cacheKey = 'taxonomy_' + sample.sample_number
+    taxJson = app.taxonSummaryCache.get(cacheKey)
+    if (taxJson is None):
+        app.logger.debug('Taxonomy cache miss: '+sample.sample_number)
+        taxJson = __getTaxonomyData(sample)  
+        app.taxonSummaryCache.set(cacheKey, taxJson) # cache indefinitely
+    else:
+        app.logger.debug('Taxonomy cache hit: '+sample.sample_number)
+        
+    return taxJson  
+    
 
 @app.route('/overviewGraphJson/<element>')
 def getOverviewGraphJson(element):
@@ -640,21 +626,44 @@ def getOverviewGraphJson(element):
 
 @app.route('/overviewTaxonTypes/<taxonLvl>')
 def getOverviewTaxonLvl(taxonLvl):
+    return __cacheableResponse(jsonify(__getOverviewTaxonLvl(taxonLvl)), 1)
 
+
+def __getOverviewTaxonLvl(taxonLvl):
     query = db.session.query(getattr(Taxonomy,taxonLvl).distinct().label(taxonLvl)).all()
     data = [x[0] for x in query]
-
-    data = {"types": sorted(data, key=lambda s: s.lower())}
-
-    return __cacheableResponse(jsonify(data), 1)
+    return {"types": sorted(data, key=lambda s: s.lower())}    
 
 
 @app.route('/overviewTaxonGraphJson/<buglevel>/<bugtype>')
 def getOverviewGraphTaxonJson(buglevel, bugtype):
-
     # prevent SQL injection
     if not (buglevel == 'domain' or buglevel =='phylum'):
         raise Exception("Invalid taxonomy level("+buglevel+"), must be domain or phylum")
+    taxJson = __getCachedOverviewGraphTaxonJson(buglevel, bugtype)
+    return __cacheableResponse(jsonify(taxJson), 1)
+
+
+@app.route('/clearTaxonomyOverviewCache')
+def clearTaxonomyOverviewCache():
+    app.taxonOverviewCache.clear()
+    return "Taxonomy cache cleared"
+           
+        
+def __getCachedOverviewGraphTaxonJson(buglevel, bugtype):
+    cacheKey = 'taxonomyOverview_' + buglevel + '_' + bugtype
+    taxJson = app.taxonOverviewCache.get(cacheKey)
+    if (taxJson is None):
+        app.logger.debug('Taxonomy overview cache miss: '+buglevel+', '+bugtype)
+        taxJson = __getOverviewGraphTaxonJson(buglevel, bugtype)  
+        app.taxonOverviewCache.set(cacheKey, taxJson)
+    else:
+        app.logger.debug('Taxonomy overview cache hit: '+buglevel+', '+bugtype)
+        
+    return taxJson 
+
+    
+def __getOverviewGraphTaxonJson(buglevel, bugtype):    
 
     query = text(
         """select s.id, s.location_id, p.pH, p.initialTemp,
@@ -678,12 +687,23 @@ def getOverviewGraphTaxonJson(buglevel, bugtype):
         percent = row['subset_count']/row['total_count']
         data["plots"].append({'temperature':row["temp"],'pH':row["pH"],'id':row["location_id"],'value':int(percent*100),'index':index})
 
-    return __cacheableResponse(jsonify(data), 1)
+    return data
 
 
 @app.route('/taxon/<name>')
 def getTaxonDetails(name):
+    googleUrl='https://www.google.co.nz/search?ie=UTF-8&q='+name;
+    wikiUrl=None
     try:
+        try:
+            conn = httplib.HTTPSConnection("en.wikipedia.org")
+            conn.request("HEAD", "/wiki/"+name)
+            wikiResponse = conn.getresponse()
+            if (wikiResponse.status == 200):
+                wikiUrl='https://en.wikipedia.org/wiki/'+name
+        except:
+            traceback.print_exc()
+                      
         data = json.load(urllib2.urlopen('https://www.googleapis.com/freebase/v1/topic/en/'+name.lower()))
         description = data['property']['/common/topic/description']['values'][0]['value']
         try:
@@ -695,16 +715,23 @@ def getTaxonDetails(name):
             imageUrl = 'https://usercontent.googleapis.com/freebase/v1/image' + imageId
         except KeyError:
             imageUrl=None
-        try:
-            wikiUrl = data['property']['/common/topic/description']['values'][0]['citation']['uri'];
-        except KeyError:
-            wikiUrl=None
+            
+        if wikiUrl is None:    
+            try:
+                wikiUrl = data['property']['/common/topic/description']['values'][0]['citation']['uri']
+            except KeyError:
+                try:
+                    for values in data['property']['/common/topic/topic_equivalent_webpage']['values']:
+                        if values['value'].startswith('http://en.wikipedia.org'):
+                            wikiUrl = values['value']
+                except KeyError:    
+                    wikiUrl=None
 
-        response = render_template('taxonDetails.html', taxon=name, rank=rank, description=description, imageUrl=imageUrl, wikiUrl=wikiUrl)
+        response = render_template('taxonDetails.html', taxon=name, rank=rank, description=description, imageUrl=imageUrl, wikiUrl=wikiUrl, googleUrl=googleUrl)
         return __cacheableResponse(response, 7)
 
-    except:
-        return render_template('taxonDetails.html', error=True)
+    except:        
+        return render_template('taxonDetails.html', error=True, wikiUrl=wikiUrl, googleUrl=googleUrl)
 
 
 def __cacheableResponse(response, expiryDays):

@@ -34,8 +34,8 @@ $('#chemList').val("sulfate").trigger("chosen:updated");
 
 $('#chemList').on('change', function(evt, params) {
    d3.select("#newGraph").select("svg").remove();
-   loadData("overviewGraphJson/", $(this).val(), $('#chemList option:selected').text(), "ppm");
-
+   var label = $('#chemList option:selected').text();
+   loadData("overviewGraphJson/", $(this).val(), label, getChemUnits(label));
   });
 
 $('#taxLvlList').on('change', function(evt, params) {
@@ -202,7 +202,7 @@ var svg = d3.select("#newGraph").append("svg")
       .attr("dy", ".71em")
       .style("text-anchor", "end")
       .attr("class","graph-text")
-      .text("Temperature")
+      .text("Temperature (\u00B0C)")
 
   svg.selectAll(".dot")
       .data(data)

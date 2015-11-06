@@ -258,7 +258,7 @@ class Chemical_data(db.Model):
         elements.append(["Si",self.Si])
         elements.append(["K",self.K])
         elements.append(["Ca",self.Ca])
-        elements.append(["V ",self.V])
+        elements.append(["V",self.V])
         elements.append(["Cr",self.Cr])
         elements.append(["Fe",self.Fe])
         elements.append(["Mn",self.Mn])
