@@ -202,7 +202,7 @@ var svg = d3.select("#newGraph").append("svg")
       .attr("dy", ".71em")
       .style("text-anchor", "end")
       .attr("class","graph-text")
-      .text("Temperature")
+      .text("Temperature (\u00B0C)")
 
   svg.selectAll(".dot")
       .data(data)
