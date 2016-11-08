@@ -6,6 +6,7 @@ import os
 import StringIO
 import mimetypes
 from hotspringsapp import app
+from sqlalchemy import or_
 from sqlalchemy.sql import func
 from sqlalchemy.orm import joinedload
 from flask.ext.sqlalchemy import get_debug_queries
@@ -174,18 +175,19 @@ def simpleresults(page = 1, showAll = None):
 
     latestSampleIds = Location.latestSampleIdsAllLocations()
 
-    latestFilteredSamples = Sample.query.filter(Physical_data.id == Sample.phys_id,
-                                                Physical_data.initialTemp>= minTemp,
-                                                Physical_data.initialTemp < maxTemp,
-                                                Physical_data.pH >= minPH,
-                                                Physical_data.pH < maxPH,
-                                                Physical_data.conductivity >= minCond,
-                                                Physical_data.conductivity < maxCond,
-                                                Physical_data.turbidity >= minTurb,
-                                                Physical_data.turbidity < maxTurb,
-                                                Sample.location_id == Location.id,
-                                                Sample.id.in_(latestSampleIds)
-                                                )
+    latestFilteredSamples = Sample.query.filter(
+        Physical_data.id == Sample.phys_id,
+        or_(Physical_data.initialTemp == None, Physical_data.initialTemp>= minTemp),
+        or_(Physical_data.initialTemp == None, Physical_data.initialTemp < maxTemp),
+        or_(Physical_data.pH == None, Physical_data.pH >= minPH),
+        or_(Physical_data.pH == None, Physical_data.pH < maxPH),
+        or_(Physical_data.conductivity == None, Physical_data.conductivity >= minCond),
+        or_(Physical_data.conductivity == None, Physical_data.conductivity < maxCond),
+        or_(Physical_data.turbidity == None, Physical_data.turbidity >= minTurb),
+        or_(Physical_data.turbidity == None, Physical_data.turbidity < maxTurb),
+        Sample.location_id == Location.id,
+        Sample.id.in_(latestSampleIds)
+    )
 
     if district != "" and district != None:
         latestFilteredSamples = latestFilteredSamples.filter(Location.district == district)
@@ -277,7 +279,7 @@ def dataoverview():
             else:
                 chemName = chem.capitalize() if len(chem) > 3 else chem
                 chemCols[chem] = digitRegex.sub(subscriptDigit, chemName)
-            
+
     chemNames = OrderedDict(sorted(chemCols.items(), key=lambda item: item[1].lower()))
     taxLvls = ["domain","phylum"]
     query = db.session.query(Taxonomy.domain.distinct().label("domain"))
@@ -336,10 +338,10 @@ def getChemMap():
             'Tl': 'Thallium',
             'U': 'Uranium',
             'V': 'Vanadium',
-            'Zn': 'Zinc'  
+            'Zn': 'Zinc'
         }
     return chemMap
-    
+
 @app.route('/samplesite/<int:site_id>')
 def samplesite(site_id):
 
@@ -584,7 +586,7 @@ def getChemistryJson(sampleNumber):
 @app.route('/taxonomyJson/<sampleNumber>')
 def getTaxonomyJson(sampleNumber):
     sample = Sample.query.filter(Sample.sample_number == sampleNumber).first()
-    taxJson = __getCachedTaxononyJson(sample)  
+    taxJson = __getCachedTaxononyJson(sample)
     if taxJson is None:
         return "No taxonomy data for "+sampleNumber, 404
 
@@ -593,19 +595,19 @@ def getTaxonomyJson(sampleNumber):
 @app.route('/clearTaxonomyCache')
 def clearTaxonomyCache():
     return "Taxonomy cache cleared"
-        
+
 def __getCachedTaxononyJson(sample):
     cacheKey = 'taxonomy_' + sample.sample_number
     taxJson = app.taxonSummaryCache.get(cacheKey)
     if (taxJson is None):
         app.logger.debug('Taxonomy cache miss: '+sample.sample_number)
-        taxJson = __getTaxonomyData(sample)  
+        taxJson = __getTaxonomyData(sample)
         app.taxonSummaryCache.set(cacheKey, taxJson) # cache indefinitely
     else:
         app.logger.debug('Taxonomy cache hit: '+sample.sample_number)
-        
-    return taxJson  
-    
+
+    return taxJson
+
 
 @app.route('/overviewGraphJson/<element>')
 def getOverviewGraphJson(element):
@@ -632,7 +634,7 @@ def getOverviewTaxonLvl(taxonLvl):
 def __getOverviewTaxonLvl(taxonLvl):
     query = db.session.query(getattr(Taxonomy,taxonLvl).distinct().label(taxonLvl)).all()
     data = [x[0] for x in query]
-    return {"types": sorted(data, key=lambda s: s.lower())}    
+    return {"types": sorted(data, key=lambda s: s.lower())}
 
 
 @app.route('/overviewTaxonGraphJson/<buglevel>/<bugtype>')
@@ -648,22 +650,22 @@ def getOverviewGraphTaxonJson(buglevel, bugtype):
 def clearTaxonomyOverviewCache():
     app.taxonOverviewCache.clear()
     return "Taxonomy cache cleared"
-           
-        
+
+
 def __getCachedOverviewGraphTaxonJson(buglevel, bugtype):
     cacheKey = 'taxonomyOverview_' + buglevel + '_' + bugtype
     taxJson = app.taxonOverviewCache.get(cacheKey)
     if (taxJson is None):
         app.logger.debug('Taxonomy overview cache miss: '+buglevel+', '+bugtype)
-        taxJson = __getOverviewGraphTaxonJson(buglevel, bugtype)  
+        taxJson = __getOverviewGraphTaxonJson(buglevel, bugtype)
         app.taxonOverviewCache.set(cacheKey, taxJson)
     else:
         app.logger.debug('Taxonomy overview cache hit: '+buglevel+', '+bugtype)
-        
-    return taxJson 
 
-    
-def __getOverviewGraphTaxonJson(buglevel, bugtype):    
+    return taxJson
+
+
+def __getOverviewGraphTaxonJson(buglevel, bugtype):
 
     query = text(
         """select s.id, s.location_id, p.pH, p.initialTemp,
@@ -672,11 +674,11 @@ def __getOverviewGraphTaxonJson(buglevel, bugtype):
         from public_sample s
         join physical_data p on s.phys_id = p.id
         join sample_taxonomy st on s.id=st.sample_id
-        join taxonomy t on st.taxonomy_id = t.id 
+        join taxonomy t on st.taxonomy_id = t.id
         group by s.id, s.location_id, p.pH, p.initialTemp
         order by s.id"""
     )
-    
+
     results = db.engine.execute(query, bugtype=bugtype).fetchall()
 
     mapping = ["id","location_id","pH","temp","total_count","subset_count"]
@@ -703,7 +705,7 @@ def getTaxonDetails(name):
                 wikiUrl='https://en.wikipedia.org/wiki/'+name
         except:
             traceback.print_exc()
-                      
+
         data = json.load(urllib2.urlopen('https://www.googleapis.com/freebase/v1/topic/en/'+name.lower()))
         description = data['property']['/common/topic/description']['values'][0]['value']
         try:
@@ -715,8 +717,8 @@ def getTaxonDetails(name):
             imageUrl = 'https://usercontent.googleapis.com/freebase/v1/image' + imageId
         except KeyError:
             imageUrl=None
-            
-        if wikiUrl is None:    
+
+        if wikiUrl is None:
             try:
                 wikiUrl = data['property']['/common/topic/description']['values'][0]['citation']['uri']
             except KeyError:
@@ -724,13 +726,13 @@ def getTaxonDetails(name):
                     for values in data['property']['/common/topic/topic_equivalent_webpage']['values']:
                         if values['value'].startswith('http://en.wikipedia.org'):
                             wikiUrl = values['value']
-                except KeyError:    
+                except KeyError:
                     wikiUrl=None
 
         response = render_template('taxonDetails.html', taxon=name, rank=rank, description=description, imageUrl=imageUrl, wikiUrl=wikiUrl, googleUrl=googleUrl)
         return __cacheableResponse(response, 7)
 
-    except:        
+    except:
         return render_template('taxonDetails.html', error=True, wikiUrl=wikiUrl, googleUrl=googleUrl)
 
 
