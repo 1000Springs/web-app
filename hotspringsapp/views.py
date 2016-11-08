@@ -187,7 +187,7 @@ def simpleresults(page = 1, showAll = None):
         or_(Physical_data.turbidity == None, Physical_data.turbidity < maxTurb),
         Sample.location_id == Location.id,
         Sample.id.in_(latestSampleIds)
-    )
+    ).order_by(func.lower(Location.feature_name))
 
     if district != "" and district != None:
         latestFilteredSamples = latestFilteredSamples.filter(Location.district == district)
