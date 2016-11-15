@@ -17,6 +17,7 @@ from collections import OrderedDict
 import re
 import traceback
 import httplib
+import math
 
 from flask import Flask, url_for, render_template, request, g, session, flash, redirect, Response, abort, jsonify, make_response, send_from_directory
 from models import *
@@ -175,7 +176,11 @@ def simpleresults(page = 1, showAll = None):
 
     latestSampleIds = Location.latestSampleIdsAllLocations()
 
-    latestFilteredSamples = Sample.query.filter(
+    latestFilteredSamples = Sample.query.options(
+        joinedload('location'),
+        joinedload('image'),
+        joinedload('phys')).filter(
+
         Physical_data.id == Sample.phys_id,
         or_(Physical_data.initialTemp == None, Physical_data.initialTemp>= minTemp),
         or_(Physical_data.initialTemp == None, Physical_data.initialTemp < maxTemp),
@@ -204,8 +209,17 @@ def simpleresults(page = 1, showAll = None):
     else:
         resultsPerPage = app.config["RESULTS_PER_PAGE"]
 
+    # Samples have to be sorted in memory due to MySQL's limited support
+    # for regular expression searching (no group extraction)
+    sortedSamples = []
+    for s in latestFilteredSamples:
+        sortedSamples.append(s)
+    featureNameRegEx = re.compile('^(.*[\D]*)(\d+)$')
+    sortedSamples = sorted(sortedSamples, key = lambda s: (_sort_key(s, featureNameRegEx)))
 
-    paginatedSamples = latestFilteredSamples.paginate(page,resultsPerPage,False)
+    # SQLAlchemy pagination only works on the returned Query object, so need
+    # this custom implementation to work with sorted samples
+    paginatedSamples = Paginator(sortedSamples, resultsPerPage, page)
 
     form = SearchForm()
 
@@ -232,6 +246,44 @@ def simpleresults(page = 1, showAll = None):
                                                 pieChart=pieChart,
                                                 locations=locations
                                                 )
+
+def _sort_key(sample, featureNameRegEx):
+    featureName = sample.location.feature_name
+    match = featureNameRegEx.match(featureName)
+    if (match):
+        lcFeatureName = match.group(1).lower()
+        featureNumber = match.group(2)
+    else:
+        lcFeatureName = featureName.lower()
+        featureNumber = None
+
+    return lcFeatureName, featureNumber
+
+class Paginator:
+
+    items = []
+    resultsPerPage = 20
+    page = 1
+    pages = 1
+    prev_num = 0
+    next_num = 2
+    has_prev = False
+    has_next = False
+
+    def __init__(self, allItems, resultsPerPage, page):
+        startIndex = resultsPerPage * (page - 1)
+        endIndex = min(resultsPerPage * page, len(allItems))
+        self.items = allItems[startIndex : endIndex]
+        self.resultsPerPage = resultsPerPage
+        self.page = page
+        self.prev_num = page - 1
+        self.next_num = page + 1
+        self.pages = len(allItems) / resultsPerPage
+        if len(allItems) % resultsPerPage:
+            self.pages += 1
+
+        self.has_prev = 1 < self.page
+        self.has_next = self.page < self.pages
 
 
 @app.route('/searchbyimage')
