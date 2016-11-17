@@ -209,8 +209,10 @@ def simpleresults(page = 1, showAll = None):
     else:
         resultsPerPage = app.config["RESULTS_PER_PAGE"]
 
-    # Samples have to be sorted in memory due to MySQL's limited support
-    # for regular expression searching (no group extraction)
+    # Feature names have an optional numeric part, e.g the 17 in 'Wairakei Terraces Feature 17',
+    # and results need to be sorted by the non-numeric part then the numeric part (if present).
+    # Due to MySQL's limited support for regular expression searching (no group extraction),
+    # samples have to be sorted in memory.
     sortedSamples = []
     for s in latestFilteredSamples:
         sortedSamples.append(s)
