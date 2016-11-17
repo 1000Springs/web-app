@@ -214,7 +214,7 @@ def simpleresults(page = 1, showAll = None):
     sortedSamples = []
     for s in latestFilteredSamples:
         sortedSamples.append(s)
-    featureNameRegEx = re.compile('^(.*[\D]*)(\d+)$')
+    featureNameRegEx = re.compile('^(.*\D)(\d+)\s*$')
     sortedSamples = sorted(sortedSamples, key = lambda s: (_sort_key(s, featureNameRegEx)))
 
     # SQLAlchemy pagination only works on the returned Query object, so need
@@ -251,10 +251,10 @@ def _sort_key(sample, featureNameRegEx):
     featureName = sample.location.feature_name
     match = featureNameRegEx.match(featureName)
     if (match):
-        lcFeatureName = match.group(1).lower()
-        featureNumber = match.group(2)
+        lcFeatureName = match.group(1).lower().strip()
+        featureNumber = int(match.group(2))
     else:
-        lcFeatureName = featureName.lower()
+        lcFeatureName = featureName.lower().strip()
         featureNumber = None
 
     return lcFeatureName, featureNumber
