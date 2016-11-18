@@ -6,9 +6,9 @@ var minCond = 0;
 var maxCond = 2000000;
 
 var minTurb = 0;
-var maxTurb = 1000;
+var maxTurb = 2500;
 
-var minpH = 0;
+var minpH = -1;
 var maxpH = 14;
 
 function setup(ranges)
