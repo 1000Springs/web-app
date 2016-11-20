@@ -24,7 +24,7 @@ head %}
 <script type="text/javascript"
 	src="{{ url_for('static', filename='js/snapSVG/snap.svg-min.js') }}"></script>	
 <script type="text/javascript"
-	src="https://maps.googleapis.com/maps/api/js?sensor=true"></script>
+	src="https://maps.googleapis.com/maps/api/js"></script>
 
 <style>
 span.units {
@@ -261,12 +261,16 @@ span.units {
 									Oxidation Reduction <br> Potential:
 								</h5>
 							</td>
-	
+							
 							<td style="text-align: left;">
-								<p>
-									{{sample_site.phys.redox}} <span class="units" rel="tooltip"
-										data-original-title="Millivolts">mV</span>
-								</p>
+								{%- if sample_site.phys.redox is not none -%}
+									<p>
+										{{sample_site.phys.redox}} <span class="units" rel="tooltip"
+											data-original-title="Millivolts">mV</span>
+									</p>
+								{% else %}
+									<p>Not determined</p>
+								{%- endif %}
 							</td>
 						</tr>
 						<tr>
@@ -275,10 +279,14 @@ span.units {
 							</td>
 	
 							<td style="text-align: left;">
-								<p>
-									{{sample_site.phys.conductivity}} <span class="units"
-										rel="tooltip" data-original-title="Microsiemens per Centimeter">&#xB5;S/cm</span>
-								</p>
+								{%- if sample_site.phys.conductivity is not none -%}
+									<p>
+										{{sample_site.phys.conductivity}} <span class="units"
+											rel="tooltip" data-original-title="Microsiemens per Centimeter">&#xB5;S/cm</span>
+									</p>
+								{% else %}
+									<p>Not determined</p>
+								{%- endif %}
 							</td>
 						</tr>
 						<tr>
@@ -287,10 +295,14 @@ span.units {
 							</td>
 	
 							<td style="text-align: left;">
-								<p>
-									{{sample_site.phys.dO}} <span class="units" rel="tooltip"
-										data-original-title="Milligrams per Litre">mg/L</span>
-								</p>
+								{%- if sample_site.phys.dO is not none -%}
+									<p>
+										{{sample_site.phys.dO}} <span class="units" rel="tooltip"
+											data-original-title="Milligrams per Litre">mg/L</span>
+									</p>
+								{% else %}
+									<p>Not determined</p>
+								{%- endif %}
 							</td>
 						</tr>
 						<tr>
@@ -299,10 +311,14 @@ span.units {
 							</td>
 	
 							<td style="text-align: left;">
-								<p>
-									{{sample_site.phys.turbidity}} <span class="units" rel="tooltip"
-										data-original-title="Formazin Nephelometric Units">FNU</span>
-								</p>
+								{%- if sample_site.phys.turbidity is not none -%}
+									<p>
+										{{sample_site.phys.turbidity}} <span class="units" rel="tooltip"
+											data-original-title="Formazin Nephelometric Units">FNU</span>
+									</p>
+								{% else %}
+									<p>Not determined</p>
+								{%- endif %}
 							</td>
 						</tr>					
 	
