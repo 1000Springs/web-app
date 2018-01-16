@@ -51,6 +51,8 @@ CREATE TABLE `chemical_data` (
   `Rb` float DEFAULT NULL,
   `Cs` float DEFAULT NULL,
   `Hg` float DEFAULT NULL,
+  `As2` float DEFAULT NULL,
+  `Sb` float DEFAULT NULL,
   PRIMARY KEY (`id`)
 );
 
