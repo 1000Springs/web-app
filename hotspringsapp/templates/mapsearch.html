@@ -1,0 +1,66 @@
+{% extends "layout.html" %}
+{% block title %}Home{% endblock %}
+{% block head %}
+  {{ super() }}
+    <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBj_MCLMBKMcNvUXelP9pfEmlCsHN_nbX0"></script>
+    <script type="text/javascript" src="{{ url_for('static', filename='js/maps.js') }}"></script>
+
+	<script type="text/javascript">
+	var map;
+	
+	function loadMarkers()
+	{
+		{% for pos in positions %}	
+			{% if pos.access != "PRIVATE" %}	
+				addInfoWindowMarker("{{pos.feature_system}}", "{{pos.lat}}", "{{pos.lng}}", "{{pos.feature_name}}", "{{pos.description}}", map, '{{url_for("samplesite", site_id=pos.id)}}' );
+			{% endif %}
+		{% endfor %}
+	}
+
+	window.onload=function()
+	{
+		map = setupMap("map_canvas");
+		map.zoom = 8;
+		loadMarkers();
+	};
+	</script>
+
+{% endblock %}
+
+{% block content %}
+<div class="title">
+	<h2>map search</h2>
+</div>
+
+<div class="row-fluid" style="position:relative">
+<div class="span1" style="background-color:rgba(29,155,171,0.5);height: 500px;"></div>
+<div class="span10">
+
+	<div id="map_canvas" style="height: 500px;" ></div>	
+
+</div>
+
+<!-- <div class="span4">
+	<form action="{{url_for('mapResults')}}">
+	<div id="selected" class="bodytype" style="margin:0px">
+		<h3> Selected Springs </h3>
+	</div>
+	<input type="submit" value="Search">
+	</form>
+
+	<input type="button" value="Northland" style="display:block">
+	<input type="button" value="Auckland" style="display:block">
+	<input type="button" value="Waikato" style="display:block">
+	<input type="button" value="Bay of Plenty" style="display:block">
+	<input type="button" value="Gisbourne" style="display:block">
+	<input type="button" value="Manawatu-Wanganui" style="display:block">
+	<input type="button" value="Wellington" style="display:block">
+	<input type="button" value="Hawke's Bay" style="display:block">
+
+</div> -->
+<div class="span1" style="background-color:rgba(29,155,171,0.5);height: 500px;"></div>
+</div>
+
+
+
+{% endblock %}

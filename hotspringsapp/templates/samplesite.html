@@ -1,0 +1,462 @@
+{% extends "layout.html" %} {% block title %}Home{% endblock %} {% block
+head %}
+<link rel="stylesheet"
+	href="{{ url_for('static', filename='js/snapSVG/style.css')}}"
+	type="text/css" />
+<link type="text/css" rel="stylesheet" href="{{ url_for('static', filename='style.css') }}"/>
+
+{{ super() }}
+
+<!-- <script type="text/javascript" src="{{ url_for('static', filename='js/jquery.js') }}"></script> -->
+
+<script type="text/javascript"
+	src="{{ url_for('static', filename='js/jQuery/jquery.opacityrollover.js') }}"></script>
+<script type="text/javascript"
+	src="{{ url_for('static', filename='js/maps.js') }}"></script>
+<script type="text/javascript"
+	src="{{ url_for('static', filename='js/Vis/radialTree/d3.js') }}"></script>
+<script type="text/javascript"
+	src="{{ url_for('static', filename='js/views/samplesite.js') }}"></script>
+<script type="text/javascript"
+	src="{{ url_for('static', filename='js/views/status.js') }}"></script>
+<script type="text/javascript"
+	src="{{ url_for('static', filename='js/snapSVG/snap.svg-min.js') }}"></script>
+<script type="text/javascript"
+	src="{{ url_for('static', filename='js/snapSVG/snap.svg-min.js') }}"></script>	
+<script type="text/javascript"
+	src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBj_MCLMBKMcNvUXelP9pfEmlCsHN_nbX0"></script>
+
+<style>
+span.units {
+	color: rgb(29, 155, 171);
+	cursor: default;
+}
+</style>
+
+<script type="text/javascript">	
+
+	window.onload = function()
+	{
+		if (browserSupportsSvg()) {
+			var tempMarkers = [{name:"Ice",value:0},
+						   {name:"Human Body", value:37},
+						   {name:"Scalding Water", value:55,height:2},
+						   {name:"Pasteurization", value:67,height:3},
+						   {name:"Boiling Water", value:100}];	
+	
+			var tempCategories = [];	
+	
+			var tempBar = ({svg:Snap("#tempBar"),
+						length:250,
+						x:50,
+						y:10,
+						max:100,
+						current:{{sample_site.phys.initialTemp}},
+						markers:tempMarkers,
+						categories:tempCategories,
+						step:10,
+						warning:40,
+						units:String.fromCharCode(186)+"C"});
+	
+			addProgressBar(tempBar);
+	
+			var phMarkers = [{name:"Stomach Acid",value:1},
+							 {name:"Lemon Juice",value:2,height:2},
+							 {name:"Vinegar",value:3,height:3},
+							 {name:"Pure Water",value:6},
+							 {name:"Spa Water",value:8,height:2},
+							 {name:"Soap",value:10},
+							 {name:"Ammonia",value:11, height:3},
+							 {name:"Bleach",value:12}];
+	
+	
+			var pHCategories = [];			
+	
+			var phBar = ({svg:Snap("#pHBar"),
+						length:250,
+						x:50,
+						y:10,
+						max:14,
+						current:{{sample_site.phys.pH}},
+						markers:phMarkers,
+						categories:pHCategories,
+						step:1,
+						units:""});		
+			
+			addProgressBar(phBar);
+			
+		} else {
+			// browser does not support SVG
+			$('#tempTableData').html('<p>{{sample_site.phys.initialTemp}}</p>');
+			$('#pHTableData').html('<p>{{sample_site.phys.pH}}</p>');
+		}
+
+	};
+
+	$(function()
+	{
+		var sampleSiteMap = setupMap("show_map");	
+		sampleSiteMap.zoom = 14;
+		{% if sample_site.location.access != "PRIVATE" %}
+
+		addInfoWindowMarker("{{sample_site.location.feature_system}}",
+							"{{sample_site.location.lat}}",
+							"{{sample_site.location.lng}}",
+							"{{sample_site.location.feature_name}}",
+							"{{sample_site.location.description}}",
+							sampleSiteMap)		
+		{% endif %}
+
+		$('img').tooltip();
+		$('span').tooltip();
+
+		 $("svg circle, .inner").tooltip({
+        'container': 'body',
+        'placement': 'top'
+    	});
+
+		if (browserSupportsSvg()) {
+			statusGraph("#status",{{statusPos}});
+		} else {
+			$('#statusHeadingTableData').html('');
+		}
+
+
+		$('.accordion').on('show hide', function (n) 
+		{
+			$(n.target).siblings('.accordion-heading').find('.accordion-toggle i').toggleClass('icon-chevron-up icon-chevron-down');
+		});
+	});
+	
+	</script>
+
+{% endblock %} 
+
+{% block content %}
+
+<div class="title">
+
+	<h2>{{sample_site.location.feature_name}}</h2>
+
+</div>
+
+<div class="divider"></div>
+
+<div id="mainContent"
+	style="position: relative; background-color: white;">
+	<ul id="tabBar" class="nav nav-tabs tab-heading otsTabs" data-tabs="tabs">
+		<li class="active"><a href="#overviewTab" data-toggle="tab">Overview</a></li>
+		<li><a href="#chemistryTab" data-toggle="tab">Chemical Composition</a></li>
+		<li><a href="#diversityTab" data-toggle="tab">Microbial Diversity</a></li>
+	</ul>
+	<script type="text/javascript">
+		$(document).ready(function(){
+			$('#tabBar').tab();		
+		});
+
+	</script>
+
+	<div id="sampleSiteTabContent" class="tab-content">
+		<div id="overviewTab" class="tab-pane active">
+			<div class="row-fluid">
+				<div class="span7">
+	
+					<div>
+						<p>
+							<strong> Hot springs can cause serious injury and death.
+								Follow the safety instructions. Never climb over barriers and
+								step off paths. </strong>
+						</p>
+						{%if sample_site.location.access == "PRIVATE"%} <img
+							rel="tooltip" style="width: 10%; float: right"
+							data-original-title="Private"
+							src="{{ url_for('static', filename='img/icons/private.png') }}">
+						{%endif%}
+	
+						<p>{{sample_site.location.description}}</p>
+	
+	
+					</div>
+	
+	
+					<table class="descTable">
+						<tr>
+							<td>
+								<h5 style="margin-top: 0px;">Location:</h5>
+							</td>
+							<td style="text-align: left;">
+								<p>{{sample_site.location.location}},
+									{{sample_site.location.feature_system}},
+									{{sample_site.location.district}}</p>
+							</td>
+						</tr>
+	
+						<tr>
+							<td>
+								<h5 style="margin-top: 0px;">Sample Number:</h5>
+							</td>
+							<td style="text-align: left;">
+								<p id="sampleNumber">{{sample_site.sample_number}}</p>
+							</td>
+						</tr>
+	
+						<tr>
+							<td>
+								<h5 style="margin-top: 0px;">Sample Date:</h5>
+							</td>
+							<td style="text-align: left;">
+								<p class="muted">{{sample_site.date_gathered.strftime('%d-%m-%Y')}}</p>
+							</td>
+						</tr>
+						<tr>
+							<td>
+								<h5 style="margin-top: 0px;">Feature Type:</h5>
+							</td>
+							<td style="text-align: left;">
+								<p>{{sample_site.location.feature_type}}</p>
+							</td>
+						</tr>
+						<tr>
+							<td>
+								<h5 style="margin-top: 0px;">Temperature:</h5>
+							</td>
+							<td id="tempTableData" style="text-align: left;"><svg width="400px"
+									height="110px" id="tempBar"></svg></td>
+						</tr>
+						<tr>
+							<td>
+								<h5 style="margin-top: 0px;">pH:</h5>
+							</td>
+							<td id="pHTableData" style="text-align: left;"><svg width="400px"
+									height="110px" id="pHBar"></svg></td>
+						</tr>
+						<tr>
+							<td>
+								<h5 style="margin-top: 0px;">Size (approx):</h5>
+							</td>
+	
+							<td style="text-align: left;">
+								<p>{{sample_site.phys.size}}</p>
+							</td>
+						</tr>
+						<tr>
+							<td>
+								<h5 style="margin-top: 0px;">Ebullition:</h5>
+							</td>
+	
+							<td style="text-align: left;">
+								<p>{{sample_site.phys.ebullition|capitalize}}</p>
+							</td>
+						</tr>
+						<tr>
+							<td>
+								<h5 style="margin-top: 0px;">
+									Oxidation Reduction <br> Potential:
+								</h5>
+							</td>
+							
+							<td style="text-align: left;">
+								{%- if sample_site.phys.redox is not none -%}
+									<p>
+										{{sample_site.phys.redox}} <span class="units" rel="tooltip"
+											data-original-title="Millivolts">mV</span>
+									</p>
+								{% else %}
+									<p>Not determined</p>
+								{%- endif %}
+							</td>
+						</tr>
+						<tr>
+							<td>
+								<h5 style="margin-top: 0px;">Conductivity:</h5>
+							</td>
+	
+							<td style="text-align: left;">
+								{%- if sample_site.phys.conductivity is not none -%}
+									<p>
+										{{sample_site.phys.conductivity}} <span class="units"
+											rel="tooltip" data-original-title="Microsiemens per Centimeter">&#xB5;S/cm</span>
+									</p>
+								{% else %}
+									<p>Not determined</p>
+								{%- endif %}
+							</td>
+						</tr>
+						<tr>
+							<td>
+								<h5 style="margin-top: 0px;">Dissolved Oxygen:</h5>
+							</td>
+	
+							<td style="text-align: left;">
+								{%- if sample_site.phys.dO is not none -%}
+									<p>
+										{{sample_site.phys.dO}} <span class="units" rel="tooltip"
+											data-original-title="Milligrams per Litre">mg/L</span>
+									</p>
+								{% else %}
+									<p>Not determined</p>
+								{%- endif %}
+							</td>
+						</tr>
+						<tr>
+							<td>
+								<h5 style="margin-top: 0px;">Turbidity:</h5>
+							</td>
+	
+							<td style="text-align: left;">
+								{%- if sample_site.phys.turbidity is not none -%}
+									<p>
+										{{sample_site.phys.turbidity}} <span class="units" rel="tooltip"
+											data-original-title="Formazin Nephelometric Units">FNU</span>
+									</p>
+								{% else %}
+									<p>Not determined</p>
+								{%- endif %}
+							</td>
+						</tr>					
+	
+						<tr>
+							<td id="statusHeadingTableData"colspan="2">
+								<h4 style="text-align: center">Sample Site Status</h4>
+							</td>
+						</tr>
+	
+						<tr>
+	
+							<td style="text-align: left" colspan="2"><svg height="110px" width="550px"
+									id="status"></svg></td>
+						</tr>
+	
+	
+					</table>
+	
+				</div>
+	
+	
+				<div class="span5">
+	
+					<div id="show_map"></div>
+	
+	
+					<div class="divider"></div>
+					<div style="margin-bottom: 10px; margin-left: -1px;">
+						{% if largeImage != None %} 
+							<a href="{{largeImage.image_path}}">
+						{% endif %} 						
+						{% if bestPhotoImage != None %} 
+							<img id="sampleSiteImg" src="{{bestPhotoImage.image_path}}" />
+						{% endif %}
+						{% if largeImage != None %} 
+							</a>
+						{% endif %} 
+					</div>							
+						
+				</div>
+	
+			</div>
+		</div>
+	
+	
+		<div id="chemistryTab" class="tab-pane requiresSvg">
+	        <div id="chemistryViewLoading">
+		    	<img src="{{ url_for('static', filename='img/ajax-waiting-large.gif') }}" style="margin: 200px auto 200px auto; display: block;">
+		    </div>
+			<div id="chemistryViewWrapper" style="display: none;">
+				<div class="row-fluid">
+					<div class="span4">
+						<div id="bubbleDesc">
+							<figure>
+								<p>
+									<strong>Instructions: </strong>Clicking on a bubble will zoom
+									in to get a closer look. While zoomed in, to focus on an
+									adjacent bubble simply click it. Selecting the currently
+									zoomed bubble will zoom back out.
+								</p>
+								<br>
+								<p>The chemical bubble chart represents the measured
+									chemical composition of this particular geothermal sample.
+									The relative size of each bubble reflects the concentration
+									of the named species (the larger the bubble, the higher the
+									concentration and vice versa). The concentration of the
+									chemical species in parts per million (ppm) which is
+									equivalent to mg per litre can be visualised by holding the
+									cursor in each bubble. Please note, carbon monoxide, hydrogen
+									and methane concentrations are in &#956;M or microMolar, not ppm.</p>
+							</figure>
+						</div>
+					</div>
+					<div class="span8">
+						<div id="bubbles"></div>
+					</div>
+				</div>
+			</div>
+		</div>
+	
+		<div id="diversityTab" class="tab-pane requiresSvg">
+		    <div id="diversityViewLoading">
+		    	<img src="{{ url_for('static', filename='img/ajax-waiting-large.gif') }}" style="margin: 100px auto 100px auto; display: block;">
+		    </div>
+			<div id="diversityViewWrapper" style="display: none;">
+				<div class="diversityView">
+					<div class="diversityControlLinks">
+						<span class="diversityToggleView">Change view</span><span class="diversityToggleHelp">Hide instructions</span>
+					</div>
+					{% include "Vis/radialTree/collapsibleTree.html" %}
+				</div>
+				<div class="diversityView" style="display: none;">
+					<div class="diversityControlLinks">
+						<span class="diversityToggleView">Change view</span><span class="diversityToggleHelp">Hide instructions</span>
+					</div>
+					{% include "Vis/radialTree/sunburst.html" %}
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<!-- End tabbed content -->
+
+<div id="myModal" class="modal hide fade" tabindex="-1" role="dialog"
+	aria-labelledby="myModalLabel" aria-hidden="true">
+	<!--<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+					<h3 id="myModalLabel">Modal header</h3>
+				  </div>!-->
+	<div class="modal-body">
+		<div class="container">
+			<div class="logincontent">
+
+				<div class="login-form">
+					<h2>Login</h2>
+					<form action="{{url_for('login')}}" method="post">
+						<fieldset>
+							<input type="text" placeholder="Username" name="username"
+								style="display: block" id="usernameTextbox"> <input
+								type="password" placeholder="Password" name="password"
+								style="display: block"> <input type="hidden"
+								name="site_id" value="{{sample_site.location_id}}">
+
+							<button class="btn btn-primary" type="submit">Login</button>
+						</fieldset>
+
+					</form>
+
+					{% if error%}
+					<div class="alert" id="alert">
+						<button type="button" class="close" data-dismiss="alert">&times;</button>
+						<p id="alertMessage">{{error}}</p>
+					</div>
+					{% endif %}
+
+				</div>
+
+			</div>
+		</div>
+	</div>
+	<!--  <div class="modal-footer">
+				  	
+					<button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
+				  </div> !-->
+</div>
+
+
+{% endblock %}

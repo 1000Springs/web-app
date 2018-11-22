@@ -1,0 +1,399 @@
+{% extends "layout.html" %}
+{% block title %}Results{% endblock %}
+{% block head %}
+  {{ super() }}
+    <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBj_MCLMBKMcNvUXelP9pfEmlCsHN_nbX0"></script>
+    <script type="text/javascript" src="{{ url_for('static', filename='js/views/simpleresults.js') }}"></script>
+    <script type="text/javascript" src="{{ url_for('static', filename='js/maps.js') }}"></script>
+	<script type="text/javascript" src="https://www.google.com/jsapi"></script>
+	<script type="text/javascript" src="{{ url_for('static', filename='js/chosen_v1.0.0/chosen.jquery.min.js') }}"></script>
+	<script src="{{ url_for('static', filename='js/ionRangeSlider/ion.rangeSlider.min.js')}}"></script>
+
+  	<link rel="stylesheet" href="{{ url_for('static', filename='js/ionRangeSlider/ion.rangeSlider.skinFlat.css')}}" />
+    <link rel="stylesheet" href="{{ url_for('static', filename='js/ionRangeSlider/ion.rangeSlider.css')}}" />
+    <link rel="stylesheet" href="{{ url_for('static', filename='js/ionRangeSlider/normalize.min.css')}}" />
+    <link rel="stylesheet" href="{{url_for('static', filename='js/chosen_v1.0.0/chosen.css')}}" />
+
+
+	<script type="text/javascript">
+	
+	var max = 100;
+    var min = 0;
+	function loadMarkers()
+	{
+		{% for pos in entries.items %}	
+			{% if pos.location.access != "PRIVATE" %}	
+				addInfoWindowMarker("{{pos.location.feature_system}}", "{{pos.location.lat}}", "{{pos.location.lng}}", "{{pos.location.feature_name}}", "{{pos.location.description}}", mainMap,'{{url_for("samplesite", site_id=pos.location_id)}}');
+			{% endif %}
+		{% endfor %}
+	}
+
+
+	window.onload=function()
+	{
+		initializeMaps();
+		
+		loadMarkers();
+		$("#minTemp").val({{minTemp}});
+		$("#maxTemp").val({{maxTemp}});
+		
+		$('img').tooltip();		
+	};
+
+	 $(function () 
+ {
+
+  MenuSelect("#search","{{ url_for('static', filename='img/icons/search_Selected.png') }}");
+
+  $('.filterIcons label').click(function ()
+  {
+      $('.filterIcons label').removeClass("selected");
+
+      $(this).addClass("selected");
+
+  });
+  
+  $("#sidebar").css('min-height',$("#resultsForm").css('height'));
+  	
+ });
+
+	 $(function()
+{
+  $('.filterImage input').change(function()
+  {
+      if($(this).is(':checked'))
+      {      
+        $(this).siblings('label').children().animate(
+          {
+            "opacity": "1"
+          }, "fast");
+      }
+      else
+      {
+        $(this).siblings('label').children().animate(
+          {
+            "opacity": "0.6"
+          }, "fast");
+      }
+  });
+});
+
+function presetTemp(id,low,high)
+{
+  $(id).click(function()
+   {
+    
+    $("#minTemp").val(low);
+    $("#maxTemp").val(high);
+   });  
+}
+
+//Setting up preset temperature ranges
+$(function()
+{
+
+presetTemp("#safe",min,35);
+presetTemp("#unsafe",35,max);
+presetTemp("#hottest",Math.ceil(max*0.90),max);
+
+
+
+});
+	var chart;
+	var data;
+	var options;
+
+	google.load("visualization", "1", {packages:["corechart"]});
+
+    google.setOnLoadCallback(drawChart);
+      function drawChart() 
+      {
+      	var raw = []
+
+      	raw.push(["Range","Count"]);
+
+      	{% for slice in pieChart %}
+      		raw.push(["{{slice.range}}",{{slice.count}}]);
+      	{% endfor %}
+
+        data = google.visualization.arrayToDataTable(raw);
+
+        options = 
+        {
+          title: 'Hot Spring Temperatures',
+          chartArea: {left:5,top:20, height:"100%", width:"100%"},
+          colors:["#FFE71E","#EDAD16","#DC730F","#CB3907","#ba0000"],
+          backgroundColor: 'transparent'
+
+        };
+        
+        chart = new google.visualization.PieChart(document.getElementById('chart_div'));
+        chart.draw(data, options);
+      }
+
+</script>
+
+	
+
+<style>
+
+#minTemp,#maxTemp
+{
+display:none;
+}
+
+input[type=checkbox]
+{
+	display: none;
+}
+
+
+</style>		
+{% endblock %}
+{% block content %}
+<div class="contrast" style="height:73px;position:relative;background-color:rgba(29,155,171,0.5); ">
+<h2 style="padding:25px 15px 0 15px; margin:0; float:left; ">search results</h2>
+<div align="right">
+	<input type="button" value="Enlarge Map" id="expandMap" style="margin:37px 5px 0 0">	
+	<input type="button" value="Enlarge Graph" id="expandGraph" style="margin:37px 5px 0 0">	
+</div>
+</div>
+
+<div style="height:5px;position:relative;background-color:rgb(255,255,255)">
+
+</div>
+	
+
+
+<div class="span3" id="sidebar">	
+	<div class="contrast" id="sidebar-contents" style="position:absolute;">
+	
+	
+	<form id="resultsForm" action="{{url_for('simpleresults')}}">
+		<table>
+		<tr>	
+			<th style="text-align:left;padding:15px 0"> Location </th>
+		</tr>		
+		<tr>
+			<td>
+				<select name="dist" data-placeholder="Choose a District..."   class="chosen-select" id="districtList">
+				        <option value="" selected="selected">All</option>
+        			{% for sites in locations %}
+						<option value="{{sites}}">{{sites}}</option>
+        			{% endfor %}				
+				</select>
+			</td>
+		</tr>
+		<tr>	
+			<th style="text-align:left;padding:15px 0"> Filters </th>
+		</tr>
+		<tr>       
+
+              <td class="filterIcons" style="height:auto">        
+
+             
+              <label for="filters-0"><img rel="tooltip" data-original-title="All" src="{{ url_for('static', filename='img/icons/general_circle.png') }}"></label>
+       
+        
+              <label for="filters-1"><img rel="tooltip" data-original-title="Public Access" src="{{ url_for('static', filename='img/icons/public_access.png') }}"></label>
+      
+       
+              <label for="filters-2"><img rel="tooltip" data-original-title="Tourism" src="{{ url_for('static', filename='img/icons/tourism_access.png') }}"></label>
+
+
+              
+             
+
+           
+              
+              </td>           
+         </tr>
+		<tr>
+			<th style="text-align:left;padding:25px 0"> Temperature </th>
+		</tr>
+		<tr>
+			 <td>
+			 	
+			 		<input type="text" id="range_1" />
+			 		{{form.minTemp}} 			
+					{{form.maxTemp}}	
+			 	
+			 </td>
+		</tr>				
+		</table>
+		
+		<input type="hidden" name="minPH" value="0"/>
+		<input type="hidden" name="maxPH" value="14"/>
+		<input type="hidden" name="minTurb" value="0"/>
+		<input type="hidden" name="maxTurb" value="1000"/>	
+		<input type="hidden" name="minCond" value="0"/>
+		<input type="hidden" name="maxCond" value="2000000"/>				
+		<input type="submit" value="Search" class="btn btn-small colourClick" style="margin:35px 0 0 30%;  width: 75px;height: 75px;  border-radius: 38px;">
+		</form>
+	</div>
+	
+		
+</div>
+
+	
+	
+<div class="span10" id="results" style="position: relative; margin-left:0px; padding:0 0 0 0px; background:#fff">
+
+<div class="span3">
+	<div id="map_canvas" style="height: 233px; overflow:hidden"></div>
+</div>	
+
+<div class="span3">
+	<div id="chart_div" style="width: auto; height: auto;"></div>
+</div>	
+
+<div style="height:5px;position:relative;background-color:rgb(255,255,255)">
+
+</div>
+	<table class="table table-hover" >
+				{% for entry in entries.items %}
+		<tr>
+			<td>
+				<div class="row-fluid">
+				<div class="span3">
+
+					<!-- I must apologise for this, I could not for the life of me get it to filter by "BESTPHOTO"
+						 I tried (almost) everything, tears were shed...It got ugly
+						 it has something to do with the one to many relationship between Sample and Image
+						 because it works fine when filtering just using the Image table, that's all I got-->
+					{% for image in entry.image %}
+					
+						{% if image.image_type == "BESTPHOTO" %}
+							
+								<img style="padding-top:10px" src="{{image.image_path}}">
+
+						{% endif %}
+				
+					{% endfor %}
+				</div>
+				<div class="span7">
+					<ul class="unstyled">
+						<li>	
+							<a href="{{url_for('samplesite',site_id=entry.location_id)}}" style="text-decoration:none;" >
+								<h4 class="feature_name" style="margin-bottom:0"> {{entry.location.feature_name}} </h4>
+							</a>
+						</li>
+						<li> <p><em> {{ entry.location.feature_system }} </em></p> </li>	
+
+
+						<li><div style="overflow:hidden; height:automatic" >
+							{{ entry.location.description}}
+						</div></li>
+					</ul>
+				</div>
+			
+				
+
+				<div class="span2">
+					<div style="margin-top:10px;">
+						
+						<p style="text-align:right"> Temp: {{ entry.phys.initialTemp}} °C</p>
+					</div>
+					
+					<div style="float:right;">
+						<a href="{{url_for('samplesite',site_id=entry.location_id)}}" class="btn" style="display:block; margin:10px 0;" > More Details</a>
+
+						<input type="hidden" value="{{entry.location.lat}},{{entry.location.lng}}">
+
+						<!-- Button to trigger modal -->
+						{% if entry.location.access != "PRIVATE" %}
+						<a href="#myModal" role="button" class="btn" data-toggle="modal" onclick="modalInit.call(this);" style="display:block; ">Show on Map</a>
+						{% else %}
+						<a role="button" class="btn disabled"  style="display:block; ">Show on Map</a>
+						{% endif %}
+					</div>
+				</div>
+				
+				</div> 
+				
+			</td>
+		</tr>
+		
+		{% else %}
+
+		<tr>
+		<td> <em>Unbelievable.  No entries here</em> </td>
+		</tr>
+		{% endfor %}
+	</table>
+	<div style="width:100%;text-align:center;">
+{% if entries.has_prev %}<a href="{{ url_for_other_page(page=entries.prev_num)}}">&laquo; Prev Page</a>{% endif %}
+{% for pNum in range(1,entries.pages+1) %}
+	{% if pNum == entries.page %}
+		{{pNum}} 
+	{% else %}
+		<a href="{{ url_for_other_page(page=pNum)}}"> {{pNum}} </a>
+	{% endif %}
+{% endfor %}
+{% if entries.has_next %}<a href="{{ url_for_other_page(page=entries.next_num)}}">Next &raquo;</a></a>{% endif %}
+
+{% if entries.has_next == True or entries.has_prev == True %}	
+	<p><a href="{{ url_for_other_page(showAll='all')}}"> Show All </a></p>
+
+{% elif entries.has_next != True and entries.has_prev != True and entries.items|length >= 15 %}
+	<p><a href="{{ url_for_other_page(1)}}"> Show 15 </a></p>
+{% endif %}
+
+</div>
+</div>
+
+
+<!-- Modal -->
+				<div id="myModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+				  <div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+					<h3 id="myModalLabel">Modal header</h3>
+				  </div>
+				  <div class="modal-body">
+					<script type="text/javascript">
+						
+					</script>
+					
+					<div id="show_map" style="float:none"></div>
+				  </div>
+				  <div class="modal-footer">
+				  	
+					<button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
+				  </div>
+				</div>
+
+<script>
+    $(document).ready(function(){
+    	
+        $(".chosen-select").chosen({width: "200px",disable_search_threshold: 10});
+
+        $("#range_1").ionRangeSlider({
+            min: 1,
+            max: 101,
+            from: 25,
+            to: 75,
+            type: 'double',
+            step: 1,
+            postfix: "°C",
+            prettify: true,
+            hasGrid: false,
+            onLoad: function(obj)
+            {
+            	    $("#minTemp").val(Math.round(obj.fromNumber));
+    				$("#maxTemp").val(Math.round(obj.toNumber));
+
+            },
+            onFinish: function(obj)
+            {        
+
+ 
+     				$("#minTemp").val(Math.round(obj.fromNumber));
+    				$("#maxTemp").val(Math.round(obj.toNumber));
+    				
+   			}
+        });
+
+    });
+</script>
+
+{% endblock %}	
