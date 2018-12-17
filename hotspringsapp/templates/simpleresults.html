@@ -2,15 +2,12 @@
 {% block title %}Results{% endblock %}
 {% block head %}
   {{ super() }}
-    <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?sensor=true"></script>
+    <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBj_MCLMBKMcNvUXelP9pfEmlCsHN_nbX0"></script>
     <script type="text/javascript" src="{{ url_for('static', filename='js/views/simpleresults.js') }}"></script>
     <script type="text/javascript" src="{{ url_for('static', filename='js/maps.js') }}"></script>
 	<script type="text/javascript" src="https://www.google.com/jsapi"></script>
 	<script type="text/javascript" src="{{ url_for('static', filename='js/chosen_v1.0.0/chosen.jquery.min.js') }}"></script>
-
-
 	<script src="{{ url_for('static', filename='js/ionRangeSlider/ion.rangeSlider.min.js')}}"></script>
-
 
   	<link rel="stylesheet" href="{{ url_for('static', filename='js/ionRangeSlider/ion.rangeSlider.skinFlat.css')}}" />
     <link rel="stylesheet" href="{{ url_for('static', filename='js/ionRangeSlider/ion.rangeSlider.css')}}" />
@@ -31,10 +28,6 @@
 		{% endfor %}
 	}
 
-
-
-	
- 	
 
 	window.onload=function()
 	{

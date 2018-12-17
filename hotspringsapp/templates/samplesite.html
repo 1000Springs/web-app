@@ -24,7 +24,7 @@ head %}
 <script type="text/javascript"
 	src="{{ url_for('static', filename='js/snapSVG/snap.svg-min.js') }}"></script>	
 <script type="text/javascript"
-	src="https://maps.googleapis.com/maps/api/js"></script>
+	src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBj_MCLMBKMcNvUXelP9pfEmlCsHN_nbX0"></script>
 
 <style>
 span.units {
@@ -46,7 +46,6 @@ span.units {
 	
 			var tempCategories = [];	
 	
-				
 			var tempBar = ({svg:Snap("#tempBar"),
 						length:250,
 						x:50,
@@ -128,18 +127,12 @@ span.units {
 			$(n.target).siblings('.accordion-heading').find('.accordion-toggle i').toggleClass('icon-chevron-up icon-chevron-down');
 		});
 	});
-
-
 	
 	</script>
 
+{% endblock %} 
 
-
-
-
-{% endblock %} {% block content %}
-
-
+{% block content %}
 
 <div class="title">
 
@@ -340,7 +333,6 @@ span.units {
 				</div>
 	
 	
-	
 				<div class="span5">
 	
 					<div id="show_map"></div>
@@ -465,8 +457,6 @@ span.units {
 					<button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
 				  </div> !-->
 </div>
-
-
 
 
 {% endblock %}
